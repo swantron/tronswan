@@ -12,19 +12,19 @@ function App() {
         </p>
         <a
           className="App-link"
-          href="https://chomptron.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          chomp tron dot com
-        </a>
-        <a
-          className="App-link"
           href="https://swantron.com"
           target="_blank"
           rel="noopener noreferrer"
         >
           swan tron dot com
+        </a>
+        <a
+          className="App-link"
+          href="https://chomptron.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          chomp tron dot com
         </a>
       </header>
     </div>
