@@ -16,7 +16,15 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          chomp tron
+        </a>
+        <a
+          className="App-link"
+          href="https://swantron.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          swan tron
         </a>
       </header>
     </div>
