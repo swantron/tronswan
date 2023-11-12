@@ -1,4 +1,4 @@
-import logo from './robospin.gif';
+import logo from './robotard-removebg-preview.png';
 import './App.css';
 
 function App() {
