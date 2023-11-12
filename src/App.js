@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './robospin.gif';
 import './App.css';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          chomp tron
+          chomp tron dot com
         </a>
         <a
           className="App-link"
@@ -24,7 +24,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          swan tron
+          swan tron dot com
         </a>
       </header>
     </div>
