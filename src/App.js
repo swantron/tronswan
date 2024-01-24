@@ -27,7 +27,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        {temperature && <p>boz tron dot temp: {temperature}°F</p>}
+        <p>tron swan dot com</p>
+        {temperature && <p>thermomotron | {temperature}°F</p>}
         <a
           className="App-link"
           href="https://swantron.com"
