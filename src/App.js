@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     const fetchTemperature = async () => {
-      const apiKey = 'WEATHER_API_KEY'; // DO variable
+      const apiKey = process.env.REACT_APP_API_KEY; // Accessing the API key from DO
       const city = 'Bozeman';
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
 
