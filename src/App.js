@@ -30,19 +30,20 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="App-title">tron swan dot com</h1> {/* Larger title */}
-        <img src={logo} className="App-logo" alt="logo" />
-        {temperature && <p>thermomotron | {temperature}°F</p>}
-        {feelsLike && <p>feelometer | {feelsLike}°F</p>}
-        {pressure && <p>baromotron | {pressure} hPa</p>}
-        {humidity && <p>humidotron | {humidity}%</p>}
+    <div className="App" data-testid="app-container">
+      <header className="App-header" data-testid="app-header">
+        <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
+        <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
+        {temperature && <p data-testid="temperature-display">thermomotron | {temperature}°F</p>}
+        {feelsLike && <p data-testid="feels-like-display">feelometer | {feelsLike}°F</p>}
+        {pressure && <p data-testid="pressure-display">baromotron | {pressure} hPa</p>}
+        {humidity && <p data-testid="humidity-display">humidotron | {humidity}%</p>}
         <a
           className="App-link"
           href="https://swantron.com"
           target="_blank"
           rel="noopener noreferrer"
+          data-testid="swantron-link"
         >
           swan tron dot com
         </a>
@@ -51,6 +52,7 @@ function App() {
           href="https://chomptron.com"
           target="_blank"
           rel="noopener noreferrer"
+          data-testid="chomptron-link"
         >
           chomp tron dot com
         </a>
