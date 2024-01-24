@@ -27,8 +27,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>tron swan dot com a react joint</p>
-        {temperature && <p>Current Temperature in Bozeman, MT: {temperature}°F</p>}
+        {temperature && <p>boz tron dot temp: {temperature}°F</p>}
         <a
           className="App-link"
           href="https://swantron.com"
