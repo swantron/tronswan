@@ -4,9 +4,12 @@ import './App.css';
 
 function App() {
   const [temperature, setTemperature] = useState(null);
+  const [feelsLike, setFeelsLike] = useState(null); // State for "feels like" temperature
+  const [pressure, setPressure] = useState(null);
+  const [humidity, setHumidity] = useState(null); // State for humidity
 
   useEffect(() => {
-    const fetchTemperature = async () => {
+    const fetchWeatherData = async () => {
       const apiKey = process.env.REACT_APP_API_KEY; // Accessing the API key from DO
       const city = 'Bozeman';
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
@@ -15,12 +18,15 @@ function App() {
         const response = await fetch(url);
         const data = await response.json();
         setTemperature(data.main.temp);
+        setFeelsLike(data.main.feels_like); // Set "feels like" temperature
+        setPressure(data.main.pressure);
+        setHumidity(data.main.humidity); // Set humidity
       } catch (error) {
-        console.error('Error fetching temperature:', error);
+        console.error('Error fetching weather data:', error);
       }
     };
 
-    fetchTemperature();
+    fetchWeatherData();
   }, []);
 
   return (
@@ -29,6 +35,9 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>tron swan dot com</p>
         {temperature && <p>thermomotron | {temperature}°F</p>}
+        {feelsLike && <p>feelometer | {feelsLike}°F</p>} {/* Display "feels like" temperature */}
+        {pressure && <p>baromotron | {pressure} hPa</p>}
+        {humidity && <p>humidotron | {humidity}%</p>} {/* Display humidity */}
         <a
           className="App-link"
           href="https://swantron.com"
