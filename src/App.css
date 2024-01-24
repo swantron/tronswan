@@ -24,8 +24,14 @@
   color: white;
 }
 
+.App-title {
+  font-size: 3em; /* Larger font size for the title */
+  margin-bottom: 20px; /* Spacing between title and image */
+}
+
 .App-link {
   color: #f89859;
+  margin-top: 20px; /* Add spacing above links if needed */
 }
 
 @keyframes App-logo-spin {
