@@ -40,13 +40,13 @@ jobs:
           echo "Polling DigitalOcean App Platform deployment status..."
           for ((i=1;i<=RETRIES;i++)); do
             echo "Making request to DigitalOcean API..."
-            RESPONSE=$(curl -s -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" "https://api.digitalocean.com/v2/apps/$APP_ID/deployments")
+            RESPONSE=$(curl -s -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" "https://api.digitalocean.com/v2/apps/$APP_ID/deployments?per_page=1")
             echo "Response: $RESPONSE"
             if echo "$RESPONSE" | jq -e '.errors' > /dev/null; then
               echo "Error in response: $(echo $RESPONSE | jq '.errors')"
               exit 1
             fi
-            DEPLOYMENT_STATUS=$(echo $RESPONSE | jq -r '.deployments[0] | select(.progress.summary_steps[].status == "SUCCESS" and .progress.summary_steps[].name == "deploy").progress.summary_steps[].status')
+            DEPLOYMENT_STATUS=$(echo $RESPONSE | jq -r '.deployments[0].progress.steps[] | select(.name == "deploy").status')
             echo "Attempt $i: Deployment status is $DEPLOYMENT_STATUS"
             if [ "$DEPLOYMENT_STATUS" == "SUCCESS" ]; then
               echo "Deployment completed successfully."
