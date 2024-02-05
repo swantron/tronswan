@@ -1,15 +1,18 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('TronSwan Website Tests', () => {
-  test('Homepage should load and contain expected element', async ({ page }) => {
-    // Navigate to tronswan.com
+  test('Homepage should load and contain the swantron.com link', async ({ page }) => {
+    // Navigate to your website
     await page.goto('https://tronswan.com');
 
-    // Check if a specific element exists, replace `#yourElementSelector` with the actual selector
-    // For example, if you're checking for a header: await expect(page.locator('h1')).toContainText('Expected Header Text');
-    await expect(page.locator('Your Expected Element Selector')).toBeVisible();
+    // Check if the specific link element is visible
+    // We're using the data-testid attribute for a precise selection
+    await expect(page.locator('a[data-testid="swantron-link"]')).toBeVisible();
 
-    // Add more assertions here as needed
+    // Additional assertion to check the href attribute if needed
+    await expect(page.locator('a[data-testid="swantron-link"]')).toHaveAttribute('href', 'https://swantron.com');
+
+    // You can also verify the link text if necessary
+    await expect(page.locator('a[data-testid="swantron-link"]')).toContainText('swan tron dot com');
   });
 });
-
