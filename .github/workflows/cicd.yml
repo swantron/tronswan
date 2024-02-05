@@ -65,10 +65,14 @@ jobs:
         env:
           DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: playwright placeholder
-        if: success()
+      - uses: actions/checkout@v3 # This is the correct place to add the checkout step
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - run: npm ci # Ensure dependencies for playwright are installed
+      - name: Run Playwright Tests
         run: |
-          echo 'run playwright tests...'
-          pwd
-          ls -larth
+          echo 'Running Playwright tests...'
           npx playwright test tronswan.test.js
