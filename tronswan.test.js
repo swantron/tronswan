@@ -4,6 +4,7 @@ test.describe('TronSwan Website Tests', () => {
   test('Homepage should load and contain the swantron.com link', async ({ page }) => {
     // Navigate to your website
     await page.goto('https://tronswan.com');
+    // await page.goto('localhost:3000');
 
     // Check if the specific link element is visible
     // We're using the data-testid attribute for a precise selection
