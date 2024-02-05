@@ -69,5 +69,4 @@ jobs:
         if: success()
         run: |
           echo 'run playwright tests...'
-          npx playwright test playwright/tronswan.test.js
-
+          npx playwright test tronswan.test.js
