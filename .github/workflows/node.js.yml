@@ -33,15 +33,24 @@ jobs:
 
       - name: Poll Deployment Status
         run: |
-          RETRIES=60 # Set this to the number of retries you are willing to make
-          SLEEP_DURATION=10 # Set this to how long you want to wait between each retry
+          RETRIES=60
+          SLEEP_DURATION=10
           APP_ID="0513ce4c-b074-4139-bb38-a1c6a5bc97a6"
           DIGITALOCEAN_ACCESS_TOKEN="${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}"
           echo "Polling DigitalOcean App Platform deployment status..."
           for ((i=1;i<=RETRIES;i++)); do
-            DEPLOYMENT_RESPONSE=$(curl -s -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" \
+            RESPONSE=$(curl -s -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" \
               "https://api.digitalocean.com/v2/apps/$APP_ID/deployments")
-            DEPLOYMENT_STATUS=$(echo $DEPLOYMENT_RESPONSE | jq -r '.deployments[0].steps[] | select(.name == "deploy") | .status')
+            if [[ $? -ne 0 ]]; then
+              echo "Failed to retrieve deployments"
+              exit 1
+            fi
+            DEPLOYMENTS=$(echo $RESPONSE | jq '.deployments')
+            if [[ "$DEPLOYMENTS" == "null" || "$DEPLOYMENTS" == "[]" ]]; then
+              echo "No deployments found"
+              exit 1
+            fi
+            DEPLOYMENT_STATUS=$(echo $DEPLOYMENTS | jq -r '.[0].steps[] | select(.name == "deploy") | .status')
             echo "Attempt $i: Deployment status is $DEPLOYMENT_STATUS"
             if [[ "$DEPLOYMENT_STATUS" == "SUCCESS" ]]; then
               echo "Deployment completed successfully."
@@ -64,4 +73,5 @@ jobs:
         if: success()
         run: |
           echo 'Running Playwright tests...'
+          # Replace the next line with your actual Playwright test command
           echo 'TODO: Add your Playwright test command here.'
