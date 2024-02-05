@@ -7,13 +7,17 @@ test.describe('TronSwan Website Tests', () => {
     // await page.goto('localhost:3000');
 
     // Check if the specific link element is visible
-    // We're using the data-testid attribute for a precise selection
     await expect(page.locator('a[data-testid="swantron-link"]')).toBeVisible();
-
-    // Additional assertion to check the href attribute if needed
     await expect(page.locator('a[data-testid="swantron-link"]')).toHaveAttribute('href', 'https://swantron.com');
-
-    // You can also verify the link text if necessary
     await expect(page.locator('a[data-testid="swantron-link"]')).toContainText('swan tron dot com');
+    
+    // New check for the temperature display element
+    const temperatureDisplay = page.locator('p[data-testid="temperature-display"]');
+    await expect(temperatureDisplay).toBeVisible();
+
+    // Optional: Check if the temperature display contains specific text
+    // This will depend on the expected content format, for example:
+    await expect(temperatureDisplay).toContainText(/thermomotron \| \d+\.\d+°F/);
   });
 });
+
