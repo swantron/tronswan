@@ -46,14 +46,9 @@ jobs:
               echo "Error in response: $(echo $RESPONSE | jq '.errors')"
               exit 1
             fi
-            DEPLOYMENTS=$(echo $RESPONSE | jq '.deployments')
-            if [[ "$DEPLOYMENTS" == "null" || "$DEPLOYMENTS" == "[]" ]]; then
-              echo "No deployments found"
-              exit 1
-            fi
-            DEPLOYMENT_STATUS=$(echo $DEPLOYMENTS | jq -r '.[0].steps[] | select(.name == "deploy") | .status')
+            DEPLOYMENT_STATUS=$(echo $RESPONSE | jq -r '.deployments[0] | select(.progress.summary_steps[].status == "SUCCESS" and .progress.summary_steps[].name == "deploy").progress.summary_steps[].status')
             echo "Attempt $i: Deployment status is $DEPLOYMENT_STATUS"
-            if [[ "$DEPLOYMENT_STATUS" == "SUCCESS" ]]; then
+            if [ "$DEPLOYMENT_STATUS" == "SUCCESS" ]; then
               echo "Deployment completed successfully."
               break
             fi
@@ -63,7 +58,7 @@ jobs:
             fi
             sleep $SLEEP_DURATION
           done
-          if [[ "$DEPLOYMENT_STATUS" != "SUCCESS" ]]; then
+          if [ "$DEPLOYMENT_STATUS" != "SUCCESS" ]; then
             echo "Deployment did not succeed."
             exit 1
           fi
