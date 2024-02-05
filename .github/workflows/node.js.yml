@@ -28,19 +28,22 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
+      - name: Install jq
+        run: sudo apt-get install jq
+
       - name: Poll Deployment Status
         run: |
           RETRIES=60 # Set this to the number of retries you are willing to make
           SLEEP_DURATION=10 # Set this to how long you want to wait between each retry
-          DEPLOYMENT_STATUS="unknown"
           APP_ID="0513ce4c-b074-4139-bb38-a1c6a5bc97a6"
           DIGITALOCEAN_ACCESS_TOKEN="${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}"
           echo "Polling DigitalOcean App Platform deployment status..."
           for ((i=1;i<=RETRIES;i++)); do
-            DEPLOYMENT_STATUS=$(curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" \
-              "https://api.digitalocean.com/v2/apps/$APP_ID/deployments" | jq -r '.deployments[0].progress')
+            DEPLOYMENT_RESPONSE=$(curl -s -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" \
+              "https://api.digitalocean.com/v2/apps/$APP_ID/deployments")
+            DEPLOYMENT_STATUS=$(echo $DEPLOYMENT_RESPONSE | jq -r '.deployments[0].steps[] | select(.name == "deploy") | .status')
             echo "Attempt $i: Deployment status is $DEPLOYMENT_STATUS"
-            if [ "$DEPLOYMENT_STATUS" == "100" ]; then
+            if [[ "$DEPLOYMENT_STATUS" == "SUCCESS" ]]; then
               echo "Deployment completed successfully."
               break
             fi
@@ -50,11 +53,15 @@ jobs:
             fi
             sleep $SLEEP_DURATION
           done
+          if [[ "$DEPLOYMENT_STATUS" != "SUCCESS" ]]; then
+            echo "Deployment did not succeed."
+            exit 1
+          fi
         env:
           DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Run Playwright Tests
-        if: env.DEPLOYMENT_STATUS == '100'
+        if: success()
         run: |
           echo 'Running Playwright tests...'
           echo 'TODO: Add your Playwright test command here.'
