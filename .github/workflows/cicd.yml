@@ -65,13 +65,15 @@ jobs:
         env:
           DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - uses: actions/checkout@v3 # This is the correct place to add the checkout step
+      - uses: actions/checkout@v3
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
-      - run: npm ci # Ensure dependencies for playwright are installed
+      - run: npm ci # Ensure dependencies for Playwright are installed
+      - name: Install Playwright Browsers
+        run: npx playwright install # This line is added to install Playwright browsers
       - name: Run Playwright Tests
         run: |
           echo 'Running Playwright tests...'
