@@ -33,7 +33,7 @@ jobs:
 
       - name: Poll Deployment Status
         run: |
-          RETRIES=60
+          RETRIES=30
           SLEEP_DURATION=10
           APP_ID="0513ce4c-b074-4139-bb38-a1c6a5bc97a6"
           DIGITALOCEAN_ACCESS_TOKEN="${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}"
