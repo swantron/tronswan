@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     async function fetchWeatherData() {
@@ -25,8 +25,8 @@ function App() {
           humidity: data.main.humidity,
         });
       } catch (error) {
-        setError('Failed to fetch weather data');
         console.error('Error fetching weather data:', error);
+        setErrorMessage('api call to openweathermap failed.. check the console');
       } finally {
         setLoading(false);
       }
@@ -35,19 +35,41 @@ function App() {
     fetchWeatherData();
   }, []);
 
-  if (loading) return <div className="App">Loading...</div>;
-  if (error) return <div className="App">Error: {error}</div>;
-
   return (
     <div className="App" data-testid="app-container">
       <header className="App-header" data-testid="app-header">
         <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
         <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
-        {weather.temperature && <p data-testid="temperature-display">thermomotron | {weather.temperature}°F</p>}
-        {weather.feelsLike && <p data-testid="feels-like-display">feelometer | {weather.feelsLike}°F</p>}
-        {weather.pressure && <p data-testid="pressure-display">baromotron | {weather.pressure} hPa</p>}
-        {weather.humidity && <p data-testid="humidity-display">humidotron | {weather.humidity}%</p>}
-        {/* Links */}
+        {loading ? (
+          <p>Loading...</p>
+        ) : errorMessage ? (
+          <p className="error-message">{errorMessage}</p>
+        ) : (
+          <>
+            {weather.temperature && <p data-testid="temperature-display">thermomotron | {weather.temperature}°F</p>}
+            {weather.feelsLike && <p data-testid="feels-like-display">feelometer | {weather.feelsLike}°F</p>}
+            {weather.pressure && <p data-testid="pressure-display">baromotron | {weather.pressure} hPa</p>}
+            {weather.humidity && <p data-testid="humidity-display">humidotron | {weather.humidity}%</p>}
+          </>
+        )}
+        <a
+          className="App-link"
+          href="https://swantron.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="swantron-link"
+        >
+          swan tron dot com
+        </a>
+        <a
+          className="App-link"
+          href="https://chomptron.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="chomptron-link"
+        >
+          chomp tron dot com
+        </a>
       </header>
     </div>
   );
