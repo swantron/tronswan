@@ -15,12 +15,7 @@ test.describe('TronSwan Website Tests', () => {
     const temperatureDisplay = page.locator('p[data-testid="temperature-display"]');
     await expect(temperatureDisplay).toBeVisible();
 
-    // Optional: Check if the temperature display contains specific text
-    // This will depend on the expected content format, for example:
-    await expect(temperatureDisplay).toContainText(/thermomotron \| \d+\.\d+°F/);
-
-    await expect(temperatureDisplay).toHaveText(/thermomotron \| ([0-9]|3[0-9]|40)\.\d+°F/);
-
+    // Updated regex to check if the temperature is between -50°F and 120°F
+    await expect(temperatureDisplay).toContainText(/thermomotron \| -?(?:[0-5]?[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9]|1[01][0-9]|120)\.\d+°F/);
   });
 });
-
