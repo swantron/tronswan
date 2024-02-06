@@ -3,59 +3,51 @@ import logo from './robotard-removebg-preview.png';
 import './App.css';
 
 function App() {
-  const [temperature, setTemperature] = useState(null);
-  const [feelsLike, setFeelsLike] = useState(null);
-  const [pressure, setPressure] = useState(null);
-  const [humidity, setHumidity] = useState(null);
+  const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      const apiKey = process.env.REACT_APP_API_KEY; // Accessing the API key from DO
-      const city = 'Bozeman';
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
+    async function fetchWeatherData() {
+      const apiKey = process.env.REACT_APP_API_KEY;
+      const city = process.env.REACT_APP_CITY || 'Bozeman';
+      const units = process.env.REACT_APP_UNITS || 'imperial';
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
 
       try {
         const response = await fetch(url);
+        if (!response.ok) throw new Error('Weather data fetch failed');
         const data = await response.json();
-        setTemperature(data.main.temp);
-        setFeelsLike(data.main.feels_like);
-        setPressure(data.main.pressure);
-        setHumidity(data.main.humidity);
+        setWeather({
+          temperature: data.main.temp,
+          feelsLike: data.main.feels_like,
+          pressure: data.main.pressure,
+          humidity: data.main.humidity,
+        });
       } catch (error) {
+        setError('Failed to fetch weather data');
         console.error('Error fetching weather data:', error);
+      } finally {
+        setLoading(false);
       }
-    };
+    }
 
     fetchWeatherData();
   }, []);
+
+  if (loading) return <div className="App">Loading...</div>;
+  if (error) return <div className="App">Error: {error}</div>;
 
   return (
     <div className="App" data-testid="app-container">
       <header className="App-header" data-testid="app-header">
         <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
         <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
-        {temperature && <p data-testid="temperature-display">thermomotron | {temperature}°F</p>}
-        {feelsLike && <p data-testid="feels-like-display">feelometer | {feelsLike}°F</p>}
-        {pressure && <p data-testid="pressure-display">baromotron | {pressure} hPa</p>}
-        {humidity && <p data-testid="humidity-display">humidotron | {humidity}%</p>}
-        <a
-          className="App-link"
-          href="https://swantron.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="swantron-link"
-        >
-          swan tron dot com
-        </a>
-        <a
-          className="App-link"
-          href="https://chomptron.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="chomptron-link"
-        >
-          chomp tron dot com
-        </a>
+        {weather.temperature && <p data-testid="temperature-display">thermomotron | {weather.temperature}°F</p>}
+        {weather.feelsLike && <p data-testid="feels-like-display">feelometer | {weather.feelsLike}°F</p>}
+        {weather.pressure && <p data-testid="pressure-display">baromotron | {weather.pressure} hPa</p>}
+        {weather.humidity && <p data-testid="humidity-display">humidotron | {weather.humidity}%</p>}
+        {/* Links */}
       </header>
     </div>
   );
