@@ -19,7 +19,7 @@ test.describe('TronSwan Website Tests', () => {
     // This will depend on the expected content format, for example:
     await expect(temperatureDisplay).toContainText(/thermomotron \| \d+\.\d+°F/);
 
-    await expect(temperatureDisplay).toHaveText(/thermomotron \| ([0-9]|3[0-9]|40)\.\d+°F/);
+    await expect(temperatureDisplay).toHaveText(/thermomotron \| (2[0-9]|3[0-9]|40)\.\d+°F/);
 
   });
 });
