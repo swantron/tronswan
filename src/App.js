@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from './robotard-removebg-preview.png';
-import './App.css'; // Updated import statement to use the new App.css file
+import './App.css';
 
 function FizzBuzz({ number }) {
   const generateFizzBuzz = (num) => {
