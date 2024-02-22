@@ -1,12 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import logo from './robotard-removebg-preview.png';
-import './App.css';
+import './App.css'; // Updated import statement to use the new App.css file
+
+function FizzBuzz({ number }) {
+  const generateFizzBuzz = (num) => {
+    let result = [];
+    for (let i = 1; i <= num; i++) {
+      if (i % 3 === 0 && i % 5 === 0) {
+        result.push('FizzBuzz');
+      } else if (i % 3 === 0) {
+        result.push('Fizz');
+      } else if (i % 5 === 0) {
+        result.push('Buzz');
+      } else {
+        result.push(i);
+      }
+    }
+    return result.join(', ');
+  };
+
+  return (
+    <div>
+      <h2>FizzBuzz</h2>
+      <p>{generateFizzBuzz(number)}</p>
+    </div>
+  );
+}
 
 function App() {
   const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [inputNumber, setInputNumber] = useState('');
+  
   useEffect(() => {
     async function fetchWeatherData() {
       const apiKey = process.env.REACT_APP_API_KEY;
@@ -35,6 +61,10 @@ function App() {
     fetchWeatherData();
   }, []);
 
+  const handleInputChange = (event) => {
+    setInputNumber(event.target.value);
+  };
+
   return (
     <div className="App" data-testid="app-container">
       <header className="App-header" data-testid="app-header">
@@ -52,6 +82,10 @@ function App() {
             {weather.humidity && <p data-testid="humidity-display">humidotron | {weather.humidity}%</p>}
           </>
         )}
+        <div>
+          <input type="number" value={inputNumber} onChange={handleInputChange} />
+          {inputNumber && <FizzBuzz number={parseInt(inputNumber)} />}
+        </div>
         <a
           className="App-link"
           href="https://swantron.com"
