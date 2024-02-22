@@ -20,8 +20,8 @@ function FizzBuzz({ number }) {
   };
 
   return (
-    <div>
-      <h2>FizzBuzz</h2>
+    <div className="fizzbuzz-container">
+      <h2 className="fizzbuzz-title">FizzBuzz</h2>
       <p>{generateFizzBuzz(number)}</p>
     </div>
   );
@@ -32,7 +32,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [inputNumber, setInputNumber] = useState('');
-  
+
   useEffect(() => {
     async function fetchWeatherData() {
       const apiKey = process.env.REACT_APP_API_KEY;
