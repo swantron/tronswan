@@ -1,7 +1,9 @@
 # tronswan
 
-..a react app parked at [https://tronswan.com](https://tronswan.com)
-
+.. a react app 
+... with a cicd pipeline
+.... parked at [https://tronswan.com](https://tronswan.com)
+..... for learning and doing stuff live
 
 ## Scripts
 
