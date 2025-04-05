@@ -1,12 +1,55 @@
 /* App.css */
 
-.App {
-  text-align: center;
+/* CSS Variables for theming */
+:root {
+  --primary-bg: #282c34;
+  --secondary-bg: #f0f0f0;
+  --primary-text: #ffffff;
+  --secondary-text: #333333;
+  --accent-color: #f89859;
+  --error-color: #ff4444;
+  --success-color: #4CAF50;
+  --border-radius: 10px;
+  --transition-speed: 0.3s;
+  --max-width: 1200px;
+  --container-padding: 20px;
 }
 
+/* Base styles */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container for content */
+.App-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--container-padding);
+  width: 100%;
+}
+
+/* Header styles */
+.App-header {
+  background-color: var(--primary-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: var(--primary-text);
+  padding: 2rem;
+}
+
+/* Logo styles */
 .App-logo {
   height: 40vmin;
+  max-height: 300px;
   pointer-events: none;
+  transition: transform var(--transition-speed) ease;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -15,27 +58,130 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
+/* Title styles */
 .App-title {
-  font-size: 1.5em; /* Larger font size for the title */
-  margin-bottom: 20px; /* Spacing between title and image */
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  margin-bottom: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Link styles */
 .App-link {
-  color: #f89859;
-  margin-top: 20px; /* Add spacing above links if needed */
+  color: var(--accent-color);
+  margin-top: 1.5rem;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+  position: relative;
 }
 
+.App-link:hover,
+.App-link:focus {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.App-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* FizzBuzz component styles */
+.fizzbuzz-container {
+  background-color: var(--secondary-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.fizzbuzz-title {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: var(--secondary-text);
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.fizzbuzz-sequence {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: var(--secondary-text);
+  line-height: 1.6;
+}
+
+/* Input styles */
+input[type="number"] {
+  background-color: var(--accent-color);
+  color: var(--primary-text);
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 300px;
+  transition: all var(--transition-speed) ease;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-bg);
+  transform: scale(1.02);
+}
+
+input[type="number"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Weather display styles */
+.weather-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.weather-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  transition: transform var(--transition-speed) ease;
+}
+
+.weather-item:hover {
+  transform: translateY(-5px);
+}
+
+/* Error message styles */
+.error-message {
+  color: var(--error-color);
+  background-color: rgba(255, 68, 68, 0.1);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Loading state styles */
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--accent-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+/* Animations */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -45,31 +191,50 @@
   }
 }
 
-/* Styles for FizzBuzz component */
-.fizzbuzz-container {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.fizzbuzz-title {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 10px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 1rem;
+  }
+
+  .weather-container {
+    grid-template-columns: 1fr;
+  }
+
+  .fizzbuzz-container {
+    padding: 1.5rem;
+  }
 }
 
-.fizzbuzz-sequence {
-  font-size: 16px;
-  color: #555;
+@media (max-width: 480px) {
+  .App-logo {
+    height: 30vmin;
+  }
+
+  .App-title {
+    font-size: 1.8rem;
+  }
+
+  input[type="number"] {
+    padding: 0.6rem 1rem;
+  }
 }
 
-/* Additional style for input box */
-input[type="number"] {
-  background-color: #f89859; /* Orange background color */
-  color: white; /* Text color */
-  border: none; /* Remove default border */
-  padding: 8px; /* Add padding */
-  border-radius: 5px; /* Add border-radius */
-  margin-top: 10px; /* Adjust margin as needed */
+/* Print styles */
+@media print {
+  .App-header {
+    background-color: white;
+    color: black;
+  }
+
+  .App-link {
+    color: black;
+    text-decoration: underline;
+  }
 }
