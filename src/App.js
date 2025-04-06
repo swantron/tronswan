@@ -97,7 +97,7 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
+      <h1 className="App-title" data-testid="app-title">chomptron</h1>
       <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
       
       {loading ? (
@@ -142,21 +142,12 @@ function App() {
             <div className="external-links">
               <a
                 className="App-link"
-                href="https://swantron.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="swantron-link"
-              >
-                swan tron dot com
-              </a>
-              <a
-                className="App-link"
                 href="https://chomptron.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="chomptron-link"
               >
-                chomp tron dot com
+                chomptron.com
               </a>
             </div>
           </div>

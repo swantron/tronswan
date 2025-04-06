@@ -2,17 +2,18 @@
 
 /* CSS Variables for theming */
 :root {
-  --primary-bg: #282c34;
-  --secondary-bg: #f0f0f0;
-  --primary-text: #ffffff;
-  --secondary-text: #333333;
-  --accent-color: #f89859;
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f9fa;
+  --accent-color: #ff6b6b;
+  --primary-text: #2d3436;
+  --secondary-text: #636e72;
   --error-color: #ff4444;
   --success-color: #4CAF50;
   --border-radius: 10px;
   --transition-speed: 0.3s;
   --max-width: 1200px;
   --container-padding: 20px;
+  --border-color: #dfe6e9;
 }
 
 /* Base styles */
