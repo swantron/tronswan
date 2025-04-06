@@ -1,5 +1,5 @@
 const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://chomptron.com/wp-json/wp/v2';
-const CORS_PROXY = 'https://corsproxy.io/?';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 const fetchWithCors = async (url, options = {}) => {
   try {
@@ -30,8 +30,8 @@ export const wordpressService = {
       const url = `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
       const response = await fetchWithCors(url);
-      const totalPages = response.headers.get('X-WP-TotalPages');
       const recipes = await response.json();
+      const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
       return {
         recipes: recipes.map(recipe => ({
@@ -82,8 +82,8 @@ export const wordpressService = {
       const url = `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
       const response = await fetchWithCors(url);
-      const totalPages = response.headers.get('X-WP-TotalPages');
       const recipes = await response.json();
+      const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
       return {
         recipes: recipes.map(recipe => ({
