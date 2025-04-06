@@ -1,35 +1,12 @@
-const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://chomptron.com/wp-json/wp/v2';
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
-
-const fetchWithCors = async (url, options = {}) => {
-  try {
-    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
-    const response = await fetch(proxyUrl, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response;
-  } catch (error) {
-    console.error('Error in fetchWithCors:', error);
-    throw error;
-  }
-};
+const PROXY_URL = process.env.REACT_APP_PROXY_URL || 'http://localhost:3001';
 
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
     try {
       const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
-      const url = `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
+      const url = `${PROXY_URL}/wp-json/wp/v2/posts?_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
-      const response = await fetchWithCors(url);
+      const response = await fetch(url);
       const recipes = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
@@ -54,8 +31,8 @@ export const wordpressService = {
 
   async getRecipeById(id) {
     try {
-      const response = await fetchWithCors(
-        `${WORDPRESS_API_URL}/posts/${id}?_embed`
+      const response = await fetch(
+        `${PROXY_URL}/wp-json/wp/v2/posts/${id}?_embed`
       );
 
       const recipe = await response.json();
@@ -79,9 +56,9 @@ export const wordpressService = {
   async searchRecipes(query, page = 1, perPage = 10) {
     try {
       const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
-      const url = `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
+      const url = `${PROXY_URL}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
-      const response = await fetchWithCors(url);
+      const response = await fetch(url);
       const recipes = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
