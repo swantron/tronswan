@@ -1,20 +1,26 @@
 const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://chomptron.com/wp-json/wp/v2';
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 const fetchWithCors = async (url, options = {}) => {
-  const response = await fetch(url, {
-    ...options,
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+  try {
+    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+    const response = await fetch(proxyUrl, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Error in fetchWithCors:', error);
+    throw error;
   }
-
-  return response;
 };
 
 export const wordpressService = {
