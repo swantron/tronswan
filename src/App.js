@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from './robotard-removebg-preview.png';
 import RecipeList from './components/RecipeList';
+import RecipeDetail from './components/RecipeDetail';
 import './App.css';
 
 function FizzBuzz({ number }) {
@@ -135,6 +136,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/recipes" element={<RecipeList />} />
+              <Route path="/recipes/:id" element={<RecipeDetail />} />
             </Routes>
 
             <div className="external-links">
