@@ -1,10 +1,10 @@
-const PROXY_URL = process.env.REACT_APP_PROXY_URL || 'http://localhost:3001';
+const PROXY_URL = 'http://localhost:3001';
+const WORDPRESS_API_URL = 'https://chomptron.com/wp-json/wp/v2';
 
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
     try {
-      const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
-      const url = `${PROXY_URL}/wp-json/wp/v2/posts?_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
+      const url = `${PROXY_URL}/wp-json/wp/v2/posts?_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
@@ -55,8 +55,7 @@ export const wordpressService = {
 
   async searchRecipes(query, page = 1, perPage = 10) {
     try {
-      const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
-      const url = `${PROXY_URL}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
+      const url = `${PROXY_URL}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
