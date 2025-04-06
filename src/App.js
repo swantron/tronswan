@@ -130,7 +130,7 @@ function App() {
           <div className="App-container">
             <nav className="main-nav">
               <Link to="/" className="nav-link">Home</Link>
-              <Link to="/recipes" className="nav-link">Recipes</Link>
+              <Link to="/recipes" className="nav-link">Chomptron</Link>
             </nav>
 
             <Routes>
@@ -142,12 +142,21 @@ function App() {
             <div className="external-links">
               <a
                 className="App-link"
+                href="https://swantron.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="swantron-link"
+              >
+                swan tron dot com
+              </a>
+              <a
+                className="App-link"
                 href="https://chomptron.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="chomptron-link"
               >
-                chomptron.com
+                chomp tron dot com
               </a>
             </div>
           </div>
