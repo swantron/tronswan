@@ -1,4 +1,4 @@
-const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://your-wordpress-site.com/wp-json/wp/v2';
+const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://chomptron.com/wp-json/wp/v2';
 
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
