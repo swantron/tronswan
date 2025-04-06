@@ -18,10 +18,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+          cache: 'yarn'
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn test
 
   deploy-and-validate:
     runs-on: ubuntu-latest
@@ -70,11 +73,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-          cache: 'npm'
-      - run: npm ci # Ensure dependencies for Playwright are installed
+          cache: 'yarn'
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
       - name: Install Playwright Browsers
-        run: npx playwright install # This line is added to install Playwright browsers
+        run: yarn playwright install
       - name: Run Playwright Tests
         run: |
           echo 'Running Playwright tests...'
-          npx playwright test tronswan.test.js
+          yarn playwright test tronswan.test.js

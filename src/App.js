@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from './robotard-removebg-preview.png';
+import RecipeList from './components/RecipeList';
 import './App.css';
 
 function FizzBuzz({ number }) {
@@ -54,7 +56,7 @@ function WeatherDisplay({ weather }) {
   );
 }
 
-function App() {
+function Home() {
   const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -93,52 +95,72 @@ function App() {
   };
 
   return (
-    <div className="App" data-testid="app-container">
-      <header className="App-header" data-testid="app-header">
-        <div className="App-container">
-          <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
-          <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
-          
-          {loading ? (
-            <div className="loading-spinner" aria-label="Loading weather data" />
-          ) : errorMessage ? (
-            <p className="error-message">{errorMessage}</p>
-          ) : (
-            <WeatherDisplay weather={weather} />
-          )}
+    <div className="home-container">
+      <h1 className="App-title" data-testid="app-title">tron swan dot com</h1>
+      <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
+      
+      {loading ? (
+        <div className="loading-spinner" aria-label="Loading weather data" />
+      ) : errorMessage ? (
+        <p className="error-message">{errorMessage}</p>
+      ) : (
+        <WeatherDisplay weather={weather} />
+      )}
 
-          <div>
-            <input
-              type="number"
-              value={inputNumber}
-              onChange={handleInputChange}
-              placeholder="Enter a number"
-              aria-label="Enter a number for FizzBuzz"
-            />
-            {inputNumber && <FizzBuzz number={parseInt(inputNumber)} />}
-          </div>
-
-          <a
-            className="App-link"
-            href="https://swantron.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="swantron-link"
-          >
-            swan tron dot com
-          </a>
-          <a
-            className="App-link"
-            href="https://chomptron.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="chomptron-link"
-          >
-            chomp tron dot com
-          </a>
-        </div>
-      </header>
+      <div>
+        <input
+          type="number"
+          value={inputNumber}
+          onChange={handleInputChange}
+          placeholder="Enter a number"
+          aria-label="Enter a number for FizzBuzz"
+        />
+        {inputNumber && <FizzBuzz number={parseInt(inputNumber)} />}
+      </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="App" data-testid="app-container">
+        <header className="App-header" data-testid="app-header">
+          <div className="App-container">
+            <nav className="main-nav">
+              <Link to="/" className="nav-link">Home</Link>
+              <Link to="/recipes" className="nav-link">Recipes</Link>
+            </nav>
+
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/recipes" element={<RecipeList />} />
+            </Routes>
+
+            <div className="external-links">
+              <a
+                className="App-link"
+                href="https://swantron.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="swantron-link"
+              >
+                swan tron dot com
+              </a>
+              <a
+                className="App-link"
+                href="https://chomptron.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="chomptron-link"
+              >
+                chomp tron dot com
+              </a>
+            </div>
+          </div>
+        </header>
+      </div>
+    </Router>
   );
 }
 

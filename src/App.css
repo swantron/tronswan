@@ -29,6 +29,9 @@
   margin: 0 auto;
   padding: var(--container-padding);
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Header styles */
@@ -38,9 +41,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: var(--primary-text);
+  padding: 2rem;
+}
+
+/* Navigation styles */
+.main-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+}
+
+.nav-link {
+  color: var(--primary-text);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+}
+
+/* Home container styles */
+.home-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
 }
 
@@ -66,10 +104,17 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* External links styles */
+.external-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
 /* Link styles */
 .App-link {
   color: var(--accent-color);
-  margin-top: 1.5rem;
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
@@ -209,6 +254,12 @@ input[type="number"]::placeholder {
 
   .fizzbuzz-container {
     padding: 1.5rem;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
 }
 
