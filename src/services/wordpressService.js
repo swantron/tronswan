@@ -1,16 +1,29 @@
 const WORDPRESS_API_URL = process.env.REACT_APP_WORDPRESS_API_URL || 'https://chomptron.com/wp-json/wp/v2';
 
+const fetchWithCors = async (url, options = {}) => {
+  const response = await fetch(url, {
+    ...options,
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response;
+};
+
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
     try {
-      const response = await fetch(
-        `${WORDPRESS_API_URL}/posts?categories=${process.env.REACT_APP_RECIPE_CATEGORY_ID}&_embed&page=${page}&per_page=${perPage}`
-      );
+      const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
+      const url = `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
-      if (!response.ok) {
-        throw new Error('Failed to fetch recipes');
-      }
-
+      const response = await fetchWithCors(url);
       const totalPages = response.headers.get('X-WP-TotalPages');
       const recipes = await response.json();
 
@@ -35,13 +48,9 @@ export const wordpressService = {
 
   async getRecipeById(id) {
     try {
-      const response = await fetch(
+      const response = await fetchWithCors(
         `${WORDPRESS_API_URL}/posts/${id}?_embed`
       );
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch recipe');
-      }
 
       const recipe = await response.json();
 
@@ -63,14 +72,10 @@ export const wordpressService = {
 
   async searchRecipes(query, page = 1, perPage = 10) {
     try {
-      const response = await fetch(
-        `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&categories=${process.env.REACT_APP_RECIPE_CATEGORY_ID}&_embed&page=${page}&per_page=${perPage}`
-      );
+      const categoryId = process.env.REACT_APP_RECIPE_CATEGORY_ID || '';
+      const url = `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}${categoryId ? `&categories=${categoryId}` : ''}`;
       
-      if (!response.ok) {
-        throw new Error('Failed to search recipes');
-      }
-
+      const response = await fetchWithCors(url);
       const totalPages = response.headers.get('X-WP-TotalPages');
       const recipes = await response.json();
 
