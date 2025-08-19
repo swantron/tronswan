@@ -4,10 +4,21 @@ const SWANTRON_API_URL = process.env.REACT_APP_SWANTRON_API_URL || 'https://swan
 export const swantronService = {
   async getPosts(page = 1, perPage = 10) {
     try {
-      const url = `${SWANTRON_API_URL}/posts&_embed&page=${page}&per_page=${perPage}`;
+      const url = `${SWANTRON_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const posts = await response.json();
+      
+      if (!Array.isArray(posts)) {
+        console.error('Expected array but got:', posts);
+        throw new Error('Invalid response format from swantron.com API');
+      }
+      
       const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
       return {
@@ -33,8 +44,12 @@ export const swantronService = {
   async getPostById(id) {
     try {
       const response = await fetch(
-        `${SWANTRON_API_URL}/posts/${id}&_embed`
+        `${SWANTRON_API_URL}/posts/${id}?_embed`
       );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const post = await response.json();
 
@@ -57,10 +72,21 @@ export const swantronService = {
 
   async searchPosts(query, page = 1, perPage = 10) {
     try {
-      const url = `${SWANTRON_API_URL}/posts&search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
+      const url = `${SWANTRON_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const posts = await response.json();
+      
+      if (!Array.isArray(posts)) {
+        console.error('Expected array but got:', posts);
+        throw new Error('Invalid response format from swantron.com API');
+      }
+      
       const totalPages = response.headers.get('X-WP-TotalPages') || 1;
 
       return {
