@@ -5,6 +5,7 @@ import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
 import Weather from './components/Weather';
 import FizzBuzz from './components/FizzBuzz';
+import Hello from './components/Hello';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import './App.css';
@@ -34,6 +35,7 @@ function App() {
               <Link to="/recipes" className="nav-link">chomptron</Link>
               <Link to="/weather" className="nav-link">weathertron</Link>
               <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
+              <Link to="/hello" className="nav-link">hello</Link>
             </nav>
 
             <ErrorBoundary>
@@ -43,29 +45,10 @@ function App() {
                 <Route path="/recipes/:id" element={<RecipeDetail />} />
                 <Route path="/weather" element={<Weather />} />
                 <Route path="/trontronbuzztron" element={<FizzBuzz />} />
+                <Route path="/hello" element={<Hello />} />
               </Routes>
             </ErrorBoundary>
 
-            <div className="external-links">
-              <a
-                className="App-link"
-                href="https://swantron.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="swantron-link"
-              >
-                swan tron dot com
-              </a>
-              <a
-                className="App-link"
-                href="https://chomptron.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="chomptron-link"
-              >
-                chomp tron dot com
-              </a>
-            </div>
           </div>
         </header>
       </div>
