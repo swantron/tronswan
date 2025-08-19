@@ -1,3 +1,4 @@
+// Updated API endpoint to use correct WordPress REST API format
 const WORDPRESS_API_URL = 'https://chomptron.com/index.php?rest_route=/wp/v2';
 
 export const wordpressService = {
