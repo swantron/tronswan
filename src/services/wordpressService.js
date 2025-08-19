@@ -4,7 +4,7 @@ const WORDPRESS_API_URL = 'https://chomptron.com/index.php?rest_route=/wp/v2';
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
     try {
-      const url = `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
+      const url = `${WORDPRESS_API_URL}/posts&_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
@@ -32,7 +32,7 @@ export const wordpressService = {
   async getRecipeById(id) {
     try {
       const response = await fetch(
-        `${WORDPRESS_API_URL}/posts/${id}?_embed`
+        `${WORDPRESS_API_URL}/posts/${id}&_embed`
       );
 
       const recipe = await response.json();
@@ -55,7 +55,7 @@ export const wordpressService = {
 
   async searchRecipes(query, page = 1, perPage = 10) {
     try {
-      const url = `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
+      const url = `${WORDPRESS_API_URL}/posts&search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
