@@ -1,65 +1,64 @@
 // Imports necessary utilities from the testing library and jest-dom for DOM assertions.
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from './App'; // Imports the App component to be tested.
 import '@testing-library/jest-dom'; // Provides the extended matchers like toBeInTheDocument for easier DOM node assertions.
 
-// Global setup for tests, mocking the fetch API call before all tests run.
-beforeAll(() => {
-  global.fetch = jest.fn(() => Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve({
-      main: {
-        temp: '50',
-        feels_like: '48',
-        pressure: '1000',
-        humidity: '10'
-      }
-    })
-  }));
-});
-
-// Cleans up mocks to prevent tests from affecting each other
-afterEach(() => {
-  fetch.mockClear();
+// Mock the SEO component to prevent react-helmet-async errors in tests
+jest.mock('./components/SEO', () => {
+  return function MockSEO() {
+    return null; // Return null to render nothing
+  };
 });
 
 // Grouping related tests about the App component.
 describe('App Component', () => {
   // Test to ensure the App container is rendered properly.
-  test('renders app container', async () => {
+  test('renders app container', () => {
     render(<App />);
     const appContainer = screen.getByTestId('app-container');
     expect(appContainer).toBeInTheDocument();
   });
 
   // Test to ensure the App header is rendered.
-  test('renders app header', async () => {
+  test('renders app header', () => {
     render(<App />);
     const headerElement = screen.getByTestId('app-header');
     expect(headerElement).toBeInTheDocument();
   });
 
-  // Test to check if the loading message is displayed before data loads.
-  test('renders loading state', () => {
+  // Test to check if the navigation links are rendered.
+  test('renders navigation links', () => {
     render(<App />);
-    const loadingMessage = screen.getByText(/Loading.../i);
-    expect(loadingMessage).toBeInTheDocument();
+    // Test navigation links specifically
+    const navLinks = screen.getAllByRole('link');
+    expect(navLinks).toHaveLength(6);
+    
+    // Check specific navigation text
+    expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'weathertron' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'trontronbuzztron' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
   });
 
-  // Test to check if the logo is present after data has successfully loaded.
-  test('renders logo after loading completes', async () => {
+  // Test to check if the home page content is rendered by default.
+  test('renders home page content by default', () => {
     render(<App />);
-    const logoElement = await waitFor(() => screen.getByTestId('app-logo'));
+    const titleElement = screen.getByTestId('app-title');
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveTextContent('tronswan');
+    
+    const logoElement = screen.getByTestId('app-logo');
     expect(logoElement).toBeInTheDocument();
+    
+    expect(screen.getByText('tron swan dot com')).toBeInTheDocument();
   });
 
-  // Test to simulate an API failure and check if an error message is displayed.
-  test('renders error message on API call failure', async () => {
-    // Mock the fetch to simulate an API failure.
-    fetch.mockImplementationOnce(() => Promise.reject(new Error('API call failed')));
+  // Test to check if the home container is rendered.
+  test('renders home container', () => {
     render(<App />);
-    // Expect to find an error message on the screen after the failed API call.
-    const errorMessage = await waitFor(() => screen.getByText(/api call to openweathermap failed.. check the console/i));
-    expect(errorMessage).toBeInTheDocument();
+    const homeContainer = screen.getByText('tron swan dot com').closest('.home-container');
+    expect(homeContainer).toBeInTheDocument();
   });
 });
