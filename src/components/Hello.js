@@ -56,9 +56,7 @@ function Hello() {
         <div className="hello-info">
           <h3>About This Site</h3>
           <p>
-            Tron Swan is a collection of robot-powered tools and experiments. 
-            Navigate through the different sections to explore weather data, 
-            recipes, and programming challenges.
+            building / deploying / learning
           </p>
         </div>
       </div>
