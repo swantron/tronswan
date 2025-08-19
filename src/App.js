@@ -20,7 +20,16 @@ function Home() {
       <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
       
       <div className="home-description">
-        <p>tron swan dot com</p>
+        <p>
+          <a 
+            href="https://swantron.com" 
+            data-testid="swantron-link"
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            swan tron dot com
+          </a>
+        </p>
       </div>
     </div>
   );

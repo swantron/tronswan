@@ -29,8 +29,8 @@ describe('App Component', () => {
   // Test to check if the navigation links are rendered.
   test('renders navigation links', () => {
     render(<App />);
-    // Test navigation links specifically
-    const navLinks = screen.getAllByRole('link');
+    // Test navigation links specifically - only the nav bar links, not the swantron link
+    const navLinks = screen.getAllByRole('link').filter(link => link.closest('nav'));
     expect(navLinks).toHaveLength(6);
     
     // Check specific navigation text
@@ -52,13 +52,16 @@ describe('App Component', () => {
     const logoElement = screen.getByTestId('app-logo');
     expect(logoElement).toBeInTheDocument();
     
-    expect(screen.getByText('tron swan dot com')).toBeInTheDocument();
+    const swantronLink = screen.getByTestId('swantron-link');
+    expect(swantronLink).toBeInTheDocument();
+    expect(swantronLink).toHaveAttribute('href', 'https://swantron.com');
+    expect(swantronLink).toHaveTextContent('swan tron dot com');
   });
 
   // Test to check if the home container is rendered.
   test('renders home container', () => {
     render(<App />);
-    const homeContainer = screen.getByText('tron swan dot com').closest('.home-container');
+    const homeContainer = screen.getByTestId('swantron-link').closest('.home-container');
     expect(homeContainer).toBeInTheDocument();
   });
 });
