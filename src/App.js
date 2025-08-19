@@ -1,122 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from './robotard-removebg-preview.png';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
+import Weather from './components/Weather';
+import FizzBuzz from './components/FizzBuzz';
+import ErrorBoundary from './components/ErrorBoundary';
+import SEO from './components/SEO';
 import './App.css';
 
-function FizzBuzz({ number }) {
-  const generateFizzBuzz = (num) => {
-    let result = [];
-    for (let i = 1; i <= num; i++) {
-      if (i % 3 === 0 && i % 5 === 0) {
-        result.push('FizzBuzz');
-      } else if (i % 3 === 0) {
-        result.push('Fizz');
-      } else if (i % 5 === 0) {
-        result.push('Buzz');
-      } else {
-        result.push(i);
-      }
-    }
-    return result.join(', ');
-  };
-
-  return (
-    <div className="fizzbuzz-container">
-      <h2 className="fizzbuzz-title">FizzBuzz</h2>
-      <p className="fizzbuzz-sequence">{generateFizzBuzz(number)}</p>
-    </div>
-  );
-}
-
-function WeatherDisplay({ weather }) {
-  return (
-    <div className="weather-container">
-      {weather.temperature && (
-        <div className="weather-item">
-          <p data-testid="temperature-display">thermomotron | {weather.temperature}°F</p>
-        </div>
-      )}
-      {weather.feelsLike && (
-        <div className="weather-item">
-          <p data-testid="feels-like-display">feelometer | {weather.feelsLike}°F</p>
-        </div>
-      )}
-      {weather.pressure && (
-        <div className="weather-item">
-          <p data-testid="pressure-display">baromotron | {weather.pressure} hPa</p>
-        </div>
-      )}
-      {weather.humidity && (
-        <div className="weather-item">
-          <p data-testid="humidity-display">humidotron | {weather.humidity}%</p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function Home() {
-  const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [inputNumber, setInputNumber] = useState('');
-
-  useEffect(() => {
-    async function fetchWeatherData() {
-      const apiKey = process.env.REACT_APP_API_KEY;
-      const city = 'Bozeman';
-      const units = 'imperial';
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
-
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Weather data fetch failed');
-        const data = await response.json();
-        setWeather({
-          temperature: data.main.temp,
-          feelsLike: data.main.feels_like,
-          pressure: data.main.pressure,
-          humidity: data.main.humidity,
-        });
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        setErrorMessage('api call to openweathermap failed.. check the console');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchWeatherData();
-  }, []);
-
-  const handleInputChange = (event) => {
-    setInputNumber(event.target.value);
-  };
-
   return (
     <div className="home-container">
-      <h1 className="App-title" data-testid="app-title">chomptron</h1>
+      <h1 className="App-title" data-testid="app-title">tronswan</h1>
       <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
       
-      {loading ? (
-        <div className="loading-spinner" aria-label="Loading weather data" />
-      ) : errorMessage ? (
-        <p className="error-message">{errorMessage}</p>
-      ) : (
-        <WeatherDisplay weather={weather} />
-      )}
-
-      <div>
-        <input
-          type="number"
-          value={inputNumber}
-          onChange={handleInputChange}
-          placeholder="Enter a number"
-          aria-label="Enter a number for FizzBuzz"
-        />
-        {inputNumber && <FizzBuzz number={parseInt(inputNumber)} />}
+      <div className="home-description">
+        <p>🤖 Welcome to the robot playground where technology meets creativity</p>
+        <p>Explore our collection of robot-powered tools and discover the future of digital interaction</p>
       </div>
     </div>
   );
@@ -129,15 +31,21 @@ function App() {
         <header className="App-header" data-testid="app-header">
           <div className="App-container">
             <nav className="main-nav">
-              <Link to="/" className="nav-link">Home</Link>
-              <Link to="/recipes" className="nav-link">Chomptron</Link>
+              <Link to="/" className="nav-link">tronswan</Link>
+              <Link to="/recipes" className="nav-link">chomptron</Link>
+              <Link to="/weather" className="nav-link">weathertron</Link>
+              <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
             </nav>
 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/recipes" element={<RecipeList />} />
-              <Route path="/recipes/:id" element={<RecipeDetail />} />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<><SEO /><Home /></>} />
+                <Route path="/recipes" element={<RecipeList />} />
+                <Route path="/recipes/:id" element={<RecipeDetail />} />
+                <Route path="/weather" element={<Weather />} />
+                <Route path="/trontronbuzztron" element={<FizzBuzz />} />
+              </Routes>
+            </ErrorBoundary>
 
             <div className="external-links">
               <a

@@ -83,6 +83,19 @@
   padding: 2rem;
 }
 
+.home-description {
+  margin-top: 2rem;
+  max-width: 800px;
+  text-align: center;
+}
+
+.home-description p {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  line-height: 1.6;
+  margin: 1rem 0;
+  opacity: 0.9;
+}
+
 /* Logo styles */
 .App-logo {
   height: 40vmin;
