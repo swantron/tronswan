@@ -17,8 +17,7 @@ function Home() {
       <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
       
       <div className="home-description">
-        <p>🤖 Welcome to the robot playground where technology meets creativity</p>
-        <p>Explore our collection of robot-powered tools and discover the future of digital interaction</p>
+        <p>tron swan dot com</p>
       </div>
     </div>
   );
