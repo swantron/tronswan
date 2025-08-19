@@ -1,13 +1,9 @@
-const isDevelopment = process.env.NODE_ENV === 'development';
-const PROXY_URL = isDevelopment ? 'http://localhost:3001' : 'https://chomptron.com';
-const WORDPRESS_API_URL = 'https://chomptron.com/wp-json/wp/v2';
+const WORDPRESS_API_URL = 'https://chomptron.com/index.php?rest_route=/wp/v2';
 
 export const wordpressService = {
   async getRecipes(page = 1, perPage = 10) {
     try {
-      const url = isDevelopment 
-        ? `${PROXY_URL}/wp-json/wp/v2/posts?_embed&page=${page}&per_page=${perPage}`
-        : `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
+      const url = `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
@@ -34,11 +30,10 @@ export const wordpressService = {
 
   async getRecipeById(id) {
     try {
-      const url = isDevelopment
-        ? `${PROXY_URL}/wp-json/wp/v2/posts/${id}?_embed`
-        : `${WORDPRESS_API_URL}/posts/${id}?_embed`;
+      const response = await fetch(
+        `${WORDPRESS_API_URL}/posts/${id}?_embed`
+      );
 
-      const response = await fetch(url);
       const recipe = await response.json();
 
       return {
@@ -59,9 +54,7 @@ export const wordpressService = {
 
   async searchRecipes(query, page = 1, perPage = 10) {
     try {
-      const url = isDevelopment
-        ? `${PROXY_URL}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`
-        : `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
+      const url = `${WORDPRESS_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
       
       const response = await fetch(url);
       const recipes = await response.json();
