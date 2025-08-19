@@ -6,6 +6,8 @@ import RecipeDetail from './components/RecipeDetail';
 import Weather from './components/Weather';
 import FizzBuzz from './components/FizzBuzz';
 import Hello from './components/Hello';
+import SwantronList from './components/SwantronList';
+import SwantronDetail from './components/SwantronDetail';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import './App.css';
@@ -33,6 +35,7 @@ function App() {
             <nav className="main-nav">
               <Link to="/" className="nav-link">tronswan</Link>
               <Link to="/recipes" className="nav-link">chomptron</Link>
+              <Link to="/swantron" className="nav-link">swantron</Link>
               <Link to="/weather" className="nav-link">weathertron</Link>
               <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
               <Link to="/hello" className="nav-link">hello</Link>
@@ -43,6 +46,8 @@ function App() {
                 <Route path="/" element={<><SEO /><Home /></>} />
                 <Route path="/recipes" element={<RecipeList />} />
                 <Route path="/recipes/:id" element={<RecipeDetail />} />
+                <Route path="/swantron" element={<SwantronList />} />
+                <Route path="/swantron/:id" element={<SwantronDetail />} />
                 <Route path="/weather" element={<Weather />} />
                 <Route path="/trontronbuzztron" element={<FizzBuzz />} />
                 <Route path="/hello" element={<Hello />} />

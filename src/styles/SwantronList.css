@@ -1,0 +1,181 @@
+/* Swantron page styles */
+.swantron-page {
+  min-height: 100vh;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  padding: 2rem;
+}
+
+.swantron-list-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.swantron-list-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.swantron-list-header h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: var(--accent-color);
+}
+
+.swantron-subtitle {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  margin-bottom: 2rem;
+  color: var(--primary-text);
+  opacity: 0.9;
+}
+
+.swantron-search-form {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.swantron-search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+  transition: all var(--transition-speed) ease;
+}
+
+.swantron-search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(248, 152, 89, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.swantron-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.swantron-search-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+}
+
+.swantron-search-button:hover {
+  background-color: #e6813f;
+  transform: translateY(-2px);
+}
+
+.swantron-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.pagination-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #e6813f;
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-info {
+  color: var(--primary-text);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Error and loading states */
+.error-message,
+.no-posts-message {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--primary-text);
+  opacity: 0.8;
+}
+
+.error-message {
+  color: var(--error-color);
+  background-color: rgba(255, 68, 68, 0.1);
+  border-radius: var(--border-radius);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .swantron-page {
+    padding: 1rem;
+  }
+
+  .swantron-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .swantron-search-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .swantron-search-input {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .swantron-search-button {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .swantron-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swantron-list-header {
+    margin-bottom: 2rem;
+  }
+}
