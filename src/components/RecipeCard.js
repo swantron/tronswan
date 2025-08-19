@@ -1,15 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDateFormatter } from '../hooks/useDateFormatter';
 import '../styles/RecipeCard.css';
 
-const RecipeCard = ({ recipe }) => {
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+const RecipeCard = React.memo(({ recipe }) => {
+  const formatDate = useDateFormatter();
 
   return (
     <div className="recipe-card" data-testid="recipe-card">
@@ -45,6 +40,6 @@ const RecipeCard = ({ recipe }) => {
       </Link>
     </div>
   );
-};
+});
 
-export default RecipeCard; 
+export default RecipeCard;

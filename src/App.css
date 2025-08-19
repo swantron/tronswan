@@ -278,6 +278,83 @@ input[type="number"]::placeholder {
   }
 }
 
+/* Error Boundary styles */
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  background-color: var(--secondary-bg);
+  border-radius: var(--border-radius);
+  margin: 2rem;
+}
+
+.error-boundary-content {
+  text-align: center;
+  max-width: 600px;
+  color: var(--secondary-text);
+}
+
+.error-boundary-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--error-color);
+}
+
+.error-boundary-content p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.error-boundary-retry-button,
+.error-boundary-reload-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--transition-speed) ease;
+}
+
+.error-boundary-retry-button:hover,
+.error-boundary-reload-button:hover {
+  background-color: var(--primary-bg);
+  transform: translateY(-2px);
+}
+
+.error-boundary-details {
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+}
+
+.error-boundary-details summary {
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.error-boundary-stack {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  color: var(--error-color);
+}
+
 /* Print styles */
 @media print {
   .App-header {

@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2e108848.css",
+    "main.js": "/static/js/main.61df9ba1.js",
+    "static/js/453.3b9c3fcf.chunk.js": "/static/js/453.3b9c3fcf.chunk.js",
+    "static/media/robotard-removebg-preview.png": "/static/media/robotard-removebg-preview.cd995bc25208213efe7f.png",
+    "index.html": "/index.html",
+    "main.2e108848.css.map": "/static/css/main.2e108848.css.map",
+    "main.61df9ba1.js.map": "/static/js/main.61df9ba1.js.map",
+    "453.3b9c3fcf.chunk.js.map": "/static/js/453.3b9c3fcf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e108848.css",
+    "static/js/main.61df9ba1.js"
+  ]
+}
