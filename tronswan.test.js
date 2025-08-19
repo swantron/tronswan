@@ -9,7 +9,7 @@ test.describe('TronSwan Website Tests', () => {
     // Check if the specific link element is visible
     await expect(page.locator('a[data-testid="swantron-link"]')).toBeVisible();
     await expect(page.locator('a[data-testid="swantron-link"]')).toHaveAttribute('href', 'https://swantron.com');
-    await expect(page.locator('a[data-testid="swantron-link"]')).toContainText('swan tron dot com');
+    await expect(page.locator('a[data-testid="swantron-link"]')).toContainText('tron swan dot com');
   });
 
   test('Weather page should display temperature data', async ({ page }) => {
