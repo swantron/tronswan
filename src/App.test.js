@@ -52,14 +52,10 @@ describe('App Component', () => {
     const logoElement = screen.getByTestId('app-logo');
     expect(logoElement).toBeInTheDocument();
     
-    const swantronContainer = screen.getByTestId('swantron-link');
-    expect(swantronContainer).toBeInTheDocument();
-    expect(swantronContainer).toHaveTextContent('tron swan dot com');
-    
-    // Find the actual link element within the container
-    const swantronLink = swantronContainer.querySelector('a');
+    const swantronLink = screen.getByTestId('swantron-link');
     expect(swantronLink).toBeInTheDocument();
     expect(swantronLink).toHaveAttribute('href', 'https://swantron.com');
+    expect(swantronLink).toHaveTextContent('tron swan dot com');
   });
 
   // Test to check if the home container is rendered.

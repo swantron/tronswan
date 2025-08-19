@@ -20,9 +20,10 @@ function Home() {
       <img src={logo} className="App-logo" alt="logo" data-testid="app-logo" />
       
       <div className="home-description">
-        <h2 className="App-title" data-testid="swantron-link">
+        <h2 className="App-title">
           <a 
             href="https://swantron.com" 
+            data-testid="swantron-link"
             target="_blank" 
             rel="noopener noreferrer"
             style={{ textDecoration: 'none', color: 'inherit' }}
