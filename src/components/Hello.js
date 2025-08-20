@@ -55,7 +55,7 @@ function Hello() {
 
         <div className="hello-info">
           <h3>About This Site</h3>
-          <p>
+          <p className="building-learning-text">
             building / deploying / learning
           </p>
         </div>
