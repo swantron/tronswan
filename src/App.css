@@ -81,6 +81,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  min-height: 60vh;
 }
 
 .home-description {
@@ -116,6 +117,41 @@
   margin-bottom: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Swantron link styles - larger and more prominent */
+.swantron-link {
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  margin: 1rem 0;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all var(--transition-speed) ease;
+}
+
+.swantron-link a {
+  color: var(--primary-text);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  /* Touch-friendly improvements */
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swantron-link a:hover {
+  color: var(--accent-color);
+  transform: scale(1.05);
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.swantron-link a:active {
+  transform: scale(0.98);
 }
 
 /* External links styles */
@@ -275,6 +311,11 @@ input[type="number"]::placeholder {
     align-items: center;
     gap: 1rem;
   }
+
+  .swantron-link {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    margin: 0.8rem 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -286,8 +327,36 @@ input[type="number"]::placeholder {
     font-size: 1.8rem;
   }
 
+  .swantron-link {
+    font-size: clamp(1.4rem, 4.5vw, 1.8rem);
+    margin: 0.6rem 0;
+  }
+
   input[type="number"] {
     padding: 0.6rem 1rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .App-header {
+    padding: 0.5rem;
+  }
+
+  .home-container {
+    padding: 1rem;
+    min-height: 50vh;
+  }
+
+  .swantron-link {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    margin: 0.5rem 0;
+  }
+
+  .swantron-link a {
+    padding: 0.4rem 0.8rem;
+    min-height: 40px;
+    min-width: 40px;
   }
 }
 
