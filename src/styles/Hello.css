@@ -109,7 +109,11 @@
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: var(--border-radius);
   border: 1px solid rgba(248, 152, 89, 0.2);
-  text-align: left;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .hello-info h3 {
@@ -136,7 +140,8 @@
   text-shadow: 0 0 10px rgba(248, 152, 89, 0.5);
   animation: buildingLearningGlow 3s ease-in-out infinite alternate, buildingLearningEntrance 1s ease-out, buildingLearningPulse 4s ease-in-out infinite, buildingLearningColor 5s ease-in-out infinite;
   position: relative;
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   background: linear-gradient(45deg, rgba(248, 152, 89, 0.1), rgba(248, 152, 89, 0.05));
@@ -145,6 +150,7 @@
   opacity: 0;
   animation-fill-mode: forwards;
   cursor: pointer;
+  text-align: center;
 }
 
 .building-learning-text::before {
