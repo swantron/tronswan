@@ -31,13 +31,14 @@ describe('App Component', () => {
     render(<App />);
     // Test navigation links specifically - only the nav bar links, not the swantron link
     const navLinks = screen.getAllByRole('link').filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(6);
+    expect(navLinks).toHaveLength(7);
     
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'weathertron' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'hacking' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'trontronbuzztron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
   });
