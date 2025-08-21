@@ -8,6 +8,7 @@ import FizzBuzz from './components/FizzBuzz';
 import Hello from './components/Hello';
 import SwantronList from './components/SwantronList';
 import SwantronDetail from './components/SwantronDetail';
+import Hacking from './components/Hacking';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import './App.css';
@@ -46,6 +47,7 @@ function App() {
               <Link to="/recipes" className="nav-link">chomptron</Link>
               <Link to="/swantron" className="nav-link">swantron</Link>
               <Link to="/weather" className="nav-link">weathertron</Link>
+              <Link to="/hacking" className="nav-link">hacking</Link>
               <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
               <Link to="/hello" className="nav-link">hello</Link>
             </nav>
@@ -58,6 +60,7 @@ function App() {
                 <Route path="/swantron" element={<SwantronList />} />
                 <Route path="/swantron/:id" element={<SwantronDetail />} />
                 <Route path="/weather" element={<Weather />} />
+                <Route path="/hacking" element={<Hacking />} />
                 <Route path="/trontronbuzztron" element={<FizzBuzz />} />
                 <Route path="/hello" element={<Hello />} />
               </Routes>
