@@ -24,10 +24,12 @@ describe('Hacking Component', () => {
   test('video has correct attributes', () => {
     render(<Hacking />);
     const videoElement = screen.getByTestId('hacking-video');
-    expect(videoElement).toHaveAttribute('autoPlay');
-    expect(videoElement).toHaveAttribute('muted');
-    expect(videoElement).toHaveAttribute('loop');
-    expect(videoElement).toHaveAttribute('playsInline');
+    // Check that video element exists and has the expected properties
+    expect(videoElement).toBeInTheDocument();
+    expect(videoElement.autoplay).toBe(true);
+    expect(videoElement.muted).toBe(true);
+    expect(videoElement.loop).toBe(true);
+    expect(videoElement.playsInline).toBe(true);
   });
 
   test('renders status information', () => {
