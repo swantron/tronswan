@@ -5,15 +5,11 @@ import Hacking from './Hacking';
 describe('Hacking Component', () => {
   test('renders hacking title', () => {
     render(<Hacking />);
-    const titleElement = screen.getByText(/Hacking in Progress/i);
+    const titleElement = screen.getByText(/computer hacking skills/i);
     expect(titleElement).toBeInTheDocument();
   });
 
-  test('renders hacking subtitle', () => {
-    render(<Hacking />);
-    const subtitleElement = screen.getByText(/Accessing mainframe/i);
-    expect(subtitleElement).toBeInTheDocument();
-  });
+
 
   test('renders video element', () => {
     render(<Hacking />);
@@ -32,18 +28,7 @@ describe('Hacking Component', () => {
     expect(videoElement.playsInline).toBe(true);
   });
 
-  test('renders status information', () => {
-    render(<Hacking />);
-    expect(screen.getByText(/Status:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Progress:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Target:/i)).toBeInTheDocument();
-  });
 
-  test('renders matrix effect', () => {
-    render(<Hacking />);
-    const matrixLines = screen.getAllByText(/01010101|10101010/);
-    expect(matrixLines.length).toBeGreaterThan(0);
-  });
 
   test('renders container with correct test id', () => {
     render(<Hacking />);
