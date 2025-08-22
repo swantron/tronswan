@@ -1,0 +1,130 @@
+.gangnam-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  color: #00ff41;
+  font-family: 'Courier New', monospace;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.gangnam-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 65, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.gangnam-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.gangnam-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: #00ff41;
+  font-family: inherit;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.video-container {
+  margin: 2rem 0;
+  border: 2px solid #00ff41;
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+  position: relative;
+}
+
+.video-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ff41, #00cc33, #00ff41);
+  border-radius: 12px;
+  z-index: -1;
+  animation: borderGlow 3s linear infinite;
+}
+
+.gangnam-video {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+}
+
+.video-fallback {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.video-fallback a {
+  color: #00ff41;
+  text-decoration: none;
+  border: 1px solid #00ff41;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.video-fallback a:hover {
+  background: #00ff41;
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+}
+
+/* Animations */
+@keyframes borderGlow {
+  0% {
+    background: linear-gradient(45deg, #00ff41, #00cc33, #00ff41);
+  }
+  50% {
+    background: linear-gradient(45deg, #00cc33, #00ff41, #00cc33);
+  }
+  100% {
+    background: linear-gradient(45deg, #00ff41, #00cc33, #00ff41);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .gangnam-container {
+    padding: 1rem;
+  }
+  
+  .gangnam-title {
+    font-size: 2rem;
+  }
+  
+  .gangnam-video {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .gangnam-title {
+    font-size: 1.5rem;
+  }
+}

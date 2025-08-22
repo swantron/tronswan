@@ -154,6 +154,42 @@
   transform: scale(0.98);
 }
 
+/* Get it button styles */
+.get-it-section {
+  margin-top: 2rem;
+}
+
+.get-it-button {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  text-transform: lowercase;
+  font-family: inherit;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.get-it-button:hover {
+  background-color: #e6894a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.get-it-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.get-it-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 /* External links styles */
 .external-links {
   display: flex;

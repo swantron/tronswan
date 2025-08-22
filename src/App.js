@@ -9,12 +9,21 @@ import Hello from './components/Hello';
 import SwantronList from './components/SwantronList';
 import SwantronDetail from './components/SwantronDetail';
 import Hacking from './components/Hacking';
+import Gangnam1 from './components/Gangnam1';
+import Gangnam2 from './components/Gangnam2';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import './App.css';
 
 
 function Home() {
+  const handleGetItClick = () => {
+    // Randomly choose between gangnam1 and gangnam2
+    const random = Math.random();
+    const path = random < 0.5 ? '/gangnam1' : '/gangnam2';
+    window.location.href = path;
+  };
+
   return (
     <div className="home-container">
       <h1 className="App-title" data-testid="app-title">tronswan</h1>
@@ -31,6 +40,15 @@ function Home() {
             tron swan dot com
           </a>
         </h2>
+        <div className="get-it-section">
+          <button 
+            onClick={handleGetItClick}
+            className="get-it-button"
+            data-testid="get-it-button"
+          >
+            get it
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -61,6 +79,8 @@ function App() {
                 <Route path="/swantron/:id" element={<SwantronDetail />} />
                 <Route path="/weather" element={<Weather />} />
                 <Route path="/hacking" element={<Hacking />} />
+                <Route path="/gangnam1" element={<Gangnam1 />} />
+                <Route path="/gangnam2" element={<Gangnam2 />} />
                 <Route path="/trontronbuzztron" element={<FizzBuzz />} />
                 <Route path="/hello" element={<Hello />} />
               </Routes>

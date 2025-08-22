@@ -57,6 +57,10 @@ describe('App Component', () => {
     expect(swantronLink).toBeInTheDocument();
     expect(swantronLink).toHaveAttribute('href', 'https://swantron.com');
     expect(swantronLink).toHaveTextContent('tron swan dot com');
+    
+    const getItButton = screen.getByTestId('get-it-button');
+    expect(getItButton).toBeInTheDocument();
+    expect(getItButton).toHaveTextContent('get it');
   });
 
   // Test to check if the home container is rendered.
