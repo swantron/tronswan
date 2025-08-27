@@ -1,35 +1,10 @@
-# Chomptron
+# tron swan dot com
 
 [![Test Coverage](https://img.shields.io/badge/coverage-93.77%25-brightgreen)](https://github.com/swantron/tronswan/actions)
 [![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern web application that displays recipes from chomptron.com, along with weather data and a fun FizzBuzz feature.
-
-## Features
-
-- **Recipe Display**: Browse and search recipes from chomptron.com
-  - Responsive recipe cards with featured images
-  - Detailed recipe pages with full content
-  - Category and tag filtering
-  - Search functionality
-  - Pagination support
-
-- **Weather Integration**: Real-time weather data display
-  - Temperature
-  - Feels like temperature
-  - Pressure
-  - Humidity
-
-- **FizzBuzz Game**: Interactive number game
-  - Enter any number to see the FizzBuzz sequence
-  - Fun way to test the application
-
-- **Modern UI**: Clean and responsive design
-  - Mobile-friendly layout
-  - Smooth animations
-  - Loading states
-  - Error handling
+building / deploying / learning
 
 ## Getting Started
 
