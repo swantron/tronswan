@@ -170,7 +170,37 @@ describe('swantronService', () => {
 
       const result = await swantronService.getPosts();
 
-      expect(result.posts[0].featuredImage).toBeUndefined();
+      expect(result.posts[0].featuredImage).toBeNull();
+      expect(result.posts[0].categories).toEqual([]);
+      expect(result.posts[0].tags).toEqual([]);
+    });
+
+    test('should extract image from content when no featured image is set', async () => {
+      const postsWithContentImage = [
+        {
+          id: 4,
+          title: { rendered: 'Post with content image' },
+          excerpt: { rendered: 'Has image in content' },
+          content: { rendered: '<p>Some text here</p><img src="https://example.com/content-image.jpg" alt="Content image" /><p>More text</p>' },
+          date: '2023-12-27T10:00:00Z',
+          _embedded: {},
+          link: 'https://swantron.com/post/4'
+        }
+      ];
+
+      const mockResponse = {
+        ok: true,
+        json: jest.fn().mockResolvedValue(postsWithContentImage),
+        headers: {
+          get: jest.fn().mockReturnValue('1')
+        }
+      };
+
+      global.fetch.mockResolvedValue(mockResponse);
+
+      const result = await swantronService.getPosts();
+
+      expect(result.posts[0].featuredImage).toBe('https://example.com/content-image.jpg');
       expect(result.posts[0].categories).toEqual([]);
       expect(result.posts[0].tags).toEqual([]);
     });
