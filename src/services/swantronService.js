@@ -1,5 +1,5 @@
 // Swantron WordPress API service
-const SWANTRON_API_URL = process.env.REACT_APP_SWANTRON_API_URL || 'https://swantron.com/wp-json/wp/v2';
+const SWANTRON_API_URL = 'https://swantron.com/wp-json/wp/v2';
 
 export const swantronService = {
   async getPosts(page = 1, perPage = 10) {

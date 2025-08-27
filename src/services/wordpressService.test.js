@@ -63,7 +63,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.getRecipes();
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&_embed&page=1&per_page=10'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&_embed&page=1&per_page=10'
       );
       expect(result.recipes).toHaveLength(2);
       expect(result.totalPages).toBe(3);
@@ -93,7 +93,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.getRecipes(2, 5);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&_embed&page=2&per_page=5'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&_embed&page=2&per_page=5'
       );
       expect(result.totalPages).toBe(2);
     });
@@ -196,7 +196,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.getRecipeById(1);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts/1&_embed'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts/1&_embed'
       );
       expect(result.id).toBe(1);
       expect(result.title).toBe('Single Recipe');
@@ -295,7 +295,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.searchRecipes('test query');
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&search=test%20query&_embed&page=1&per_page=10'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=test%20query&_embed&page=1&per_page=10'
       );
       expect(result.recipes).toHaveLength(1);
       expect(result.recipes[0].title).toBe('Search Recipe Result');
@@ -315,7 +315,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.searchRecipes('query', 3, 20);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&search=query&_embed&page=3&per_page=20'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=query&_embed&page=3&per_page=20'
       );
     });
 
@@ -333,7 +333,7 @@ describe('wordpressService', () => {
       await wordpressService.searchRecipes('test & query with special chars!');
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&search=test%20%26%20query%20with%20special%20chars!&_embed&page=1&per_page=10'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=test%20%26%20query%20with%20special%20chars!&_embed&page=1&per_page=10'
       );
     });
 
@@ -368,7 +368,7 @@ describe('wordpressService', () => {
       const result = await wordpressService.searchRecipes('');
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://chomptron.com/wp-json/wp/v2/posts&search=&_embed&page=1&per_page=10'
+        'https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=&_embed&page=1&per_page=10'
       );
       expect(result.recipes).toHaveLength(0);
     });
@@ -388,7 +388,7 @@ describe('wordpressService', () => {
       await wordpressService.searchRecipes(longQuery);
 
       expect(fetch).toHaveBeenCalledWith(
-        `https://chomptron.com/wp-json/wp/v2/posts&search=${encodeURIComponent(longQuery)}&_embed&page=1&per_page=10`
+        `https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=${encodeURIComponent(longQuery)}&_embed&page=1&per_page=10`
       );
     });
 
@@ -413,7 +413,7 @@ describe('wordpressService', () => {
       await wordpressService.searchRecipes(unicodeQuery);
 
       expect(fetch).toHaveBeenCalledWith(
-        `https://chomptron.com/wp-json/wp/v2/posts&search=${encodeURIComponent(unicodeQuery)}&_embed&page=1&per_page=10`
+        `https://chomptron.com/index.php?rest_route=/wp/v2/posts&search=${encodeURIComponent(unicodeQuery)}&_embed&page=1&per_page=10`
       );
     });
   });
