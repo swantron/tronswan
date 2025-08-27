@@ -1,6 +1,6 @@
 # tron swan dot com
 
-[![Test Coverage](https://img.shields.io/badge/coverage-93.77%25-brightgreen)](https://github.com/swantron/tronswan/actions)
+[![Test Coverage](https://img.shields.io/badge/coverage-93.35%25-brightgreen)](https://github.com/swantron/tronswan/actions)
 [![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -38,7 +38,8 @@ building / deploying / learning
 
 - `yarn start`: Runs the app in development mode
 - `yarn test`: Launches the test runner
-- `yarn test --coverage`: Runs tests with coverage reporting
+- `yarn test:coverage`: Runs tests with coverage reporting
+- `yarn update-badge`: Updates the coverage badge in README with current test coverage
 - `yarn build`: Builds the app for production
 - `yarn eject`: Ejects from Create React App
 
@@ -46,7 +47,7 @@ building / deploying / learning
 
 This project maintains high test coverage with comprehensive unit tests for all components, hooks, and services.
 
-- **Current Coverage**: 93.77%
+- **Current Coverage**: 93.35%
 - **Test Framework**: Jest + React Testing Library
 - **Coverage Reports**: Generated automatically as part of CI/CD pipeline
 - **Coverage Badge**: Shows current test coverage percentage
@@ -63,6 +64,30 @@ yarn test:coverage
 yarn test --watch
 ```
 
+### Coverage Badge Management
+
+The project automatically maintains an up-to-date test coverage badge in the README. The badge shows the current test coverage percentage and links to the GitHub Actions workflow.
+
+**To update the coverage badge:**
+
+1. Run tests with coverage:
+   ```bash
+   yarn test:coverage
+   ```
+
+2. Update the badge in README:
+   ```bash
+   yarn update-badge
+   ```
+
+This will:
+- Read the coverage data from `coverage/coverage-summary.json`
+- Update the coverage badge at the top of the README
+- Update the coverage percentage in the Testing section
+- Provide console output showing what was updated
+
+**Note:** The coverage badge is automatically updated as part of the CI/CD pipeline, but you can manually update it locally using the above commands.
+
 
 
 ## Deployment
@@ -74,6 +99,12 @@ The application is deployed to DigitalOcean using their App Platform. The deploy
 - `REACT_APP_API_KEY`: OpenWeatherMap API key
 - `REACT_APP_CITY`: Default city for weather data
 - `REACT_APP_UNITS`: Units for weather data (imperial/metric)
+
+## Scripts
+
+The project includes several utility scripts in the `scripts/` directory:
+
+- **`update-coverage-badge.js`**: Automatically updates the test coverage badge in the README based on Jest coverage reports.
 
 ## Contributing
 
