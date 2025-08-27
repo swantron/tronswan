@@ -40,20 +40,24 @@ jobs:
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
           echo "Coverage: $COVERAGE%"
           
-      - name: Update README with coverage badge
-        if: github.ref == 'refs/heads/main'
-        run: |
-          # Update the coverage badge in README.md
-          sed -i "s/\[!\[Test Coverage\].*\]/\[![Test Coverage\](https:\/\/img.shields.io\/badge\/coverage-${COVERAGE}%25-brightgreen)\]/" README.md
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
           
-          # Update the coverage percentage in the Testing section
-          sed -i "s/\*\*Current Coverage\*\*: [0-9.]*%/\*\*Current Coverage\*\*: ${COVERAGE}%/" README.md
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage/
+          retention-days: 30
           
-      - name: Commit and push changes
-        if: github.ref == 'refs/heads/main'
+      - name: Coverage Summary
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update coverage badge to ${COVERAGE}%"
-          git push
+          echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Overall Coverage**: ${{ steps.coverage.outputs.coverage }}%" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Coverage reports have been uploaded as artifacts." >> $GITHUB_STEP_SUMMARY
+          echo "To update the README badge, run: \`yarn update-badge\` locally and commit the changes." >> $GITHUB_STEP_SUMMARY

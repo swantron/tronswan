@@ -74,7 +74,7 @@ This project maintains high test coverage with comprehensive unit tests for all 
 - **Current Coverage**: 93.77%
 - **Test Framework**: Jest + React Testing Library
 - **Coverage Reports**: Generated automatically on every push to main
-- **Coverage Badge**: Updated automatically via GitHub Actions
+- **Coverage Badge**: Can be updated locally with `yarn update-badge`
 
 To run tests locally:
 ```bash
