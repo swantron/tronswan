@@ -1,5 +1,9 @@
 # Chomptron
 
+[![Test Coverage](https://img.shields.io/badge/coverage-93.77%25-brightgreen)](https://github.com/swantron/tronswan)
+[![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A modern web application that displays recipes from chomptron.com, along with weather data and a fun FizzBuzz feature.
 
 ## Features
@@ -59,8 +63,33 @@ A modern web application that displays recipes from chomptron.com, along with we
 
 - `yarn start`: Runs the app in development mode
 - `yarn test`: Launches the test runner
+- `yarn test --coverage`: Runs tests with coverage reporting
 - `yarn build`: Builds the app for production
 - `yarn eject`: Ejects from Create React App
+
+### Testing
+
+This project maintains high test coverage with comprehensive unit tests for all components, hooks, and services.
+
+- **Current Coverage**: 93.77%
+- **Test Framework**: Jest + React Testing Library
+- **Coverage Reports**: Generated automatically on every push to main
+- **Coverage Badge**: Updated automatically via GitHub Actions
+
+To run tests locally:
+```bash
+# Run all tests
+yarn test
+
+# Run tests with coverage
+yarn test:coverage
+
+# Run tests in watch mode
+yarn test --watch
+
+# Update coverage badge in README
+yarn update-badge
+```
 
 ## Deployment
 

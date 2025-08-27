@@ -24,7 +24,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: yarn test
+      - name: Run tests with coverage
+        run: yarn test --coverage --watchAll=false --coverageReporters=text --coverageReporters=lcov --coverageReporters=html
+        
+
 
   deploy-and-validate:
     runs-on: ubuntu-latest
