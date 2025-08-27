@@ -73,7 +73,7 @@ This project maintains high test coverage with comprehensive unit tests for all 
 
 - **Current Coverage**: 93.77%
 - **Test Framework**: Jest + React Testing Library
-- **Coverage Reports**: Generated automatically on every push to main
+- **Coverage Reports**: Generated automatically as part of CI/CD pipeline
 - **Coverage Badge**: Shows current test coverage percentage
 
 To run tests locally:
