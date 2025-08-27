@@ -1,6 +1,6 @@
 # Chomptron
 
-[![Test Coverage](https://img.shields.io/badge/coverage-dynamic-blue)](https://github.com/swantron/tronswan/actions)
+[![Test Coverage](https://img.shields.io/badge/coverage-93.77%25-brightgreen)](https://github.com/swantron/tronswan/actions)
 [![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -74,7 +74,7 @@ This project maintains high test coverage with comprehensive unit tests for all 
 - **Current Coverage**: 93.77%
 - **Test Framework**: Jest + React Testing Library
 - **Coverage Reports**: Generated automatically on every push to main
-- **Coverage Badge**: Dynamic badge data generated in GitHub Actions artifacts
+- **Coverage Badge**: Shows current test coverage percentage
 
 To run tests locally:
 ```bash
@@ -88,23 +88,7 @@ yarn test:coverage
 yarn test --watch
 ```
 
-### Dynamic Coverage Badge
 
-The GitHub Actions workflow generates a `badge.json` file in the coverage artifacts that contains the current coverage data. You can use this to create dynamic badges:
-
-1. **Download Coverage Artifacts**: After each workflow run, download the `coverage-reports` artifact
-2. **Extract Badge Data**: The `badge.json` file contains the current coverage percentage and color
-3. **Use in README**: Update your README with the current coverage data
-
-**Example badge.json:**
-```json
-{
-  "schemaVersion": 1,
-  "label": "coverage",
-  "message": "93.77%",
-  "color": "brightgreen"
-}
-```
 
 ## Deployment
 
