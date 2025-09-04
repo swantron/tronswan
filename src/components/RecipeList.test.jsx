@@ -1,27 +1,28 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import RecipeList from './RecipeList';
 
 // Mock the wordpressService
-jest.mock('../services/wordpressService', () => ({
+vi.mock('../services/wordpressService', () => ({
   wordpressService: {
-    getRecipes: jest.fn(),
-    searchRecipes: jest.fn()
+    getRecipes: vi.fn(),
+    searchRecipes: vi.fn()
   }
 }));
 
 // Mock the RecipeCard component
-jest.mock('./RecipeCard', () => {
-  return function MockRecipeCard({ recipe }) {
+vi.mock('./RecipeCard', () => ({
+  default: function MockRecipeCard({ recipe }) {
     return (
       <div data-testid={`recipe-card-${recipe.id}`} className="recipe-card">
         <h3>{recipe.title}</h3>
         <p>{recipe.excerpt}</p>
       </div>
     );
-  };
-});
+  }
+}));
 
 import { wordpressService } from '../services/wordpressService';
 
@@ -45,7 +46,7 @@ describe('RecipeList Component', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders recipe list container', () => {

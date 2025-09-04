@@ -1,19 +1,20 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RecipeDetail from './RecipeDetail';
 
 // Mock the wordpressService
-jest.mock('../services/wordpressService', () => ({
+vi.mock('../services/wordpressService', () => ({
   wordpressService: {
-    getRecipeById: jest.fn()
+    getRecipeById: vi.fn()
   }
 }));
 
 // Mock the CSS import
-jest.mock('../styles/RecipeDetail.css', () => ({}));
+vi.mock('../styles/RecipeDetail.css', () => ({}));
 
-const { wordpressService } = require('../services/wordpressService');
+import { wordpressService } from '../services/wordpressService';
 
 // Wrapper component to provide router context
 const renderWithRouter = (component, { route = '/recipe/1' } = {}) => {
@@ -47,9 +48,9 @@ describe('RecipeDetail Component', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Mock console.error to avoid noise in tests
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -232,7 +233,7 @@ describe('RecipeDetail Component', () => {
   });
 
   test('logs error to console when API call fails', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const apiError = new Error('Network error');
     wordpressService.getRecipeById.mockRejectedValue(apiError);
     

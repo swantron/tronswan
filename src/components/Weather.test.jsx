@@ -1,17 +1,18 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Weather from './Weather';
 
 // Mock the SEO component to prevent react-helmet-async errors
-jest.mock('./SEO', () => {
-  return function MockSEO() {
+vi.mock('./SEO', () => ({
+  default: function MockSEO() {
     return null;
-  };
-});
+  }
+}));
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 describe('Weather Component', () => {
   beforeEach(() => {

@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useApiRequest } from './useApiRequest';
 
 // Mock console.error to avoid noise in tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 afterAll(() => {
@@ -13,16 +14,11 @@ afterAll(() => {
 
 describe('useApiRequest Hook', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
+    vi.clearAllMocks();
   });
 
   test('should initialize with default values', () => {
-    const mockApiFunction = jest.fn();
+    const mockApiFunction = vi.fn();
     const { result } = renderHook(() => useApiRequest(mockApiFunction));
 
     expect(result.current.data).toBe(null);
@@ -33,7 +29,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should initialize with custom initial data', () => {
-    const mockApiFunction = jest.fn();
+    const mockApiFunction = vi.fn();
     const initialData = { test: 'data' };
     const { result } = renderHook(() => 
       useApiRequest(mockApiFunction, [], { initialData })
@@ -43,7 +39,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should execute API function on mount', async () => {
-    const mockApiFunction = jest.fn().mockResolvedValue({ success: true });
+    const mockApiFunction = vi.fn().mockResolvedValue({ success: true });
     const { result } = renderHook(() => useApiRequest(mockApiFunction));
 
     await waitFor(() => {
@@ -60,8 +56,8 @@ describe('useApiRequest Hook', () => {
 
   test('should handle successful API response', async () => {
     const mockData = { message: 'Success' };
-    const mockApiFunction = jest.fn().mockResolvedValue(mockData);
-    const onSuccess = jest.fn();
+    const mockApiFunction = vi.fn().mockResolvedValue(mockData);
+    const onSuccess = vi.fn();
     
     const { result } = renderHook(() => 
       useApiRequest(mockApiFunction, [], { onSuccess })
@@ -78,8 +74,8 @@ describe('useApiRequest Hook', () => {
 
   test('should handle API errors', async () => {
     const mockError = new Error('API Error');
-    const mockApiFunction = jest.fn().mockRejectedValue(mockError);
-    const onError = jest.fn();
+    const mockApiFunction = vi.fn().mockRejectedValue(mockError);
+    const onError = vi.fn();
     
     const { result } = renderHook(() => 
       useApiRequest(mockApiFunction, [], { onError })
@@ -96,7 +92,7 @@ describe('useApiRequest Hook', () => {
 
   test('should handle errors without message', async () => {
     const mockError = {};
-    const mockApiFunction = jest.fn().mockRejectedValue(mockError);
+    const mockApiFunction = vi.fn().mockRejectedValue(mockError);
     
     const { result } = renderHook(() => useApiRequest(mockApiFunction));
 
@@ -108,7 +104,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should retry failed requests', async () => {
-    const mockApiFunction = jest.fn()
+    const mockApiFunction = vi.fn()
       .mockRejectedValueOnce(new Error('First attempt failed'))
       .mockResolvedValueOnce({ success: true });
     
@@ -129,7 +125,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should respect retry attempts limit', async () => {
-    const mockApiFunction = jest.fn().mockRejectedValue(new Error('Always fails'));
+    const mockApiFunction = vi.fn().mockRejectedValue(new Error('Always fails'));
     
     const { result } = renderHook(() => 
       useApiRequest(mockApiFunction, [], { retryAttempts: 2, retryDelay: 100 })
@@ -146,7 +142,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should execute retry function manually', async () => {
-    const mockApiFunction = jest.fn()
+    const mockApiFunction = vi.fn()
       .mockRejectedValueOnce(new Error('First attempt failed'))
       .mockResolvedValueOnce({ success: true });
     
@@ -173,7 +169,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should execute when dependencies change', async () => {
-    const mockApiFunction = jest.fn().mockResolvedValue({ success: true });
+    const mockApiFunction = vi.fn().mockResolvedValue({ success: true });
     let dependencies = ['initial'];
     
     const { result, rerender } = renderHook(() => 
@@ -196,7 +192,7 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should use exponential backoff for retries', async () => {
-    const mockApiFunction = jest.fn().mockRejectedValue(new Error('Always fails'));
+    const mockApiFunction = vi.fn().mockRejectedValue(new Error('Always fails'));
     
     const { result } = renderHook(() => 
       useApiRequest(mockApiFunction, [], { retryAttempts: 3, retryDelay: 100 })

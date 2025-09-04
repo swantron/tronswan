@@ -1,23 +1,26 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Gangnam1 from './Gangnam1';
+import Hacking from './Hacking';
 
-describe('Gangnam1 Component', () => {
-  test('renders gangnam title', () => {
-    render(<Gangnam1 />);
-    const titleElement = screen.getByText(/gangnam style/i);
+describe('Hacking Component', () => {
+  test('renders hacking title', () => {
+    render(<Hacking />);
+    const titleElement = screen.getByText(/computer hacking skills/i);
     expect(titleElement).toBeInTheDocument();
   });
 
+
+
   test('renders video element', () => {
-    render(<Gangnam1 />);
-    const videoElement = screen.getByTestId('gangnam1-video');
+    render(<Hacking />);
+    const videoElement = screen.getByTestId('hacking-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
-    render(<Gangnam1 />);
-    const videoElement = screen.getByTestId('gangnam1-video');
+    render(<Hacking />);
+    const videoElement = screen.getByTestId('hacking-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect(videoElement.autoplay).toBe(true);
@@ -26,9 +29,11 @@ describe('Gangnam1 Component', () => {
     expect(videoElement.playsInline).toBe(true);
   });
 
+
+
   test('renders container with correct test id', () => {
-    render(<Gangnam1 />);
-    const container = screen.getByTestId('gangnam1-container');
+    render(<Hacking />);
+    const container = screen.getByTestId('hacking-container');
     expect(container).toBeInTheDocument();
   });
 });

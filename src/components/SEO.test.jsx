@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SEO from './SEO';
 
 // Mock react-helmet-async
-jest.mock('react-helmet-async', () => ({
+vi.mock('react-helmet-async', () => ({
   Helmet: ({ children }) => <div data-testid="helmet">{children}</div>
 }));
 

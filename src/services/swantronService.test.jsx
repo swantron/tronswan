@@ -1,12 +1,13 @@
+import { vi } from 'vitest';
 import { swantronService } from './swantronService';
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Mock console.error to avoid noise in tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 afterAll(() => {
@@ -15,7 +16,7 @@ afterAll(() => {
 
 describe('swantronService', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset environment variable
     delete process.env.REACT_APP_SWANTRON_API_URL;
   });
@@ -54,9 +55,9 @@ describe('swantronService', () => {
     test('should fetch posts successfully with default parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockPostsResponse),
+        json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: jest.fn().mockReturnValue('5')
+          get: vi.fn().mockReturnValue('5')
         }
       };
 
@@ -85,9 +86,9 @@ describe('swantronService', () => {
     test('should fetch posts with custom page and perPage parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockPostsResponse),
+        json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: jest.fn().mockReturnValue('3')
+          get: vi.fn().mockReturnValue('3')
         }
       };
 
@@ -118,9 +119,9 @@ describe('swantronService', () => {
     test('should handle invalid response format', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue('not-an-array'),
+        json: vi.fn().mockResolvedValue('not-an-array'),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -132,9 +133,9 @@ describe('swantronService', () => {
     test('should handle missing total pages header', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockPostsResponse),
+        json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: jest.fn().mockReturnValue(null)
+          get: vi.fn().mockReturnValue(null)
         }
       };
 
@@ -160,9 +161,9 @@ describe('swantronService', () => {
 
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(postsWithoutEmbedded),
+        json: vi.fn().mockResolvedValue(postsWithoutEmbedded),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -190,9 +191,9 @@ describe('swantronService', () => {
 
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(postsWithContentImage),
+        json: vi.fn().mockResolvedValue(postsWithContentImage),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -232,7 +233,7 @@ describe('swantronService', () => {
     test('should fetch single post successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockPostResponse)
+        json: vi.fn().mockResolvedValue(mockPostResponse)
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -288,9 +289,9 @@ describe('swantronService', () => {
     test('should search posts successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockSearchResponse),
+        json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: jest.fn().mockReturnValue('2')
+          get: vi.fn().mockReturnValue('2')
         }
       };
 
@@ -308,9 +309,9 @@ describe('swantronService', () => {
     test('should search posts with custom parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockSearchResponse),
+        json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -326,9 +327,9 @@ describe('swantronService', () => {
     test('should handle special characters in search query', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -344,9 +345,9 @@ describe('swantronService', () => {
     test('should handle empty search results', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -373,9 +374,9 @@ describe('swantronService', () => {
     test('should handle invalid response format for search', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue('not-an-array'),
+        json: vi.fn().mockResolvedValue('not-an-array'),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 

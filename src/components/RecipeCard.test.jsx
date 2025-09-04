@@ -1,11 +1,12 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import RecipeCard from './RecipeCard';
 
 // Mock the useDateFormatter hook
-jest.mock('../hooks/useDateFormatter', () => ({
-  useDateFormatter: () => jest.fn((date) => `Formatted: ${date}`)
+vi.mock('../hooks/useDateFormatter', () => ({
+  useDateFormatter: () => vi.fn((date) => `Formatted: ${date}`)
 }));
 
 // Wrapper component to provide router context

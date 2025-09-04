@@ -1,14 +1,15 @@
+import { vi } from 'vitest';
 // Imports necessary utilities from the testing library and jest-dom for DOM assertions.
 import { render, screen } from '@testing-library/react';
 import App from './App'; // Imports the App component to be tested.
 import '@testing-library/jest-dom'; // Provides the extended matchers like toBeInTheDocument for easier DOM node assertions.
 
 // Mock the SEO component to prevent react-helmet-async errors in tests
-jest.mock('./components/SEO', () => {
-  return function MockSEO() {
+vi.mock('./components/SEO', () => ({
+  default: function MockSEO() {
     return null; // Return null to render nothing
-  };
-});
+  }
+}));
 
 // Grouping related tests about the App component.
 describe('App Component', () => {

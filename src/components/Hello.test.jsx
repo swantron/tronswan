@@ -1,14 +1,15 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Hello from './Hello';
 
 // Mock the SEO component to prevent react-helmet-async errors
-jest.mock('./SEO', () => {
-  return function MockSEO() {
+vi.mock('./SEO', () => ({
+  default: function MockSEO() {
     return null;
-  };
-});
+  }
+}));
 
 describe('Hello Component', () => {
   test('renders page title', () => {

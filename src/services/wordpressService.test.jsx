@@ -1,12 +1,13 @@
+import { vi } from 'vitest';
 import { wordpressService } from './wordpressService';
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Mock console.error to avoid noise in tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 afterAll(() => {
@@ -15,7 +16,7 @@ afterAll(() => {
 
 describe('wordpressService', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset environment variable
     delete process.env.REACT_APP_WORDPRESS_API_URL;
   });
@@ -52,9 +53,9 @@ describe('wordpressService', () => {
     test('should fetch recipes successfully with default parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockRecipesResponse),
+        json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: jest.fn().mockReturnValue('3')
+          get: vi.fn().mockReturnValue('3')
         }
       };
 
@@ -82,9 +83,9 @@ describe('wordpressService', () => {
     test('should fetch recipes with custom page and perPage parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockRecipesResponse),
+        json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: jest.fn().mockReturnValue('2')
+          get: vi.fn().mockReturnValue('2')
         }
       };
 
@@ -103,9 +104,9 @@ describe('wordpressService', () => {
     test('should handle missing total pages header', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockRecipesResponse),
+        json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: jest.fn().mockReturnValue(null)
+          get: vi.fn().mockReturnValue(null)
         }
       };
 
@@ -130,9 +131,9 @@ describe('wordpressService', () => {
 
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(recipesWithoutEmbedded),
+        json: vi.fn().mockResolvedValue(recipesWithoutEmbedded),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -154,9 +155,9 @@ describe('wordpressService', () => {
     test('should handle empty recipes array', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -188,7 +189,7 @@ describe('wordpressService', () => {
     test('should fetch single recipe successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockRecipeResponse)
+        json: vi.fn().mockResolvedValue(mockRecipeResponse)
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -217,7 +218,7 @@ describe('wordpressService', () => {
 
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(recipeWithoutEmbedded)
+        json: vi.fn().mockResolvedValue(recipeWithoutEmbedded)
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -250,7 +251,7 @@ describe('wordpressService', () => {
 
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(recipeWithPartialEmbedded)
+        json: vi.fn().mockResolvedValue(recipeWithPartialEmbedded)
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -284,9 +285,9 @@ describe('wordpressService', () => {
     test('should search recipes successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockSearchResponse),
+        json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: jest.fn().mockReturnValue('2')
+          get: vi.fn().mockReturnValue('2')
         }
       };
 
@@ -304,9 +305,9 @@ describe('wordpressService', () => {
     test('should search recipes with custom parameters', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockSearchResponse),
+        json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -322,9 +323,9 @@ describe('wordpressService', () => {
     test('should handle special characters in search query', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -340,9 +341,9 @@ describe('wordpressService', () => {
     test('should handle empty search results', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -357,9 +358,9 @@ describe('wordpressService', () => {
     test('should handle search with empty query', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -377,9 +378,9 @@ describe('wordpressService', () => {
       const longQuery = 'a'.repeat(1000);
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 
@@ -402,9 +403,9 @@ describe('wordpressService', () => {
       const unicodeQuery = 'café résumé naïve';
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue([]),
+        json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: jest.fn().mockReturnValue('1')
+          get: vi.fn().mockReturnValue('1')
         }
       };
 

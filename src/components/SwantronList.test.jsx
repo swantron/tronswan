@@ -1,43 +1,44 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SwantronList from './SwantronList';
 
 // Mock the swantronService
-jest.mock('../services/swantronService', () => ({
+vi.mock('../services/swantronService', () => ({
   swantronService: {
-    getPosts: jest.fn(),
-    searchPosts: jest.fn()
+    getPosts: vi.fn(),
+    searchPosts: vi.fn()
   }
 }));
 
 // Mock the SEO component
-jest.mock('./SEO', () => {
-  return function MockSEO({ title, description, keywords, url }) {
+vi.mock('./SEO', () => ({
+  default: function MockSEO({ title, description, keywords, url }) {
     return (
       <div data-testid="seo-component" data-title={title} data-description={description} data-keywords={keywords} data-url={url}>
         SEO Component
       </div>
     );
-  };
-});
+  }
+}));
 
 // Mock the SwantronCard component
-jest.mock('./SwantronCard', () => {
-  return function MockSwantronCard({ post }) {
+vi.mock('./SwantronCard', () => ({
+  default: function MockSwantronCard({ post }) {
     return (
       <div data-testid={`swantron-card-${post.id}`} data-post-id={post.id}>
         <h3>{post.title}</h3>
         <p>{post.excerpt}</p>
       </div>
     );
-  };
-});
+  }
+}));
 
 // Mock the CSS import
-jest.mock('../styles/SwantronList.css', () => ({}));
+vi.mock('../styles/SwantronList.css', () => ({}));
 
-const { swantronService } = require('../services/swantronService');
+import { swantronService } from '../services/swantronService';
 
 const renderWithRouter = (component) => {
   return render(
@@ -75,9 +76,9 @@ describe('SwantronList Component', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Mock console.error to avoid noise in tests
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -267,7 +268,7 @@ describe('SwantronList Component', () => {
   });
 
   test('logs error to console when API call fails', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const apiError = new Error('Network error');
     swantronService.getPosts.mockRejectedValue(apiError);
     

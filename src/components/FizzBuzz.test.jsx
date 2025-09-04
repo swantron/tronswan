@@ -1,14 +1,15 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FizzBuzz from './FizzBuzz';
 
 // Mock the SEO component to prevent react-helmet-async errors
-jest.mock('./SEO', () => {
-  return function MockSEO() {
+vi.mock('./SEO', () => ({
+  default: function MockSEO() {
     return null;
-  };
-});
+  }
+}));
 
 describe('FizzBuzz Component', () => {
   test('renders page title', () => {

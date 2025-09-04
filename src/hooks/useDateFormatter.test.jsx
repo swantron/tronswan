@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useDateFormatter } from './useDateFormatter';
 
 // Mock console.error to avoid noise in tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 
 afterAll(() => {
@@ -13,7 +14,7 @@ afterAll(() => {
 
 describe('useDateFormatter Hook', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should format date with default options', () => {
