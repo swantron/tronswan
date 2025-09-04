@@ -140,7 +140,7 @@ describe('wordpressService', () => {
 
       const result = await wordpressService.getRecipes();
 
-      expect(result.recipes[0].featuredImage).toBeUndefined();
+      expect(result.recipes[0].featuredImage).toBeNull();
       expect(result.recipes[0].categories).toEqual([]);
       expect(result.recipes[0].tags).toEqual([]);
     });
@@ -224,7 +224,7 @@ describe('wordpressService', () => {
 
       const result = await wordpressService.getRecipeById(2);
 
-      expect(result.featuredImage).toBeUndefined();
+      expect(result.featuredImage).toBeNull();
       expect(result.categories).toEqual([]);
       expect(result.tags).toEqual([]);
     });

@@ -40,8 +40,18 @@ building / deploying / learning
 - `yarn test`: Launches the test runner
 - `yarn test:coverage`: Runs tests with coverage reporting
 - `yarn update-badge`: Updates the coverage badge in README with current test coverage
+- `yarn type-check`: Runs TypeScript type checking without emitting files
 - `yarn build`: Builds the app for production
 - `yarn eject`: Ejects from Create React App
+
+### TypeScript
+
+This project uses TypeScript for enhanced type safety and developer experience.
+
+- **Type Safety**: All services and API responses are fully typed
+- **Gradual Migration**: Services layer migrated to TypeScript, components remain in JavaScript for now
+- **Type Checking**: Run `yarn type-check` to validate types without building
+- **Configuration**: `tsconfig.json` configured for React and modern JavaScript features
 
 ### Testing
 
