@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDateFormatter } from '../hooks/useDateFormatter';
+import { RecipeCardProps } from '../types';
 import '../styles/RecipeCard.css';
 
-const RecipeCard = React.memo(({ recipe }) => {
+const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe }) => {
   const formatDate = useDateFormatter();
 
   return (
@@ -41,5 +42,7 @@ const RecipeCard = React.memo(({ recipe }) => {
     </div>
   );
 });
+
+RecipeCard.displayName = 'RecipeCard';
 
 export default RecipeCard;

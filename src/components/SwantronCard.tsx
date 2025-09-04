@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDateFormatter } from '../hooks/useDateFormatter';
+import { SwantronCardProps } from '../types';
 import '../styles/SwantronCard.css';
 
-const SwantronCard = React.memo(({ post }) => {
+const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
   const formatDate = useDateFormatter();
 
   return (
@@ -52,5 +53,7 @@ const SwantronCard = React.memo(({ post }) => {
     </div>
   );
 });
+
+SwantronCard.displayName = 'SwantronCard';
 
 export default SwantronCard;

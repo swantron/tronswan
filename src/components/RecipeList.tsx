@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import RecipeCard from './RecipeCard';
 import { wordpressService } from '../services/wordpressService';
+import { Recipe } from '../types';
 import '../styles/RecipeList.css';
 
-const RecipeList = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+const RecipeList: React.FC = () => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchRecipes = async (): Promise<void> => {
       try {
         setLoading(true);
         const data = searchQuery
@@ -33,7 +34,7 @@ const RecipeList = () => {
     fetchRecipes();
   }, [page, searchQuery]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setPage(1); // Reset to first page when searching
   };
@@ -99,4 +100,4 @@ const RecipeList = () => {
   );
 };
 
-export default RecipeList; 
+export default RecipeList;

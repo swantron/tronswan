@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import SwantronCard from './SwantronCard';
 import { swantronService } from '../services/swantronService';
 import SEO from './SEO';
+import { Post } from '../types';
 import '../styles/SwantronList.css';
 
-const SwantronList = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+const SwantronList: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPosts = async (): Promise<void> => {
       try {
         setLoading(true);
         const data = searchQuery
@@ -34,7 +35,7 @@ const SwantronList = () => {
     fetchPosts();
   }, [page, searchQuery]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setPage(1); // Reset to first page when searching
   };
