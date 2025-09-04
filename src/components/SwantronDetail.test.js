@@ -222,7 +222,7 @@ describe('SwantronDetail Component', () => {
     renderWithRouter(<SwantronDetail />, { route: '/swantron/123' });
     
     await waitFor(() => {
-      expect(swantronService.getPostById).toHaveBeenCalledWith('123');
+      expect(swantronService.getPostById).toHaveBeenCalledWith(123);
     });
   });
 

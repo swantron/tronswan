@@ -171,7 +171,7 @@ describe('RecipeDetail Component', () => {
     renderWithRouter(<RecipeDetail />, { route: '/recipe/123' });
     
     await waitFor(() => {
-      expect(wordpressService.getRecipeById).toHaveBeenCalledWith('123');
+      expect(wordpressService.getRecipeById).toHaveBeenCalledWith(123);
     });
   });
 
