@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { wordpressService } from '../services/wordpressService';
+import { Recipe } from '../types';
 import '../styles/RecipeDetail.css';
 
-const RecipeDetail = () => {
-  const { id } = useParams();
-  const [recipe, setRecipe] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const RecipeDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRecipe = async () => {
+    const fetchRecipe = async (): Promise<void> => {
+      if (!id) return;
+      
       try {
         setLoading(true);
-        const data = await wordpressService.getRecipeById(id);
+        const data = await wordpressService.getRecipeById(parseInt(id, 10));
         setRecipe(data);
         setError(null);
       } catch (err) {
@@ -27,7 +30,7 @@ const RecipeDetail = () => {
     fetchRecipe();
   }, [id]);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -109,4 +112,4 @@ const RecipeDetail = () => {
   );
 };
 
-export default RecipeDetail; 
+export default RecipeDetail;

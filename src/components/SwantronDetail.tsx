@@ -3,20 +3,23 @@ import { useParams } from 'react-router-dom';
 import { swantronService } from '../services/swantronService';
 import { useDateFormatter } from '../hooks/useDateFormatter';
 import SEO from './SEO';
+import { Post } from '../types';
 import '../styles/SwantronDetail.css';
 
-const SwantronDetail = () => {
-  const { id } = useParams();
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const SwantronDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const formatDate = useDateFormatter();
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPost = async (): Promise<void> => {
+      if (!id) return;
+      
       try {
         setLoading(true);
-        const data = await swantronService.getPostById(id);
+        const data = await swantronService.getPostById(parseInt(id, 10));
         setPost(data);
         setError(null);
       } catch (err) {
@@ -61,7 +64,7 @@ const SwantronDetail = () => {
         description={post.excerpt.replace(/<[^>]*>/g, '').substring(0, 160)}
         keywords={`swantron, Joseph Swanson, ${post.title}, blog post`}
         url={`/swantron/${post.id}`}
-        image={post.featuredImage}
+        image={post.featuredImage || undefined}
       />
 
       <article className="swantron-detail" data-testid="swantron-detail">
