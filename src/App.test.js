@@ -69,4 +69,5 @@ describe('App Component', () => {
     const homeContainer = screen.getByTestId('swantron-link').closest('.home-container');
     expect(homeContainer).toBeInTheDocument();
   });
+
 });
