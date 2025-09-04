@@ -78,6 +78,9 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
+# npm lock file (we use yarn.lock instead)
+package-lock.json
+
 # dotenv environment variables file
 .env
 
