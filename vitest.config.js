@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/setupTests.js'],
+    setupFiles: ['./src/setupTests.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
@@ -20,10 +20,10 @@ export default defineConfig({
       reporter: ['text', 'lcov', 'html', 'json-summary'],
       reportsDirectory: './coverage',
       include: [
-        'src/**/*.{js,jsx}',
-        '!src/index.js',
-        '!src/reportWebVitals.js',
-        '!src/setupTests.js'
+        'src/**/*.{ts,tsx}',
+        '!src/index.tsx',
+        '!src/reportWebVitals.ts',
+        '!src/setupTests.ts'
       ],
       thresholds: {
         global: {
