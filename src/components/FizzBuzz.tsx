@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import SEO from './SEO';
 import '../styles/FizzBuzz.css';
 
-function FizzBuzzDisplay({ number }) {
-  const generateFizzBuzz = (num) => {
+interface FizzBuzzDisplayProps {
+  number: number;
+}
+
+function FizzBuzzDisplay({ number }: FizzBuzzDisplayProps) {
+  const generateFizzBuzz = (num: number): string => {
     let result = [];
     for (let i = 1; i <= num; i++) {
       if (i % 3 === 0 && i % 5 === 0) {
@@ -28,9 +32,9 @@ function FizzBuzzDisplay({ number }) {
 }
 
 function FizzBuzz() {
-  const [inputNumber, setInputNumber] = useState('');
+  const [inputNumber, setInputNumber] = useState<string>('');
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputNumber(event.target.value);
   };
 
@@ -64,7 +68,7 @@ function FizzBuzz() {
           />
         </div>
 
-        {inputNumber && !isNaN(inputNumber) && parseInt(inputNumber) > 0 && (
+        {inputNumber && !isNaN(Number(inputNumber)) && parseInt(inputNumber) > 0 && (
           <FizzBuzzDisplay number={parseInt(inputNumber)} />
         )}
 

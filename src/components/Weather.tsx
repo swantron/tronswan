@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import SEO from './SEO';
 import '../styles/Weather.css';
 
-function WeatherDisplay({ weather }) {
+interface WeatherData {
+  temperature: number | null;
+  feelsLike: number | null;
+  pressure: number | null;
+  humidity: number | null;
+}
+
+interface WeatherDisplayProps {
+  weather: WeatherData;
+}
+
+function WeatherDisplay({ weather }: WeatherDisplayProps) {
   return (
     <div className="weather-container">
       {weather.temperature && (
@@ -30,9 +41,9 @@ function WeatherDisplay({ weather }) {
 }
 
 function Weather() {
-  const [weather, setWeather] = useState({ temperature: null, feelsLike: null, pressure: null, humidity: null });
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [weather, setWeather] = useState<WeatherData>({ temperature: null, feelsLike: null, pressure: null, humidity: null });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     async function fetchWeatherData() {

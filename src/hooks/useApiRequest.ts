@@ -1,13 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
 
+interface UseApiRequestOptions<T> {
+  retryAttempts?: number;
+  retryDelay?: number;
+  initialData?: T | null;
+  onSuccess?: (data: T) => void;
+  onError?: (error: Error) => void;
+}
+
+interface UseApiRequestReturn<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  retry: () => void;
+  retryCount: number;
+  canRetry: boolean;
+}
+
 /**
  * Custom hook for handling API requests with retry logic and loading states
- * @param {function} apiFunction - The API function to call
- * @param {array} dependencies - Dependencies array for useEffect
- * @param {object} options - Configuration options
- * @returns {object} State object with data, loading, error, and retry function
+ * @param apiFunction - The API function to call
+ * @param dependencies - Dependencies array for useEffect
+ * @param options - Configuration options
+ * @returns State object with data, loading, error, and retry function
  */
-export const useApiRequest = (apiFunction, dependencies = [], options = {}) => {
+export const useApiRequest = <T>(
+  apiFunction: () => Promise<T>, 
+  dependencies: any[] = [], 
+  options: UseApiRequestOptions<T> = {}
+): UseApiRequestReturn<T> => {
   const {
     retryAttempts = 3,
     retryDelay = 1000,
@@ -16,10 +37,10 @@ export const useApiRequest = (apiFunction, dependencies = [], options = {}) => {
     onError = null
   } = options;
 
-  const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const [data, setData] = useState<T | null>(initialData);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState<number>(0);
 
   const executeRequest = useCallback(async () => {
     try {
@@ -35,10 +56,11 @@ export const useApiRequest = (apiFunction, dependencies = [], options = {}) => {
       }
     } catch (err) {
       console.error('API request failed:', err);
-      setError(err.message || 'An error occurred while fetching data');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred while fetching data';
+      setError(errorMessage);
       
       if (onError) {
-        onError(err);
+        onError(err instanceof Error ? err : new Error(errorMessage));
       }
 
       // Retry logic
