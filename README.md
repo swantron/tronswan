@@ -37,41 +37,50 @@ building / deploying / learning
 ### Available Scripts
 
 - `yarn start`: Runs the app in development mode
-- `yarn test`: Launches the test runner
+- `yarn test`: Launches the Vitest test runner in watch mode
+- `yarn test:run`: Runs tests once and exits
 - `yarn test:coverage`: Runs tests with coverage reporting
-- `yarn update-badge`: Updates the coverage badge in README with current test coverage
+- `yarn test:ui`: Launches the Vitest UI for interactive testing
 - `yarn type-check`: Runs TypeScript type checking without emitting files
 - `yarn build`: Builds the app for production
 - `yarn eject`: Ejects from Create React App
 
 ### TypeScript
 
-This project uses TypeScript for enhanced type safety and developer experience.
+This project is fully migrated to TypeScript for enhanced type safety and developer experience.
 
-- **Type Safety**: All services and API responses are fully typed
-- **Gradual Migration**: Services layer migrated to TypeScript, components remain in JavaScript for now
+- **Full TypeScript**: All components, hooks, services, and tests are written in TypeScript
+- **Type Safety**: Comprehensive type definitions for all API responses, component props, and state
 - **Type Checking**: Run `yarn type-check` to validate types without building
 - **Configuration**: `tsconfig.json` configured for React and modern JavaScript features
+- **Test Files**: All test files use `.test.tsx` extension with full TypeScript support
+- **Migration Complete**: Successfully migrated from Jest to Vitest with full TypeScript support
 
 ### Testing
 
 This project maintains high test coverage with comprehensive unit tests for all components, hooks, and services.
 
 - **Current Coverage**: 93.35%
-- **Test Framework**: Jest + React Testing Library
+- **Test Framework**: Vitest + React Testing Library
+- **TypeScript Support**: All tests written in TypeScript with full type safety
+- **Fast Execution**: Vitest provides faster test execution compared to Jest
+- **Modern Tooling**: Built on Vite for optimal performance and developer experience
 - **Coverage Reports**: Generated automatically as part of CI/CD pipeline
 - **Coverage Badge**: Shows current test coverage percentage
 
 To run tests locally:
 ```bash
-# Run all tests
+# Run all tests in watch mode
 yarn test
+
+# Run tests once and exit
+yarn test:run
 
 # Run tests with coverage
 yarn test:coverage
 
-# Run tests in watch mode
-yarn test --watch
+# Launch interactive test UI
+yarn test:ui
 ```
 
 ### Coverage Badge Management
@@ -114,7 +123,7 @@ The application is deployed to DigitalOcean using their App Platform. The deploy
 
 The project includes several utility scripts in the `scripts/` directory:
 
-- **`update-coverage-badge.js`**: Automatically updates the test coverage badge in the README based on Jest coverage reports.
+- **`update-coverage-badge.js`**: Automatically updates the test coverage badge in the README based on Vitest coverage reports.
 
 ## Contributing
 
