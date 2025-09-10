@@ -6,11 +6,33 @@
 
 building / deploying / learning
 
+**Live Demo**: [tronswan.com](https://tronswan.com)
+
+## Features
+
+- 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
+- 🍳 **Recipe Collection** - Displays recipes from chomptron.com  
+- 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
+- 🎮 **Interactive Games** - FizzBuzz calculator and fun components
+- 📱 **Responsive Design** - Works on all devices
+- ⚡ **Fast Performance** - Optimized with modern React patterns
+- 🧪 **High Test Coverage** - 93%+ test coverage with Vitest
+
+## Tech Stack
+
+- **Frontend**: React 18.3, TypeScript, React Router
+- **Styling**: CSS3 with CSS Variables, Responsive Design
+- **Testing**: Vitest, React Testing Library, Playwright
+- **Build Tools**: Create React App, Vite
+- **Deployment**: DigitalOcean App Platform
+- **APIs**: WordPress REST API, OpenWeatherMap API
+- **Package Manager**: Yarn
+
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v20 or higher)
 - Yarn package manager
 - Git
 
@@ -18,8 +40,8 @@ building / deploying / learning
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/swantron/chomptron.git
-   cd chomptron
+   git clone https://github.com/swantron/tronswan.git
+   cd tronswan
    ```
 
 2. Install dependencies:
@@ -132,6 +154,26 @@ The project includes several utility scripts in the `scripts/` directory:
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Troubleshooting
+
+### Common Issues
+
+**Build fails with Node.js version error**
+- Ensure you're using Node.js v20 or higher
+- Check with `node --version`
+
+**Weather data not loading**
+- Verify your OpenWeatherMap API key is set in `.env`
+- Check that `REACT_APP_API_KEY` is correctly configured
+
+**Blog posts not loading**
+- Check network connectivity to swantron.com and chomptron.com
+- Verify the WordPress APIs are accessible
+
+**Tests failing**
+- Run `yarn install` to ensure all dependencies are installed
+- Check that all environment variables are set
 
 ## License
 
