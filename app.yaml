@@ -11,8 +11,12 @@ services:
     value: 20
   - key: NODE_ENV
     value: production
-  - key: REACT_APP_API_KEY
-    value: ${REACT_APP_API_KEY}
+  - key: VITE_API_KEY
+    value: ${VITE_API_KEY}
+  - key: VITE_CITY
+    value: Bozeman
+  - key: VITE_UNITS
+    value: imperial
   http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xs 

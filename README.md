@@ -51,9 +51,9 @@ building / deploying / learning
 
 3. Create a `.env` file in the root directory with the following variables:
    ```
-   REACT_APP_API_KEY=your_openweathermap_api_key
-   REACT_APP_CITY=Bozeman
-   REACT_APP_UNITS=imperial
+   VITE_API_KEY=your_openweathermap_api_key
+   VITE_CITY=Bozeman
+   VITE_UNITS=imperial
    ```
 
 ### Available Scripts
@@ -138,9 +138,9 @@ The application is deployed to DigitalOcean using their App Platform. The deploy
 
 ### Environment Variables
 
-- `REACT_APP_API_KEY`: OpenWeatherMap API key
-- `REACT_APP_CITY`: Default city for weather data
-- `REACT_APP_UNITS`: Units for weather data (imperial/metric)
+- `VITE_API_KEY`: OpenWeatherMap API key
+- `VITE_CITY`: Default city for weather data
+- `VITE_UNITS`: Units for weather data (imperial/metric)
 
 ## Scripts
 
@@ -166,7 +166,7 @@ The project includes several utility scripts in the `scripts/` directory:
 
 **Weather data not loading**
 - Verify your OpenWeatherMap API key is set in `.env`
-- Check that `REACT_APP_API_KEY` is correctly configured
+- Check that `VITE_API_KEY` is correctly configured
 
 **Blog posts not loading**
 - Check network connectivity to swantron.com and chomptron.com

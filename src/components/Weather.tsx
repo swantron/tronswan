@@ -47,9 +47,9 @@ function Weather() {
 
   useEffect(() => {
     async function fetchWeatherData() {
-      const apiKey = process.env.REACT_APP_API_KEY;
-      const city = process.env.REACT_APP_CITY || 'Bozeman';
-      const units = process.env.REACT_APP_UNITS || 'imperial';
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const city = import.meta.env.VITE_CITY || 'Bozeman';
+      const units = import.meta.env.VITE_UNITS || 'imperial';
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
 
       try {
