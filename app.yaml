@@ -5,7 +5,7 @@ services:
     branch: main
     deploy_on_push: true
   build_command: yarn install --frozen-lockfile && yarn build
-  run_command: npx serve -s build -l 3000
+  run_command: npx serve -s build -l 8080
   envs:
   - key: NODE_VERSION
     value: 20
@@ -13,6 +13,6 @@ services:
     value: production
   - key: REACT_APP_API_KEY
     value: ${REACT_APP_API_KEY}
-  http_port: 3000
+  http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xs 
