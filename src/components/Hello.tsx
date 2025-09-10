@@ -17,7 +17,7 @@ function Hello() {
         <p className="hello-subtitle">👋 connect with joseph swanson</p>
         
         <div className="hello-description">
-          <p>Staff Software Engineer specializing in DevX, CI/CD, AI, IaC, and internal tools</p>
+          <p>Staff Software Engineer building full-stack solutions with a focus on DevX, CI/CD, AI, IaC, and React</p>
           <p>Based in Bozeman, Montana 🏔️</p>
         </div>
 
