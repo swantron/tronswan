@@ -5,7 +5,7 @@ services:
     branch: main
     deploy_on_push: true
   build_command: yarn install --frozen-lockfile && yarn build
-  run_command: yarn start
+  run_command: npx serve -s build -l 3000
   envs:
   - key: NODE_VERSION
     value: 20
