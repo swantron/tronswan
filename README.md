@@ -23,7 +23,7 @@ building / deploying / learning
 - **Frontend**: React 18.3, TypeScript, React Router
 - **Styling**: CSS3 with CSS Variables, Responsive Design
 - **Testing**: Vitest, React Testing Library, Playwright
-- **Build Tools**: Create React App, Vite
+- **Build Tools**: Vite, TypeScript
 - **Deployment**: DigitalOcean App Platform
 - **APIs**: WordPress REST API, OpenWeatherMap API
 - **Package Manager**: Yarn
@@ -58,14 +58,15 @@ building / deploying / learning
 
 ### Available Scripts
 
-- `yarn start`: Runs the app in development mode
+- `yarn dev`: Runs the app in development mode with Vite
+- `yarn start`: Alias for `yarn dev`
 - `yarn test`: Launches the Vitest test runner in watch mode
 - `yarn test:run`: Runs tests once and exits
 - `yarn test:coverage`: Runs tests with coverage reporting
 - `yarn test:ui`: Launches the Vitest UI for interactive testing
 - `yarn type-check`: Runs TypeScript type checking without emitting files
-- `yarn build`: Builds the app for production
-- `yarn eject`: Ejects from Create React App
+- `yarn build`: Builds the app for production with Vite
+- `yarn preview`: Preview the production build locally
 
 ### TypeScript
 
