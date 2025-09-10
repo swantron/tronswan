@@ -7,8 +7,8 @@ function Hello() {
     <div className="hello-page">
       <SEO
         title="Hello - Connect with Joseph Swanson | Tron Swan"
-        description="Connect with Joseph Swanson, Staff Software Engineer specializing in DevX, CI/CD, AI, and IaC. Links to personal projects and professional profiles."
-        keywords="Joseph Swanson, software engineer, DevX, CI/CD, IaC, AI, fullstack, LinkedIn, Montana, Bozeman"
+        description="Connect with Joseph Swanson, Staff Software Engineer building full-stack solutions with a focus on DevX, CI/CD, AI, IaC, and React. Links to personal projects and professional profiles."
+        keywords="Joseph Swanson, software engineer, DevX, CI/CD, IaC, AI, React, full-stack, LinkedIn, Montana, Bozeman"
         url="/hello"
       />
       

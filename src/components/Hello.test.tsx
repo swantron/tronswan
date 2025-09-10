@@ -25,7 +25,7 @@ describe('Hello Component', () => {
 
   test('renders description section', () => {
     render(<Hello />);
-    expect(screen.getByText('Staff Software Engineer specializing in DevX, CI/CD, AI, IaC, and internal tools')).toBeInTheDocument();
+    expect(screen.getByText('Staff Software Engineer building full-stack solutions with a focus on DevX, CI/CD, AI, IaC, and React')).toBeInTheDocument();
     expect(screen.getByText('Based in Bozeman, Montana 🏔️')).toBeInTheDocument();
   });
 
