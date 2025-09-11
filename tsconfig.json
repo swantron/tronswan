@@ -26,7 +26,11 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
-  ],
-  "types": ["vitest/globals"]
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "src/setupTests.ts"
+  ]
 }

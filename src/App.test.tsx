@@ -1,4 +1,5 @@
 import { vi, expect, describe, test } from 'vitest';
+import React from 'react';
 // Imports necessary utilities from the testing library and jest-dom for DOM assertions.
 import { render, screen } from '@testing-library/react';
 import App from './App'; // Imports the App component to be tested.
