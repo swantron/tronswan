@@ -16,6 +16,8 @@ interface DigitalOceanStatusProps {
 
 function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
   const [activeTab, setActiveTab] = useState<'app' | 'droplets' | 'loadbalancers' | 'databases'>('app');
+  
+  console.log('DigitalOceanStatus received data:', data);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +31,7 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
           digitalOceanService.getDatabases(),
         ]);
         
+        console.log('DigitalOcean data loaded:', { app, droplets, loadBalancers, databases });
         onDataChange({ 
           ...data, 
           app,
@@ -153,7 +156,7 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
             {data.app ? (
               <div className="app-info">
                 <div className="app-header">
-                  <h4>{data.app.spec?.name || 'trons-swan-react-app'}</h4>
+                  <h4>{data.app.spec?.name || 'tronswan-react-app'}</h4>
                   <span className={`status ${getStatusClass(data.app.last_deployment_active_at ? 'active' : 'inactive')}`}>
                     {getStatusIcon(data.app.last_deployment_active_at ? 'active' : 'inactive')} 
                     {data.app.last_deployment_active_at ? 'ACTIVE' : 'INACTIVE'}
