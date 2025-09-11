@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, expect, describe, test, beforeAll, afterAll, beforeEach } from 'vitest';
 import { wordpressService } from './wordpressService';
 
 // Mock fetch globally
