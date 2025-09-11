@@ -1,8 +1,8 @@
 .health-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #282c34;
   padding: 2rem;
-  color: #333;
+  color: #ffffff;
 }
 
 .health-header {
@@ -33,9 +33,9 @@
 }
 
 .refresh-button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: #f89859;
+  border: 2px solid #f89859;
+  color: #282c34;
   padding: 0.75rem 1.5rem;
   border-radius: 25px;
   font-size: 1rem;
@@ -46,8 +46,8 @@
 }
 
 .refresh-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: #e6894a;
+  border-color: #e6894a;
   transform: translateY(-2px);
 }
 
@@ -83,12 +83,12 @@
 }
 
 .health-section {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(248, 152, 89, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -101,8 +101,8 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  color: #2d3748;
-  border-bottom: 3px solid #667eea;
+  color: #f89859;
+  border-bottom: 3px solid #f89859;
   padding-bottom: 0.5rem;
 }
 

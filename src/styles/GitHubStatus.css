@@ -1,9 +1,10 @@
 /* GitHub Status Component Styles */
 .github-status {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  border: 1px solid rgba(248, 152, 89, 0.3);
 }
 
 /* Loading State */
@@ -59,8 +60,8 @@
 /* Tabs */
 .github-tabs {
   display: flex;
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
 }
 
 .tab {
@@ -71,19 +72,19 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #6c757d;
+  color: #ffffff;
   transition: all 0.2s ease;
 }
 
 .tab:hover {
-  background: #e9ecef;
-  color: #495057;
+  background: rgba(248, 152, 89, 0.2);
+  color: #f89859;
 }
 
 .tab.active {
-  background: #fff;
-  color: #007bff;
-  border-bottom: 2px solid #007bff;
+  background: rgba(248, 152, 89, 0.3);
+  color: #f89859;
+  border-bottom: 2px solid #f89859;
 }
 
 /* Content */
@@ -98,7 +99,7 @@
 
 .actions-tab h3 {
   margin: 0 0 16px 0;
-  color: #495057;
+  color: #f89859;
   font-size: 1.25rem;
 }
 
@@ -113,13 +114,13 @@
 
 .actions-header p {
   margin: 0;
-  color: #6c757d;
+  color: #ffffff;
   font-size: 0.9rem;
 }
 
 .refresh-button {
-  background: #007bff;
-  color: white;
+  background: #f89859;
+  color: #282c34;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
@@ -129,7 +130,7 @@
 }
 
 .refresh-button:hover:not(:disabled) {
-  background: #0056b3;
+  background: #e6894a;
 }
 
 .refresh-button:disabled {
