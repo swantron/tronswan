@@ -4,10 +4,10 @@ import '../styles/DigitalOceanStatus.css';
 
 interface DigitalOceanStatusProps {
   data: {
+    app: any;
     droplets: DigitalOceanDroplet[];
     loadBalancers: DigitalOceanLoadBalancer[];
     databases: DigitalOceanDatabase[];
-    account: any;
     loading: boolean;
     error: string | null;
   };
@@ -15,26 +15,26 @@ interface DigitalOceanStatusProps {
 }
 
 function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
-  const [activeTab, setActiveTab] = useState<'droplets' | 'loadbalancers' | 'databases' | 'account'>('droplets');
+  const [activeTab, setActiveTab] = useState<'app' | 'droplets' | 'loadbalancers' | 'databases'>('app');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         onDataChange({ ...data, loading: true, error: null });
         
-        const [droplets, loadBalancers, databases, account] = await Promise.all([
+        const [app, droplets, loadBalancers, databases] = await Promise.all([
+          digitalOceanService.getApp(),
           digitalOceanService.getDroplets(),
           digitalOceanService.getLoadBalancers(),
           digitalOceanService.getDatabases(),
-          digitalOceanService.getAccount(),
         ]);
         
         onDataChange({ 
           ...data, 
+          app,
           droplets, 
           loadBalancers, 
           databases, 
-          account: account.account,
           loading: false 
         });
       } catch (error) {
@@ -121,6 +121,12 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
     <div className="digitalocean-status">
       <div className="do-tabs">
         <button 
+          className={`tab ${activeTab === 'app' ? 'active' : ''}`}
+          onClick={() => setActiveTab('app')}
+        >
+          App Status
+        </button>
+        <button 
           className={`tab ${activeTab === 'droplets' ? 'active' : ''}`}
           onClick={() => setActiveTab('droplets')}
         >
@@ -138,15 +144,54 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
         >
           Databases ({data.databases?.length || 0})
         </button>
-        <button 
-          className={`tab ${activeTab === 'account' ? 'active' : ''}`}
-          onClick={() => setActiveTab('account')}
-        >
-          Account
-        </button>
       </div>
 
       <div className="do-content">
+        {activeTab === 'app' && (
+          <div className="app-tab">
+            <h3>App Status</h3>
+            {data.app ? (
+              <div className="app-info">
+                <div className="app-header">
+                  <h4>{data.app.spec?.name || 'trons-swan-react-app'}</h4>
+                  <span className={`status ${getStatusClass(data.app.last_deployment_active_at ? 'active' : 'inactive')}`}>
+                    {getStatusIcon(data.app.last_deployment_active_at ? 'active' : 'inactive')} 
+                    {data.app.last_deployment_active_at ? 'ACTIVE' : 'INACTIVE'}
+                  </span>
+                </div>
+                <div className="app-details">
+                  <div className="detail-item">
+                    <span className="label">App ID:</span>
+                    <span className="value">{data.app.id}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Region:</span>
+                    <span className="value">{data.app.region?.slug || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Created:</span>
+                    <span className="value">{data.app.created_at ? new Date(data.app.created_at).toLocaleDateString() : 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Last Deployed:</span>
+                    <span className="value">{data.app.last_deployment_active_at ? new Date(data.app.last_deployment_active_at).toLocaleDateString() : 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Live URL:</span>
+                    <span className="value">
+                      <a href={data.app.live_url} target="_blank" rel="noopener noreferrer">
+                        {data.app.live_url || 'N/A'}
+                      </a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="no-data">App information not available</p>
+            )}
+          </div>
+        )}
+
         {activeTab === 'droplets' && (
           <div className="droplets-tab">
             <h3>Droplets</h3>
@@ -273,37 +318,6 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
           </div>
         )}
 
-        {activeTab === 'account' && (
-          <div className="account-tab">
-            <h3>Account Limits</h3>
-            {data.account ? (
-              <div className="account-limits">
-                <div className="limit-item">
-                  <span className="limit-label">Droplets:</span>
-                  <span className="limit-value">{data.droplets?.length || 0} / {data.account?.droplet_limit || 0}</span>
-                </div>
-                <div className="limit-item">
-                  <span className="limit-label">Load Balancers:</span>
-                  <span className="limit-value">{data.loadBalancers?.length || 0} / {data.account?.load_balancer_limit || 0}</span>
-                </div>
-                <div className="limit-item">
-                  <span className="limit-label">Databases:</span>
-                  <span className="limit-value">{data.databases?.length || 0} / {data.account?.database_limit || 0}</span>
-                </div>
-                <div className="limit-item">
-                  <span className="limit-label">Floating IPs:</span>
-                  <span className="limit-value">0 / {data.account?.floating_ip_limit || 0}</span>
-                </div>
-                <div className="limit-item">
-                  <span className="limit-label">Volumes:</span>
-                  <span className="limit-value">0 / {data.account?.volume_limit || 0}</span>
-                </div>
-              </div>
-            ) : (
-              <p className="no-data">Account information not available</p>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

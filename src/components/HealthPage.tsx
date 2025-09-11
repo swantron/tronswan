@@ -16,10 +16,10 @@ interface HealthData {
     error: string | null;
   };
   digitalocean: {
+    app: any;
     droplets: any[];
     loadBalancers: any[];
     databases: any[];
-    account: any;
     loading: boolean;
     error: string | null;
   };
@@ -41,10 +41,10 @@ function HealthPage() {
       error: null,
     },
     digitalocean: {
+      app: null,
       droplets: [],
       loadBalancers: [],
       databases: [],
-      account: null,
       loading: true,
       error: null,
     },

@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_GITHUB_TOKEN: string
   readonly VITE_GITHUB_OWNER: string
   readonly VITE_DIGITALOCEAN_TOKEN: string
+  readonly VITE_DIGITALOCEAN_APP_ID: string
 }
 
 interface ImportMeta {

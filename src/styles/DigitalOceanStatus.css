@@ -64,6 +64,66 @@
   padding: 2rem;
 }
 
+/* App Status Tab Styles */
+.app-tab {
+  padding: 20px;
+}
+
+.app-info {
+  margin-top: 20px;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.app-header h4 {
+  margin: 0;
+  color: #495057;
+  font-size: 1.25rem;
+}
+
+.app-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.detail-item .label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.detail-item .value {
+  font-weight: 500;
+  color: #007bff;
+  text-align: right;
+}
+
+.detail-item .value a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.detail-item .value a:hover {
+  text-decoration: underline;
+}
+
 .droplets-tab h3,
 .loadbalancers-tab h3,
 .databases-tab h3,

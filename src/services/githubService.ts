@@ -137,7 +137,8 @@ class GitHubService {
   }
 
   async getRepositories(): Promise<GitHubRepository[]> {
-    return this.makeRequest(`/users/${this.owner}/repos?sort=updated&per_page=10`);
+    // Only get the specific tronswan repository
+    return this.makeRequest(`/repos/${this.owner}/tronswan`).then(repo => [repo]);
   }
 
   async getRepository(name: string): Promise<GitHubRepository> {

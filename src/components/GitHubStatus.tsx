@@ -27,14 +27,11 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const [user, repositories] = await Promise.all([
-        githubService.getUser(),
-        githubService.getRepositories()
-      ]);
+      const repositories = await githubService.getRepositories();
 
       onDataChange({
         ...data,
-        user,
+        user: null, // Don't load user profile
         repositories,
         loading: false,
         error: null
@@ -151,25 +148,6 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         </button>
       </div>
 
-      {data.user && (
-        <div className="github-user">
-          <div className="user-info">
-            <img 
-              src={data.user.avatar_url} 
-              alt={data.user.login}
-              className="user-avatar"
-            />
-            <div className="user-details">
-              <h4>{data.user.name || data.user.login}</h4>
-              <p>@{data.user.login}</p>
-              <div className="user-stats">
-                <span>📦 {data.user.public_repos} repos</span>
-                <span>⭐ {data.user.followers} followers</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {data.repositories && data.repositories.length > 0 && (
         <div className="github-repositories">

@@ -160,10 +160,12 @@ export interface DigitalOceanDatabase {
 class DigitalOceanService {
   private baseUrl: string;
   private token: string;
+  private appId: string;
 
   constructor() {
     this.baseUrl = 'https://api.digitalocean.com/v2';
     this.token = runtimeConfig.get('VITE_DIGITALOCEAN_TOKEN');
+    this.appId = runtimeConfig.getWithDefault('VITE_DIGITALOCEAN_APP_ID', '0513ce4c-b074-4139-bb38-a1c6a5bc97a6');
   }
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
@@ -183,10 +185,31 @@ class DigitalOceanService {
     return data;
   }
 
+  async getApp(): Promise<any> {
+    try {
+      return await this.makeRequest(`/apps/${this.appId}`);
+    } catch (error) {
+      console.error('Error fetching DigitalOcean app:', error);
+      throw error;
+    }
+  }
+
   async getDroplets(): Promise<DigitalOceanDroplet[]> {
     try {
-      const response = await this.makeRequest<{ droplets: DigitalOceanDroplet[] }>('/droplets');
-      return response.droplets;
+      // Get app first to see if it has associated droplets
+      const app = await this.getApp();
+      const appDroplets = app.droplets || [];
+      
+      if (appDroplets.length === 0) {
+        return [];
+      }
+      
+      // Get details for each droplet associated with the app
+      const dropletPromises = appDroplets.map((dropletId: string) => 
+        this.makeRequest<{ droplet: DigitalOceanDroplet }>(`/droplets/${dropletId}`).then(res => res.droplet)
+      );
+      
+      return Promise.all(dropletPromises);
     } catch (error) {
       console.error('Error fetching DigitalOcean droplets:', error);
       throw error;

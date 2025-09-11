@@ -25,6 +25,7 @@ VITE_GITHUB_OWNER=swantron
 # Get your DigitalOcean token from: https://cloud.digitalocean.com/account/api/tokens
 # Create a token with 'read' scope
 VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
+VITE_DIGITALOCEAN_APP_ID=0513ce4c-b074-4139-bb38-a1c6a5bc97a6
 ```
 
 ## Deployed Environment (DigitalOcean)
@@ -153,4 +154,5 @@ VITE_GITHUB_OWNER=swantron
 # Get your DigitalOcean token from: https://cloud.digitalocean.com/account/api/tokens
 # Create a token with 'read' scope
 VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
+VITE_DIGITALOCEAN_APP_ID=0513ce4c-b074-4139-bb38-a1c6a5bc97a6
 ```
