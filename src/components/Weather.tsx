@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SEO from './SEO';
+import { runtimeConfig } from '../utils/runtimeConfig';
 import '../styles/Weather.css';
 
 interface WeatherData {
@@ -47,9 +48,12 @@ function Weather() {
 
   useEffect(() => {
     async function fetchWeatherData() {
-      const apiKey = import.meta.env.VITE_API_KEY;
-      const city = import.meta.env.VITE_CITY || 'Bozeman';
-      const units = import.meta.env.VITE_UNITS || 'imperial';
+      // Initialize runtime config if not already done
+      await runtimeConfig.initialize();
+      
+      const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+      const city = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
+      const units = runtimeConfig.getWithDefault('VITE_WEATHER_UNITS', 'imperial');
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
 
       try {
@@ -96,7 +100,7 @@ function Weather() {
 
         <div className="weather-info">
           <p>Real-time weather data from OpenWeatherMap API</p>
-          <p>Location: {process.env.REACT_APP_CITY || 'Bozeman'}, Montana</p>
+          <p>Location: {runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman')}, Montana</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { runtimeConfig } from '../utils/runtimeConfig';
 
 const SEO = ({
   title = 'Tron Swan - Robot-Style Recipes & Tech Fun',
@@ -11,7 +12,7 @@ const SEO = ({
   author = 'SwanTron',
   structuredData = null
 }) => {
-  const siteUrl = process.env.REACT_APP_SITE_URL || 'https://tronswan.com';
+  const siteUrl = runtimeConfig.getWithDefault('VITE_SITE_URL', 'https://tronswan.com');
   const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url}`;
   const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 

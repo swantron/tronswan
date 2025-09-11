@@ -32,7 +32,7 @@ describe('App Component', () => {
     render(<App />);
     // Test navigation links specifically - only the nav bar links, not the swantron link
     const navLinks = screen.getAllByRole('link').filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(7);
+    expect(navLinks).toHaveLength(8);
     
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
@@ -42,6 +42,7 @@ describe('App Component', () => {
     expect(screen.getByRole('link', { name: 'hacking' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'trontronbuzztron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
   });
 
   // Test to check if the home page content is rendered by default.

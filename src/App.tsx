@@ -11,6 +11,7 @@ import SwantronDetail from './components/SwantronDetail';
 import Hacking from './components/Hacking';
 import Gangnam1 from './components/Gangnam1';
 import Gangnam2 from './components/Gangnam2';
+import HealthPage from './components/HealthPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import './App.css';
@@ -68,6 +69,7 @@ function App() {
               <Link to="/hacking" className="nav-link">hacking</Link>
               <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
               <Link to="/hello" className="nav-link">hello</Link>
+              <Link to="/health" className="nav-link">health</Link>
             </nav>
 
             <ErrorBoundary>
@@ -83,6 +85,7 @@ function App() {
                 <Route path="/gangnam2" element={<Gangnam2 />} />
                 <Route path="/trontronbuzztron" element={<FizzBuzz />} />
                 <Route path="/hello" element={<Hello />} />
+                <Route path="/health" element={<HealthPage />} />
               </Routes>
             </ErrorBoundary>
 
