@@ -119,22 +119,28 @@
 .detail-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 15px;
   background: #f8f9fa;
   border-radius: 8px;
   border-left: 4px solid #007bff;
+  min-height: 60px;
 }
 
 .detail-item .label {
   font-weight: 600;
   color: #495057;
+  flex-shrink: 0;
+  min-width: 120px;
 }
 
 .detail-item .value {
   font-weight: 500;
   color: #007bff;
   text-align: right;
+  word-break: break-all;
+  flex: 1;
+  margin-left: 10px;
 }
 
 .detail-item .value a {
