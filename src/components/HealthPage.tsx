@@ -11,8 +11,7 @@ interface HealthData {
   github: {
     user: any;
     repositories: any[];
-    workflows: any[];
-    workflowRuns: any[];
+    actions: any[];
     loading: boolean;
     error: string | null;
   };
@@ -36,8 +35,7 @@ function HealthPage() {
     github: {
       user: null,
       repositories: [],
-      workflows: [],
-      workflowRuns: [],
+      actions: [],
       loading: true,
       error: null,
     },

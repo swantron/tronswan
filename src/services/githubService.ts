@@ -141,6 +141,11 @@ class GitHubService {
     return this.makeRequest(`/repos/${this.owner}/tronswan`).then(repo => [repo]);
   }
 
+  async getAllRepositories(): Promise<GitHubRepository[]> {
+    // Get all repositories for the swantron organization
+    return this.makeRequest(`/users/${this.owner}/repos?sort=updated&per_page=10`);
+  }
+
   async getRepository(name: string): Promise<GitHubRepository> {
     return this.makeRequest(`/repos/${this.owner}/${name}`);
   }

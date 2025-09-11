@@ -5,8 +5,7 @@ import '../styles/GitHubStatus.css';
 interface GitHubData {
   user: any;
   repositories: any[];
-  workflows: any[];
-  workflowRuns: any[];
+  actions: any[];
   loading: boolean;
   error: string | null;
 }
@@ -17,7 +16,8 @@ interface GitHubStatusProps {
 }
 
 const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
-  const [selectedRepo, setSelectedRepo] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'actions' | 'repos'>('actions');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     loadGitHubData();
@@ -27,12 +27,16 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const repositories = await githubService.getRepositories();
+      const [repositories, actions] = await Promise.all([
+        githubService.getAllRepositories(),
+        githubService.getWorkflowRuns('tronswan')
+      ]);
 
       onDataChange({
         ...data,
         user: null, // Don't load user profile
         repositories,
+        actions: actions.workflow_runs || [],
         loading: false,
         error: null
       });
@@ -46,35 +50,10 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     }
   };
 
-  const loadWorkflowData = async (repo: string) => {
-    if (!repo) return;
-
-    try {
-      const [workflows, workflowRuns] = await Promise.all([
-        githubService.getWorkflows(repo),
-        githubService.getWorkflowRuns(repo)
-      ]);
-
-      onDataChange({
-        ...data,
-        workflows: workflows.workflows || [],
-        workflowRuns: workflowRuns.workflow_runs || [],
-        error: null
-      });
-    } catch (error) {
-      console.error('Error loading workflow data:', error);
-      onDataChange({
-        ...data,
-        error: error instanceof Error ? error.message : 'Failed to load workflow data'
-      });
-    }
-  };
-
-  const handleRepoChange = (repo: string) => {
-    setSelectedRepo(repo);
-    if (repo) {
-      loadWorkflowData(repo);
-    }
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await loadGitHubData();
+    setIsRefreshing(false);
   };
 
   const getStatusIcon = (status: string, conclusion?: string | null) => {
@@ -103,6 +82,28 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     return '❓';
   };
 
+  const getStatusClass = (status: string, conclusion?: string | null) => {
+    if (status === 'completed') {
+      switch (conclusion) {
+        case 'success':
+          return 'status-success';
+        case 'failure':
+          return 'status-failure';
+        case 'cancelled':
+          return 'status-cancelled';
+        case 'skipped':
+        case 'timed_out':
+        case 'action_required':
+          return 'status-pending';
+        default:
+          return 'status-unknown';
+      }
+    } else if (status === 'in_progress' || status === 'queued') {
+      return 'status-pending';
+    }
+    return 'status-unknown';
+  };
+
   const getStatusText = (status: string, conclusion?: string | null) => {
     if (status === 'completed') {
       return conclusion || 'Unknown';
@@ -116,153 +117,128 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
 
   if (data.loading) {
     return (
-      <div className="github-status">
-        <div className="github-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading GitHub data...</p>
-        </div>
+      <div className="github-status loading">
+        <div className="loading-spinner" />
+        <p>Loading GitHub data...</p>
       </div>
     );
   }
 
   if (data.error) {
     return (
-      <div className="github-status">
-        <div className="github-error">
-          <h3>⚠️ GitHub Error</h3>
-          <p>{data.error}</p>
-          <button onClick={loadGitHubData} className="retry-button">
-            🔄 Retry
-          </button>
-        </div>
+      <div className="github-status error">
+        <div className="error-icon">⚠️</div>
+        <p>Error: {data.error}</p>
+        <small>Check your GitHub API token configuration</small>
+        <button onClick={handleRefresh} className="retry-button">
+          🔄 Retry
+        </button>
       </div>
     );
   }
 
   return (
     <div className="github-status">
-      <div className="github-header">
-        <h3>📊 GitHub Status</h3>
-        <button onClick={loadGitHubData} className="refresh-button">
-          🔄 Refresh
+      <div className="github-tabs">
+        <button
+          className={`tab ${activeTab === 'actions' ? 'active' : ''}`}
+          onClick={() => setActiveTab('actions')}
+        >
+          Actions ({data.actions?.length || 0})
+        </button>
+        <button
+          className={`tab ${activeTab === 'repos' ? 'active' : ''}`}
+          onClick={() => setActiveTab('repos')}
+        >
+          Repos ({data.repositories?.length || 0})
         </button>
       </div>
 
-
-      {data.repositories && data.repositories.length > 0 && (
-        <div className="github-repositories">
-          <h4>📚 Recent Repositories</h4>
-          <div className="repo-list">
-            {data.repositories.slice(0, 5).map((repo) => (
-              <div key={repo.id} className="repo-item">
-                <div className="repo-header">
-                  <a 
-                    href={repo.html_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="repo-name"
-                  >
-                    {repo.name}
-                  </a>
-                  <span className={`repo-visibility ${repo.private ? 'private' : 'public'}`}>
-                    {repo.private ? '🔒' : '🌐'}
-                  </span>
-                </div>
-                {repo.description && (
-                  <p className="repo-description">{repo.description}</p>
-                )}
-                <div className="repo-stats">
-                  <span>⭐ {repo.stargazers_count}</span>
-                  <span>🍴 {repo.forks_count}</span>
-                  {repo.language && <span>💻 {repo.language}</span>}
-                  <span>🕒 {formatDate(repo.updated_at)}</span>
-                </div>
-                <button 
-                  onClick={() => handleRepoChange(repo.name)}
-                  className={`workflow-button ${selectedRepo === repo.name ? 'active' : ''}`}
-                >
-                  {selectedRepo === repo.name ? '📋 Hide Workflows' : '📋 View Workflows'}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedRepo && data.workflows && data.workflows.length > 0 && (
-        <div className="github-workflows">
-          <h4>⚙️ Workflows - {selectedRepo}</h4>
-          <div className="workflow-list">
-            {data.workflows.map((workflow) => (
-              <div key={workflow.id} className="workflow-item">
-                <div className="workflow-header">
-                  <h5>{workflow.name}</h5>
-                  <span className={`workflow-state ${workflow.state}`}>
-                    {workflow.state === 'active' ? '🟢' : '🔴'} {workflow.state}
-                  </span>
-                </div>
-                <p className="workflow-path">{workflow.path}</p>
-                <div className="workflow-actions">
-                  <a 
-                    href={workflow.html_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="workflow-link"
-                  >
-                    🔗 View in GitHub
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedRepo && data.workflowRuns && data.workflowRuns.length > 0 && (
-        <div className="github-workflow-runs">
-          <h4>🏃 Recent Workflow Runs - {selectedRepo}</h4>
-          <div className="workflow-runs-list">
-            {data.workflowRuns.slice(0, 5).map((run) => (
-              <div key={run.id} className="workflow-run-item">
-                <div className="run-header">
-                  <div className="run-info">
-                    <h5>{run.name}</h5>
-                    <p className="run-branch">🌿 {run.head_branch}</p>
+      <div className="github-content">
+        {activeTab === 'actions' && (
+          <div className="actions-tab">
+            <h3>GitHub Actions</h3>
+            <div className="actions-header">
+              <p>Recent workflow runs for tronswan repository</p>
+              <button 
+                onClick={handleRefresh} 
+                className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
+              </button>
+            </div>
+            {(data.actions?.length || 0) === 0 ? (
+              <p className="no-data">No workflow runs found</p>
+            ) : (
+              <div className="actions-list">
+                {(data.actions || []).map((action: any) => (
+                  <div key={action.id} className="action-item">
+                    <div className="action-header">
+                      <h4>{action.name}</h4>
+                      <span className={`status ${getStatusClass(action.status, action.conclusion)}`}>
+                        {getStatusIcon(action.status, action.conclusion)}
+                        {getStatusText(action.status, action.conclusion)}
+                      </span>
+                    </div>
+                    <div className="action-details">
+                      <p><strong>Branch:</strong> {action.head_branch || 'N/A'}</p>
+                      <p><strong>Commit:</strong> {action.head_sha ? action.head_sha.substring(0, 7) : 'N/A'}</p>
+                      <p><strong>Triggered by:</strong> {action.triggering_actor?.login || action.actor?.login || 'Unknown'}</p>
+                      <p><strong>Created:</strong> {action.created_at ? formatDate(action.created_at) : 'N/A'}</p>
+                      <p><strong>Updated:</strong> {action.updated_at ? formatDate(action.updated_at) : 'N/A'}</p>
+                      {action.html_url && (
+                        <p><strong>URL:</strong> <a href={action.html_url} target="_blank" rel="noopener noreferrer">View Details</a></p>
+                      )}
+                    </div>
                   </div>
-                  <div className="run-status">
-                    <span className="status-icon">
-                      {getStatusIcon(run.status, run.conclusion)}
-                    </span>
-                    <span className="status-text">
-                      {getStatusText(run.status, run.conclusion)}
-                    </span>
-                  </div>
-                </div>
-                <div className="run-details">
-                  <p className="run-commit">
-                    💬 {run.head_commit.message}
-                  </p>
-                  <div className="run-meta">
-                    <span>👤 {run.head_commit.author.name}</span>
-                    <span>🕒 {formatDate(run.created_at)}</span>
-                    <span># {run.run_number}</span>
-                  </div>
-                </div>
-                <div className="run-actions">
-                  <a 
-                    href={run.html_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="run-link"
-                  >
-                    🔗 View Details
-                  </a>
-                </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        </div>
-      )}
+        )}
+
+        {activeTab === 'repos' && (
+          <div className="repos-tab">
+            <h3>Repositories</h3>
+            <div className="repos-header">
+              <p>Recent repositories in swantron organization</p>
+              <button 
+                onClick={handleRefresh} 
+                className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
+              </button>
+            </div>
+            {(data.repositories?.length || 0) === 0 ? (
+              <p className="no-data">No repositories found</p>
+            ) : (
+              <div className="repositories-list">
+                {(data.repositories || []).map((repo: any) => (
+                  <div key={repo.id} className="repository-item">
+                    <div className="repo-header">
+                      <h4>{repo.name}</h4>
+                      <span className={`status ${repo.private ? 'private' : 'public'}`}>
+                        {repo.private ? '🔒' : '🌐'}
+                        {repo.private ? 'Private' : 'Public'}
+                      </span>
+                    </div>
+                    <div className="repo-details">
+                      <p><strong>Description:</strong> {repo.description || 'No description'}</p>
+                      <p><strong>Language:</strong> {repo.language || 'Unknown'}</p>
+                      <p><strong>Stars:</strong> {repo.stargazers_count || 0}</p>
+                      <p><strong>Forks:</strong> {repo.forks_count || 0}</p>
+                      <p><strong>Last Updated:</strong> {repo.updated_at ? formatDate(repo.updated_at) : 'Unknown'}</p>
+                      <p><strong>URL:</strong> <a href={repo.html_url} target="_blank" rel="noopener noreferrer">{repo.html_url}</a></p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
