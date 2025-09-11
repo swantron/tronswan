@@ -82,11 +82,12 @@ describe('HealthPage', () => {
     expect(refreshButton).toBeInTheDocument();
   });
 
-  it('renders health footer with configuration note', () => {
+  it('renders health footer', () => {
     renderWithHelmet(<HealthPage />);
     
-    expect(screen.getByText(/This dashboard shows real-time status from GitHub Actions and DigitalOcean APIs/)).toBeInTheDocument();
-    expect(screen.getByText(/Configure API tokens in environment variables/)).toBeInTheDocument();
+    // Check that the health footer div exists but is empty
+    const footer = document.querySelector('.health-footer');
+    expect(footer).toBeInTheDocument();
   });
 
   it('has proper SEO meta tags', async () => {

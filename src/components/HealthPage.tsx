@@ -171,11 +171,6 @@ function HealthPage() {
       </div>
 
       <div className="health-footer">
-        <p className="health-note">
-          💡 This dashboard shows real-time status from GitHub Actions and DigitalOcean APIs.
-          <br />
-          Configure API tokens in environment variables for full functionality.
-        </p>
       </div>
     </div>
   );
