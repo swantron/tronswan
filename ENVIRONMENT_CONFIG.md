@@ -42,20 +42,18 @@ For deployed environments, set these as environment variables in your DigitalOce
 - `VITE_SITE_URL` - Site URL (default: https://tronswan.com)
 - `VITE_GITHUB_OWNER` - GitHub username/organization (default: swantron)
 
-## Runtime Configuration
+## Configuration System
 
-The application includes a runtime configuration system that:
+The application uses a simple configuration system that:
 
 1. **Local Development**: Reads from `.env` file via Vite's `import.meta.env`
-2. **Deployed Environment**: Can pull configuration from a runtime config endpoint
-3. **Fallback**: Falls back to build-time environment variables
+2. **Deployed Environment**: Uses environment variables set in DigitalOcean App Platform
 
 ### How It Works
 
 The `runtimeConfig` utility automatically:
 - Initializes configuration on first use
-- Tries to load runtime config from `/api/config` endpoint (for deployed environments)
-- Falls back to build-time environment variables
+- Loads environment variables from Vite's `import.meta.env`
 - Provides type-safe access to configuration values
 
 ### Usage in Components
@@ -127,12 +125,7 @@ If migrating from Create React App, update these variable names:
 ### Deployed Environment Issues
 - Verify environment variables are set in DigitalOcean App Platform
 - Check that variables are prefixed with `VITE_`
-- Ensure the runtime config endpoint is accessible (if using custom config endpoint)
-
-### Runtime Config Issues
-- Check browser console for configuration loading errors
-- Verify that the config endpoint returns valid JSON (if using custom endpoint)
-- Ensure fallback to build-time variables is working
+- Ensure variables are properly configured in your DigitalOcean app settings
 
 ## .env.example File
 

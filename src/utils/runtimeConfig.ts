@@ -24,44 +24,12 @@ class RuntimeConfigManager {
   async initialize(): Promise<void> {
     if (this.initialized) return;
 
-    try {
-      // Try to load runtime config from a config endpoint (for deployed environments)
-      await this.loadRuntimeConfig();
-    } catch (error) {
-      console.warn('Failed to load runtime config, falling back to build-time env vars:', error);
-    }
-
-    // Fallback to build-time environment variables
+    // Load build-time environment variables
     this.loadBuildTimeConfig();
     
     this.initialized = true;
   }
 
-  /**
-   * Load configuration from a runtime config endpoint
-   * This is useful for deployed environments where env vars are injected at runtime
-   */
-  private async loadRuntimeConfig(): Promise<void> {
-    try {
-      // Try to fetch runtime config from a config endpoint
-      // This endpoint would be set up to return environment variables as JSON
-      const response = await fetch('/api/config', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const runtimeConfig = await response.json();
-        this.config = { ...this.config, ...runtimeConfig };
-        console.log('Loaded runtime configuration');
-      }
-    } catch (error) {
-      // Silently fail - we'll fall back to build-time config
-      throw error;
-    }
-  }
 
   /**
    * Load configuration from build-time environment variables

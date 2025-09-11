@@ -124,19 +124,19 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
           className={`tab ${activeTab === 'droplets' ? 'active' : ''}`}
           onClick={() => setActiveTab('droplets')}
         >
-          Droplets ({data.droplets.length})
+          Droplets ({data.droplets?.length || 0})
         </button>
         <button 
           className={`tab ${activeTab === 'loadbalancers' ? 'active' : ''}`}
           onClick={() => setActiveTab('loadbalancers')}
         >
-          Load Balancers ({data.loadBalancers.length})
+          Load Balancers ({data.loadBalancers?.length || 0})
         </button>
         <button 
           className={`tab ${activeTab === 'databases' ? 'active' : ''}`}
           onClick={() => setActiveTab('databases')}
         >
-          Databases ({data.databases.length})
+          Databases ({data.databases?.length || 0})
         </button>
         <button 
           className={`tab ${activeTab === 'account' ? 'active' : ''}`}
@@ -150,11 +150,11 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
         {activeTab === 'droplets' && (
           <div className="droplets-tab">
             <h3>Droplets</h3>
-            {data.droplets.length === 0 ? (
+            {(data.droplets?.length || 0) === 0 ? (
               <p className="no-data">No droplets found</p>
             ) : (
               <div className="droplets-list">
-                {data.droplets.map(droplet => (
+                {(data.droplets || []).map(droplet => (
                   <div key={droplet.id} className="droplet-item">
                     <div className="droplet-header">
                       <h4>{droplet.name}</h4>
@@ -202,11 +202,11 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
         {activeTab === 'loadbalancers' && (
           <div className="loadbalancers-tab">
             <h3>Load Balancers</h3>
-            {data.loadBalancers.length === 0 ? (
+            {(data.loadBalancers?.length || 0) === 0 ? (
               <p className="no-data">No load balancers found</p>
             ) : (
               <div className="loadbalancers-list">
-                {data.loadBalancers.map(lb => (
+                {(data.loadBalancers || []).map(lb => (
                   <div key={lb.id} className="loadbalancer-item">
                     <div className="lb-header">
                       <h4>{lb.name}</h4>
@@ -240,11 +240,11 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
         {activeTab === 'databases' && (
           <div className="databases-tab">
             <h3>Databases</h3>
-            {data.databases.length === 0 ? (
+            {(data.databases?.length || 0) === 0 ? (
               <p className="no-data">No databases found</p>
             ) : (
               <div className="databases-list">
-                {data.databases.map(db => (
+                {(data.databases || []).map(db => (
                   <div key={db.id} className="database-item">
                     <div className="db-header">
                       <h4>{db.name}</h4>
@@ -280,23 +280,23 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
               <div className="account-limits">
                 <div className="limit-item">
                   <span className="limit-label">Droplets:</span>
-                  <span className="limit-value">{data.droplets.length} / {data.account.droplet_limit}</span>
+                  <span className="limit-value">{data.droplets?.length || 0} / {data.account?.droplet_limit || 0}</span>
                 </div>
                 <div className="limit-item">
                   <span className="limit-label">Load Balancers:</span>
-                  <span className="limit-value">{data.loadBalancers.length} / {data.account.load_balancer_limit}</span>
+                  <span className="limit-value">{data.loadBalancers?.length || 0} / {data.account?.load_balancer_limit || 0}</span>
                 </div>
                 <div className="limit-item">
                   <span className="limit-label">Databases:</span>
-                  <span className="limit-value">{data.databases.length} / {data.account.database_limit}</span>
+                  <span className="limit-value">{data.databases?.length || 0} / {data.account?.database_limit || 0}</span>
                 </div>
                 <div className="limit-item">
                   <span className="limit-label">Floating IPs:</span>
-                  <span className="limit-value">0 / {data.account.floating_ip_limit}</span>
+                  <span className="limit-value">0 / {data.account?.floating_ip_limit || 0}</span>
                 </div>
                 <div className="limit-item">
                   <span className="limit-label">Volumes:</span>
-                  <span className="limit-value">0 / {data.account.volume_limit}</span>
+                  <span className="limit-value">0 / {data.account?.volume_limit || 0}</span>
                 </div>
               </div>
             ) : (
