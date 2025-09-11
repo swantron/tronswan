@@ -93,3 +93,6 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Github Token
+github_token

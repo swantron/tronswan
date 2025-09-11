@@ -15,6 +15,12 @@ VITE_WEATHER_UNITS=imperial
 # Site Configuration
 VITE_SITE_URL=https://tronswan.com
 
+# GitHub Configuration
+# Get your GitHub token from: https://github.com/settings/tokens
+# Create a fine-grained token with repository access
+VITE_GITHUB_TOKEN=your_github_token_here
+VITE_GITHUB_OWNER=swantron
+
 # DigitalOcean Configuration
 # Get your DigitalOcean token from: https://cloud.digitalocean.com/account/api/tokens
 # Create a token with 'read' scope
@@ -27,12 +33,14 @@ For deployed environments, set these as environment variables in your DigitalOce
 
 ### Required Variables:
 - `VITE_WEATHER_API_KEY` - OpenWeatherMap API key
+- `VITE_GITHUB_TOKEN` - GitHub token (optional, for health page)
 - `VITE_DIGITALOCEAN_TOKEN` - DigitalOcean API token (optional, for health page)
 
 ### Optional Variables:
 - `VITE_WEATHER_CITY` - Weather city (default: Bozeman)
 - `VITE_WEATHER_UNITS` - Weather units (default: imperial)
 - `VITE_SITE_URL` - Site URL (default: https://tronswan.com)
+- `VITE_GITHUB_OWNER` - GitHub username/organization (default: swantron)
 
 ## Runtime Configuration
 
@@ -65,8 +73,8 @@ const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
 const city = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
 
 // Check if a value is set
-if (runtimeConfig.has('VITE_DIGITALOCEAN_TOKEN')) {
-  // Use DigitalOcean integration
+if (runtimeConfig.has('VITE_GITHUB_TOKEN')) {
+  // Use GitHub integration
 }
 ```
 
@@ -77,6 +85,20 @@ if (runtimeConfig.has('VITE_DIGITALOCEAN_TOKEN')) {
 2. Sign up for a free account
 3. Generate an API key
 4. Add it as `VITE_WEATHER_API_KEY`
+
+### GitHub Token (Optional)
+**Classic Personal Access Token**
+1. Go to [GitHub Personal Access Tokens](https://github.com/settings/tokens)
+2. Click **"Generate new token"** → **"Generate new token (classic)"**
+3. Fill in:
+   - **Note**: `tronswan-health-monitor`
+   - **Expiration**: Choose an appropriate expiration (e.g., 1 year)
+   - **Scopes**: Check the following scopes:
+     - **`actions`** - Access GitHub Actions
+     - **`metadata`** - Access repository metadata
+     - **`contents`** - Access repository contents
+4. Click **"Generate token"**
+5. Copy the token and add it as `VITE_GITHUB_TOKEN`
 
 ### DigitalOcean Token (Optional)
 1. Go to [DigitalOcean API Tokens](https://cloud.digitalocean.com/account/api/tokens)
@@ -90,6 +112,8 @@ If migrating from Create React App, update these variable names:
 - `REACT_APP_CITY` → `VITE_WEATHER_CITY`
 - `REACT_APP_UNITS` → `VITE_WEATHER_UNITS`
 - `REACT_APP_SITE_URL` → `VITE_SITE_URL`
+- `REACT_APP_GITHUB_TOKEN` → `VITE_GITHUB_TOKEN`
+- `REACT_APP_GITHUB_OWNER` → `VITE_GITHUB_OWNER`
 - `REACT_APP_DIGITALOCEAN_TOKEN` → `VITE_DIGITALOCEAN_TOKEN`
 
 ## Troubleshooting
@@ -125,6 +149,12 @@ VITE_WEATHER_UNITS=imperial
 
 # Site Configuration
 VITE_SITE_URL=https://tronswan.com
+
+# GitHub Configuration
+# Get your GitHub token from: https://github.com/settings/tokens
+# Create a fine-grained token with repository access
+VITE_GITHUB_TOKEN=your_github_token_here
+VITE_GITHUB_OWNER=swantron
 
 # DigitalOcean Configuration
 # Get your DigitalOcean token from: https://cloud.digitalocean.com/account/api/tokens

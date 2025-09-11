@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import SEO from './SEO';
+import GitHubStatus from './GitHubStatus';
 import DigitalOceanStatus from './DigitalOceanStatus';
 import ServiceHealth from './ServiceHealth';
 import { runtimeConfig } from '../utils/runtimeConfig';
 import '../styles/HealthPage.css';
 
 interface HealthData {
+  github: {
+    user: any;
+    repositories: any[];
+    workflows: any[];
+    workflowRuns: any[];
+    loading: boolean;
+    error: string | null;
+  };
   digitalocean: {
     droplets: any[];
     loadBalancers: any[];
@@ -23,6 +32,14 @@ interface HealthData {
 
 function HealthPage() {
   const [healthData, setHealthData] = useState<HealthData>({
+    github: {
+      user: null,
+      repositories: [],
+      workflows: [],
+      workflowRuns: [],
+      loading: true,
+      error: null,
+    },
     digitalocean: {
       droplets: [],
       loadBalancers: [],
@@ -62,9 +79,9 @@ function HealthPage() {
   return (
     <div className="health-page">
       <SEO
-        title="Service Health & Infrastructure Status - Tron Swan"
-        description="Monitor service health and infrastructure metrics for Tron Swan applications. Real-time status from DigitalOcean."
-        keywords="service health, infrastructure status, DigitalOcean, monitoring, DevOps"
+        title="Service Health & Deployment Status - Tron Swan"
+        description="Monitor service health, deployment status, and infrastructure metrics for Tron Swan applications. Real-time status from GitHub Actions and DigitalOcean."
+        keywords="service health, deployment status, GitHub Actions, DigitalOcean, monitoring, DevOps"
         url="/health"
       />
       
@@ -89,6 +106,16 @@ function HealthPage() {
 
       <div className="health-grid">
         <div className="health-section">
+          <h2 className="section-title">🚀 Deployment Status</h2>
+          <GitHubStatus 
+            data={healthData.github}
+            onDataChange={(githubData) => 
+              setHealthData(prev => ({ ...prev, github: githubData }))
+            }
+          />
+        </div>
+
+        <div className="health-section">
           <h2 className="section-title">☁️ Infrastructure</h2>
           <DigitalOceanStatus 
             data={healthData.digitalocean}
@@ -106,7 +133,7 @@ function HealthPage() {
 
       <div className="health-footer">
         <p className="health-note">
-          💡 This dashboard shows real-time status from DigitalOcean APIs.
+          💡 This dashboard shows real-time status from GitHub Actions and DigitalOcean APIs.
           <br />
           Configure API tokens in environment variables for full functionality.
         </p>

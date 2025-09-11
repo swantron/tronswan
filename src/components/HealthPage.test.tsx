@@ -4,6 +4,15 @@ import { HelmetProvider } from 'react-helmet-async';
 import HealthPage from './HealthPage';
 
 // Mock the services
+vi.mock('../services/githubService', () => ({
+  default: {
+    getUser: vi.fn().mockResolvedValue({ login: 'swantron', name: 'Swantron', public_repos: 10, followers: 5 }),
+    getRepositories: vi.fn().mockResolvedValue([]),
+    getWorkflows: vi.fn().mockResolvedValue({ workflows: [] }),
+    getWorkflowRuns: vi.fn().mockResolvedValue({ workflow_runs: [] }),
+  }
+}));
+
 vi.mock('../services/digitalOceanService', () => ({
   default: {
     getDroplets: vi.fn().mockResolvedValue([]),
@@ -52,6 +61,7 @@ describe('HealthPage', () => {
   it('renders section titles', () => {
     renderWithHelmet(<HealthPage />);
     
+    expect(screen.getByText('🚀 Deployment Status')).toBeInTheDocument();
     expect(screen.getByText('☁️ Infrastructure')).toBeInTheDocument();
     expect(screen.getByText('🌐 Service Health')).toBeInTheDocument();
   });
@@ -75,7 +85,7 @@ describe('HealthPage', () => {
   it('renders health footer with configuration note', () => {
     renderWithHelmet(<HealthPage />);
     
-    expect(screen.getByText(/This dashboard shows real-time status from DigitalOcean APIs/)).toBeInTheDocument();
+    expect(screen.getByText(/This dashboard shows real-time status from GitHub Actions and DigitalOcean APIs/)).toBeInTheDocument();
     expect(screen.getByText(/Configure API tokens in environment variables/)).toBeInTheDocument();
   });
 
