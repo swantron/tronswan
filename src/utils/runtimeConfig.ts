@@ -8,8 +8,6 @@ interface RuntimeConfig {
   VITE_WEATHER_CITY: string;
   VITE_WEATHER_UNITS: string;
   VITE_SITE_URL: string;
-  VITE_GITLAB_TOKEN: string;
-  VITE_GITLAB_URL: string;
   VITE_DIGITALOCEAN_TOKEN: string;
 }
 
@@ -70,11 +68,9 @@ class RuntimeConfigManager {
   private loadBuildTimeConfig(): void {
     const envVars: (keyof RuntimeConfig)[] = [
       'VITE_WEATHER_API_KEY',
-      'VITE_WEATHER_CITY', 
+      'VITE_WEATHER_CITY',
       'VITE_WEATHER_UNITS',
       'VITE_SITE_URL',
-      'VITE_GITLAB_TOKEN',
-      'VITE_GITLAB_URL',
       'VITE_DIGITALOCEAN_TOKEN',
     ];
 

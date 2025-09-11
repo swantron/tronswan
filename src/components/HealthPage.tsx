@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SEO from './SEO';
-import GitLabStatus from './GitLabStatus';
 import DigitalOceanStatus from './DigitalOceanStatus';
 import ServiceHealth from './ServiceHealth';
 import { runtimeConfig } from '../utils/runtimeConfig';
 import '../styles/HealthPage.css';
 
 interface HealthData {
-  gitlab: {
-    pipelines: any[];
-    projects: any[];
-    loading: boolean;
-    error: string | null;
-  };
   digitalocean: {
     droplets: any[];
     loadBalancers: any[];
@@ -30,12 +23,6 @@ interface HealthData {
 
 function HealthPage() {
   const [healthData, setHealthData] = useState<HealthData>({
-    gitlab: {
-      pipelines: [],
-      projects: [],
-      loading: true,
-      error: null,
-    },
     digitalocean: {
       droplets: [],
       loadBalancers: [],
@@ -75,9 +62,9 @@ function HealthPage() {
   return (
     <div className="health-page">
       <SEO
-        title="Service Health & Deployment Status - Tron Swan"
-        description="Monitor service health, deployment status, and infrastructure metrics for Tron Swan applications. Real-time status from GitLab CI and DigitalOcean."
-        keywords="service health, deployment status, GitLab CI, DigitalOcean, monitoring, infrastructure, DevOps"
+        title="Service Health & Infrastructure Status - Tron Swan"
+        description="Monitor service health and infrastructure metrics for Tron Swan applications. Real-time status from DigitalOcean."
+        keywords="service health, infrastructure status, DigitalOcean, monitoring, DevOps"
         url="/health"
       />
       
@@ -102,16 +89,6 @@ function HealthPage() {
 
       <div className="health-grid">
         <div className="health-section">
-          <h2 className="section-title">🚀 Deployment Status</h2>
-          <GitLabStatus 
-            data={healthData.gitlab}
-            onDataChange={(gitlabData) => 
-              setHealthData(prev => ({ ...prev, gitlab: gitlabData }))
-            }
-          />
-        </div>
-
-        <div className="health-section">
           <h2 className="section-title">☁️ Infrastructure</h2>
           <DigitalOceanStatus 
             data={healthData.digitalocean}
@@ -129,7 +106,7 @@ function HealthPage() {
 
       <div className="health-footer">
         <p className="health-note">
-          💡 This dashboard shows real-time status from GitLab CI and DigitalOcean APIs.
+          💡 This dashboard shows real-time status from DigitalOcean APIs.
           <br />
           Configure API tokens in environment variables for full functionality.
         </p>
