@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, expect, describe, test } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -49,7 +49,7 @@ describe('FizzBuzz Component', () => {
     const input = screen.getByLabelText('Enter a number for FizzBuzz');
     
     fireEvent.change(input, { target: { value: '15' } });
-    expect(input.value).toBe('15');
+    expect((input as HTMLInputElement).value).toBe('15');
   });
 
   test('generates FizzBuzz sequence for valid input', () => {

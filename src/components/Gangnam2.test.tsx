@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, expect, describe, test } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Gangnam2 from './Gangnam2';
@@ -21,10 +21,10 @@ describe('Gangnam2 Component', () => {
     const videoElement = screen.getByTestId('gangnam2-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
-    expect(videoElement.autoplay).toBe(true);
-    expect(videoElement.muted).toBe(true);
-    expect(videoElement.loop).toBe(true);
-    expect(videoElement.playsInline).toBe(true);
+    expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
+    expect((videoElement as HTMLVideoElement).muted).toBe(true);
+    expect((videoElement as HTMLVideoElement).loop).toBe(true);
+    expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
   });
 
   test('renders container with correct test id', () => {

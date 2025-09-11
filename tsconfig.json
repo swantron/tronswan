@@ -25,10 +25,8 @@
     "src/**/*.tsx"
   ],
   "exclude": [
-    "src/**/*.test.tsx",
-    "src/**/*.test.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.spec.ts",
-    "src/setupTests.ts"
-  ]
+    "node_modules",
+    "dist"
+  ],
+  "types": ["vitest/globals"]
 }

@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
+import { vi, expect, describe, test, beforeAll, afterAll } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ErrorBoundary from './ErrorBoundary';
 
 // Component that throws an error for testing
-const ThrowError = ({ shouldThrow }) => {
+const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {
     throw new Error('Test error');
   }
