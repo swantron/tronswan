@@ -15,42 +15,9 @@ interface DigitalOceanStatusProps {
 }
 
 function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
-  const [activeTab, setActiveTab] = useState<'app' | 'droplets' | 'loadbalancers' | 'databases'>('app');
-  
-  console.log('DigitalOceanStatus received data:', data);
+  const [activeTab, setActiveTab] = useState<'app' | 'droplets'>('app');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onDataChange({ ...data, loading: true, error: null });
-        
-        const [app, droplets, loadBalancers, databases] = await Promise.all([
-          digitalOceanService.getApp(),
-          digitalOceanService.getDroplets(),
-          digitalOceanService.getLoadBalancers(),
-          digitalOceanService.getDatabases(),
-        ]);
-        
-        console.log('DigitalOcean data loaded:', { app, droplets, loadBalancers, databases });
-        onDataChange({ 
-          ...data, 
-          app,
-          droplets, 
-          loadBalancers, 
-          databases, 
-          loading: false 
-        });
-      } catch (error) {
-        onDataChange({ 
-          ...data, 
-          loading: false, 
-          error: error instanceof Error ? error.message : 'Failed to fetch DigitalOcean data'
-        });
-      }
-    };
-
-    fetchData();
-  }, []);
+  // Data fetching is now handled by the parent HealthPage component
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -127,7 +94,7 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
           className={`tab ${activeTab === 'app' ? 'active' : ''}`}
           onClick={() => setActiveTab('app')}
         >
-          App Status
+          App Platform
         </button>
         <button 
           className={`tab ${activeTab === 'droplets' ? 'active' : ''}`}
@@ -135,32 +102,30 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
         >
           Droplets ({data.droplets?.length || 0})
         </button>
-        <button 
-          className={`tab ${activeTab === 'loadbalancers' ? 'active' : ''}`}
-          onClick={() => setActiveTab('loadbalancers')}
-        >
-          Load Balancers ({data.loadBalancers?.length || 0})
-        </button>
-        <button 
-          className={`tab ${activeTab === 'databases' ? 'active' : ''}`}
-          onClick={() => setActiveTab('databases')}
-        >
-          Databases ({data.databases?.length || 0})
-        </button>
       </div>
 
       <div className="do-content">
         {activeTab === 'app' && (
           <div className="app-tab">
-            <h3>App Status</h3>
+            <h3>App Platform</h3>
             {data.app ? (
               <div className="app-info">
                 <div className="app-header">
-                  <h4>{data.app.spec?.name || 'tronswan-react-app'}</h4>
-                  <span className={`status ${getStatusClass(data.app.last_deployment_active_at ? 'active' : 'inactive')}`}>
-                    {getStatusIcon(data.app.last_deployment_active_at ? 'active' : 'inactive')} 
-                    {data.app.last_deployment_active_at ? 'ACTIVE' : 'INACTIVE'}
-                  </span>
+                  <div className="app-title-section">
+                    <h4>{data.app.spec?.name || 'tronswan-react-app'}</h4>
+                    <p className="app-description">DigitalOcean App Platform Application</p>
+                  </div>
+                  <div className="status-section">
+                    <span className={`status ${getStatusClass(data.app.last_deployment_active_at ? 'active' : 'inactive')}`}>
+                      {getStatusIcon(data.app.last_deployment_active_at ? 'active' : 'inactive')} 
+                      {data.app.last_deployment_active_at ? 'ACTIVE' : 'INACTIVE'}
+                    </span>
+                    {data.app.active_deployment?.phase && (
+                      <span className="deployment-phase">
+                        Phase: {data.app.active_deployment.phase}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="app-details">
                   <div className="detail-item">
@@ -169,11 +134,19 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
                   </div>
                   <div className="detail-item">
                     <span className="label">Region:</span>
-                    <span className="value">{data.app.region?.slug || 'N/A'}</span>
+                    <span className="value">{data.app.region?.label || data.app.region?.slug || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Tier:</span>
+                    <span className="value">{data.app.tier_slug?.toUpperCase() || 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <span className="label">Created:</span>
                     <span className="value">{data.app.created_at ? new Date(data.app.created_at).toLocaleDateString() : 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Last Updated:</span>
+                    <span className="value">{data.app.updated_at ? new Date(data.app.updated_at).toLocaleDateString() : 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <span className="label">Last Deployed:</span>
@@ -186,6 +159,26 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
                         {data.app.live_url || 'N/A'}
                       </a>
                     </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Default Ingress:</span>
+                    <span className="value">
+                      <a href={data.app.default_ingress} target="_blank" rel="noopener noreferrer">
+                        {data.app.default_ingress || 'N/A'}
+                      </a>
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Live Domain:</span>
+                    <span className="value">{data.app.live_domain || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Active Deployment ID:</span>
+                    <span className="value">{data.app.active_deployment?.id || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Deployment Phase:</span>
+                    <span className="value">{data.app.active_deployment?.phase || 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -247,79 +240,6 @@ function DigitalOceanStatus({ data, onDataChange }: DigitalOceanStatusProps) {
           </div>
         )}
 
-        {activeTab === 'loadbalancers' && (
-          <div className="loadbalancers-tab">
-            <h3>Load Balancers</h3>
-            {(data.loadBalancers?.length || 0) === 0 ? (
-              <p className="no-data">No load balancers found</p>
-            ) : (
-              <div className="loadbalancers-list">
-                {(data.loadBalancers || []).map(lb => (
-                  <div key={lb.id} className="loadbalancer-item">
-                    <div className="lb-header">
-                      <h4>{lb.name}</h4>
-                      <span className={`status ${getStatusClass(lb.status)}`}>
-                        {getStatusIcon(lb.status)} {lb.status}
-                      </span>
-                    </div>
-                    <div className="lb-info">
-                      <div className="lb-details">
-                        <span><strong>IP:</strong> {lb.ip}</span>
-                        <span><strong>Algorithm:</strong> {lb.algorithm}</span>
-                        <span><strong>Region:</strong> {lb.region.name}</span>
-                        <span><strong>Droplets:</strong> {lb.droplet_ids.length}</span>
-                      </div>
-                      <div className="lb-rules">
-                        <strong>Forwarding Rules:</strong>
-                        {lb.forwarding_rules.map((rule, index) => (
-                          <div key={index} className="rule">
-                            {rule.entry_protocol}:{rule.entry_port} → {rule.target_protocol}:{rule.target_port}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'databases' && (
-          <div className="databases-tab">
-            <h3>Databases</h3>
-            {(data.databases?.length || 0) === 0 ? (
-              <p className="no-data">No databases found</p>
-            ) : (
-              <div className="databases-list">
-                {(data.databases || []).map(db => (
-                  <div key={db.id} className="database-item">
-                    <div className="db-header">
-                      <h4>{db.name}</h4>
-                      <span className={`status ${getStatusClass(db.status)}`}>
-                        {getStatusIcon(db.status)} {db.status}
-                      </span>
-                    </div>
-                    <div className="db-info">
-                      <div className="db-details">
-                        <span><strong>Engine:</strong> {db.engine} {db.version}</span>
-                        <span><strong>Size:</strong> {db.size}</span>
-                        <span><strong>Nodes:</strong> {db.num_nodes}</span>
-                        <span><strong>Region:</strong> {db.region}</span>
-                      </div>
-                      <div className="db-connection">
-                        <strong>Connection:</strong>
-                        <span className="connection-info">
-                          {db.connection.host}:{db.connection.port}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
 
       </div>
     </div>

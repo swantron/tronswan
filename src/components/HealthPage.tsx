@@ -4,6 +4,7 @@ import GitHubStatus from './GitHubStatus';
 import DigitalOceanStatus from './DigitalOceanStatus';
 import ServiceHealth from './ServiceHealth';
 import { runtimeConfig } from '../utils/runtimeConfig';
+import digitalOceanService from '../services/digitalOceanService';
 import '../styles/HealthPage.css';
 
 interface HealthData {
@@ -71,6 +72,44 @@ function HealthPage() {
     };
     
     initializeConfig();
+    
+    // Fetch DigitalOcean data
+    const fetchDigitalOceanData = async () => {
+      try {
+        setHealthData(prev => ({ ...prev, digitalocean: { ...prev.digitalocean, loading: true, error: null } }));
+        
+        const [app, droplets] = await Promise.all([
+          digitalOceanService.getApp(),
+          digitalOceanService.getDroplets(),
+        ]);
+        
+        console.log('HealthPage loaded DigitalOcean data:', { app, droplets });
+        
+        setHealthData(prev => ({ 
+          ...prev, 
+          digitalocean: { 
+            app: app.app, // Extract the nested app object
+            droplets, 
+            loadBalancers: [], 
+            databases: [], 
+            loading: false, 
+            error: null 
+          }
+        }));
+      } catch (error) {
+        console.error('Error fetching DigitalOcean data:', error);
+        setHealthData(prev => ({ 
+          ...prev, 
+          digitalocean: { 
+            ...prev.digitalocean, 
+            loading: false, 
+            error: error instanceof Error ? error.message : 'Failed to fetch DigitalOcean data'
+          }
+        }));
+      }
+    };
+    
+    fetchDigitalOceanData();
     
     const interval = setInterval(refreshData, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);

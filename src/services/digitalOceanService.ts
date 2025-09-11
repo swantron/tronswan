@@ -196,20 +196,9 @@ class DigitalOceanService {
 
   async getDroplets(): Promise<DigitalOceanDroplet[]> {
     try {
-      // Get app first to see if it has associated droplets
-      const app = await this.getApp();
-      const appDroplets = app.droplets || [];
-      
-      if (appDroplets.length === 0) {
-        return [];
-      }
-      
-      // Get details for each droplet associated with the app
-      const dropletPromises = appDroplets.map((dropletId: string) => 
-        this.makeRequest<{ droplet: DigitalOceanDroplet }>(`/droplets/${dropletId}`).then(res => res.droplet)
-      );
-      
-      return Promise.all(dropletPromises);
+      // Get all droplets in the account
+      const response = await this.makeRequest<{ droplets: DigitalOceanDroplet[] }>('/droplets');
+      return response.droplets;
     } catch (error) {
       console.error('Error fetching DigitalOcean droplets:', error);
       throw error;
