@@ -205,8 +205,9 @@
 .lb-header h4,
 .db-header h4 {
   margin: 0;
-  color: #2d3748;
+  color: #1a202c;
   font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .status {
@@ -282,6 +283,15 @@
   justify-content: space-between;
   padding: 0.25rem 0;
   border-bottom: 1px solid #f1f5f9;
+  color: #1a202c;
+}
+
+.droplet-specs span strong,
+.droplet-details span strong,
+.lb-details span strong,
+.db-details span strong {
+  color: #2d3748;
+  font-weight: 600;
 }
 
 .droplet-networks,
