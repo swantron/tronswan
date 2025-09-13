@@ -5,6 +5,18 @@
   color: #ffffff;
 }
 
+/* Typography Scale - Standardized font sizes */
+.health-page {
+  --font-xs: 0.75rem;    /* 12px - Small labels, timestamps */
+  --font-sm: 0.875rem;   /* 14px - Body text, descriptions */
+  --font-base: 1rem;     /* 16px - Default text */
+  --font-lg: 1.125rem;   /* 18px - Large body text */
+  --font-xl: 1.25rem;    /* 20px - Section subtitles */
+  --font-2xl: 1.5rem;    /* 24px - Section titles */
+  --font-3xl: 2rem;      /* 32px - Page subtitle */
+  --font-4xl: 3rem;      /* 48px - Main page title */
+}
+
 .health-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -12,14 +24,14 @@
 }
 
 .health-title {
-  font-size: 3rem;
+  font-size: var(--font-4xl);
   font-weight: bold;
   margin-bottom: 0.5rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .health-subtitle {
-  font-size: 1.2rem;
+  font-size: var(--font-xl);
   margin-bottom: 2rem;
   opacity: 0.9;
 }
@@ -98,7 +110,7 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: var(--font-2xl);
   font-weight: bold;
   margin-bottom: 1.5rem;
   color: #f89859;

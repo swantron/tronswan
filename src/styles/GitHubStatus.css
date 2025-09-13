@@ -7,6 +7,16 @@
   border: 1px solid rgba(248, 152, 89, 0.3);
 }
 
+/* Typography Scale - Inherit from health page */
+.github-status {
+  --font-xs: 0.75rem;    /* 12px - Small labels, timestamps */
+  --font-sm: 0.875rem;   /* 14px - Body text, descriptions */
+  --font-base: 1rem;     /* 16px - Default text */
+  --font-lg: 1.125rem;   /* 18px - Large body text */
+  --font-xl: 1.25rem;    /* 20px - Section subtitles */
+  --font-2xl: 1.5rem;    /* 24px - Section titles */
+}
+
 /* Loading State */
 .github-status.loading {
   padding: 40px;
@@ -70,7 +80,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-sm);
   font-weight: 500;
   color: #ffffff;
   transition: all 0.2s ease;
@@ -100,7 +110,7 @@
 .actions-tab h3 {
   margin: 0 0 16px 0;
   color: #f89859;
-  font-size: 1.25rem;
+  font-size: var(--font-2xl);
 }
 
 .actions-header {
@@ -115,7 +125,7 @@
 .actions-header p {
   margin: 0;
   color: #ffffff;
-  font-size: 0.9rem;
+  font-size: var(--font-sm);
 }
 
 .refresh-button {
@@ -166,13 +176,13 @@
 .action-header h4 {
   margin: 0;
   color: #495057;
-  font-size: 1.1rem;
+  font-size: var(--font-lg);
 }
 
 .action-header .status {
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: var(--font-xs);
   font-weight: 500;
 }
 
@@ -205,7 +215,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 8px;
-  font-size: 0.9rem;
+  font-size: var(--font-sm);
 }
 
 .action-details p {
