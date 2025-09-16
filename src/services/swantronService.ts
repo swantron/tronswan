@@ -19,38 +19,44 @@ interface WordPressPost {
   link: string;
   _embedded?: {
     'wp:featuredmedia'?: Array<{ source_url: string }>;
-    'wp:term'?: Array<Array<{ id: number; name: string; slug: string; link: string }>>;
+    'wp:term'?: Array<
+      Array<{ id: number; name: string; slug: string; link: string }>
+    >;
   };
 }
 
 export const swantronService: SwantronService = {
-  async getPosts(page: number = 1, perPage: number = 10): Promise<SwantronServiceResponse> {
+  async getPosts(
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<SwantronServiceResponse> {
     try {
       const url = `${SWANTRON_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
-      
+
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const posts: WordPressPost[] = await response.json();
-      
+
       if (!Array.isArray(posts)) {
         console.error('Expected array but got:', posts);
         throw new Error('Invalid response format from swantron.com API');
       }
-      
+
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
 
       return {
         posts: posts.map((post: WordPressPost): Post => {
           // Try to get featured image, fallback to content image
-          let featuredImage: string | null = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
+          let featuredImage: string | null =
+            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
           if (!featuredImage) {
             featuredImage = extractImageFromContent(post.content.rendered);
           }
-          
+
           return {
             id: post.id,
             title: post.title.rendered,
@@ -60,10 +66,10 @@ export const swantronService: SwantronService = {
             featuredImage,
             categories: post._embedded?.['wp:term']?.[0] || [],
             tags: post._embedded?.['wp:term']?.[1] || [],
-            link: post.link
+            link: post.link,
           };
         }),
-        totalPages: parseInt(totalPages, 10)
+        totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
       console.error('Error fetching swantron posts:', error);
@@ -73,10 +79,8 @@ export const swantronService: SwantronService = {
 
   async getPostById(id: number): Promise<Post> {
     try {
-      const response = await fetch(
-        `${SWANTRON_API_URL}/posts/${id}?_embed`
-      );
-      
+      const response = await fetch(`${SWANTRON_API_URL}/posts/${id}?_embed`);
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -84,7 +88,8 @@ export const swantronService: SwantronService = {
       const post: WordPressPost = await response.json();
 
       // Try to get featured image, fallback to content image
-      let featuredImage: string | null = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
+      let featuredImage: string | null =
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
       if (!featuredImage) {
         featuredImage = extractImageFromContent(post.content.rendered);
       }
@@ -98,7 +103,7 @@ export const swantronService: SwantronService = {
         featuredImage,
         categories: post._embedded?.['wp:term']?.[0] || [],
         tags: post._embedded?.['wp:term']?.[1] || [],
-        link: post.link
+        link: post.link,
       };
     } catch (error) {
       console.error('Error fetching swantron post:', error);
@@ -106,33 +111,38 @@ export const swantronService: SwantronService = {
     }
   },
 
-  async searchPosts(query: string, page: number = 1, perPage: number = 10): Promise<SwantronServiceResponse> {
+  async searchPosts(
+    query: string,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<SwantronServiceResponse> {
     try {
       const url = `${SWANTRON_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
-      
+
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const posts: WordPressPost[] = await response.json();
-      
+
       if (!Array.isArray(posts)) {
         console.error('Expected array but got:', posts);
         throw new Error('Invalid response format from swantron.com API');
       }
-      
+
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
 
       return {
         posts: posts.map((post: WordPressPost): Post => {
           // Try to get featured image, fallback to content image
-          let featuredImage: string | null = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
+          let featuredImage: string | null =
+            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
           if (!featuredImage) {
             featuredImage = extractImageFromContent(post.content.rendered);
           }
-          
+
           return {
             id: post.id,
             title: post.title.rendered,
@@ -142,14 +152,14 @@ export const swantronService: SwantronService = {
             featuredImage,
             categories: post._embedded?.['wp:term']?.[0] || [],
             tags: post._embedded?.['wp:term']?.[1] || [],
-            link: post.link
+            link: post.link,
           };
         }),
-        totalPages: parseInt(totalPages, 10)
+        totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
       console.error('Error searching swantron posts:', error);
       throw error;
     }
-  }
+  },
 };

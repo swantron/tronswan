@@ -7,14 +7,14 @@
 
 /* Typography Scale - Standardized font sizes */
 .health-page {
-  --font-xs: 0.75rem;    /* 12px - Small labels, timestamps */
-  --font-sm: 0.875rem;   /* 14px - Body text, descriptions */
-  --font-base: 1rem;     /* 16px - Default text */
-  --font-lg: 1.125rem;   /* 18px - Large body text */
-  --font-xl: 1.25rem;    /* 20px - Section subtitles */
-  --font-2xl: 1.5rem;    /* 24px - Section titles */
-  --font-3xl: 2rem;      /* 32px - Page subtitle */
-  --font-4xl: 3rem;      /* 48px - Main page title */
+  --font-xs: 0.75rem; /* 12px - Small labels, timestamps */
+  --font-sm: 0.875rem; /* 14px - Body text, descriptions */
+  --font-base: 1rem; /* 16px - Default text */
+  --font-lg: 1.125rem; /* 18px - Large body text */
+  --font-xl: 1.25rem; /* 20px - Section subtitles */
+  --font-2xl: 1.5rem; /* 24px - Section titles */
+  --font-3xl: 2rem; /* 32px - Page subtitle */
+  --font-4xl: 3rem; /* 48px - Main page title */
 }
 
 .health-header {
@@ -73,8 +73,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .last-updated {
@@ -101,7 +105,9 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(248, 152, 89, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .health-section:hover {
@@ -139,20 +145,20 @@
   .health-page {
     padding: 1rem;
   }
-  
+
   .health-title {
     font-size: 2rem;
   }
-  
+
   .health-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .health-section {
     padding: 1.5rem;
   }
-  
+
   .health-controls {
     flex-direction: column;
     gap: 0.5rem;

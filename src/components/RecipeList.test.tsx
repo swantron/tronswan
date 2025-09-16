@@ -1,48 +1,49 @@
-import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
+import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
+
 import '@testing-library/jest-dom';
+import { wordpressService } from '../services/wordpressService';
+
 import RecipeList from './RecipeList';
 
 // Mock the wordpressService
 vi.mock('../services/wordpressService', () => ({
   wordpressService: {
     getRecipes: vi.fn(),
-    searchRecipes: vi.fn()
-  }
+    searchRecipes: vi.fn(),
+  },
 }));
 
 // Mock the RecipeCard component
 vi.mock('./RecipeCard', () => ({
   default: function MockRecipeCard({ recipe }) {
     return (
-      <div data-testid={`recipe-card-${recipe.id}`} className="recipe-card">
+      <div data-testid={`recipe-card-${recipe.id}`} className='recipe-card'>
         <h3>{recipe.title}</h3>
         <p>{recipe.excerpt}</p>
       </div>
     );
-  }
+  },
 }));
-
-import { wordpressService } from '../services/wordpressService';
 
 describe('RecipeList Component', () => {
   const mockRecipes = [
     {
       id: 1,
       title: 'Test Recipe 1',
-      excerpt: 'This is a test recipe excerpt 1'
+      excerpt: 'This is a test recipe excerpt 1',
     },
     {
       id: 2,
       title: 'Test Recipe 2',
-      excerpt: 'This is a test recipe excerpt 2'
-    }
+      excerpt: 'This is a test recipe excerpt 2',
+    },
   ];
 
   const mockApiResponse = {
     recipes: mockRecipes,
-    totalPages: 2
+    totalPages: 2,
   };
 
   beforeEach(() => {
@@ -61,7 +62,9 @@ describe('RecipeList Component', () => {
 
   test('renders search form', () => {
     render(<RecipeList />);
-    expect(screen.getByPlaceholderText('Search recipes...')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Search recipes...')
+    ).toBeInTheDocument();
     expect(screen.getByText('Search')).toBeInTheDocument();
   });
 
@@ -90,27 +93,31 @@ describe('RecipeList Component', () => {
     render(<RecipeList />);
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to load recipes. Please try again later.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Failed to load recipes. Please try again later.')
+      ).toBeInTheDocument();
     });
   });
 
   test('renders no recipes message when no recipes found', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: [],
-      totalPages: 1
+      totalPages: 1,
     });
 
     render(<RecipeList />);
 
     await waitFor(() => {
-      expect(screen.getByText('No recipes found. Try a different search term.')).toBeInTheDocument();
+      expect(
+        screen.getByText('No recipes found. Try a different search term.')
+      ).toBeInTheDocument();
     });
   });
 
   test('handles search input change', () => {
     render(<RecipeList />);
     const searchInput = screen.getByPlaceholderText('Search recipes...');
-    
+
     fireEvent.change(searchInput, { target: { value: 'pasta' } });
     expect(searchInput.value).toBe('pasta');
   });
@@ -121,7 +128,7 @@ describe('RecipeList Component', () => {
     render(<RecipeList />);
     const searchInput = screen.getByPlaceholderText('Search recipes...');
     const searchButton = screen.getByText('Search');
-    
+
     fireEvent.change(searchInput, { target: { value: 'pasta' } });
     fireEvent.click(searchButton);
 
@@ -133,9 +140,9 @@ describe('RecipeList Component', () => {
   test('resets to page 1 when searching', async () => {
     // Set up the mock to return recipes initially
     wordpressService.getRecipes.mockResolvedValue(mockApiResponse);
-    
+
     render(<RecipeList />);
-    
+
     // Wait for recipes to load
     await waitFor(() => {
       expect(screen.getByTestId('recipe-card-1')).toBeInTheDocument();
@@ -143,10 +150,10 @@ describe('RecipeList Component', () => {
 
     // Now set up the mock for search
     wordpressService.searchRecipes.mockResolvedValue(mockApiResponse);
-    
+
     const searchInput = screen.getByPlaceholderText('Search recipes...');
     const searchButton = screen.getByText('Search');
-    
+
     // Perform search
     fireEvent.change(searchInput, { target: { value: 'pasta' } });
     fireEvent.click(searchButton);
@@ -159,7 +166,7 @@ describe('RecipeList Component', () => {
   test('renders pagination when multiple pages exist', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: mockRecipes,
-      totalPages: 3
+      totalPages: 3,
     });
 
     render(<RecipeList />);
@@ -174,7 +181,7 @@ describe('RecipeList Component', () => {
   test('does not render pagination when only one page', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: mockRecipes,
-      totalPages: 1
+      totalPages: 1,
     });
 
     render(<RecipeList />);
@@ -188,7 +195,7 @@ describe('RecipeList Component', () => {
   test('pagination buttons work correctly', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: mockRecipes,
-      totalPages: 3
+      totalPages: 3,
     });
 
     render(<RecipeList />);
@@ -208,7 +215,7 @@ describe('RecipeList Component', () => {
   test('previous button is disabled on first page', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: mockRecipes,
-      totalPages: 3
+      totalPages: 3,
     });
 
     render(<RecipeList />);
@@ -222,7 +229,7 @@ describe('RecipeList Component', () => {
   test('next button is disabled on last page', async () => {
     wordpressService.getRecipes.mockResolvedValue({
       recipes: mockRecipes,
-      totalPages: 1
+      totalPages: 1,
     });
 
     render(<RecipeList />);
@@ -246,7 +253,7 @@ describe('RecipeList Component', () => {
     // Search calls searchRecipes
     const searchInput = screen.getByPlaceholderText('Search recipes...');
     const searchButton = screen.getByText('Search');
-    
+
     fireEvent.change(searchInput, { target: { value: 'pasta' } });
     fireEvent.click(searchButton);
 
@@ -261,7 +268,7 @@ describe('RecipeList Component', () => {
     render(<RecipeList />);
     const searchInput = screen.getByPlaceholderText('Search recipes...');
     const searchButton = screen.getByText('Search');
-    
+
     fireEvent.change(searchInput, { target: { value: '' } });
     fireEvent.click(searchButton);
 
@@ -269,4 +276,4 @@ describe('RecipeList Component', () => {
       expect(wordpressService.getRecipes).toHaveBeenCalledWith(1);
     });
   });
-}); 
+});

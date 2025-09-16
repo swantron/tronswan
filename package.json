@@ -2,6 +2,7 @@
   "name": "tronswan",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -24,13 +25,12 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "update-badge": "node scripts/update-coverage-badge.js",
-    "type-check": "tsc --noEmit"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "check-all": "yarn type-check && yarn lint && yarn format:check"
   },
   "browserslist": {
     "production": [
@@ -50,10 +50,20 @@
     "@types/node": "^24.3.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
     "@vitejs/plugin-react": "^5.0.2",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "^3.2.4",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"

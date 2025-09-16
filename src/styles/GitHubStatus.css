@@ -9,12 +9,12 @@
 
 /* Typography Scale - Inherit from health page */
 .github-status {
-  --font-xs: 0.75rem;    /* 12px - Small labels, timestamps */
-  --font-sm: 0.875rem;   /* 14px - Body text, descriptions */
-  --font-base: 1rem;     /* 16px - Default text */
-  --font-lg: 1.125rem;   /* 18px - Large body text */
-  --font-xl: 1.25rem;    /* 20px - Section subtitles */
-  --font-2xl: 1.5rem;    /* 24px - Section titles */
+  --font-xs: 0.75rem; /* 12px - Small labels, timestamps */
+  --font-sm: 0.875rem; /* 14px - Body text, descriptions */
+  --font-base: 1rem; /* 16px - Default text */
+  --font-lg: 1.125rem; /* 18px - Large body text */
+  --font-xl: 1.25rem; /* 20px - Section subtitles */
+  --font-2xl: 1.5rem; /* 24px - Section titles */
 }
 
 /* Loading State */
@@ -35,8 +35,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error State */

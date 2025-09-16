@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import githubService from '../services/githubService';
 import '../styles/GitHubStatus.css';
 
@@ -29,7 +30,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
 
       const [repositories, actions] = await Promise.all([
         githubService.getAllRepositories(),
-        githubService.getWorkflowRuns('tronswan')
+        githubService.getWorkflowRuns('tronswan'),
       ]);
 
       onDataChange({
@@ -38,14 +39,15 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         repositories,
         actions: actions.workflow_runs || [],
         loading: false,
-        error: null
+        error: null,
       });
     } catch (error) {
       console.error('Error loading GitHub data:', error);
       onDataChange({
         ...data,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load GitHub data'
+        error:
+          error instanceof Error ? error.message : 'Failed to load GitHub data',
       });
     }
   };
@@ -117,8 +119,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
 
   if (data.loading) {
     return (
-      <div className="github-status loading">
-        <div className="loading-spinner" />
+      <div className='github-status loading'>
+        <div className='loading-spinner' />
         <p>Loading GitHub data...</p>
       </div>
     );
@@ -126,11 +128,11 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
 
   if (data.error) {
     return (
-      <div className="github-status error">
-        <div className="error-icon">⚠️</div>
+      <div className='github-status error'>
+        <div className='error-icon'>⚠️</div>
         <p>Error: {data.error}</p>
         <small>Check your GitHub API token configuration</small>
-        <button onClick={handleRefresh} className="retry-button">
+        <button onClick={handleRefresh} className='retry-button'>
           🔄 Retry
         </button>
       </div>
@@ -138,8 +140,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   }
 
   return (
-    <div className="github-status">
-      <div className="github-tabs">
+    <div className='github-status'>
+      <div className='github-tabs'>
         <button
           className={`tab ${activeTab === 'actions' ? 'active' : ''}`}
           onClick={() => setActiveTab('actions')}
@@ -154,14 +156,14 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         </button>
       </div>
 
-      <div className="github-content">
+      <div className='github-content'>
         {activeTab === 'actions' && (
-          <div className="actions-tab">
+          <div className='actions-tab'>
             <h3>GitHub Actions</h3>
-            <div className="actions-header">
+            <div className='actions-header'>
               <p>Recent workflow runs for tronswan repository</p>
-              <button 
-                onClick={handleRefresh} 
+              <button
+                onClick={handleRefresh}
                 className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
                 disabled={isRefreshing}
               >
@@ -169,26 +171,59 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
               </button>
             </div>
             {(data.actions?.length || 0) === 0 ? (
-              <p className="no-data">No workflow runs found</p>
+              <p className='no-data'>No workflow runs found</p>
             ) : (
-              <div className="actions-list">
+              <div className='actions-list'>
                 {(data.actions || []).map((action: any) => (
-                  <div key={action.id} className="action-item">
-                    <div className="action-header">
+                  <div key={action.id} className='action-item'>
+                    <div className='action-header'>
                       <h4>{action.name}</h4>
-                      <span className={`status ${getStatusClass(action.status, action.conclusion)}`}>
+                      <span
+                        className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                      >
                         {getStatusIcon(action.status, action.conclusion)}
                         {getStatusText(action.status, action.conclusion)}
                       </span>
                     </div>
-                    <div className="action-details">
-                      <p><strong>Branch:</strong> {action.head_branch || 'N/A'}</p>
-                      <p><strong>Commit:</strong> {action.head_sha ? action.head_sha.substring(0, 7) : 'N/A'}</p>
-                      <p><strong>Triggered by:</strong> {action.triggering_actor?.login || action.actor?.login || 'Unknown'}</p>
-                      <p><strong>Created:</strong> {action.created_at ? formatDate(action.created_at) : 'N/A'}</p>
-                      <p><strong>Updated:</strong> {action.updated_at ? formatDate(action.updated_at) : 'N/A'}</p>
+                    <div className='action-details'>
+                      <p>
+                        <strong>Branch:</strong> {action.head_branch || 'N/A'}
+                      </p>
+                      <p>
+                        <strong>Commit:</strong>{' '}
+                        {action.head_sha
+                          ? action.head_sha.substring(0, 7)
+                          : 'N/A'}
+                      </p>
+                      <p>
+                        <strong>Triggered by:</strong>{' '}
+                        {action.triggering_actor?.login ||
+                          action.actor?.login ||
+                          'Unknown'}
+                      </p>
+                      <p>
+                        <strong>Created:</strong>{' '}
+                        {action.created_at
+                          ? formatDate(action.created_at)
+                          : 'N/A'}
+                      </p>
+                      <p>
+                        <strong>Updated:</strong>{' '}
+                        {action.updated_at
+                          ? formatDate(action.updated_at)
+                          : 'N/A'}
+                      </p>
                       {action.html_url && (
-                        <p><strong>URL:</strong> <a href={action.html_url} target="_blank" rel="noopener noreferrer">View Details</a></p>
+                        <p>
+                          <strong>URL:</strong>{' '}
+                          <a
+                            href={action.html_url}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            View Details
+                          </a>
+                        </p>
                       )}
                     </div>
                   </div>
@@ -199,12 +234,12 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         )}
 
         {activeTab === 'repos' && (
-          <div className="repos-tab">
+          <div className='repos-tab'>
             <h3>Repositories</h3>
-            <div className="repos-header">
+            <div className='repos-header'>
               <p>Recent repositories in swantron organization</p>
-              <button 
-                onClick={handleRefresh} 
+              <button
+                onClick={handleRefresh}
                 className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
                 disabled={isRefreshing}
               >
@@ -212,25 +247,50 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
               </button>
             </div>
             {(data.repositories?.length || 0) === 0 ? (
-              <p className="no-data">No repositories found</p>
+              <p className='no-data'>No repositories found</p>
             ) : (
-              <div className="repositories-list">
+              <div className='repositories-list'>
                 {(data.repositories || []).map((repo: any) => (
-                  <div key={repo.id} className="repository-item">
-                    <div className="repo-header">
+                  <div key={repo.id} className='repository-item'>
+                    <div className='repo-header'>
                       <h4>{repo.name}</h4>
-                      <span className={`status ${repo.private ? 'private' : 'public'}`}>
+                      <span
+                        className={`status ${repo.private ? 'private' : 'public'}`}
+                      >
                         {repo.private ? '🔒' : '🌐'}
                         {repo.private ? 'Private' : 'Public'}
                       </span>
                     </div>
-                    <div className="repo-details">
-                      <p><strong>Description:</strong> {repo.description || 'No description'}</p>
-                      <p><strong>Language:</strong> {repo.language || 'Unknown'}</p>
-                      <p><strong>Stars:</strong> {repo.stargazers_count || 0}</p>
-                      <p><strong>Forks:</strong> {repo.forks_count || 0}</p>
-                      <p><strong>Last Updated:</strong> {repo.updated_at ? formatDate(repo.updated_at) : 'Unknown'}</p>
-                      <p><strong>URL:</strong> <a href={repo.html_url} target="_blank" rel="noopener noreferrer">{repo.html_url}</a></p>
+                    <div className='repo-details'>
+                      <p>
+                        <strong>Description:</strong>{' '}
+                        {repo.description || 'No description'}
+                      </p>
+                      <p>
+                        <strong>Language:</strong> {repo.language || 'Unknown'}
+                      </p>
+                      <p>
+                        <strong>Stars:</strong> {repo.stargazers_count || 0}
+                      </p>
+                      <p>
+                        <strong>Forks:</strong> {repo.forks_count || 0}
+                      </p>
+                      <p>
+                        <strong>Last Updated:</strong>{' '}
+                        {repo.updated_at
+                          ? formatDate(repo.updated_at)
+                          : 'Unknown'}
+                      </p>
+                      <p>
+                        <strong>URL:</strong>{' '}
+                        <a
+                          href={repo.html_url}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          {repo.html_url}
+                        </a>
+                      </p>
                     </div>
                   </div>
                 ))}

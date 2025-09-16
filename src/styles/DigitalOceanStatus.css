@@ -9,12 +9,12 @@
 
 /* Typography Scale - Inherit from health page */
 .digitalocean-status {
-  --font-xs: 0.75rem;    /* 12px - Small labels, timestamps */
-  --font-sm: 0.875rem;   /* 14px - Body text, descriptions */
-  --font-base: 1rem;     /* 16px - Default text */
-  --font-lg: 1.125rem;   /* 18px - Large body text */
-  --font-xl: 1.25rem;    /* 20px - Section subtitles */
-  --font-2xl: 1.5rem;    /* 24px - Section titles */
+  --font-xs: 0.75rem; /* 12px - Small labels, timestamps */
+  --font-sm: 0.875rem; /* 14px - Body text, descriptions */
+  --font-base: 1rem; /* 16px - Default text */
+  --font-lg: 1.125rem; /* 18px - Large body text */
+  --font-xl: 1.25rem; /* 20px - Section subtitles */
+  --font-2xl: 1.5rem; /* 24px - Section titles */
 }
 
 .digitalocean-status.loading,
@@ -412,24 +412,24 @@
   .do-tabs {
     flex-direction: column;
   }
-  
+
   .tab {
     text-align: center;
   }
-  
+
   .droplet-header,
   .lb-header,
   .db-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .droplet-info,
   .lb-info,
   .db-info {
     grid-template-columns: 1fr;
   }
-  
+
   .account-limits {
     grid-template-columns: 1fr;
   }

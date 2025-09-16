@@ -27,10 +27,9 @@ class RuntimeConfigManager {
 
     // Load build-time environment variables
     this.loadBuildTimeConfig();
-    
+
     this.initialized = true;
   }
-
 
   /**
    * Load configuration from build-time environment variables
@@ -75,7 +74,10 @@ class RuntimeConfigManager {
   /**
    * Get a configuration value with a default
    */
-  getWithDefault<K extends keyof RuntimeConfig>(key: K, defaultValue: string): string {
+  getWithDefault<K extends keyof RuntimeConfig>(
+    key: K,
+    defaultValue: string
+  ): string {
     const value = this.get(key);
     return value || defaultValue;
   }

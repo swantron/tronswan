@@ -126,7 +126,7 @@
 }
 
 .fizzbuzz-rules li::before {
-  content: "🤖 ";
+  content: '🤖 ';
   margin-right: 0.5rem;
 }
 
@@ -150,16 +150,16 @@
   .fizzbuzz-page {
     padding: 1rem;
   }
-  
+
   .fizzbuzz-container {
     padding: 1.5rem;
   }
-  
+
   .fizzbuzz-rules {
     margin: 2rem auto 1rem;
     padding: 1.5rem;
   }
-  
+
   .fizzbuzz-input {
     padding: 0.8rem 1.2rem;
     font-size: 1rem;
@@ -170,16 +170,16 @@
   .fizzbuzz-content {
     padding: 0 0.5rem;
   }
-  
+
   .fizzbuzz-container {
     padding: 1rem;
   }
-  
+
   .fizzbuzz-sequence {
     font-size: 0.8rem;
     max-height: 300px;
   }
-  
+
   .fizzbuzz-info {
     padding: 1.5rem;
   }

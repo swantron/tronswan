@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import SwantronCard from './SwantronCard';
+
 import { swantronService } from '../services/swantronService';
-import SEO from './SEO';
 import { Post } from '../types';
+
+import SEO from './SEO';
+import SwantronCard from './SwantronCard';
 import '../styles/SwantronList.css';
 
 const SwantronList: React.FC = () => {
@@ -20,12 +22,14 @@ const SwantronList: React.FC = () => {
         const data = searchQuery
           ? await swantronService.searchPosts(searchQuery, page)
           : await swantronService.getPosts(page);
-        
+
         setPosts(data.posts);
         setTotalPages(data.totalPages);
         setError(null);
       } catch (err) {
-        setError('Failed to load posts from swantron.com. Please try again later.');
+        setError(
+          'Failed to load posts from swantron.com. Please try again later.'
+        );
         console.error('Error fetching swantron posts:', err);
       } finally {
         setLoading(false);
@@ -41,64 +45,68 @@ const SwantronList: React.FC = () => {
   };
 
   return (
-    <div className="swantron-page">
+    <div className='swantron-page'>
       <SEO
-        title="Swantron Posts - Personal Blog | Tron Swan"
+        title='Swantron Posts - Personal Blog | Tron Swan'
         description="Explore personal posts and thoughts from Joseph Swanson's blog at swantron.com. Tech insights, life updates, and random musings from a software engineer."
-        keywords="swantron, Joseph Swanson, blog posts, software engineering, personal blog, tech insights"
-        url="/swantron"
+        keywords='swantron, Joseph Swanson, blog posts, software engineering, personal blog, tech insights'
+        url='/swantron'
       />
 
-      <div className="swantron-list-container" data-testid="swantron-list">
-        <div className="swantron-list-header">
+      <div className='swantron-list-container' data-testid='swantron-list'>
+        <div className='swantron-list-header'>
           <h1>swantron posts</h1>
-          <p className="swantron-subtitle">🦢 personal blog posts from swantron.com</p>
-          <form onSubmit={handleSearch} className="swantron-search-form">
+          <p className='swantron-subtitle'>
+            🦢 personal blog posts from swantron.com
+          </p>
+          <form onSubmit={handleSearch} className='swantron-search-form'>
             <input
-              type="text"
+              type='text'
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search posts..."
-              className="swantron-search-input"
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder='Search posts...'
+              className='swantron-search-input'
             />
-            <button type="submit" className="swantron-search-button">
+            <button type='submit' className='swantron-search-button'>
               Search
             </button>
           </form>
         </div>
 
         {loading ? (
-          <div className="loading-spinner" aria-label="Loading posts" />
+          <div className='loading-spinner' aria-label='Loading posts' />
         ) : error ? (
-          <div className="error-message">{error}</div>
+          <div className='error-message'>{error}</div>
         ) : posts.length === 0 ? (
-          <div className="no-posts-message">
+          <div className='no-posts-message'>
             No posts found. Try a different search term.
           </div>
         ) : (
           <>
-            <div className="swantron-grid">
-              {posts.map((post) => (
+            <div className='swantron-grid'>
+              {posts.map(post => (
                 <SwantronCard key={post.id} post={post} />
               ))}
             </div>
-            
+
             {totalPages > 1 && (
-              <div className="pagination">
+              <div className='pagination'>
                 <button
-                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  onClick={() => setPage(prev => Math.max(prev - 1, 1))}
                   disabled={page === 1}
-                  className="pagination-button"
+                  className='pagination-button'
                 >
                   Previous
                 </button>
-                <span className="pagination-info">
+                <span className='pagination-info'>
                   Page {page} of {totalPages}
                 </span>
                 <button
-                  onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                  onClick={() =>
+                    setPage(prev => Math.min(prev + 1, totalPages))
+                  }
                   disabled={page === totalPages}
-                  className="pagination-button"
+                  className='pagination-button'
                 >
                   Next
                 </button>

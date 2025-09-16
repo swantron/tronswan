@@ -1,4 +1,13 @@
-import { vi, expect, describe, test, beforeAll, afterAll, beforeEach } from 'vitest';
+import {
+  vi,
+  expect,
+  describe,
+  test,
+  beforeAll,
+  afterAll,
+  beforeEach,
+} from 'vitest';
+
 import { swantronService } from './swantronService';
 
 // Mock fetch globally
@@ -30,13 +39,15 @@ describe('swantronService', () => {
         content: { rendered: 'Test content 1' },
         date: '2023-12-25T10:00:00Z',
         _embedded: {
-          'wp:featuredmedia': [{ source_url: 'https://example.com/image1.jpg' }],
+          'wp:featuredmedia': [
+            { source_url: 'https://example.com/image1.jpg' },
+          ],
           'wp:term': [
             [{ id: 1, name: 'Category 1' }],
-            [{ id: 1, name: 'Tag 1' }]
-          ]
+            [{ id: 1, name: 'Tag 1' }],
+          ],
         },
-        link: 'https://swantron.com/post/1'
+        link: 'https://swantron.com/post/1',
       },
       {
         id: 2,
@@ -46,10 +57,10 @@ describe('swantronService', () => {
         date: '2023-12-26T10:00:00Z',
         _embedded: {
           'wp:featuredmedia': [],
-          'wp:term': [[], []]
+          'wp:term': [[], []],
         },
-        link: 'https://swantron.com/post/2'
-      }
+        link: 'https://swantron.com/post/2',
+      },
     ];
 
     test('should fetch posts successfully with default parameters', async () => {
@@ -57,8 +68,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: vi.fn().mockReturnValue('5')
-        }
+          get: vi.fn().mockReturnValue('5'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -79,7 +90,7 @@ describe('swantronService', () => {
         featuredImage: 'https://example.com/image1.jpg',
         categories: [{ id: 1, name: 'Category 1' }],
         tags: [{ id: 1, name: 'Tag 1' }],
-        link: 'https://swantron.com/post/1'
+        link: 'https://swantron.com/post/1',
       });
     });
 
@@ -88,8 +99,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: vi.fn().mockReturnValue('3')
-        }
+          get: vi.fn().mockReturnValue('3'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -102,18 +113,18 @@ describe('swantronService', () => {
       expect(result.totalPages).toBe(3);
     });
 
-    
-
     test('should handle HTTP error responses', async () => {
       const mockResponse = {
         ok: false,
         status: 404,
-        statusText: 'Not Found'
+        statusText: 'Not Found',
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
-      await expect(swantronService.getPosts()).rejects.toThrow('HTTP 404: Not Found');
+      await expect(swantronService.getPosts()).rejects.toThrow(
+        'HTTP 404: Not Found'
+      );
     });
 
     test('should handle invalid response format', async () => {
@@ -121,13 +132,15 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue('not-an-array'),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
-      await expect(swantronService.getPosts()).rejects.toThrow('Invalid response format from swantron.com API');
+      await expect(swantronService.getPosts()).rejects.toThrow(
+        'Invalid response format from swantron.com API'
+      );
     });
 
     test('should handle missing total pages header', async () => {
@@ -135,8 +148,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockPostsResponse),
         headers: {
-          get: vi.fn().mockReturnValue(null)
-        }
+          get: vi.fn().mockReturnValue(null),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -155,16 +168,16 @@ describe('swantronService', () => {
           content: { rendered: 'Content here' },
           date: '2023-12-27T10:00:00Z',
           _embedded: {},
-          link: 'https://swantron.com/post/3'
-        }
+          link: 'https://swantron.com/post/3',
+        },
       ];
 
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(postsWithoutEmbedded),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -182,26 +195,31 @@ describe('swantronService', () => {
           id: 4,
           title: { rendered: 'Post with content image' },
           excerpt: { rendered: 'Has image in content' },
-          content: { rendered: '<p>Some text here</p><img src="https://example.com/content-image.jpg" alt="Content image" /><p>More text</p>' },
+          content: {
+            rendered:
+              '<p>Some text here</p><img src="https://example.com/content-image.jpg" alt="Content image" /><p>More text</p>',
+          },
           date: '2023-12-27T10:00:00Z',
           _embedded: {},
-          link: 'https://swantron.com/post/4'
-        }
+          link: 'https://swantron.com/post/4',
+        },
       ];
 
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(postsWithContentImage),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
       const result = await swantronService.getPosts();
 
-      expect(result.posts[0].featuredImage).toBe('https://example.com/content-image.jpg');
+      expect(result.posts[0].featuredImage).toBe(
+        'https://example.com/content-image.jpg'
+      );
       expect(result.posts[0].categories).toEqual([]);
       expect(result.posts[0].tags).toEqual([]);
     });
@@ -222,18 +240,15 @@ describe('swantronService', () => {
       date: '2023-12-25T10:00:00Z',
       _embedded: {
         'wp:featuredmedia': [{ source_url: 'https://example.com/image.jpg' }],
-        'wp:term': [
-          [{ id: 1, name: 'Category' }],
-          [{ id: 1, name: 'Tag' }]
-        ]
+        'wp:term': [[{ id: 1, name: 'Category' }], [{ id: 1, name: 'Tag' }]],
       },
-      link: 'https://swantron.com/post/1'
+      link: 'https://swantron.com/post/1',
     };
 
     test('should fetch single post successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue(mockPostResponse)
+        json: vi.fn().mockResolvedValue(mockPostResponse),
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -252,18 +267,22 @@ describe('swantronService', () => {
       const mockResponse = {
         ok: false,
         status: 500,
-        statusText: 'Internal Server Error'
+        statusText: 'Internal Server Error',
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
-      await expect(swantronService.getPostById(1)).rejects.toThrow('HTTP 500: Internal Server Error');
+      await expect(swantronService.getPostById(1)).rejects.toThrow(
+        'HTTP 500: Internal Server Error'
+      );
     });
 
     test('should handle network errors for single post', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(swantronService.getPostById(1)).rejects.toThrow('Network error');
+      await expect(swantronService.getPostById(1)).rejects.toThrow(
+        'Network error'
+      );
     });
   });
 
@@ -276,14 +295,16 @@ describe('swantronService', () => {
         content: { rendered: 'Search content' },
         date: '2023-12-25T10:00:00Z',
         _embedded: {
-          'wp:featuredmedia': [{ source_url: 'https://example.com/search-image.jpg' }],
+          'wp:featuredmedia': [
+            { source_url: 'https://example.com/search-image.jpg' },
+          ],
           'wp:term': [
             [{ id: 1, name: 'Search Category' }],
-            [{ id: 1, name: 'Search Tag' }]
-          ]
+            [{ id: 1, name: 'Search Tag' }],
+          ],
         },
-        link: 'https://swantron.com/search-result'
-      }
+        link: 'https://swantron.com/search-result',
+      },
     ];
 
     test('should search posts successfully', async () => {
@@ -291,8 +312,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: vi.fn().mockReturnValue('2')
-        }
+          get: vi.fn().mockReturnValue('2'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -311,8 +332,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -329,8 +350,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -347,8 +368,8 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -363,12 +384,14 @@ describe('swantronService', () => {
       const mockResponse = {
         ok: false,
         status: 400,
-        statusText: 'Bad Request'
+        statusText: 'Bad Request',
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
-      await expect(swantronService.searchPosts('query')).rejects.toThrow('HTTP 400: Bad Request');
+      await expect(swantronService.searchPosts('query')).rejects.toThrow(
+        'HTTP 400: Bad Request'
+      );
     });
 
     test('should handle invalid response format for search', async () => {
@@ -376,13 +399,15 @@ describe('swantronService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue('not-an-array'),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
 
-      await expect(swantronService.searchPosts('query')).rejects.toThrow('Invalid response format from swantron.com API');
+      await expect(swantronService.searchPosts('query')).rejects.toThrow(
+        'Invalid response format from swantron.com API'
+      );
     });
   });
 });

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import SEO from './SEO';
 import '../styles/FizzBuzz.css';
 
@@ -8,7 +9,7 @@ interface FizzBuzzDisplayProps {
 
 function FizzBuzzDisplay({ number }: FizzBuzzDisplayProps) {
   const generateFizzBuzz = (num: number): string => {
-    let result = [];
+    const result = [];
     for (let i = 1; i <= num; i++) {
       if (i % 3 === 0 && i % 5 === 0) {
         result.push('FizzBuzz');
@@ -24,9 +25,9 @@ function FizzBuzzDisplay({ number }: FizzBuzzDisplayProps) {
   };
 
   return (
-    <div className="fizzbuzz-container">
-      <h2 className="fizzbuzz-title">FizzBuzz</h2>
-      <p className="fizzbuzz-sequence">{generateFizzBuzz(number)}</p>
+    <div className='fizzbuzz-container'>
+      <h2 className='fizzbuzz-title'>FizzBuzz</h2>
+      <p className='fizzbuzz-sequence'>{generateFizzBuzz(number)}</p>
     </div>
   );
 }
@@ -39,53 +40,60 @@ function FizzBuzz() {
   };
 
   return (
-    <div className="fizzbuzz-page">
+    <div className='fizzbuzz-page'>
       <SEO
-        title="TronTronBuzzTron - FizzBuzz Generator | Tron Swan"
-        description="Generate FizzBuzz sequences with our robot-powered TronTronBuzzTron. Enter a number and watch the magic happen with this classic programming challenge."
-        keywords="FizzBuzz, programming, algorithm, robot, TronTronBuzzTron, coding challenge"
-        url="/trontronbuzztron"
+        title='TronTronBuzzTron - FizzBuzz Generator | Tron Swan'
+        description='Generate FizzBuzz sequences with our robot-powered TronTronBuzzTron. Enter a number and watch the magic happen with this classic programming challenge.'
+        keywords='FizzBuzz, programming, algorithm, robot, TronTronBuzzTron, coding challenge'
+        url='/trontronbuzztron'
       />
-      
-      <div className="fizzbuzz-content">
-        <h1 className="fizzbuzz-page-title" data-testid="fizzbuzz-page-title">trontronbuzztron</h1>
-        <p className="fizzbuzz-subtitle">🤖 robot-powered FizzBuzz sequence generator</p>
-        
-        <div className="fizzbuzz-input-section">
-          <label htmlFor="fizzbuzz-input" className="fizzbuzz-label">
+
+      <div className='fizzbuzz-content'>
+        <h1 className='fizzbuzz-page-title' data-testid='fizzbuzz-page-title'>
+          trontronbuzztron
+        </h1>
+        <p className='fizzbuzz-subtitle'>
+          🤖 robot-powered FizzBuzz sequence generator
+        </p>
+
+        <div className='fizzbuzz-input-section'>
+          <label htmlFor='fizzbuzz-input' className='fizzbuzz-label'>
             Enter a number to generate FizzBuzz sequence:
           </label>
           <input
-            id="fizzbuzz-input"
-            type="number"
+            id='fizzbuzz-input'
+            type='number'
             value={inputNumber}
             onChange={handleInputChange}
-            placeholder="Enter a number (e.g., 100)"
-            aria-label="Enter a number for FizzBuzz"
-            min="1"
-            max="1000"
-            className="fizzbuzz-input"
+            placeholder='Enter a number (e.g., 100)'
+            aria-label='Enter a number for FizzBuzz'
+            min='1'
+            max='1000'
+            className='fizzbuzz-input'
           />
         </div>
 
-        {inputNumber && !isNaN(Number(inputNumber)) && parseInt(inputNumber) > 0 && (
-          <FizzBuzzDisplay number={parseInt(inputNumber)} />
-        )}
+        {inputNumber &&
+          !isNaN(Number(inputNumber)) &&
+          parseInt(inputNumber) > 0 && (
+            <FizzBuzzDisplay number={parseInt(inputNumber)} />
+          )}
 
-        <div className="fizzbuzz-rules">
+        <div className='fizzbuzz-rules'>
           <h3>FizzBuzz Rules:</h3>
           <ul>
-            <li>Numbers divisible by 3 → "Fizz"</li>
-            <li>Numbers divisible by 5 → "Buzz"</li>
-            <li>Numbers divisible by both 3 and 5 → "FizzBuzz"</li>
+            <li>Numbers divisible by 3 → &quot;Fizz&quot;</li>
+            <li>Numbers divisible by 5 → &quot;Buzz&quot;</li>
+            <li>Numbers divisible by both 3 and 5 → &quot;FizzBuzz&quot;</li>
             <li>All other numbers → the number itself</li>
           </ul>
         </div>
 
-        <div className="fizzbuzz-info">
+        <div className='fizzbuzz-info'>
           <p>
-            FizzBuzz is a classic programming exercise that demonstrates basic 
-            control flow and modular arithmetic. Perfect for testing your robot logic circuits!
+            FizzBuzz is a classic programming exercise that demonstrates basic
+            control flow and modular arithmetic. Perfect for testing your robot
+            logic circuits!
           </p>
         </div>
       </div>

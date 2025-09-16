@@ -67,11 +67,22 @@ export interface RecipeListProps {
 export interface SwantronService {
   getPosts(page?: number, perPage?: number): Promise<SwantronServiceResponse>;
   getPostById(id: number): Promise<Post>;
-  searchPosts(query: string, page?: number, perPage?: number): Promise<SwantronServiceResponse>;
+  searchPosts(
+    query: string,
+    page?: number,
+    perPage?: number
+  ): Promise<SwantronServiceResponse>;
 }
 
 export interface WordPressService {
-  getRecipes(page?: number, perPage?: number): Promise<WordPressServiceResponse>;
+  getRecipes(
+    page?: number,
+    perPage?: number
+  ): Promise<WordPressServiceResponse>;
   getRecipeById(id: number): Promise<Recipe>;
-  searchRecipes(query: string, page?: number, perPage?: number): Promise<WordPressServiceResponse>;
+  searchRecipes(
+    query: string,
+    page?: number,
+    perPage?: number
+  ): Promise<WordPressServiceResponse>;
 }

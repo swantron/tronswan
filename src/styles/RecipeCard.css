@@ -2,7 +2,9 @@
   background: var(--secondary-bg);
   border-radius: var(--border-radius);
   overflow: hidden;
-  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  transition:
+    transform var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -105,4 +107,4 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
-} 
+}

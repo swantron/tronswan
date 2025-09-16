@@ -115,7 +115,15 @@ export interface DigitalOceanDatabase {
   name: string;
   engine: string;
   version: string;
-  status: 'creating' | 'online' | 'resizing' | 'migrating' | 'backing_up' | 'restoring' | 'maintenance' | 'offline';
+  status:
+    | 'creating'
+    | 'online'
+    | 'resizing'
+    | 'migrating'
+    | 'backing_up'
+    | 'restoring'
+    | 'maintenance'
+    | 'offline';
   created_at: string;
   size: string;
   num_nodes: number;
@@ -165,20 +173,25 @@ class DigitalOceanService {
   constructor() {
     this.baseUrl = 'https://api.digitalocean.com/v2';
     this.token = runtimeConfig.get('VITE_DIGITALOCEAN_TOKEN');
-    this.appId = runtimeConfig.getWithDefault('VITE_DIGITALOCEAN_APP_ID', '0513ce4c-b074-4139-bb38-a1c6a5bc97a6');
+    this.appId = runtimeConfig.getWithDefault(
+      'VITE_DIGITALOCEAN_APP_ID',
+      '0513ce4c-b074-4139-bb38-a1c6a5bc97a6'
+    );
   }
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const response = await fetch(url, {
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error(`DigitalOcean API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `DigitalOcean API error: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -197,7 +210,9 @@ class DigitalOceanService {
   async getDroplets(): Promise<DigitalOceanDroplet[]> {
     try {
       // Get all droplets in the account
-      const response = await this.makeRequest<{ droplets: DigitalOceanDroplet[] }>('/droplets');
+      const response = await this.makeRequest<{
+        droplets: DigitalOceanDroplet[];
+      }>('/droplets');
       return response.droplets;
     } catch (error) {
       console.error('Error fetching DigitalOcean droplets:', error);
@@ -207,7 +222,9 @@ class DigitalOceanService {
 
   async getLoadBalancers(): Promise<DigitalOceanLoadBalancer[]> {
     try {
-      const response = await this.makeRequest<{ load_balancers: DigitalOceanLoadBalancer[] }>('/load_balancers');
+      const response = await this.makeRequest<{
+        load_balancers: DigitalOceanLoadBalancer[];
+      }>('/load_balancers');
       return response.load_balancers;
     } catch (error) {
       console.error('Error fetching DigitalOcean load balancers:', error);
@@ -217,7 +234,9 @@ class DigitalOceanService {
 
   async getDatabases(): Promise<DigitalOceanDatabase[]> {
     try {
-      const response = await this.makeRequest<{ databases: DigitalOceanDatabase[] }>('/databases');
+      const response = await this.makeRequest<{
+        databases: DigitalOceanDatabase[];
+      }>('/databases');
       return response.databases;
     } catch (error) {
       console.error('Error fetching DigitalOcean databases:', error);
@@ -225,9 +244,25 @@ class DigitalOceanService {
     }
   }
 
-  async getAccount(): Promise<{ account: { droplet_limit: number; floating_ip_limit: number; volume_limit: number; load_balancer_limit: number; database_limit: number; } }> {
+  async getAccount(): Promise<{
+    account: {
+      droplet_limit: number;
+      floating_ip_limit: number;
+      volume_limit: number;
+      load_balancer_limit: number;
+      database_limit: number;
+    };
+  }> {
     try {
-      return await this.makeRequest<{ account: { droplet_limit: number; floating_ip_limit: number; volume_limit: number; load_balancer_limit: number; database_limit: number; } }>('/account');
+      return await this.makeRequest<{
+        account: {
+          droplet_limit: number;
+          floating_ip_limit: number;
+          volume_limit: number;
+          load_balancer_limit: number;
+          database_limit: number;
+        };
+      }>('/account');
     } catch (error) {
       console.error('Error fetching DigitalOcean account info:', error);
       throw error;

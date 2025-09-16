@@ -1,4 +1,13 @@
-import { vi, expect, describe, test, beforeAll, afterAll, beforeEach } from 'vitest';
+import {
+  vi,
+  expect,
+  describe,
+  test,
+  beforeAll,
+  afterAll,
+  beforeEach,
+} from 'vitest';
+
 import { wordpressService } from './wordpressService';
 
 // Mock fetch globally
@@ -30,12 +39,14 @@ describe('wordpressService', () => {
         content: { rendered: 'Test recipe content 1' },
         date: '2023-12-25T10:00:00Z',
         _embedded: {
-          'wp:featuredmedia': [{ source_url: 'https://example.com/recipe1.jpg' }],
+          'wp:featuredmedia': [
+            { source_url: 'https://example.com/recipe1.jpg' },
+          ],
           'wp:term': [
             [{ id: 1, name: 'Breakfast' }],
-            [{ id: 1, name: 'Quick' }]
-          ]
-        }
+            [{ id: 1, name: 'Quick' }],
+          ],
+        },
       },
       {
         id: 2,
@@ -45,9 +56,9 @@ describe('wordpressService', () => {
         date: '2023-12-26T10:00:00Z',
         _embedded: {
           'wp:featuredmedia': [],
-          'wp:term': [[], []]
-        }
-      }
+          'wp:term': [[], []],
+        },
+      },
     ];
 
     test('should fetch recipes successfully with default parameters', async () => {
@@ -55,8 +66,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: vi.fn().mockReturnValue('3')
-        }
+          get: vi.fn().mockReturnValue('3'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -76,7 +87,7 @@ describe('wordpressService', () => {
         date: '2023-12-25T10:00:00Z',
         featuredImage: 'https://example.com/recipe1.jpg',
         categories: [{ id: 1, name: 'Breakfast' }],
-        tags: [{ id: 1, name: 'Quick' }]
+        tags: [{ id: 1, name: 'Quick' }],
       });
     });
 
@@ -85,8 +96,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: vi.fn().mockReturnValue('2')
-        }
+          get: vi.fn().mockReturnValue('2'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -99,15 +110,13 @@ describe('wordpressService', () => {
       expect(result.totalPages).toBe(2);
     });
 
-
-
     test('should handle missing total pages header', async () => {
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockRecipesResponse),
         headers: {
-          get: vi.fn().mockReturnValue(null)
-        }
+          get: vi.fn().mockReturnValue(null),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -125,16 +134,16 @@ describe('wordpressService', () => {
           excerpt: { rendered: 'No embedded content' },
           content: { rendered: 'Content here' },
           date: '2023-12-27T10:00:00Z',
-          _embedded: {}
-        }
+          _embedded: {},
+        },
       ];
 
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(recipesWithoutEmbedded),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -149,7 +158,9 @@ describe('wordpressService', () => {
     test('should handle network errors', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(wordpressService.getRecipes()).rejects.toThrow('Network error');
+      await expect(wordpressService.getRecipes()).rejects.toThrow(
+        'Network error'
+      );
     });
 
     test('should handle empty recipes array', async () => {
@@ -157,8 +168,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -179,17 +190,14 @@ describe('wordpressService', () => {
       date: '2023-12-25T10:00:00Z',
       _embedded: {
         'wp:featuredmedia': [{ source_url: 'https://example.com/recipe.jpg' }],
-        'wp:term': [
-          [{ id: 1, name: 'Dinner' }],
-          [{ id: 1, name: 'Healthy' }]
-        ]
-      }
+        'wp:term': [[{ id: 1, name: 'Dinner' }], [{ id: 1, name: 'Healthy' }]],
+      },
     };
 
     test('should fetch single recipe successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue(mockRecipeResponse)
+        json: vi.fn().mockResolvedValue(mockRecipeResponse),
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -213,12 +221,12 @@ describe('wordpressService', () => {
         excerpt: { rendered: 'No embedded content' },
         content: { rendered: 'Content here' },
         date: '2023-12-26T10:00:00Z',
-        _embedded: {}
+        _embedded: {},
       };
 
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue(recipeWithoutEmbedded)
+        json: vi.fn().mockResolvedValue(recipeWithoutEmbedded),
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -233,7 +241,9 @@ describe('wordpressService', () => {
     test('should handle network errors for single recipe', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(wordpressService.getRecipeById(1)).rejects.toThrow('Network error');
+      await expect(wordpressService.getRecipeById(1)).rejects.toThrow(
+        'Network error'
+      );
     });
 
     test('should handle recipe with missing embedded terms', async () => {
@@ -244,14 +254,16 @@ describe('wordpressService', () => {
         content: { rendered: 'Content here' },
         date: '2023-12-27T10:00:00Z',
         _embedded: {
-          'wp:featuredmedia': [{ source_url: 'https://example.com/partial.jpg' }]
+          'wp:featuredmedia': [
+            { source_url: 'https://example.com/partial.jpg' },
+          ],
           // Missing wp:term
-        }
+        },
       };
 
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue(recipeWithPartialEmbedded)
+        json: vi.fn().mockResolvedValue(recipeWithPartialEmbedded),
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -273,13 +285,15 @@ describe('wordpressService', () => {
         content: { rendered: 'Search recipe content' },
         date: '2023-12-25T10:00:00Z',
         _embedded: {
-          'wp:featuredmedia': [{ source_url: 'https://example.com/search-recipe.jpg' }],
+          'wp:featuredmedia': [
+            { source_url: 'https://example.com/search-recipe.jpg' },
+          ],
           'wp:term': [
             [{ id: 1, name: 'Search Category' }],
-            [{ id: 1, name: 'Search Tag' }]
-          ]
-        }
-      }
+            [{ id: 1, name: 'Search Tag' }],
+          ],
+        },
+      },
     ];
 
     test('should search recipes successfully', async () => {
@@ -287,8 +301,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: vi.fn().mockReturnValue('2')
-        }
+          get: vi.fn().mockReturnValue('2'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -307,8 +321,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockSearchResponse),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -325,8 +339,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -343,8 +357,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -360,8 +374,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -380,8 +394,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -396,7 +410,9 @@ describe('wordpressService', () => {
     test('should handle network errors for search', async () => {
       global.fetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(wordpressService.searchRecipes('query')).rejects.toThrow('Network error');
+      await expect(wordpressService.searchRecipes('query')).rejects.toThrow(
+        'Network error'
+      );
     });
 
     test('should handle search with unicode characters', async () => {
@@ -405,8 +421,8 @@ describe('wordpressService', () => {
         ok: true,
         json: vi.fn().mockResolvedValue([]),
         headers: {
-          get: vi.fn().mockReturnValue('1')
-        }
+          get: vi.fn().mockReturnValue('1'),
+        },
       };
 
       global.fetch.mockResolvedValue(mockResponse);

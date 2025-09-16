@@ -1,6 +1,7 @@
-import { vi, expect, describe, test } from 'vitest';
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { vi, expect, describe, test } from 'vitest';
+
 import Hacking from './Hacking';
 
 describe('Hacking Component', () => {
@@ -9,8 +10,6 @@ describe('Hacking Component', () => {
     const titleElement = screen.getByText(/computer hacking skills/i);
     expect(titleElement).toBeInTheDocument();
   });
-
-
 
   test('renders video element', () => {
     render(<Hacking />);
@@ -28,8 +27,6 @@ describe('Hacking Component', () => {
     expect((videoElement as HTMLVideoElement).loop).toBe(true);
     expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
   });
-
-
 
   test('renders container with correct test id', () => {
     render(<Hacking />);

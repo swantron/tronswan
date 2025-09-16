@@ -1,7 +1,8 @@
-import { vi, expect, describe, test } from 'vitest';
-import React from 'react';
-// Imports necessary utilities from the testing library and jest-dom for DOM assertions.
 import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { vi, expect, describe, test } from 'vitest';
+// Imports necessary utilities from the testing library and jest-dom for DOM assertions.
+
 import App from './App'; // Imports the App component to be tested.
 import '@testing-library/jest-dom'; // Provides the extended matchers like toBeInTheDocument for easier DOM node assertions.
 
@@ -9,7 +10,7 @@ import '@testing-library/jest-dom'; // Provides the extended matchers like toBeI
 vi.mock('./components/SEO', () => ({
   default: function MockSEO() {
     return null; // Return null to render nothing
-  }
+  },
 }));
 
 // Grouping related tests about the App component.
@@ -32,14 +33,18 @@ describe('App Component', () => {
   test('renders navigation links', () => {
     render(<App />);
     // Test navigation links specifically - only the nav bar links, not the swantron link
-    const navLinks = screen.getAllByRole('link').filter(link => link.closest('nav'));
+    const navLinks = screen
+      .getAllByRole('link')
+      .filter(link => link.closest('nav'));
     expect(navLinks).toHaveLength(7);
-    
+
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'weathertron' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'weathertron' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hacking' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
@@ -51,15 +56,15 @@ describe('App Component', () => {
     const titleElement = screen.getByTestId('app-title');
     expect(titleElement).toBeInTheDocument();
     expect(titleElement).toHaveTextContent('tronswan');
-    
+
     const logoElement = screen.getByTestId('app-logo');
     expect(logoElement).toBeInTheDocument();
-    
+
     const swantronLink = screen.getByTestId('swantron-link');
     expect(swantronLink).toBeInTheDocument();
     expect(swantronLink).toHaveAttribute('href', 'https://swantron.com');
     expect(swantronLink).toHaveTextContent('tron swan dot com');
-    
+
     const getItButton = screen.getByTestId('get-it-button');
     expect(getItButton).toBeInTheDocument();
     expect(getItButton).toHaveTextContent('get it');
@@ -68,8 +73,9 @@ describe('App Component', () => {
   // Test to check if the home container is rendered.
   test('renders home container', () => {
     render(<App />);
-    const homeContainer = screen.getByTestId('swantron-link').closest('.home-container');
+    const homeContainer = screen
+      .getByTestId('swantron-link')
+      .closest('.home-container');
     expect(homeContainer).toBeInTheDocument();
   });
-
 });

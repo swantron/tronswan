@@ -19,17 +19,17 @@ type DateFormatter = (dateString: string) => string;
  * @returns A memoized date formatting function
  */
 export const useDateFormatter = (
-  locale: string = 'en-US', 
+  locale: string = 'en-US',
   options: DateFormatterOptions = {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   }
 ): DateFormatter => {
   const formatDate = useMemo(() => {
     return (dateString: string): string => {
       if (!dateString) return '';
-      
+
       try {
         return new Date(dateString).toLocaleDateString(locale, options);
       } catch (error) {

@@ -1,6 +1,7 @@
-import { vi, expect, describe, test, beforeAll, afterAll } from 'vitest';
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { vi, expect, describe, test, beforeAll, afterAll } from 'vitest';
+
 import '@testing-library/jest-dom';
 import ErrorBoundary from './ErrorBoundary';
 
@@ -29,7 +30,7 @@ describe('ErrorBoundary Component', () => {
         <div>Test content</div>
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
@@ -39,9 +40,15 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('We encountered an unexpected error. Don\'t worry, our robot engineers are on it!')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "We encountered an unexpected error. Don't worry, our robot engineers are on it!"
+      )
+    ).toBeInTheDocument();
   });
 
   test('renders retry button', () => {
@@ -50,7 +57,7 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const retryButton = screen.getByRole('button', { name: 'Try again' });
     expect(retryButton).toBeInTheDocument();
     expect(retryButton).toHaveAttribute('aria-label', 'Try again');
@@ -62,7 +69,7 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const reloadButton = screen.getByRole('button', { name: 'Reload page' });
     expect(reloadButton).toBeInTheDocument();
     expect(reloadButton).toHaveAttribute('aria-label', 'Reload page');
@@ -74,24 +81,28 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     // Should show error UI
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
-    
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
+
     // Click retry button
     const retryButton = screen.getByRole('button', { name: 'Try again' });
     fireEvent.click(retryButton);
-    
+
     // Create a completely new ErrorBoundary instance without error
     rerender(
-      <ErrorBoundary key="new-instance">
+      <ErrorBoundary key='new-instance'>
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     );
-    
+
     // Should show normal content
     expect(screen.getByText('No error')).toBeInTheDocument();
-    expect(screen.queryByText('🤖 Oops! Something went wrong')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('🤖 Oops! Something went wrong')
+    ).not.toBeInTheDocument();
   });
 
   test('reload button calls window.location.reload', () => {
@@ -99,7 +110,7 @@ describe('ErrorBoundary Component', () => {
     const mockReload = vi.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: mockReload },
-      writable: true
+      writable: true,
     });
 
     render(
@@ -107,10 +118,10 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const reloadButton = screen.getByRole('button', { name: 'Reload page' });
     fireEvent.click(reloadButton);
-    
+
     expect(mockReload).toHaveBeenCalled();
   });
 
@@ -120,10 +131,14 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByTestId('error-boundary')).toHaveClass('error-boundary');
-    expect(document.querySelector('.error-boundary-content')).toBeInTheDocument();
-    expect(document.querySelector('.error-boundary-actions')).toBeInTheDocument();
+    expect(
+      document.querySelector('.error-boundary-content')
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('.error-boundary-actions')
+    ).toBeInTheDocument();
   });
 
   test('retry button has correct CSS class', () => {
@@ -132,7 +147,7 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const retryButton = screen.getByRole('button', { name: 'Try again' });
     expect(retryButton).toHaveClass('error-boundary-retry-button');
   });
@@ -143,7 +158,7 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const reloadButton = screen.getByRole('button', { name: 'Reload page' });
     expect(reloadButton).toHaveClass('error-boundary-reload-button');
   });
@@ -154,31 +169,35 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     // First error
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
-    
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
+
     // Click retry to reset error state
     const retryButton = screen.getByRole('button', { name: 'Try again' });
     fireEvent.click(retryButton);
-    
+
     // Create new ErrorBoundary instance without error
     rerender(
-      <ErrorBoundary key="no-error">
+      <ErrorBoundary key='no-error'>
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText('No error')).toBeInTheDocument();
-    
+
     // Create new ErrorBoundary instance with error
     rerender(
-      <ErrorBoundary key="with-error">
+      <ErrorBoundary key='with-error'>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
   });
 
   test('maintains error state until retry is clicked', () => {
@@ -187,36 +206,40 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     // Should show error UI
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
-    
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
+
     // Re-render without error (but don't click retry)
     rerender(
       <ErrorBoundary>
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     );
-    
+
     // Should still show error UI because error state wasn't reset
-    expect(screen.getByText('🤖 Oops! Something went wrong')).toBeInTheDocument();
+    expect(
+      screen.getByText('🤖 Oops! Something went wrong')
+    ).toBeInTheDocument();
   });
 
   test('logs error details to console', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(consoleSpy).toHaveBeenCalledWith(
       'ErrorBoundary caught an error:',
       expect.any(Error),
       expect.any(Object)
     );
-    
+
     consoleSpy.mockRestore();
   });
 
@@ -226,7 +249,7 @@ describe('ErrorBoundary Component', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByTestId('error-boundary')).toBeInTheDocument();
   });
-}); 
+});

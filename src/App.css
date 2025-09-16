@@ -8,7 +8,7 @@
   --secondary-text: #333333;
   --accent-color: #f89859;
   --error-color: #ff4444;
-  --success-color: #4CAF50;
+  --success-color: #4caf50;
   --border-radius: 10px;
   --transition-speed: 0.3s;
   --max-width: 1200px;
@@ -246,7 +246,7 @@
 }
 
 /* Input styles */
-input[type="number"] {
+input[type='number'] {
   background-color: var(--accent-color);
   color: var(--primary-text);
   border: none;
@@ -259,13 +259,13 @@ input[type="number"] {
   transition: all var(--transition-speed) ease;
 }
 
-input[type="number"]:focus {
+input[type='number']:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-bg);
   transform: scale(1.02);
 }
 
-input[type="number"]::placeholder {
+input[type='number']::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -368,7 +368,7 @@ input[type="number"]::placeholder {
     margin: 0.6rem 0;
   }
 
-  input[type="number"] {
+  input[type='number'] {
     padding: 0.6rem 1rem;
   }
 }

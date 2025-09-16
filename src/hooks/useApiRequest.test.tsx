@@ -1,5 +1,14 @@
-import { vi, expect, describe, test, beforeAll, afterAll, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import {
+  vi,
+  expect,
+  describe,
+  test,
+  beforeAll,
+  afterAll,
+  beforeEach,
+} from 'vitest';
+
 import { useApiRequest } from './useApiRequest';
 
 // Mock console.error to avoid noise in tests
@@ -31,7 +40,7 @@ describe('useApiRequest Hook', () => {
   test('should initialize with custom initial data', () => {
     const mockApiFunction = vi.fn();
     const initialData = { test: 'data' };
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { initialData })
     );
 
@@ -58,8 +67,8 @@ describe('useApiRequest Hook', () => {
     const mockData = { message: 'Success' };
     const mockApiFunction = vi.fn().mockResolvedValue(mockData);
     const onSuccess = vi.fn();
-    
-    const { result } = renderHook(() => 
+
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { onSuccess })
     );
 
@@ -76,8 +85,8 @@ describe('useApiRequest Hook', () => {
     const mockError = new Error('API Error');
     const mockApiFunction = vi.fn().mockRejectedValue(mockError);
     const onError = vi.fn();
-    
-    const { result } = renderHook(() => 
+
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { onError })
     );
 
@@ -93,7 +102,7 @@ describe('useApiRequest Hook', () => {
   test('should handle errors without message', async () => {
     const mockError = {};
     const mockApiFunction = vi.fn().mockRejectedValue(mockError);
-    
+
     const { result } = renderHook(() => useApiRequest(mockApiFunction));
 
     await waitFor(() => {
@@ -104,11 +113,12 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should retry failed requests', async () => {
-    const mockApiFunction = vi.fn()
+    const mockApiFunction = vi
+      .fn()
       .mockRejectedValueOnce(new Error('First attempt failed'))
       .mockResolvedValueOnce({ success: true });
-    
-    const { result } = renderHook(() => 
+
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { retryAttempts: 2, retryDelay: 100 })
     );
 
@@ -125,9 +135,11 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should respect retry attempts limit', async () => {
-    const mockApiFunction = vi.fn().mockRejectedValue(new Error('Always fails'));
-    
-    const { result } = renderHook(() => 
+    const mockApiFunction = vi
+      .fn()
+      .mockRejectedValue(new Error('Always fails'));
+
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { retryAttempts: 2, retryDelay: 100 })
     );
 
@@ -142,10 +154,11 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should execute retry function manually', async () => {
-    const mockApiFunction = vi.fn()
+    const mockApiFunction = vi
+      .fn()
       .mockRejectedValueOnce(new Error('First attempt failed'))
       .mockResolvedValueOnce({ success: true });
-    
+
     const { result } = renderHook(() => useApiRequest(mockApiFunction));
 
     // Wait for first failure
@@ -171,8 +184,8 @@ describe('useApiRequest Hook', () => {
   test('should execute when dependencies change', async () => {
     const mockApiFunction = vi.fn().mockResolvedValue({ success: true });
     let dependencies = ['initial'];
-    
-    const { result, rerender } = renderHook(() => 
+
+    const { result, rerender } = renderHook(() =>
       useApiRequest(mockApiFunction, dependencies)
     );
 
@@ -192,9 +205,11 @@ describe('useApiRequest Hook', () => {
   });
 
   test('should use exponential backoff for retries', async () => {
-    const mockApiFunction = vi.fn().mockRejectedValue(new Error('Always fails'));
-    
-    const { result } = renderHook(() => 
+    const mockApiFunction = vi
+      .fn()
+      .mockRejectedValue(new Error('Always fails'));
+
+    const { result } = renderHook(() =>
       useApiRequest(mockApiFunction, [], { retryAttempts: 3, retryDelay: 100 })
     );
 

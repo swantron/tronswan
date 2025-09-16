@@ -15,9 +15,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(0, 255, 65, 0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(0, 255, 65, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(0, 255, 65, 0.1) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -113,11 +121,11 @@
   .gangnam-container {
     padding: 1rem;
   }
-  
+
   .gangnam-title {
     font-size: 2rem;
   }
-  
+
   .gangnam-video {
     max-width: 100%;
   }

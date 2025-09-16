@@ -34,7 +34,15 @@ interface GitHubWorkflowRun {
   run_number: number;
   event: string;
   status: 'queued' | 'in_progress' | 'completed';
-  conclusion: 'success' | 'failure' | 'neutral' | 'cancelled' | 'skipped' | 'timed_out' | 'action_required' | null;
+  conclusion:
+    | 'success'
+    | 'failure'
+    | 'neutral'
+    | 'cancelled'
+    | 'skipped'
+    | 'timed_out'
+    | 'action_required'
+    | null;
   workflow_id: number;
   url: string;
   html_url: string;
@@ -119,14 +127,16 @@ class GitHubService {
     const url = `${this.baseUrl}${endpoint}`;
     const response = await fetch(url, {
       headers: {
-        'Authorization': `token ${this.token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'TronSwan-Health-Monitor'
-      }
+        Authorization: `token ${this.token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'TronSwan-Health-Monitor',
+      },
     });
 
     if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `GitHub API error: ${response.status} ${response.statusText}`
+      );
     }
 
     return response.json();
@@ -138,12 +148,16 @@ class GitHubService {
 
   async getRepositories(): Promise<GitHubRepository[]> {
     // Only get the specific tronswan repository
-    return this.makeRequest(`/repos/${this.owner}/tronswan`).then(repo => [repo]);
+    return this.makeRequest(`/repos/${this.owner}/tronswan`).then(repo => [
+      repo,
+    ]);
   }
 
   async getAllRepositories(): Promise<GitHubRepository[]> {
     // Get all repositories for the swantron organization
-    return this.makeRequest(`/users/${this.owner}/repos?sort=updated&per_page=10`);
+    return this.makeRequest(
+      `/users/${this.owner}/repos?sort=updated&per_page=10`
+    );
   }
 
   async getRepository(name: string): Promise<GitHubRepository> {
@@ -154,35 +168,63 @@ class GitHubService {
     return this.makeRequest(`/repos/${this.owner}/${repo}/actions/workflows`);
   }
 
-  async getWorkflowRuns(repo: string, workflowId?: number): Promise<{ workflow_runs: GitHubWorkflowRun[] }> {
-    const endpoint = workflowId 
+  async getWorkflowRuns(
+    repo: string,
+    workflowId?: number
+  ): Promise<{ workflow_runs: GitHubWorkflowRun[] }> {
+    const endpoint = workflowId
       ? `/repos/${this.owner}/${repo}/actions/workflows/${workflowId}/runs?per_page=10`
       : `/repos/${this.owner}/${repo}/actions/runs?per_page=10`;
     return this.makeRequest(endpoint);
   }
 
-  async getWorkflowRun(repo: string, runId: number): Promise<GitHubWorkflowRun> {
-    return this.makeRequest(`/repos/${this.owner}/${repo}/actions/runs/${runId}`);
+  async getWorkflowRun(
+    repo: string,
+    runId: number
+  ): Promise<GitHubWorkflowRun> {
+    return this.makeRequest(
+      `/repos/${this.owner}/${repo}/actions/runs/${runId}`
+    );
   }
 
-  async getWorkflowRunJobs(repo: string, runId: number): Promise<{ jobs: any[] }> {
-    return this.makeRequest(`/repos/${this.owner}/${repo}/actions/runs/${runId}/jobs`);
+  async getWorkflowRunJobs(
+    repo: string,
+    runId: number
+  ): Promise<{ jobs: any[] }> {
+    return this.makeRequest(
+      `/repos/${this.owner}/${repo}/actions/runs/${runId}/jobs`
+    );
   }
 
-  async getRepositoryCommits(repo: string, branch: string = 'main'): Promise<any[]> {
-    return this.makeRequest(`/repos/${this.owner}/${repo}/commits?sha=${branch}&per_page=5`);
+  async getRepositoryCommits(
+    repo: string,
+    branch: string = 'main'
+  ): Promise<any[]> {
+    return this.makeRequest(
+      `/repos/${this.owner}/${repo}/commits?sha=${branch}&per_page=5`
+    );
   }
 
   async getRepositoryBranches(repo: string): Promise<any[]> {
     return this.makeRequest(`/repos/${this.owner}/${repo}/branches`);
   }
 
-  async getRepositoryIssues(repo: string, state: 'open' | 'closed' | 'all' = 'open'): Promise<any[]> {
-    return this.makeRequest(`/repos/${this.owner}/${repo}/issues?state=${state}&per_page=10`);
+  async getRepositoryIssues(
+    repo: string,
+    state: 'open' | 'closed' | 'all' = 'open'
+  ): Promise<any[]> {
+    return this.makeRequest(
+      `/repos/${this.owner}/${repo}/issues?state=${state}&per_page=10`
+    );
   }
 
-  async getRepositoryPullRequests(repo: string, state: 'open' | 'closed' | 'all' = 'open'): Promise<any[]> {
-    return this.makeRequest(`/repos/${this.owner}/${repo}/pulls?state=${state}&per_page=10`);
+  async getRepositoryPullRequests(
+    repo: string,
+    state: 'open' | 'closed' | 'all' = 'open'
+  ): Promise<any[]> {
+    return this.makeRequest(
+      `/repos/${this.owner}/${repo}/pulls?state=${state}&per_page=10`
+    );
   }
 }
 

@@ -12,31 +12,39 @@ interface WordPressRecipe {
   date: string;
   _embedded?: {
     'wp:featuredmedia'?: Array<{ source_url: string }>;
-    'wp:term'?: Array<Array<{ id: number; name: string; slug: string; link: string }>>;
+    'wp:term'?: Array<
+      Array<{ id: number; name: string; slug: string; link: string }>
+    >;
   };
 }
 
 export const wordpressService: WordPressService = {
-  async getRecipes(page: number = 1, perPage: number = 10): Promise<WordPressServiceResponse> {
+  async getRecipes(
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<WordPressServiceResponse> {
     try {
       const url = `${WORDPRESS_API_URL}/posts&_embed&page=${page}&per_page=${perPage}`;
-      
+
       const response = await fetch(url);
       const recipes: WordPressRecipe[] = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
 
       return {
-        recipes: recipes.map((recipe: WordPressRecipe): Recipe => ({
-          id: recipe.id,
-          title: recipe.title.rendered,
-          excerpt: recipe.excerpt.rendered,
-          content: recipe.content.rendered,
-          date: recipe.date,
-          featuredImage: recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-          categories: recipe._embedded?.['wp:term']?.[0] || [],
-          tags: recipe._embedded?.['wp:term']?.[1] || []
-        })),
-        totalPages: parseInt(totalPages, 10)
+        recipes: recipes.map(
+          (recipe: WordPressRecipe): Recipe => ({
+            id: recipe.id,
+            title: recipe.title.rendered,
+            excerpt: recipe.excerpt.rendered,
+            content: recipe.content.rendered,
+            date: recipe.date,
+            featuredImage:
+              recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+            categories: recipe._embedded?.['wp:term']?.[0] || [],
+            tags: recipe._embedded?.['wp:term']?.[1] || [],
+          })
+        ),
+        totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
       console.error('Error fetching recipes:', error);
@@ -46,9 +54,7 @@ export const wordpressService: WordPressService = {
 
   async getRecipeById(id: number): Promise<Recipe> {
     try {
-      const response = await fetch(
-        `${WORDPRESS_API_URL}/posts/${id}&_embed`
-      );
+      const response = await fetch(`${WORDPRESS_API_URL}/posts/${id}&_embed`);
 
       const recipe: WordPressRecipe = await response.json();
 
@@ -58,9 +64,10 @@ export const wordpressService: WordPressService = {
         excerpt: recipe.excerpt.rendered,
         content: recipe.content.rendered,
         date: recipe.date,
-        featuredImage: recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+        featuredImage:
+          recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
         categories: recipe._embedded?.['wp:term']?.[0] || [],
-        tags: recipe._embedded?.['wp:term']?.[1] || []
+        tags: recipe._embedded?.['wp:term']?.[1] || [],
       };
     } catch (error) {
       console.error('Error fetching recipe:', error);
@@ -68,30 +75,37 @@ export const wordpressService: WordPressService = {
     }
   },
 
-  async searchRecipes(query: string, page: number = 1, perPage: number = 10): Promise<WordPressServiceResponse> {
+  async searchRecipes(
+    query: string,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<WordPressServiceResponse> {
     try {
       const url = `${WORDPRESS_API_URL}/posts&search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
-      
+
       const response = await fetch(url);
       const recipes: WordPressRecipe[] = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
 
       return {
-        recipes: recipes.map((recipe: WordPressRecipe): Recipe => ({
-          id: recipe.id,
-          title: recipe.title.rendered,
-          excerpt: recipe.excerpt.rendered,
-          content: recipe.content.rendered,
-          date: recipe.date,
-          featuredImage: recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-          categories: recipe._embedded?.['wp:term']?.[0] || [],
-          tags: recipe._embedded?.['wp:term']?.[1] || []
-        })),
-        totalPages: parseInt(totalPages, 10)
+        recipes: recipes.map(
+          (recipe: WordPressRecipe): Recipe => ({
+            id: recipe.id,
+            title: recipe.title.rendered,
+            excerpt: recipe.excerpt.rendered,
+            content: recipe.content.rendered,
+            date: recipe.date,
+            featuredImage:
+              recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+            categories: recipe._embedded?.['wp:term']?.[0] || [],
+            tags: recipe._embedded?.['wp:term']?.[1] || [],
+          })
+        ),
+        totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
       console.error('Error searching recipes:', error);
       throw error;
     }
-  }
+  },
 };

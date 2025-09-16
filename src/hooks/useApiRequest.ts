@@ -25,8 +25,8 @@ interface UseApiRequestReturn<T> {
  * @returns State object with data, loading, error, and retry function
  */
 export const useApiRequest = <T>(
-  apiFunction: () => Promise<T>, 
-  dependencies: any[] = [], 
+  apiFunction: () => Promise<T>,
+  dependencies: any[] = [],
   options: UseApiRequestOptions<T> = {}
 ): UseApiRequestReturn<T> => {
   const {
@@ -34,7 +34,7 @@ export const useApiRequest = <T>(
     retryDelay = 1000,
     initialData = null,
     onSuccess = null,
-    onError = null
+    onError = null,
   } = options;
 
   const [data, setData] = useState<T | null>(initialData);
@@ -46,28 +46,34 @@ export const useApiRequest = <T>(
     try {
       setLoading(true);
       setError(null);
-      
+
       const result = await apiFunction();
       setData(result);
       setRetryCount(0);
-      
+
       if (onSuccess) {
         onSuccess(result);
       }
     } catch (err) {
       console.error('API request failed:', err);
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred while fetching data';
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'An error occurred while fetching data';
       setError(errorMessage);
-      
+
       if (onError) {
         onError(err instanceof Error ? err : new Error(errorMessage));
       }
 
       // Retry logic
       if (retryCount < retryAttempts) {
-        setTimeout(() => {
-          setRetryCount(prev => prev + 1);
-        }, retryDelay * Math.pow(2, retryCount)); // Exponential backoff
+        setTimeout(
+          () => {
+            setRetryCount(prev => prev + 1);
+          },
+          retryDelay * Math.pow(2, retryCount)
+        ); // Exponential backoff
       }
     } finally {
       setLoading(false);
@@ -97,6 +103,6 @@ export const useApiRequest = <T>(
     error,
     retry,
     retryCount,
-    canRetry: retryCount < retryAttempts
+    canRetry: retryCount < retryAttempts,
   };
 };

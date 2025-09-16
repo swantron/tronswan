@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import RecipeCard from './RecipeCard';
+
 import { wordpressService } from '../services/wordpressService';
 import { Recipe } from '../types';
+
+import RecipeCard from './RecipeCard';
 import '../styles/RecipeList.css';
 
 const RecipeList: React.FC = () => {
@@ -19,7 +21,7 @@ const RecipeList: React.FC = () => {
         const data = searchQuery
           ? await wordpressService.searchRecipes(searchQuery, page)
           : await wordpressService.getRecipes(page);
-        
+
         setRecipes(data.recipes);
         setTotalPages(data.totalPages);
         setError(null);
@@ -40,55 +42,55 @@ const RecipeList: React.FC = () => {
   };
 
   return (
-    <div className="recipe-list-container" data-testid="recipe-list">
-      <div className="recipe-list-header">
+    <div className='recipe-list-container' data-testid='recipe-list'>
+      <div className='recipe-list-header'>
         <h2>Recipes</h2>
-        <form onSubmit={handleSearch} className="recipe-search-form">
+        <form onSubmit={handleSearch} className='recipe-search-form'>
           <input
-            type="text"
+            type='text'
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search recipes..."
-            className="recipe-search-input"
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder='Search recipes...'
+            className='recipe-search-input'
           />
-          <button type="submit" className="recipe-search-button">
+          <button type='submit' className='recipe-search-button'>
             Search
           </button>
         </form>
       </div>
 
       {loading ? (
-        <div className="loading-spinner" aria-label="Loading recipes" />
+        <div className='loading-spinner' aria-label='Loading recipes' />
       ) : error ? (
-        <div className="error-message">{error}</div>
+        <div className='error-message'>{error}</div>
       ) : recipes.length === 0 ? (
-        <div className="no-recipes-message">
+        <div className='no-recipes-message'>
           No recipes found. Try a different search term.
         </div>
       ) : (
         <>
-          <div className="recipe-grid">
-            {recipes.map((recipe) => (
+          <div className='recipe-grid'>
+            {recipes.map(recipe => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-          
+
           {totalPages > 1 && (
-            <div className="pagination">
+            <div className='pagination'>
               <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                onClick={() => setPage(prev => Math.max(prev - 1, 1))}
                 disabled={page === 1}
-                className="pagination-button"
+                className='pagination-button'
               >
                 Previous
               </button>
-              <span className="pagination-info">
+              <span className='pagination-info'>
                 Page {page} of {totalPages}
               </span>
               <button
-                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={page === totalPages}
-                className="pagination-button"
+                className='pagination-button'
               >
                 Next
               </button>
