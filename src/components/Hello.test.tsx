@@ -59,6 +59,14 @@ describe('Hello Component', () => {
     expect(recipeLink.closest('a')).toHaveAttribute('aria-label', 'Joseph\'s recipe website');
   });
 
+  test('renders fizzbuzz link', () => {
+    render(<Hello />);
+    const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron');
+    expect(fizzbuzzLink).toBeInTheDocument();
+    expect(fizzbuzzLink.closest('a')).toHaveAttribute('href', '/trontronbuzztron');
+    expect(fizzbuzzLink.closest('a')).toHaveAttribute('aria-label', 'TronTronBuzzTron FizzBuzz generator');
+  });
+
   test('renders about this site section', () => {
     render(<Hello />);
     expect(screen.getByText('About This Site')).toBeInTheDocument();
@@ -75,13 +83,19 @@ describe('Hello Component', () => {
     render(<Hello />);
     
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(3);
+    expect(allLinks).toHaveLength(4);
     
-    allLinks.forEach(link => {
+    // Check external links have proper attributes
+    const externalLinks = allLinks.filter(link => link.getAttribute('target') === '_blank');
+    externalLinks.forEach(link => {
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       expect(link).toHaveAttribute('aria-label');
     });
+    
+    // Check internal link has aria-label
+    const internalLink = allLinks.find(link => link.getAttribute('href') === '/trontronbuzztron');
+    expect(internalLink).toHaveAttribute('aria-label');
   });
 
   test('links have correct CSS classes', () => {
@@ -90,10 +104,12 @@ describe('Hello Component', () => {
     const linkedinLink = screen.getByText('💼 LinkedIn Profile').closest('a');
     const personalLink = screen.getByText('🦢 swan tron dot com').closest('a');
     const recipeLink = screen.getByText('🍳 chomp tron dot com').closest('a');
+    const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron').closest('a');
     
     expect(linkedinLink).toHaveClass('hello-link', 'linkedin');
     expect(personalLink).toHaveClass('hello-link', 'personal');
     expect(recipeLink).toHaveClass('hello-link', 'recipes');
+    expect(fizzbuzzLink).toHaveClass('hello-link', 'fizzbuzz');
   });
 
   test('component structure is correct', () => {

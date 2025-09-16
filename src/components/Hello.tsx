@@ -51,6 +51,14 @@ function Hello() {
           >
             🍳 chomp tron dot com
           </a>
+
+          <a
+            className="hello-link fizzbuzz"
+            href="/trontronbuzztron"
+            aria-label="TronTronBuzzTron FizzBuzz generator"
+          >
+            🤖 trontronbuzztron
+          </a>
         </div>
 
         <div className="hello-info">

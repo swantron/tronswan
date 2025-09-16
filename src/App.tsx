@@ -67,7 +67,6 @@ function App() {
               <Link to="/swantron" className="nav-link">swantron</Link>
               <Link to="/weather" className="nav-link">weathertron</Link>
               <Link to="/hacking" className="nav-link">hacking</Link>
-              <Link to="/trontronbuzztron" className="nav-link">trontronbuzztron</Link>
               <Link to="/hello" className="nav-link">hello</Link>
               <Link to="/health" className="nav-link">health</Link>
             </nav>
