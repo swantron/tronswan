@@ -97,3 +97,6 @@ Thumbs.db
 #  Tokens
 github_token
 digitalocean_token
+
+# Playwright test results
+test-results/

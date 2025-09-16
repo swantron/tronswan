@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('TronSwan Website Tests', () => {
   test('Homepage should load and contain the swantron.com link', async ({ page }) => {
