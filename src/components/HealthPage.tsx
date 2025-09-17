@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import digitalOceanService from '../services/digitalOceanService';
 import { runtimeConfig } from '../utils/runtimeConfig';
@@ -6,7 +6,7 @@ import { runtimeConfig } from '../utils/runtimeConfig';
 import DigitalOceanStatus from './DigitalOceanStatus';
 import GitHubStatus from './GitHubStatus';
 import SEO from './SEO';
-import ServiceHealth from './ServiceHealth';
+import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
 
 import '../styles/HealthPage.css';
 
@@ -59,10 +59,17 @@ function HealthPage() {
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const serviceHealthRef = useRef<ServiceHealthRef>(null);
 
   const refreshData = async () => {
     setIsRefreshing(true);
     setLastUpdated(new Date());
+    
+    // Trigger service health checks
+    if (serviceHealthRef.current) {
+      await serviceHealthRef.current.checkAllServices();
+    }
+    
     setIsRefreshing(false);
   };
 
@@ -177,7 +184,10 @@ function HealthPage() {
 
         <div className='health-section'>
           <h2 className='section-title'>🌐 Service Health</h2>
-          <ServiceHealth services={healthData.services} />
+          <ServiceHealth 
+            ref={serviceHealthRef}
+            services={healthData.services} 
+          />
         </div>
       </div>
 

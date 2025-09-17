@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import '../styles/ServiceHealth.css';
 
 interface ServiceHealthProps {
@@ -7,6 +7,10 @@ interface ServiceHealthProps {
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
   };
+}
+
+export interface ServiceHealthRef {
+  checkAllServices: () => Promise<void>;
 }
 
 interface ServiceInfo {
@@ -19,7 +23,7 @@ interface ServiceInfo {
   uptime?: number;
 }
 
-function ServiceHealth({ services }: ServiceHealthProps) {
+const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(({ services }, ref) => {
   const [serviceData, setServiceData] = useState<ServiceInfo[]>([
     {
       name: 'Tron Swan',
@@ -82,6 +86,11 @@ function ServiceHealth({ services }: ServiceHealthProps) {
     setIsChecking(false);
   };
 
+  // Expose checkAllServices to parent component
+  useImperativeHandle(ref, () => ({
+    checkAllServices,
+  }));
+
   useEffect(() => {
     checkAllServices();
     const interval = setInterval(checkAllServices, 60000); // Check every minute
@@ -129,101 +138,95 @@ function ServiceHealth({ services }: ServiceHealthProps) {
 
   return (
     <div className='service-health'>
-      <div className='service-controls'>
-        <button
-          className={`check-button ${isChecking ? 'checking' : ''}`}
-          onClick={checkAllServices}
-          disabled={isChecking}
-        >
-          {isChecking ? '🔄 Checking...' : '🔍 Check All Services'}
-        </button>
-      </div>
-
-      <div className='services-list'>
-        {serviceData.map((service, index) => (
-          <div
-            key={index}
-            className={`service-item ${getStatusClass(service.status)}`}
-          >
-            <div className='service-header'>
-              <h4 className='service-name'>{service.name}</h4>
-              <div className='service-status'>
-                <span
-                  className={`status-indicator ${getStatusClass(service.status)}`}
-                >
-                  {getStatusIcon(service.status)}{' '}
-                  {getStatusText(service.status)}
-                </span>
-              </div>
+      <div className='service-layout'>
+        <div className='service-summary'>
+          <h3>Service Summary</h3>
+          <div className='summary-stats'>
+            <div className='stat'>
+              <span className='stat-number'>
+                {serviceData.filter(s => s.status === 'healthy').length}
+              </span>
+              <span className='stat-label'>Healthy</span>
             </div>
+            <div className='stat'>
+              <span className='stat-number'>
+                {serviceData.filter(s => s.status === 'degraded').length}
+              </span>
+              <span className='stat-label'>Degraded</span>
+            </div>
+            <div className='stat'>
+              <span className='stat-number'>
+                {serviceData.filter(s => s.status === 'down').length}
+              </span>
+              <span className='stat-label'>Down</span>
+            </div>
+          </div>
+        </div>
 
-            <div className='service-info'>
-              <p className='service-description'>{service.description}</p>
-              <div className='service-url'>
-                <a
-                  href={service.url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='service-link'
-                >
-                  {service.url}
-                </a>
-              </div>
-
-              <div className='service-metrics'>
-                <div className='metric'>
-                  <span className='metric-label'>Last Checked:</span>
-                  <span className='metric-value'>
-                    {service.lastChecked.toLocaleTimeString()}
+        <div className='services-list'>
+          {serviceData.map((service, index) => (
+            <div
+              key={index}
+              className={`service-item ${getStatusClass(service.status)}`}
+            >
+              <div className='service-header'>
+                <h4 className='service-name'>{service.name}</h4>
+                <div className='service-status'>
+                  <span
+                    className={`status-indicator ${getStatusClass(service.status)}`}
+                  >
+                    {getStatusIcon(service.status)}{' '}
+                    {getStatusText(service.status)}
                   </span>
                 </div>
+              </div>
 
-                {service.responseTime && (
+              <div className='service-info'>
+                <p className='service-description'>{service.description}</p>
+                <div className='service-url'>
+                  <a
+                    href={service.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='service-link'
+                  >
+                    {service.url}
+                  </a>
+                </div>
+
+                <div className='service-metrics'>
                   <div className='metric'>
-                    <span className='metric-label'>Response Time:</span>
+                    <span className='metric-label'>Last Checked:</span>
                     <span className='metric-value'>
-                      {service.responseTime}ms
+                      {service.lastChecked.toLocaleTimeString()}
                     </span>
                   </div>
-                )}
 
-                {service.uptime && (
-                  <div className='metric'>
-                    <span className='metric-label'>Uptime:</span>
-                    <span className='metric-value'>{service.uptime}%</span>
-                  </div>
-                )}
+                  {service.responseTime && (
+                    <div className='metric'>
+                      <span className='metric-label'>Response Time:</span>
+                      <span className='metric-value'>
+                        {service.responseTime}ms
+                      </span>
+                    </div>
+                  )}
+
+                  {service.uptime && (
+                    <div className='metric'>
+                      <span className='metric-label'>Uptime:</span>
+                      <span className='metric-value'>{service.uptime}%</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className='service-summary'>
-        <h3>Service Summary</h3>
-        <div className='summary-stats'>
-          <div className='stat'>
-            <span className='stat-number'>
-              {serviceData.filter(s => s.status === 'healthy').length}
-            </span>
-            <span className='stat-label'>Healthy</span>
-          </div>
-          <div className='stat'>
-            <span className='stat-number'>
-              {serviceData.filter(s => s.status === 'degraded').length}
-            </span>
-            <span className='stat-label'>Degraded</span>
-          </div>
-          <div className='stat'>
-            <span className='stat-number'>
-              {serviceData.filter(s => s.status === 'down').length}
-            </span>
-            <span className='stat-label'>Down</span>
-          </div>
+          ))}
         </div>
       </div>
     </div>
   );
-}
+});
+
+ServiceHealth.displayName = 'ServiceHealth';
 
 export default ServiceHealth;
