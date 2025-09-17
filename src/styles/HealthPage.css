@@ -92,10 +92,21 @@
 
 .health-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.health-section:nth-child(1),
+.health-section:nth-child(2) {
+  grid-row: 1;
+}
+
+.health-section:nth-child(3) {
+  grid-row: 2;
+  grid-column: 1 / -1;
 }
 
 .health-section {
@@ -152,7 +163,15 @@
 
   .health-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
     gap: 1.5rem;
+  }
+
+  .health-section:nth-child(1),
+  .health-section:nth-child(2),
+  .health-section:nth-child(3) {
+    grid-row: auto;
+    grid-column: 1;
   }
 
   .health-section {

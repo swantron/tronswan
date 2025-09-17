@@ -4,7 +4,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   min-height: 400px;
+  max-height: 500px;
   border: 1px solid rgba(248, 152, 89, 0.3);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Typography Scale - Inherit from health page */
@@ -69,6 +72,9 @@
 
 .do-content {
   min-height: 300px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
 }
 
 .no-data {
