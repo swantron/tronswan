@@ -64,12 +64,12 @@ function HealthPage() {
   const refreshData = async () => {
     setIsRefreshing(true);
     setLastUpdated(new Date());
-    
+
     // Trigger service health checks
     if (serviceHealthRef.current) {
       await serviceHealthRef.current.checkAllServices();
     }
-    
+
     setIsRefreshing(false);
   };
 
@@ -184,9 +184,9 @@ function HealthPage() {
 
         <div className='health-section'>
           <h2 className='section-title'>🌐 Service Health</h2>
-          <ServiceHealth 
+          <ServiceHealth
             ref={serviceHealthRef}
-            services={healthData.services} 
+            services={healthData.services}
           />
         </div>
       </div>

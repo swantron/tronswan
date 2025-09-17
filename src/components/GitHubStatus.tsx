@@ -18,7 +18,6 @@ interface GitHubStatusProps {
 
 const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   const [activeTab, setActiveTab] = useState<'actions' | 'repos'>('actions');
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     loadGitHubData();
@@ -50,12 +49,6 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
           error instanceof Error ? error.message : 'Failed to load GitHub data',
       });
     }
-  };
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await loadGitHubData();
-    setIsRefreshing(false);
   };
 
   const getStatusIcon = (status: string, conclusion?: string | null) => {
@@ -132,9 +125,6 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         <div className='error-icon'>⚠️</div>
         <p>Error: {data.error}</p>
         <small>Check your GitHub API token configuration</small>
-        <button onClick={handleRefresh} className='retry-button'>
-          🔄 Retry
-        </button>
       </div>
     );
   }
@@ -162,13 +152,6 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
             <h3>GitHub Actions</h3>
             <div className='actions-header'>
               <p>Recent workflow runs for tronswan repository</p>
-              <button
-                onClick={handleRefresh}
-                className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
-                disabled={isRefreshing}
-              >
-                {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
-              </button>
             </div>
             {(data.actions?.length || 0) === 0 ? (
               <p className='no-data'>No workflow runs found</p>
@@ -238,13 +221,6 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
             <h3>Repositories</h3>
             <div className='repos-header'>
               <p>Recent repositories in swantron organization</p>
-              <button
-                onClick={handleRefresh}
-                className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
-                disabled={isRefreshing}
-              >
-                {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
-              </button>
             </div>
             {(data.repositories?.length || 0) === 0 ? (
               <p className='no-data'>No repositories found</p>
