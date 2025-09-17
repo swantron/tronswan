@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
   useCallback,
+  useRef,
 } from 'react';
 import '../styles/ServiceHealth.css';
 
@@ -55,6 +56,9 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
     ]);
 
+    const serviceDataRef = useRef(serviceData);
+    serviceDataRef.current = serviceData;
+
     const checkServiceHealth = async (service: ServiceInfo) => {
       try {
         const startTime = Date.now();
@@ -82,11 +86,11 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
 
     const checkAllServices = useCallback(async () => {
       const updatedServices = await Promise.all(
-        serviceData.map(service => checkServiceHealth(service))
+        serviceDataRef.current.map(service => checkServiceHealth(service))
       );
 
       setServiceData(updatedServices);
-    }, [serviceData]);
+    }, []);
 
     // Expose checkAllServices to parent component
     useImperativeHandle(ref, () => ({
