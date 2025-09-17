@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useCallback,
 } from 'react';
 import '../styles/ServiceHealth.css';
 
@@ -32,29 +33,27 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
   ({ services }, ref) => {
     const [serviceData, setServiceData] = useState<ServiceInfo[]>([
       {
-        name: 'Tron Swan',
+        name: 'React portfolio site',
         url: 'https://tronswan.com',
-        description: 'Main application - React portfolio site',
+        description: '',
         status: services.tronswan,
         lastChecked: new Date(),
       },
       {
-        name: 'Chomp Tron',
+        name: 'Recipe sharing platform',
         url: 'https://chomptron.com',
-        description: 'Recipe sharing platform',
+        description: '',
         status: services.chomptron,
         lastChecked: new Date(),
       },
       {
-        name: 'Swan Tron',
+        name: 'The OG blog',
         url: 'https://swantron.com',
-        description: 'Personal blog and portfolio',
+        description: '',
         status: services.swantron,
         lastChecked: new Date(),
       },
     ]);
-
-    const [isChecking, setIsChecking] = useState(false);
 
     const checkServiceHealth = async (service: ServiceInfo) => {
       try {
@@ -81,16 +80,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       }
     };
 
-    const checkAllServices = async () => {
-      setIsChecking(true);
-
+    const checkAllServices = useCallback(async () => {
       const updatedServices = await Promise.all(
         serviceData.map(service => checkServiceHealth(service))
       );
 
       setServiceData(updatedServices);
-      setIsChecking(false);
-    };
+    }, [serviceData]);
 
     // Expose checkAllServices to parent component
     useImperativeHandle(ref, () => ({
@@ -101,7 +97,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       checkAllServices();
       const interval = setInterval(checkAllServices, 60000); // Check every minute
       return () => clearInterval(interval);
-    }, []);
+    }, [checkAllServices]);
 
     const getStatusIcon = (status: 'healthy' | 'degraded' | 'down') => {
       switch (status) {
@@ -188,7 +184,9 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
                 </div>
 
                 <div className='service-info'>
-                  <p className='service-description'>{service.description}</p>
+                  {service.description && (
+                    <p className='service-description'>{service.description}</p>
+                  )}
                   <div className='service-url'>
                     <a
                       href={service.url}

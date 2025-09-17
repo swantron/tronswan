@@ -136,7 +136,6 @@ function DigitalOceanStatus({
       <div className='do-content'>
         {activeTab === 'app' && (
           <div className='app-tab'>
-            <h3>App Platform</h3>
             {data.app ? (
               <div className='app-info'>
                 <div className='app-header'>
