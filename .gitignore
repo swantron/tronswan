@@ -100,3 +100,4 @@ digitalocean_token
 
 # Playwright test results
 test-results/
+playwright-report/
