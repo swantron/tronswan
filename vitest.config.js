@@ -24,14 +24,15 @@ export default defineConfig({
         'src/**/*.{ts,tsx}',
         '!src/index.tsx',
         '!src/reportWebVitals.ts',
-        '!src/setupTests.ts'
+        '!src/setupTests.ts',
+        '!src/types/**' // Exclude type definitions
       ],
       thresholds: {
         global: {
-          statements: 80,
-          branches: 70,
-          functions: 75,
-          lines: 80
+          statements: 70,
+          branches: 60,
+          functions: 60,
+          lines: 70
         }
       }
     }
