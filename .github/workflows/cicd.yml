@@ -125,5 +125,5 @@ jobs:
         
       - name: Run Playwright Tests
         run: |
-          echo 'Running Playwright tests...'
-          yarn playwright test tronswan.test.js
+          echo 'Running full Playwright test suite against deployed site...'
+          yarn test:e2e
