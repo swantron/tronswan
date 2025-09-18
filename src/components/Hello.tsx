@@ -65,6 +65,16 @@ function Hello() {
           >
             🤖 trontronbuzztron
           </a>
+
+          <a
+            className='hello-link resume'
+            href='https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label="Joseph Swanson's Resume"
+          >
+            📄 Resume
+          </a>
         </div>
 
         <div className='hello-info'>

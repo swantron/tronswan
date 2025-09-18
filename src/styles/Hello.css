@@ -114,6 +114,18 @@
   box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
+.hello-link.resume {
+  background-color: #ff5722;
+  color: white;
+  border-color: #ff5722;
+}
+
+.hello-link.resume:hover {
+  background-color: #e64a19;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+}
+
 .hello-info {
   margin: 4rem auto 2rem;
   max-width: 700px;
