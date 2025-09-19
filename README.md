@@ -1,6 +1,6 @@
 # tron swan dot com
 
-[![Test Coverage](https://img.shields.io/badge/coverage-93.35%25-brightgreen)](https://github.com/swantron/tronswan/actions)
+[![Test Coverage](https://img.shields.io/badge/coverage-93.98%25-brightgreen?logo=vitest&logoColor=white)](https://github.com/swantron/tronswan/actions)
 [![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -8,15 +8,23 @@ building / deploying / learning
 
 **Live Demo**: [tronswan.com](https://tronswan.com)
 
+## 📚 Documentation
+
+- **[Environment Configuration](ENVIRONMENT_CONFIG.md)** - Complete guide for setting up environment variables and API tokens
+- **[CI/CD Setup](CI_SETUP.md)** - Automated testing and deployment verification setup
+- **[Health Page Guide](HEALTH_PAGE_README.md)** - Service health monitoring and deployment status features
+
 ## Features
 
 - 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
 - 🍳 **Recipe Collection** - Displays recipes from chomptron.com  
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
+- 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](HEALTH_PAGE_README.md))
 - 📱 **Responsive Design** - Works on all devices
 - ⚡ **Fast Performance** - Optimized with modern React patterns
-- 🧪 **High Test Coverage** - 93%+ test coverage with Vitest
+- 🧪 **High Test Coverage** - 93.98% test coverage with Vitest
+- 🚀 **Automated Deployment** - CI/CD pipeline with post-deployment verification ([see CI/CD Setup](CI_SETUP.md))
 
 ## Tech Stack
 
@@ -25,8 +33,9 @@ building / deploying / learning
 - **Testing**: Vitest, React Testing Library, Playwright
 - **Build Tools**: Vite, TypeScript
 - **Deployment**: DigitalOcean App Platform
-- **APIs**: WordPress REST API, OpenWeatherMap API
+- **APIs**: WordPress REST API, OpenWeatherMap API, GitHub API, DigitalOcean API
 - **Package Manager**: Yarn
+- **CI/CD**: GitHub Actions with Playwright testing
 
 ## Getting Started
 
@@ -49,11 +58,16 @@ building / deploying / learning
    yarn install
    ```
 
-3. Create a `.env` file in the root directory with the following variables:
-   ```
-   VITE_API_KEY=your_openweathermap_api_key
-   VITE_CITY=Bozeman
-   VITE_UNITS=imperial
+3. Create a `.env` file in the root directory. See [Environment Configuration](ENVIRONMENT_CONFIG.md) for detailed setup:
+   ```bash
+   # Basic weather configuration
+   VITE_WEATHER_API_KEY=your_openweathermap_api_key
+   VITE_WEATHER_CITY=Bozeman
+   VITE_WEATHER_UNITS=imperial
+   
+   # Optional: Health monitoring features
+   VITE_GITHUB_TOKEN=your_github_token
+   VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token
    ```
 
 ### Available Scripts
@@ -64,9 +78,33 @@ building / deploying / learning
 - `yarn test:run`: Runs tests once and exits
 - `yarn test:coverage`: Runs tests with coverage reporting
 - `yarn test:ui`: Launches the Vitest UI for interactive testing
+- `yarn test:e2e`: Runs Playwright end-to-end tests
+- `yarn test:all`: Runs both unit and e2e tests
 - `yarn type-check`: Runs TypeScript type checking without emitting files
 - `yarn build`: Builds the app for production with Vite
 - `yarn preview`: Preview the production build locally
+
+### Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── DigitalOceanStatus.tsx  # Infrastructure monitoring
+│   ├── GitHubStatus.tsx        # GitHub Actions monitoring
+│   ├── HealthPage.tsx          # Main health dashboard
+│   └── ...                     # Other components
+├── services/            # API service modules
+│   ├── digitalOceanService.ts  # DigitalOcean API integration
+│   ├── githubService.ts        # GitHub API integration
+│   └── ...                     # Other services
+├── hooks/               # Custom React hooks
+├── utils/               # Utility functions and configuration
+└── styles/              # CSS stylesheets
+
+tests/                   # Playwright end-to-end tests
+scripts/                 # Utility scripts
+.github/workflows/       # GitHub Actions CI/CD
+```
 
 ### TypeScript
 
@@ -79,11 +117,22 @@ This project is fully migrated to TypeScript for enhanced type safety and develo
 - **Test Files**: All test files use `.test.tsx` extension with full TypeScript support
 - **Migration Complete**: Successfully migrated from Jest to Vitest with full TypeScript support
 
+### Health Monitoring
+
+The application includes a comprehensive health monitoring system accessible at `/health`:
+
+- **GitHub Actions Integration**: View recent workflow runs and deployment status
+- **DigitalOcean Infrastructure**: Monitor droplets, load balancers, and databases
+- **Service Health Checks**: Real-time monitoring of external services
+- **Deployment Status**: Track application deployment and health metrics
+
+See [Health Page Guide](HEALTH_PAGE_README.md) for detailed information about the health monitoring features.
+
 ### Testing
 
 This project maintains high test coverage with comprehensive unit tests for all components, hooks, and services.
 
-- **Current Coverage**: 93.35%
+- **Current Coverage**: 93.98%
 - **Test Framework**: Vitest + React Testing Library
 - **TypeScript Support**: All tests written in TypeScript with full type safety
 - **Fast Execution**: Vitest provides faster test execution compared to Jest
@@ -106,47 +155,38 @@ yarn test:coverage
 yarn test:ui
 ```
 
-### Coverage Badge Management
-
-The project automatically maintains an up-to-date test coverage badge in the README. The badge shows the current test coverage percentage and links to the GitHub Actions workflow.
-
-**To update the coverage badge:**
-
-1. Run tests with coverage:
-   ```bash
-   yarn test:coverage
-   ```
-
-2. Update the badge in README:
-   ```bash
-   yarn update-badge
-   ```
-
-This will:
-- Read the coverage data from `coverage/coverage-summary.json`
-- Update the coverage badge at the top of the README
-- Update the coverage percentage in the Testing section
-- Provide console output showing what was updated
-
-**Note:** The coverage badge is automatically updated as part of the CI/CD pipeline, but you can manually update it locally using the above commands.
-
-
 
 ## Deployment
 
-The application is deployed to DigitalOcean using their App Platform. The deployment is automated through GitHub Actions.
+The application is deployed to DigitalOcean using their App Platform. The deployment is automated through GitHub Actions with comprehensive testing and verification.
+
+### Automated CI/CD Pipeline
+
+The project includes a complete CI/CD pipeline that:
+- Runs unit tests with coverage reporting
+- Builds and verifies the application
+- Deploys to DigitalOcean App Platform
+- Runs Playwright tests against the deployed site
+- Provides detailed test reports and artifacts
+
+See [CI/CD Setup](CI_SETUP.md) for detailed information about the automated testing and deployment process.
 
 ### Environment Variables
 
-- `VITE_API_KEY`: OpenWeatherMap API key
-- `VITE_CITY`: Default city for weather data
-- `VITE_UNITS`: Units for weather data (imperial/metric)
+For detailed environment variable setup, see [Environment Configuration](ENVIRONMENT_CONFIG.md).
+
+**Required for basic functionality:**
+- `VITE_WEATHER_API_KEY`: OpenWeatherMap API key
+- `VITE_WEATHER_CITY`: Default city for weather data
+- `VITE_WEATHER_UNITS`: Units for weather data (imperial/metric)
+
+**Optional for health monitoring:**
+- `VITE_GITHUB_TOKEN`: GitHub API token for health page
+- `VITE_DIGITALOCEAN_TOKEN`: DigitalOcean API token for infrastructure monitoring
 
 ## Scripts
 
-The project includes several utility scripts in the `scripts/` directory:
-
-- **`update-coverage-badge.js`**: Automatically updates the test coverage badge in the README based on Vitest coverage reports.
+The project includes utility scripts for development and testing. All scripts are defined in `package.json` and can be run with `yarn <script-name>`.
 
 ## Contributing
 
@@ -166,15 +206,27 @@ The project includes several utility scripts in the `scripts/` directory:
 
 **Weather data not loading**
 - Verify your OpenWeatherMap API key is set in `.env`
-- Check that `VITE_API_KEY` is correctly configured
+- Check that `VITE_WEATHER_API_KEY` is correctly configured
+- See [Environment Configuration](ENVIRONMENT_CONFIG.md) for detailed setup
 
 **Blog posts not loading**
 - Check network connectivity to swantron.com and chomptron.com
 - Verify the WordPress APIs are accessible
 
+**Health page not loading**
+- Ensure GitHub and DigitalOcean tokens are configured
+- Check that API tokens have the correct permissions
+- See [Health Page Guide](HEALTH_PAGE_README.md) for troubleshooting
+
 **Tests failing**
 - Run `yarn install` to ensure all dependencies are installed
 - Check that all environment variables are set
+- Run `yarn test:coverage` to see detailed test results
+
+**Deployment issues**
+- Check GitHub Actions logs for detailed error information
+- Verify DigitalOcean App Platform configuration
+- See [CI/CD Setup](CI_SETUP.md) for deployment troubleshooting
 
 ## License
 

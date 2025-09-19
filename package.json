@@ -30,7 +30,6 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:ci": "playwright test --reporter=github",
     "test:all": "yarn test:run && yarn test:e2e",
-    "update-badge": "node scripts/update-coverage-badge.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
