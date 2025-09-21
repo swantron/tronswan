@@ -56,9 +56,6 @@ const SwantronList: React.FC = () => {
       <div className='swantron-list-container' data-testid='swantron-list'>
         <div className='swantron-list-header'>
           <h1>swantron posts</h1>
-          <p className='swantron-subtitle'>
-            🦢 personal blog posts from swantron.com
-          </p>
           <form onSubmit={handleSearch} className='swantron-search-form'>
             <input
               type='text'
