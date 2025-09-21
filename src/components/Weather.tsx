@@ -10,6 +10,8 @@ interface WeatherData {
   feelsLike: number | null;
   pressure: number | null;
   humidity: number | null;
+  city: string | null;
+  country: string | null;
 }
 
 interface WeatherDisplayProps {
@@ -45,6 +47,13 @@ function WeatherDisplay({ weather }: WeatherDisplayProps) {
           <p data-testid='humidity-display'>humidotron | {weather.humidity}%</p>
         </div>
       )}
+      {weather.city && (
+        <div className='weather-item weather-location'>
+          <p data-testid='location-display'>
+            📍 {weather.city}{weather.country ? `, ${weather.country}` : ''}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -55,52 +64,86 @@ function Weather() {
     feelsLike: null,
     pressure: null,
     humidity: null,
+    city: null,
+    country: null,
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [cityInput, setCityInput] = useState<string>('');
+  const [currentCity, setCurrentCity] = useState<string>('');
 
-  useEffect(() => {
-    async function fetchWeatherData() {
+  const fetchWeatherData = async (city: string) => {
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
       // Initialize runtime config if not already done
       await runtimeConfig.initialize();
 
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
-      const city = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
       const units = runtimeConfig.getWithDefault(
         'VITE_WEATHER_UNITS',
         'imperial'
       );
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${units}`;
 
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Weather data fetch failed');
-        const data = await response.json();
-        setWeather({
-          temperature: data.main.temp,
-          feelsLike: data.main.feels_like,
-          pressure: data.main.pressure,
-          humidity: data.main.humidity,
-        });
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        setErrorMessage(
-          'api call to openweathermap failed.. check the console'
-        );
-      } finally {
-        setLoading(false);
+      const response = await fetch(url);
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('City not found. Please check the spelling and try again.');
+        }
+        throw new Error('Weather data fetch failed');
       }
+      const data = await response.json();
+      setWeather({
+        temperature: data.main.temp,
+        feelsLike: data.main.feels_like,
+        pressure: data.main.pressure,
+        humidity: data.main.humidity,
+        city: data.name,
+        country: data.sys.country,
+      });
+      setCurrentCity(data.name);
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'api call to openweathermap failed.. check the console'
+      );
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchWeatherData();
+  useEffect(() => {
+    // Initialize runtime config and get default city
+    const initializeWeather = async () => {
+      await runtimeConfig.initialize();
+      const defaultCity = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
+      setCurrentCity(defaultCity);
+      await fetchWeatherData(defaultCity);
+    };
+
+    initializeWeather();
   }, []);
+
+  const handleCitySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (cityInput.trim()) {
+      await fetchWeatherData(cityInput.trim());
+      setCityInput('');
+    }
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCityInput(e.target.value);
+  };
 
   return (
     <div className='weather-page'>
       <SEO
         title='Weather Station - Tron Swan'
-        description='Check the current weather conditions in Bozeman with our robot weather station featuring thermomotron, feelometer, baromotron, and humidotron readings.'
-        keywords='weather, Bozeman, temperature, humidity, pressure, robot weather station'
+        description='Check the current weather conditions anywhere in the world with our robot weather station featuring thermomotron, feelometer, baromotron, and humidotron readings.'
+        keywords='weather, temperature, humidity, pressure, robot weather station, global weather'
         url='/weather'
       />
 
@@ -109,8 +152,38 @@ function Weather() {
           weathertron
         </h1>
         <p className='weather-subtitle'>
-          🌡️ robot weather station monitoring Bozeman conditions
+          🌡️ robot weather station monitoring global conditions
         </p>
+
+        <div className='weather-search'>
+          <form onSubmit={handleCitySubmit} className='city-search-form'>
+            <div className='search-input-group'>
+              <input
+                type='text'
+                value={cityInput}
+                onChange={handleCityChange}
+                placeholder='Enter city name (e.g., New York, London, Tokyo)'
+                className='city-input'
+                data-testid='city-input'
+                disabled={loading}
+              />
+              <button 
+                type='submit' 
+                className='search-button'
+                disabled={loading || !cityInput.trim()}
+                data-testid='search-button'
+              >
+                {loading ? '⏳' : '🔍'}
+              </button>
+            </div>
+          </form>
+          
+          {currentCity && (
+            <p className='current-location'>
+              Currently showing: <strong>{currentCity}</strong>
+            </p>
+          )}
+        </div>
 
         {loading ? (
           <div className='loading-spinner' aria-label='Loading weather data' />
@@ -122,11 +195,7 @@ function Weather() {
 
         <div className='weather-info'>
           <p>Real-time weather data from OpenWeatherMap API</p>
-          <p>
-            Location:{' '}
-            {runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman')},
-            Montana
-          </p>
+          <p>Search for any city worldwide to get current conditions</p>
         </div>
       </div>
     </div>
