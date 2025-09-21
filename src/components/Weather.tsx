@@ -14,13 +14,80 @@ interface WeatherData {
   country: string | null;
 }
 
+interface ForecastItem {
+  dt: number;
+  main: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+    pressure: number;
+  };
+  weather: Array<{
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  dt_txt: string;
+}
+
+interface DailyForecast {
+  date: string;
+  high: number;
+  low: number;
+  description: string;
+  icon: string;
+  humidity: number;
+}
+
 interface WeatherDisplayProps {
   weather: WeatherData;
 }
 
+interface ForecastDisplayProps {
+  forecast: DailyForecast[];
+}
+
+function ForecastDisplay({ forecast }: ForecastDisplayProps) {
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
+  return (
+    <div className='forecast-container'>
+      <h3 className='forecast-title'>5-Day Forecast</h3>
+      <div className='forecast-grid'>
+        {forecast.map((day, index) => (
+          <div key={index} className='forecast-day'>
+            <div className='forecast-date'>{formatDate(day.date)}</div>
+            <div className='forecast-icon'>
+              <img 
+                src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`} 
+                alt={day.description}
+                width="50"
+                height="50"
+              />
+            </div>
+            <div className='forecast-temps'>
+              <span className='forecast-high'>{Math.round(day.high)}°</span>
+              <span className='forecast-low'>{Math.round(day.low)}°</span>
+            </div>
+            <div className='forecast-description'>{day.description}</div>
+            <div className='forecast-humidity'>💧 {day.humidity}%</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function WeatherDisplay({ weather }: WeatherDisplayProps) {
   return (
-    <div className='weather-container'>
+    <div className='weather-container' data-testid='weather-display'>
       {weather.temperature && (
         <div className='weather-item'>
           <p data-testid='temperature-display'>
@@ -71,6 +138,26 @@ function Weather() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [cityInput, setCityInput] = useState<string>('');
   const [currentCity, setCurrentCity] = useState<string>('');
+  const [viewMode, setViewMode] = useState<'current' | 'forecast'>('current');
+  const [forecast, setForecast] = useState<DailyForecast[]>([]);
+
+  const groupForecastByDay = (forecastList: ForecastItem[]): DailyForecast[] => {
+    const grouped = forecastList.reduce((acc, item) => {
+      const date = new Date(item.dt * 1000).toDateString();
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(item);
+      return acc;
+    }, {} as Record<string, ForecastItem[]>);
+    
+    return Object.values(grouped).map(dayItems => ({
+      date: dayItems[0].dt_txt.split(' ')[0],
+      high: Math.max(...dayItems.map(item => item.main.temp)),
+      low: Math.min(...dayItems.map(item => item.main.temp)),
+      description: dayItems[0].weather[0].description,
+      icon: dayItems[0].weather[0].icon,
+      humidity: Math.round(dayItems.reduce((sum, item) => sum + item.main.humidity, 0) / dayItems.length)
+    }));
+  };
 
   const fetchWeatherData = async (city: string) => {
     setLoading(true);
@@ -114,6 +201,39 @@ function Weather() {
     }
   };
 
+  const fetchForecastData = async (city: string) => {
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      await runtimeConfig.initialize();
+      
+      const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+      const units = runtimeConfig.getWithDefault('VITE_WEATHER_UNITS', 'imperial');
+      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${units}`;
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('City not found. Please check the spelling and try again.');
+        }
+        throw new Error('Forecast data fetch failed');
+      }
+      
+      const data = await response.json();
+      const dailyForecast = groupForecastByDay(data.list);
+      setForecast(dailyForecast);
+      setCurrentCity(data.city.name);
+    } catch (error) {
+      console.error('Error fetching forecast data:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Forecast data fetch failed'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Initialize runtime config and get default city
     const initializeWeather = async () => {
@@ -121,6 +241,7 @@ function Weather() {
       const defaultCity = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
       setCurrentCity(defaultCity);
       await fetchWeatherData(defaultCity);
+      await fetchForecastData(defaultCity);
     };
 
     initializeWeather();
@@ -130,6 +251,7 @@ function Weather() {
     e.preventDefault();
     if (cityInput.trim()) {
       await fetchWeatherData(cityInput.trim());
+      await fetchForecastData(cityInput.trim());
       setCityInput('');
     }
   };
@@ -182,12 +304,31 @@ function Weather() {
           )}
         </div>
 
+        <div className='view-toggle'>
+          <button
+            className={`toggle-button ${viewMode === 'current' ? 'active' : ''}`}
+            onClick={() => setViewMode('current')}
+            disabled={loading}
+          >
+            Current
+          </button>
+          <button
+            className={`toggle-button ${viewMode === 'forecast' ? 'active' : ''}`}
+            onClick={() => setViewMode('forecast')}
+            disabled={loading}
+          >
+            Forecast
+          </button>
+        </div>
+
         {loading ? (
           <div className='loading-spinner' aria-label='Loading weather data' />
         ) : errorMessage ? (
           <div className='error-message'>{errorMessage}</div>
-        ) : (
+        ) : viewMode === 'current' ? (
           <WeatherDisplay weather={weather} />
+        ) : (
+          <ForecastDisplay forecast={forecast} />
         )}
 
         <div className='weather-info'>
