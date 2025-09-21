@@ -151,9 +151,6 @@ function Weather() {
         <h1 className='weather-title' data-testid='weather-title'>
           weathertron
         </h1>
-        <p className='weather-subtitle'>
-          🌡️ robot weather station monitoring global conditions
-        </p>
 
         <div className='weather-search'>
           <form onSubmit={handleCitySubmit} className='city-search-form'>
