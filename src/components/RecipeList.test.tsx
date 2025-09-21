@@ -57,7 +57,7 @@ describe('RecipeList Component', () => {
 
   test('renders recipe list header', () => {
     render(<RecipeList />);
-    expect(screen.getByText('Recipes')).toBeInTheDocument();
+    expect(screen.getByText('chomptron')).toBeInTheDocument();
   });
 
   test('renders search form', () => {

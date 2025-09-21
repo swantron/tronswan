@@ -44,7 +44,7 @@ const RecipeList: React.FC = () => {
   return (
     <div className='recipe-list-container' data-testid='recipe-list'>
       <div className='recipe-list-header'>
-        <h2>Recipes</h2>
+        <h1>chomptron</h1>
         <form onSubmit={handleSearch} className='recipe-search-form'>
           <input
             type='text'
