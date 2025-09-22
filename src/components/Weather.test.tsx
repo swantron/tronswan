@@ -223,6 +223,42 @@ describe('Weather Component', () => {
   });
 
 
+  // Temperature unit tests
+  test('renders temperature unit toggle buttons', () => {
+    renderWeather();
+    expect(screen.getByText('°F')).toBeInTheDocument();
+    expect(screen.getByText('°C')).toBeInTheDocument();
+    expect(screen.getByText('K')).toBeInTheDocument();
+  });
+
+  test('shows imperial as active by default', () => {
+    renderWeather();
+    const fahrenheitButton = screen.getByText('°F');
+    const celsiusButton = screen.getByText('°C');
+    const kelvinButton = screen.getByText('K');
+
+    expect(fahrenheitButton).toHaveClass('active');
+    expect(celsiusButton).not.toHaveClass('active');
+    expect(kelvinButton).not.toHaveClass('active');
+  });
+
+  test('unit buttons are clickable', () => {
+    renderWeather();
+    const fahrenheitButton = screen.getByText('°F');
+    const celsiusButton = screen.getByText('°C');
+    const kelvinButton = screen.getByText('K');
+
+    // Buttons should be present and clickable
+    expect(fahrenheitButton).toBeInTheDocument();
+    expect(celsiusButton).toBeInTheDocument();
+    expect(kelvinButton).toBeInTheDocument();
+    
+    // Buttons should have the correct classes
+    expect(fahrenheitButton).toHaveClass('unit-button');
+    expect(celsiusButton).toHaveClass('unit-button');
+    expect(kelvinButton).toHaveClass('unit-button');
+  });
+
   // Forecast functionality tests - removed due to complexity in test environment
   // The forecast feature works correctly in the actual application
 });

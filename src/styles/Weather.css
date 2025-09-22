@@ -145,6 +145,51 @@
   cursor: not-allowed;
 }
 
+/* Weather controls styles */
+.weather-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+/* Temperature unit toggle styles */
+.temperature-unit-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.unit-button {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--accent-color);
+  background-color: transparent;
+  color: var(--accent-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+  min-width: 50px;
+}
+
+.unit-button:hover:not(:disabled) {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+}
+
+.unit-button.active {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+}
+
+.unit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Forecast styles */
 .forecast-container {
   max-width: 1000px;

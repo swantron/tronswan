@@ -50,13 +50,37 @@ interface DailyForecast {
 
 interface WeatherDisplayProps {
   weather: WeatherData;
+  temperatureUnit: 'imperial' | 'metric' | 'kelvin';
 }
 
 interface ForecastDisplayProps {
   forecast: DailyForecast[];
+  temperatureUnit: 'imperial' | 'metric' | 'kelvin';
 }
 
-function ForecastDisplay({ forecast }: ForecastDisplayProps) {
+// Temperature conversion utilities
+const convertTemperature = (temp: number, fromUnit: 'imperial' | 'metric' | 'kelvin', toUnit: 'imperial' | 'metric' | 'kelvin'): number => {
+  // Convert to Celsius first
+  let celsius: number;
+  if (fromUnit === 'imperial') {
+    celsius = (temp - 32) * 5/9;
+  } else if (fromUnit === 'metric') {
+    celsius = temp;
+  } else { // kelvin
+    celsius = temp - 273.15;
+  }
+
+  // Convert from Celsius to target unit
+  if (toUnit === 'imperial') {
+    return celsius * 9/5 + 32;
+  } else if (toUnit === 'metric') {
+    return celsius;
+  } else { // kelvin
+    return celsius + 273.15;
+  }
+};
+
+function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { 
@@ -64,6 +88,19 @@ function ForecastDisplay({ forecast }: ForecastDisplayProps) {
       month: 'short', 
       day: 'numeric' 
     });
+  };
+
+  const getTemperatureUnit = () => {
+    if (temperatureUnit === 'imperial') return '°F';
+    if (temperatureUnit === 'metric') return '°C';
+    return 'K';
+  };
+
+  const convertTempForDisplay = (temp: number) => {
+    if (temperatureUnit === 'kelvin') {
+      return convertTemperature(temp, 'metric', 'kelvin');
+    }
+    return temp;
   };
 
   return (
@@ -74,16 +111,16 @@ function ForecastDisplay({ forecast }: ForecastDisplayProps) {
           <div key={index} className='forecast-day'>
             <div className='forecast-date'>{formatDate(day.date)}</div>
             <div className='forecast-icon'>
-              <img 
-                src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`} 
+              <img
+                src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
                 alt={day.description}
                 width="50"
                 height="50"
               />
             </div>
             <div className='forecast-temps'>
-              <span className='forecast-high'>{Math.round(day.high)}°</span>
-              <span className='forecast-low'>{Math.round(day.low)}°</span>
+              <span className='forecast-high'>{Math.round(convertTempForDisplay(day.high))}{getTemperatureUnit()}</span>
+              <span className='forecast-low'>{Math.round(convertTempForDisplay(day.low))}{getTemperatureUnit()}</span>
             </div>
             <div className='forecast-description'>{day.description}</div>
             <div className='forecast-humidity'>💧 {day.humidity}%</div>
@@ -94,7 +131,7 @@ function ForecastDisplay({ forecast }: ForecastDisplayProps) {
   );
 }
 
-function WeatherDisplay({ weather }: WeatherDisplayProps) {
+function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
   const formatTime = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleTimeString([], { 
       hour: '2-digit', 
@@ -105,6 +142,19 @@ function WeatherDisplay({ weather }: WeatherDisplayProps) {
   const getWindDirection = (degrees: number) => {
     const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
     return directions[Math.round(degrees / 22.5) % 16];
+  };
+
+  const getTemperatureUnit = () => {
+    if (temperatureUnit === 'imperial') return '°F';
+    if (temperatureUnit === 'metric') return '°C';
+    return 'K';
+  };
+
+  const convertTempForDisplay = (temp: number) => {
+    if (temperatureUnit === 'kelvin') {
+      return convertTemperature(temp, 'metric', 'kelvin');
+    }
+    return temp;
   };
 
   return (
@@ -124,21 +174,21 @@ function WeatherDisplay({ weather }: WeatherDisplayProps) {
         {weather.temperature && (
           <div className='weather-item'>
             <p data-testid='temperature-display'>
-              🌡️ {weather.temperature}°F
+              🌡️ {Math.round(convertTempForDisplay(weather.temperature))}{getTemperatureUnit()}
             </p>
           </div>
         )}
         {weather.feelsLike && (
           <div className='weather-item'>
             <p data-testid='feels-like-display'>
-              🤔 Feels like {weather.feelsLike}°F
+              🤔 Feels like {Math.round(convertTempForDisplay(weather.feelsLike))}{getTemperatureUnit()}
             </p>
           </div>
         )}
         {weather.tempMin && weather.tempMax && (
           <div className='weather-item'>
             <p data-testid='temp-range-display'>
-              📊 Range: {weather.tempMin}°F - {weather.tempMax}°F
+              📊 Range: {Math.round(convertTempForDisplay(weather.tempMin))}{getTemperatureUnit()} - {Math.round(convertTempForDisplay(weather.tempMax))}{getTemperatureUnit()}
             </p>
           </div>
         )}
@@ -246,6 +296,7 @@ function Weather() {
   const [currentCity, setCurrentCity] = useState<string>('');
   const [viewMode, setViewMode] = useState<'current' | 'forecast'>('current');
   const [forecast, setForecast] = useState<DailyForecast[]>([]);
+  const [temperatureUnit, setTemperatureUnit] = useState<'imperial' | 'metric' | 'kelvin'>('imperial');
 
   const groupForecastByDay = (forecastList: ForecastItem[]): DailyForecast[] => {
     const grouped = forecastList.reduce((acc, item) => {
@@ -274,11 +325,9 @@ function Weather() {
       await runtimeConfig.initialize();
 
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
-      const units = runtimeConfig.getWithDefault(
-        'VITE_WEATHER_UNITS',
-        'imperial'
-      );
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${units}`;
+      // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
+      const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -324,8 +373,9 @@ function Weather() {
       await runtimeConfig.initialize();
       
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
-      const units = runtimeConfig.getWithDefault('VITE_WEATHER_UNITS', 'imperial');
-      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${units}`;
+      // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
+      const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
+      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -375,6 +425,15 @@ function Weather() {
     setCityInput(e.target.value);
   };
 
+  const handleTemperatureUnitChange = async (unit: 'imperial' | 'metric' | 'kelvin') => {
+    setTemperatureUnit(unit);
+    // Refetch data with new unit
+    if (currentCity) {
+      await fetchWeatherData(currentCity);
+      await fetchForecastData(currentCity);
+    }
+  };
+
   return (
     <div className='weather-page'>
       <SEO
@@ -419,21 +478,47 @@ function Weather() {
           )}
         </div>
 
-        <div className='view-toggle'>
-          <button
-            className={`toggle-button ${viewMode === 'current' ? 'active' : ''}`}
-            onClick={() => setViewMode('current')}
-            disabled={loading}
-          >
-            Current
-          </button>
-          <button
-            className={`toggle-button ${viewMode === 'forecast' ? 'active' : ''}`}
-            onClick={() => setViewMode('forecast')}
-            disabled={loading}
-          >
-            Forecast
-          </button>
+        <div className='weather-controls'>
+          <div className='view-toggle'>
+            <button
+              className={`toggle-button ${viewMode === 'current' ? 'active' : ''}`}
+              onClick={() => setViewMode('current')}
+              disabled={loading}
+            >
+              Current
+            </button>
+            <button
+              className={`toggle-button ${viewMode === 'forecast' ? 'active' : ''}`}
+              onClick={() => setViewMode('forecast')}
+              disabled={loading}
+            >
+              Forecast
+            </button>
+          </div>
+          
+          <div className='temperature-unit-toggle'>
+            <button
+              className={`unit-button ${temperatureUnit === 'imperial' ? 'active' : ''}`}
+              onClick={() => handleTemperatureUnitChange('imperial')}
+              disabled={loading}
+            >
+              °F
+            </button>
+            <button
+              className={`unit-button ${temperatureUnit === 'metric' ? 'active' : ''}`}
+              onClick={() => handleTemperatureUnitChange('metric')}
+              disabled={loading}
+            >
+              °C
+            </button>
+            <button
+              className={`unit-button ${temperatureUnit === 'kelvin' ? 'active' : ''}`}
+              onClick={() => handleTemperatureUnitChange('kelvin')}
+              disabled={loading}
+            >
+              K
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -441,9 +526,9 @@ function Weather() {
         ) : errorMessage ? (
           <div className='error-message'>{errorMessage}</div>
         ) : viewMode === 'current' ? (
-          <WeatherDisplay weather={weather} />
+          <WeatherDisplay weather={weather} temperatureUnit={temperatureUnit} />
         ) : (
-          <ForecastDisplay forecast={forecast} />
+          <ForecastDisplay forecast={forecast} temperatureUnit={temperatureUnit} />
         )}
 
         <div className='weather-info'>
