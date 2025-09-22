@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import Weather from './Weather';
 
@@ -77,25 +77,25 @@ describe('Weather Component', () => {
     });
   });
 
-  it('renders weather page title', () => {
+  test('renders weather page title', () => {
     renderWeather();
     expect(screen.getByTestId('weather-title')).toHaveTextContent('weathertron');
   });
 
-  it('renders view toggle buttons', () => {
+  test('renders view toggle buttons', () => {
     renderWeather();
     expect(screen.getByText('Current')).toBeInTheDocument();
     expect(screen.getByText('Forecast')).toBeInTheDocument();
   });
 
-  it('renders loading state initially', () => {
+  test('renders loading state initially', () => {
     renderWeather();
     expect(screen.getByLabelText('Loading weather data')).toBeInTheDocument();
   });
 
 
 
-  it('renders weather info section', () => {
+  test('renders weather info section', () => {
     renderWeather();
     expect(
       screen.getByText('Real-time weather data from OpenWeatherMap API')
@@ -103,13 +103,13 @@ describe('Weather Component', () => {
     expect(screen.getByText('Search for any city worldwide to get current conditions')).toBeInTheDocument();
   });
 
-  it('renders city search input and button', () => {
+  test('renders city search input and button', () => {
     renderWeather();
     expect(screen.getByTestId('city-input')).toBeInTheDocument();
     expect(screen.getByTestId('search-button')).toBeInTheDocument();
   });
 
-  it('handles missing weather data gracefully', async () => {
+  test('handles missing weather data gracefully', async () => {
     const mockWeatherData = {
       main: {
         temp: 72,
@@ -144,13 +144,13 @@ describe('Weather Component', () => {
   });
 
 
-  it('disables search button when input is empty', () => {
+  test('disables search button when input is empty', () => {
     renderWeather();
     const searchButton = screen.getByTestId('search-button');
     expect(searchButton).toBeDisabled();
   });
 
-  it('enables search button when input has text', async () => {
+  test('enables search button when input has text', async () => {
     renderWeather();
     const cityInput = screen.getByTestId('city-input');
     const searchButton = screen.getByTestId('search-button');
@@ -165,7 +165,7 @@ describe('Weather Component', () => {
   });
 
 
-  it('shows current location when weather data is loaded', async () => {
+  test('shows current location when weather data is loaded', async () => {
     renderWeather();
 
     await waitFor(() => {
@@ -175,7 +175,7 @@ describe('Weather Component', () => {
     });
   });
 
-  it('WeatherDisplay component renders correctly with props', () => {
+  test('WeatherDisplay component renders correctly with props', () => {
     const mockWeather = {
       temperature: 72,
       feelsLike: 70,
@@ -194,7 +194,7 @@ describe('Weather Component', () => {
   });
 
 
-  it('displays weather data correctly after loading', async () => {
+  test('displays weather data correctly after loading', async () => {
     renderWeather();
 
     await waitFor(() => {
@@ -206,7 +206,7 @@ describe('Weather Component', () => {
     });
   });
 
-  it('handles search with empty input gracefully', async () => {
+  test('handles search with empty input gracefully', async () => {
     renderWeather();
     const cityInput = screen.getByTestId('city-input');
     const searchButton = screen.getByTestId('search-button');

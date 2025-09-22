@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import DigitalOceanStatus from './DigitalOceanStatus';
 
@@ -63,7 +63,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Loading State', () => {
-    it('renders loading spinner when loading', () => {
+    test('renders loading spinner when loading', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -77,7 +77,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Error State', () => {
-    it('renders error message when error occurs', () => {
+    test('renders error message when error occurs', () => {
       const errorMessage = 'API Error';
       render(
         <DigitalOceanStatus
@@ -93,14 +93,14 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Tab Navigation', () => {
-    it('renders both tabs with correct labels', () => {
+    test('renders both tabs with correct labels', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
       expect(screen.getByText('App Platform')).toBeInTheDocument();
       expect(screen.getByText('Droplets (0)')).toBeInTheDocument();
     });
 
-    it('shows droplet count in tab', () => {
+    test('shows droplet count in tab', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -111,7 +111,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('Droplets (1)')).toBeInTheDocument();
     });
 
-    it('switches to droplets tab when clicked', () => {
+    test('switches to droplets tab when clicked', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
       const dropletsTab = screen.getByText('Droplets (0)');
@@ -121,7 +121,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('App Platform')).not.toHaveClass('active');
     });
 
-    it('switches to app tab when clicked', () => {
+    test('switches to app tab when clicked', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
       const appTab = screen.getByText('App Platform');
@@ -133,13 +133,13 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('App Platform Tab', () => {
-    it('renders no data message when app data is not available', () => {
+    test('renders no data message when app data is not available', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
       expect(screen.getByText('App information not available')).toBeInTheDocument();
     });
 
-    it('renders app information when data is available', () => {
+    test('renders app information when data is available', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -153,7 +153,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('Phase: ACTIVE')).toBeInTheDocument();
     });
 
-    it('renders app details correctly', () => {
+    test('renders app details correctly', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -169,7 +169,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('BASIC')).toBeInTheDocument();
     });
 
-    it('renders links correctly', () => {
+    test('renders links correctly', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -183,7 +183,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(liveUrlLinks[0]).toHaveAttribute('rel', 'noopener noreferrer');
     });
 
-    it('handles missing app data gracefully', () => {
+    test('handles missing app data gracefully', () => {
       const incompleteAppData = {
         id: 'test-app-id',
         // Missing most fields
@@ -201,7 +201,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Droplets Tab', () => {
-    it('renders no droplets message when no droplets', () => {
+    test('renders no droplets message when no droplets', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
       // Switch to droplets tab
@@ -210,7 +210,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('No droplets found')).toBeInTheDocument();
     });
 
-    it('renders droplets list when droplets are available', () => {
+    test('renders droplets list when droplets are available', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -231,7 +231,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText(/80 GB/)).toBeInTheDocument();
     });
 
-    it('renders droplet network information', () => {
+    test('renders droplet network information', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -247,7 +247,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('10.0.0.100 (private)')).toBeInTheDocument();
     });
 
-    it('renders droplet tags when available', () => {
+    test('renders droplet tags when available', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -265,7 +265,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Status Icons and Classes', () => {
-    it('renders correct status icon for active status', () => {
+    test('renders correct status icon for active status', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -276,7 +276,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText(/✅/)).toBeInTheDocument();
     });
 
-    it('renders correct status icon for inactive status', () => {
+    test('renders correct status icon for inactive status', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -289,7 +289,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Utility Functions', () => {
-    it('formats bytes correctly', () => {
+    test('formats bytes correctly', () => {
       // Test the formatBytes function indirectly through droplet rendering
       render(
         <DigitalOceanStatus
@@ -305,7 +305,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText(/80 GB/)).toBeInTheDocument();
     });
 
-    it('formats price correctly', () => {
+    test('formats price correctly', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -321,7 +321,7 @@ describe('DigitalOceanStatus Component', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles empty droplets array', () => {
+    test('handles empty droplets array', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -335,7 +335,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('No droplets found')).toBeInTheDocument();
     });
 
-    it('handles null droplets', () => {
+    test('handles null droplets', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
@@ -349,7 +349,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('No droplets found')).toBeInTheDocument();
     });
 
-    it('handles droplets without tags', () => {
+    test('handles droplets without tags', () => {
       const dropletWithoutTags = {
         ...mockDropletData[0],
         tags: []
