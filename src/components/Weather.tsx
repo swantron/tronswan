@@ -396,7 +396,7 @@ function Weather() {
                 type='text'
                 value={cityInput}
                 onChange={handleCityChange}
-                placeholder='Enter city name (e.g., New York, London, Tokyo)'
+                placeholder='Enter city name (e.g., Bozeman, London, Tokyo)'
                 className='city-input'
                 data-testid='city-input'
                 disabled={loading}
