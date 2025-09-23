@@ -86,7 +86,9 @@ test.describe('Accessibility Regression Tests', () => {
     const currentUrl = page.url();
     const isRandomPage = currentUrl.includes('/gangnam1') || 
                         currentUrl.includes('/gangnam2') || 
-                        currentUrl.includes('/hacking');
+                        currentUrl.includes('/hacking') ||
+                        currentUrl.includes('/dealwithit1') ||
+                        currentUrl.includes('/dealwithit2');
     expect(isRandomPage).toBe(true);
   });
 

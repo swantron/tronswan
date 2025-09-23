@@ -55,11 +55,11 @@ test.describe('Smoke Tests', () => {
     await expect(homePage.swantronLink).toHaveText(testData.expectedContent.home.swantronLinkText);
     await expect(homePage.swantronLink).toHaveAttribute('href', testData.expectedContent.home.swantronLinkHref);
     
-    // Test click functionality (should redirect to gangnam pages or hacking)
+    // Test click functionality (should redirect to gangnam pages, hacking, or dealwithit pages)
     await homePage.clickSwantronLink();
     
-    // Should redirect to either gangnam1, gangnam2, or hacking
+    // Should redirect to either gangnam1, gangnam2, hacking, dealwithit1, or dealwithit2
     const currentUrl = await homePage.getCurrentUrl();
-    expect(currentUrl).toMatch(/gangnam[12]|hacking/);
+    expect(currentUrl).toMatch(/gangnam[12]|hacking|dealwithit[12]/);
   });
 });
