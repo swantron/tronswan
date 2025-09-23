@@ -19,7 +19,7 @@ export const testData = {
       title: 'tronswan',
       swantronLinkText: 'tron swan dot com',
       swantronLinkHref: 'https://swantron.com',
-      getItButtonText: 'get it',
+      getItButtonText: 'rando',
     },
     
     weather: {
@@ -34,7 +34,6 @@ export const testData = {
         { text: 'chomptron', href: '/recipes' },
         { text: 'swantron', href: '/swantron' },
         { text: 'weathertron', href: '/weather' },
-        { text: 'hacking', href: '/hacking' },
         { text: 'hello', href: '/hello' },
         { text: 'health', href: '/health' },
       ],

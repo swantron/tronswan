@@ -18,10 +18,17 @@ import logo from './robotard-removebg-preview.png';
 import './App.css';
 
 function Home() {
-  const handleGetItClick = () => {
-    // Randomly choose between gangnam1 and gangnam2
+  const handleRandoClick = () => {
+    // Randomly choose between gangnam1, gangnam2, and hacking
     const random = Math.random();
-    const path = random < 0.5 ? '/gangnam1' : '/gangnam2';
+    let path;
+    if (random < 0.33) {
+      path = '/gangnam1';
+    } else if (random < 0.66) {
+      path = '/gangnam2';
+    } else {
+      path = '/hacking';
+    }
     window.location.href = path;
   };
 
@@ -45,11 +52,11 @@ function Home() {
         </h2>
         <div className='get-it-section'>
           <button
-            onClick={handleGetItClick}
+            onClick={handleRandoClick}
             className='get-it-button'
             data-testid='get-it-button'
           >
-            get it
+            rando
           </button>
         </div>
       </div>
@@ -75,9 +82,6 @@ function App() {
               </Link>
               <Link to='/weather' className='nav-link'>
                 weathertron
-              </Link>
-              <Link to='/hacking' className='nav-link'>
-                hacking
               </Link>
               <Link to='/hello' className='nav-link'>
                 hello

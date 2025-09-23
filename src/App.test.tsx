@@ -36,7 +36,7 @@ describe('App Component', () => {
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(7);
+    expect(navLinks).toHaveLength(6);
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
@@ -45,7 +45,6 @@ describe('App Component', () => {
     expect(
       screen.getByRole('link', { name: 'weathertron' })
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'hacking' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
   });
@@ -67,7 +66,7 @@ describe('App Component', () => {
 
     const getItButton = screen.getByTestId('get-it-button');
     expect(getItButton).toBeInTheDocument();
-    expect(getItButton).toHaveTextContent('get it');
+    expect(getItButton).toHaveTextContent('rando');
   });
 
   // Test to check if the home container is rendered.

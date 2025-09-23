@@ -40,14 +40,13 @@ export class BasePage {
       recipes: this.page.locator('a.nav-link').filter({ hasText: 'chomptron' }),
       swantron: this.page.locator('a.nav-link').filter({ hasText: 'swantron' }),
       weather: this.page.locator('a.nav-link').filter({ hasText: 'weathertron' }),
-      hacking: this.page.locator('a.nav-link').filter({ hasText: 'hacking' }),
       hello: this.page.locator('a.nav-link').filter({ hasText: 'hello' }),
       health: this.page.locator('a.nav-link').filter({ hasText: 'health' }),
     };
   }
 
   // Common actions
-  async clickNavLink(linkName: keyof ReturnType<typeof this.navLinks>) {
+  async clickNavLink(linkName: keyof typeof this.navLinks) {
     await this.navLinks[linkName].click();
     await this.waitForLoad();
   }

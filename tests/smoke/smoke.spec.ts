@@ -44,21 +44,21 @@ test.describe('Smoke Tests', () => {
     expect(temperatureText).toMatch(testData.expectedContent.weather.temperaturePattern);
   });
 
-  test('Get It button is present and clickable', async ({ page }) => {
+  test('Rando button is present and clickable', async ({ page }) => {
     const homePage = new HomePage(page);
     
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
     
-    // Verify get it button
+    // Verify rando button
     await expect(homePage.getItButton).toBeVisible();
     await expect(homePage.getItButton).toHaveText(testData.expectedContent.home.getItButtonText);
     
-    // Test click functionality (should redirect to gangnam pages)
+    // Test click functionality (should redirect to gangnam pages or hacking)
     await homePage.clickGetItButton();
     
-    // Should redirect to either gangnam1 or gangnam2
+    // Should redirect to either gangnam1, gangnam2, or hacking
     const currentUrl = await homePage.getCurrentUrl();
-    expect(currentUrl).toMatch(/gangnam[12]/);
+    expect(currentUrl).toMatch(/gangnam[12]|hacking/);
   });
 });
