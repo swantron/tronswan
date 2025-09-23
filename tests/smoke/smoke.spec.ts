@@ -44,18 +44,19 @@ test.describe('Smoke Tests', () => {
     expect(temperatureText).toMatch(testData.expectedContent.weather.temperaturePattern);
   });
 
-  test('Rando button is present and clickable', async ({ page }) => {
+  test('Swantron link navigates to random pages', async ({ page }) => {
     const homePage = new HomePage(page);
     
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
     
-    // Verify rando button
-    await expect(homePage.getItButton).toBeVisible();
-    await expect(homePage.getItButton).toHaveText(testData.expectedContent.home.getItButtonText);
+    // Verify swantron link
+    await expect(homePage.swantronLink).toBeVisible();
+    await expect(homePage.swantronLink).toHaveText(testData.expectedContent.home.swantronLinkText);
+    await expect(homePage.swantronLink).toHaveAttribute('href', testData.expectedContent.home.swantronLinkHref);
     
     // Test click functionality (should redirect to gangnam pages or hacking)
-    await homePage.clickGetItButton();
+    await homePage.clickSwantronLink();
     
     // Should redirect to either gangnam1, gangnam2, or hacking
     const currentUrl = await homePage.getCurrentUrl();

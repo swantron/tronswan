@@ -18,7 +18,8 @@ import logo from './robotard-removebg-preview.png';
 import './App.css';
 
 function Home() {
-  const handleRandoClick = () => {
+  const handleSwantronClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     // Randomly choose between gangnam1, gangnam2, and hacking
     const random = Math.random();
     let path;
@@ -42,23 +43,13 @@ function Home() {
       <div className='home-description'>
         <h2 className='swantron-link'>
           <a
-            href='https://swantron.com'
+            href='#'
+            onClick={handleSwantronClick}
             data-testid='swantron-link'
-            target='_blank'
-            rel='noopener noreferrer'
           >
             tron swan dot com
           </a>
         </h2>
-        <div className='get-it-section'>
-          <button
-            onClick={handleRandoClick}
-            className='get-it-button'
-            data-testid='get-it-button'
-          >
-            rando
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -74,14 +65,14 @@ function App() {
               <Link to='/' className='nav-link'>
                 tronswan
               </Link>
-              <Link to='/recipes' className='nav-link'>
-                chomptron
-              </Link>
               <Link to='/swantron' className='nav-link'>
                 swantron
               </Link>
               <Link to='/weather' className='nav-link'>
                 weathertron
+              </Link>
+              <Link to='/recipes' className='nav-link'>
+                chomptron
               </Link>
               <Link to='/hello' className='nav-link'>
                 hello

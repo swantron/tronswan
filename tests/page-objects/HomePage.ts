@@ -11,25 +11,13 @@ export class HomePage extends BasePage {
     return this.page.locator('[data-testid="swantron-link"]');
   }
 
-  get getItButton() {
-    return this.page.locator('[data-testid="get-it-button"]');
-  }
-
   get homeDescription() {
     return this.page.locator('.home-description');
-  }
-
-  get getItSection() {
-    return this.page.locator('.get-it-section');
   }
 
   // Home page specific actions
   async clickSwantronLink() {
     await this.swantronLink.click();
-  }
-
-  async clickGetItButton() {
-    await this.getItButton.click();
   }
 
   async getSwantronLinkHref(): Promise<string | null> {
@@ -43,10 +31,6 @@ export class HomePage extends BasePage {
   // Validation methods
   async isSwantronLinkVisible(): Promise<boolean> {
     return await this.swantronLink.isVisible();
-  }
-
-  async isGetItButtonVisible(): Promise<boolean> {
-    return await this.getItButton.isVisible();
   }
 
   async isHomeDescriptionVisible(): Promise<boolean> {

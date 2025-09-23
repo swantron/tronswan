@@ -40,11 +40,11 @@ describe('App Component', () => {
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'weathertron' })
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
   });
@@ -61,12 +61,8 @@ describe('App Component', () => {
 
     const swantronLink = screen.getByTestId('swantron-link');
     expect(swantronLink).toBeInTheDocument();
-    expect(swantronLink).toHaveAttribute('href', 'https://swantron.com');
+    expect(swantronLink).toHaveAttribute('href', '#');
     expect(swantronLink).toHaveTextContent('tron swan dot com');
-
-    const getItButton = screen.getByTestId('get-it-button');
-    expect(getItButton).toBeInTheDocument();
-    expect(getItButton).toHaveTextContent('rando');
   });
 
   // Test to check if the home container is rendered.

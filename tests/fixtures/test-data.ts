@@ -18,8 +18,7 @@ export const testData = {
     home: {
       title: 'tronswan',
       swantronLinkText: 'tron swan dot com',
-      swantronLinkHref: 'https://swantron.com',
-      getItButtonText: 'rando',
+      swantronLinkHref: '#',
     },
     
     weather: {
@@ -31,9 +30,9 @@ export const testData = {
     navigation: {
       links: [
         { text: 'tronswan', href: '/' },
-        { text: 'chomptron', href: '/recipes' },
         { text: 'swantron', href: '/swantron' },
         { text: 'weathertron', href: '/weather' },
+        { text: 'chomptron', href: '/recipes' },
         { text: 'hello', href: '/hello' },
         { text: 'health', href: '/health' },
       ],

@@ -125,6 +125,5 @@ test.describe('Accessibility Regression Tests', () => {
     const pageText = await page.textContent('body');
     expect(pageText).toContain(testData.expectedContent.home.title);
     expect(pageText).toContain(testData.expectedContent.home.swantronLinkText);
-    expect(pageText).toContain(testData.expectedContent.home.getItButtonText);
   });
 });
