@@ -1,9 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 import { swantronService } from '../services/swantronService';
+
 
 import SwantronDetail from './SwantronDetail';
 
@@ -81,13 +83,13 @@ describe('SwantronDetail Component', () => {
   });
 
   afterEach(() => {
-    if (console.error.mockRestore) {
-      console.error.mockRestore();
+    if ((console.error as any).mockRestore) {
+      (console.error as any).mockRestore();
     }
   });
 
   test('renders loading state initially', () => {
-    swantronService.getPostById.mockImplementation(() => new Promise(() => {}));
+    (swantronService.getPostById as any).mockImplementation(() => new Promise(() => {}));
 
     renderWithRouter(<SwantronDetail />);
 
@@ -96,7 +98,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders post details when data is loaded successfully', async () => {
-    swantronService.getPostById.mockResolvedValue(mockPost);
+    (swantronService.getPostById as any).mockResolvedValue(mockPost);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -119,7 +121,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders SEO component with correct props', async () => {
-    swantronService.getPostById.mockResolvedValue(mockPost);
+    (swantronService.getPostById as any).mockResolvedValue(mockPost);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -148,7 +150,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders post image when featuredImage is available', async () => {
-    swantronService.getPostById.mockResolvedValue(mockPost);
+    (swantronService.getPostById as any).mockResolvedValue(mockPost);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -164,7 +166,7 @@ describe('SwantronDetail Component', () => {
 
   test('does not render image when featuredImage is not available', async () => {
     const postWithoutImage = { ...mockPost, featuredImage: null };
-    swantronService.getPostById.mockResolvedValue(postWithoutImage);
+    (swantronService.getPostById as any).mockResolvedValue(postWithoutImage);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -177,7 +179,7 @@ describe('SwantronDetail Component', () => {
 
   test('renders post without categories when none are available', async () => {
     const postWithoutCategories = { ...mockPost, categories: [] };
-    swantronService.getPostById.mockResolvedValue(postWithoutCategories);
+    (swantronService.getPostById as any).mockResolvedValue(postWithoutCategories);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -191,7 +193,7 @@ describe('SwantronDetail Component', () => {
 
   test('renders post without tags when none are available', async () => {
     const postWithoutTags = { ...mockPost, tags: [] };
-    swantronService.getPostById.mockResolvedValue(postWithoutTags);
+    (swantronService.getPostById as any).mockResolvedValue(postWithoutTags);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -204,7 +206,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders external link with correct attributes', async () => {
-    swantronService.getPostById.mockResolvedValue(mockPost);
+    (swantronService.getPostById as any).mockResolvedValue(mockPost);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -220,7 +222,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders error state when API call fails', async () => {
-    swantronService.getPostById.mockRejectedValue(new Error('API Error'));
+    (swantronService.getPostById as any).mockRejectedValue(new Error('API Error'));
 
     renderWithRouter(<SwantronDetail />);
 
@@ -236,7 +238,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders not found state when post is null', async () => {
-    swantronService.getPostById.mockResolvedValue(null);
+    (swantronService.getPostById as any).mockResolvedValue(null);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -250,7 +252,7 @@ describe('SwantronDetail Component', () => {
   });
 
   test('calls swantronService with correct ID from URL params', async () => {
-    swantronService.getPostById.mockResolvedValue(mockPost);
+    (swantronService.getPostById as any).mockResolvedValue(mockPost);
 
     renderWithRouter(<SwantronDetail />, { route: '/swantron/123' });
 
@@ -265,7 +267,7 @@ describe('SwantronDetail Component', () => {
       content:
         '<h2>Complex Content</h2><ul><li>List item 1</li><li>List item 2</li></ul><blockquote>Quote here</blockquote>',
     };
-    swantronService.getPostById.mockResolvedValue(postWithComplexHTML);
+    (swantronService.getPostById as any).mockResolvedValue(postWithComplexHTML);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -291,7 +293,7 @@ describe('SwantronDetail Component', () => {
       tags: [],
       link: 'https://swantron.com/post/2',
     };
-    swantronService.getPostById.mockResolvedValue(minimalPost);
+    (swantronService.getPostById as any).mockResolvedValue(minimalPost);
 
     renderWithRouter(<SwantronDetail />, { route: '/swantron/2' });
 
@@ -312,7 +314,7 @@ describe('SwantronDetail Component', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
     const apiError = new Error('Network error');
-    swantronService.getPostById.mockRejectedValue(apiError);
+    (swantronService.getPostById as any).mockRejectedValue(apiError);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -330,7 +332,7 @@ describe('SwantronDetail Component', () => {
   test('handles post with very long title', async () => {
     const longTitle = 'A'.repeat(300);
     const postWithLongTitle = { ...mockPost, title: longTitle };
-    swantronService.getPostById.mockResolvedValue(postWithLongTitle);
+    (swantronService.getPostById as any).mockResolvedValue(postWithLongTitle);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -344,7 +346,7 @@ describe('SwantronDetail Component', () => {
   test('handles post with very long content', async () => {
     const longContent = '<p>' + 'B'.repeat(1000) + '</p>';
     const postWithLongContent = { ...mockPost, content: longContent };
-    swantronService.getPostById.mockResolvedValue(postWithLongContent);
+    (swantronService.getPostById as any).mockResolvedValue(postWithLongContent);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -358,7 +360,7 @@ describe('SwantronDetail Component', () => {
   test('handles post with special characters in title', async () => {
     const specialTitle = 'Post with special chars: & < > " \' é ñ 🚀';
     const postWithSpecialTitle = { ...mockPost, title: specialTitle };
-    swantronService.getPostById.mockResolvedValue(postWithSpecialTitle);
+    (swantronService.getPostById as any).mockResolvedValue(postWithSpecialTitle);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -375,7 +377,7 @@ describe('SwantronDetail Component', () => {
     const specialContent =
       '<p>Content with &amp; &lt; &gt; &quot; &#39; é ñ 🚀</p>';
     const postWithSpecialContent = { ...mockPost, content: specialContent };
-    swantronService.getPostById.mockResolvedValue(postWithSpecialContent);
+    (swantronService.getPostById as any).mockResolvedValue(postWithSpecialContent);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -390,7 +392,7 @@ describe('SwantronDetail Component', () => {
 
   test('handles post with empty content', async () => {
     const postWithEmptyContent = { ...mockPost, content: '' };
-    swantronService.getPostById.mockResolvedValue(postWithEmptyContent);
+    (swantronService.getPostById as any).mockResolvedValue(postWithEmptyContent);
 
     renderWithRouter(<SwantronDetail />);
 
@@ -403,7 +405,7 @@ describe('SwantronDetail Component', () => {
 
   test('handles post with null content', async () => {
     const postWithNullContent = { ...mockPost, content: null };
-    swantronService.getPostById.mockResolvedValue(postWithNullContent);
+    (swantronService.getPostById as any).mockResolvedValue(postWithNullContent);
 
     renderWithRouter(<SwantronDetail />);
 

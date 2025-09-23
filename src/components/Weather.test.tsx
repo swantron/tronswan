@@ -1,6 +1,8 @@
+import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
+import '@testing-library/jest-dom';
 import Weather from './Weather';
 
 // Mock the runtime config
@@ -32,9 +34,9 @@ const renderWeather = (props = {}) => {
 
 describe('Weather Component', () => {
   beforeEach(() => {
-    fetch.mockClear();
+    (global.fetch as any).mockClear();
     // Mock both current weather and forecast API calls
-    fetch.mockImplementation((url) => {
+    (global.fetch as any).mockImplementation((url) => {
       if (url.includes('/weather?')) {
         // Current weather API
         return Promise.resolve({
@@ -121,7 +123,7 @@ describe('Weather Component', () => {
       sys: { country: 'US' },
     };
 
-    fetch.mockImplementation((url) => {
+    (global.fetch as any).mockImplementation((url) => {
       if (url.includes('/weather?')) {
         return Promise.resolve({
           ok: true,

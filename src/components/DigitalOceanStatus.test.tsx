@@ -1,5 +1,7 @@
+import React from 'react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import DigitalOceanStatus from './DigitalOceanStatus';
 
 // Mock the CSS import
@@ -27,20 +29,59 @@ describe('DigitalOceanStatus Component', () => {
     {
       id: 123456,
       name: 'test-droplet',
-      status: 'active',
+      status: 'active' as const,
       vcpus: 2,
       memory: 4096,
       disk: 80,
-      size_slug: 's-2vcpu-4gb',
-      region: { name: 'New York 1' },
-      image: { name: 'Ubuntu 20.04' },
+      locked: false,
+      kernel: {
+        id: 1,
+        name: 'Ubuntu',
+        version: '20.04'
+      },
       created_at: '2024-01-01T00:00:00Z',
-      size: { price_monthly: 24.00 },
+      features: ['backups', 'ipv6'],
+      backup_ids: [],
+      snapshot_ids: [],
+      volume_ids: [],
+      monitoring: false,
+      image: { 
+        id: 1,
+        name: 'Ubuntu 20.04',
+        distribution: 'Ubuntu',
+        slug: 'ubuntu-20-04-x64',
+        public: true,
+        regions: ['nyc1'],
+        created_at: '2024-01-01T00:00:00Z',
+        min_disk_size: 20,
+        type: 'snapshot',
+        size_gigabytes: 2.34
+      },
+      size: { 
+        slug: 's-2vcpu-4gb',
+        memory: 4096,
+        vcpus: 2,
+        disk: 80,
+        transfer: 4000,
+        price_monthly: 24.00,
+        price_hourly: 0.036,
+        regions: ['nyc1'],
+        available: true
+      },
+      size_slug: 's-2vcpu-4gb',
+      region: { 
+        name: 'New York 1',
+        slug: 'nyc1',
+        features: ['virtio', 'private_networking', 'backups', 'ipv6', 'metadata'],
+        available: true,
+        sizes: ['s-1vcpu-1gb']
+      },
       networks: {
         v4: [
-          { ip_address: '192.168.1.100', type: 'public' },
-          { ip_address: '10.0.0.100', type: 'private' }
-        ]
+          { ip_address: '192.168.1.100', type: 'public', netmask: '255.255.255.0', gateway: '192.168.1.1' },
+          { ip_address: '10.0.0.100', type: 'private', netmask: '255.255.0.0', gateway: '10.0.0.1' }
+        ],
+        v6: []
       },
       tags: ['production', 'web']
     }
@@ -339,7 +380,7 @@ describe('DigitalOceanStatus Component', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
-          data={{ ...defaultProps.data, droplets: null }}
+          data={{ ...defaultProps.data, droplets: [] }}
         />
       );
 
@@ -353,7 +394,7 @@ describe('DigitalOceanStatus Component', () => {
       const dropletWithoutTags = {
         ...mockDropletData[0],
         tags: []
-      };
+      } as any;
 
       render(
         <DigitalOceanStatus
