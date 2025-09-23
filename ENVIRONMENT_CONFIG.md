@@ -26,6 +26,11 @@ VITE_GITHUB_OWNER=swantron
 # Create a token with 'read' scope
 VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
 VITE_DIGITALOCEAN_APP_ID=0513ce4c-b074-4139-bb38-a1c6a5bc97a6
+
+# Google Docs API Configuration
+# Get your Google Docs API key from: https://console.cloud.google.com/
+# See GOOGLE_DOCS_SETUP.md for detailed setup instructions
+VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key_here
 ```
 
 ## Deployed Environment (DigitalOcean)
@@ -155,4 +160,9 @@ VITE_GITHUB_OWNER=swantron
 # Create a token with 'read' scope
 VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
 VITE_DIGITALOCEAN_APP_ID=0513ce4c-b074-4139-bb38-a1c6a5bc97a6
+
+# Google Docs API Configuration
+# Get your Google Docs API key from: https://console.cloud.google.com/
+# See GOOGLE_DOCS_SETUP.md for detailed setup instructions
+VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key_here
 ```

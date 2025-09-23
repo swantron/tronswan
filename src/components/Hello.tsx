@@ -68,9 +68,7 @@ function Hello() {
 
           <a
             className='hello-link resume'
-            href='https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing'
-            target='_blank'
-            rel='noopener noreferrer'
+            href='/resume'
             aria-label="Joseph Swanson's Resume"
           >
             📄 Resume

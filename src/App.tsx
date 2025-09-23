@@ -10,6 +10,7 @@ import HealthPage from './components/HealthPage';
 import Hello from './components/Hello';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeList from './components/RecipeList';
+import Resume from './components/Resume';
 import SEO from './components/SEO';
 import SwantronDetail from './components/SwantronDetail';
 import SwantronList from './components/SwantronList';
@@ -103,6 +104,7 @@ function App() {
                 <Route path='/gangnam2' element={<Gangnam2 />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
+                <Route path='/resume' element={<Resume />} />
                 <Route path='/health' element={<HealthPage />} />
               </Routes>
             </ErrorBoundary>
