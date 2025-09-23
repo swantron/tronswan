@@ -63,21 +63,31 @@ test.describe('Accessibility Regression Tests', () => {
     }
   });
 
-  test('External links have proper attributes', async ({ page }) => {
+  test('Internal navigation links work properly', async ({ page }) => {
     const homePage = new HomePage(page);
     
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
     
-    // Check swantron link
+    // Check swantron link (now internal navigation)
     const swantronLink = homePage.swantronLink;
     
-    // Should have target="_blank" and rel="noopener noreferrer"
-    await expect(swantronLink).toHaveAttribute('target', '_blank');
-    await expect(swantronLink).toHaveAttribute('rel', 'noopener noreferrer');
+    // Should have href="#" for internal navigation
+    await expect(swantronLink).toHaveAttribute('href', '#');
     
-    // Should have proper href
-    await expect(swantronLink).toHaveAttribute('href', testData.expectedContent.home.swantronLinkHref);
+    // Should not have external link attributes since it's internal
+    await expect(swantronLink).not.toHaveAttribute('target', '_blank');
+    await expect(swantronLink).not.toHaveAttribute('rel', 'noopener noreferrer');
+    
+    // Test that clicking navigates to a random page
+    await swantronLink.click();
+    
+    // Should be on one of the random pages
+    const currentUrl = page.url();
+    const isRandomPage = currentUrl.includes('/gangnam1') || 
+                        currentUrl.includes('/gangnam2') || 
+                        currentUrl.includes('/hacking');
+    expect(isRandomPage).toBe(true);
   });
 
   // Keyboard accessibility test removed due to focus issues
