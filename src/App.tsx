@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import ErrorBoundary from './components/ErrorBoundary';
+import DealWithIt1 from './components/DealWithIt1';
+import DealWithIt2 from './components/DealWithIt2';
 import FizzBuzz from './components/FizzBuzz';
 import Gangnam1 from './components/Gangnam1';
 import Gangnam2 from './components/Gangnam2';
@@ -21,15 +23,19 @@ import './App.css';
 function Home() {
   const handleSwantronClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Randomly choose between gangnam1, gangnam2, and hacking
+    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, and dealwithit2
     const random = Math.random();
     let path;
-    if (random < 0.33) {
+    if (random < 0.2) {
       path = '/gangnam1';
-    } else if (random < 0.66) {
+    } else if (random < 0.4) {
       path = '/gangnam2';
-    } else {
+    } else if (random < 0.6) {
       path = '/hacking';
+    } else if (random < 0.8) {
+      path = '/dealwithit1';
+    } else {
+      path = '/dealwithit2';
     }
     window.location.href = path;
   };
@@ -102,6 +108,8 @@ function App() {
                 <Route path='/hacking' element={<Hacking />} />
                 <Route path='/gangnam1' element={<Gangnam1 />} />
                 <Route path='/gangnam2' element={<Gangnam2 />} />
+                <Route path='/dealwithit1' element={<DealWithIt1 />} />
+                <Route path='/dealwithit2' element={<DealWithIt2 />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
