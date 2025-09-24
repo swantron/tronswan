@@ -48,7 +48,7 @@ class RuntimeConfigManager {
     ];
 
     envVars.forEach(key => {
-      if (typeof window !== 'undefined' && import.meta.env) {
+      if (typeof window !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env) {
         // Browser context - use Vite's import.meta.env
         this.config[key] = import.meta.env[key] || '';
       } else {
@@ -86,7 +86,7 @@ class RuntimeConfigManager {
    * Fallback method for getting config values when not initialized
    */
   private getFallback<K extends keyof RuntimeConfig>(key: K): string {
-    if (typeof window !== 'undefined' && import.meta.env) {
+    if (typeof window !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env) {
       return import.meta.env[key] || '';
     }
     return process.env[key] || '';
