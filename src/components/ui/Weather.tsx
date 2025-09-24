@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { runtimeConfig } from '../utils/runtimeConfig';
+import { runtimeConfig } from '../../utils/runtimeConfig';
 
 import SEO from './SEO';
-import '../styles/Weather.css';
+import '../../styles/Weather.css';
 
 interface WeatherData {
   temperature: number | null;

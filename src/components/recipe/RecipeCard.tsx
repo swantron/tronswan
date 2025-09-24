@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useDateFormatter } from '../hooks/useDateFormatter';
-import { RecipeCardProps } from '../types';
-import '../styles/RecipeCard.css';
+import { useDateFormatter } from '../../hooks/useDateFormatter';
+import { RecipeCardProps } from '../../types';
+import '../../styles/RecipeCard.css';
 
 const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe }) => {
   const formatDate = useDateFormatter();

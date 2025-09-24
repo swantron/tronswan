@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SEO from './SEO';
-import '../styles/Hello.css';
+import '../../styles/Hello.css';
 
 function Hello() {
   return (

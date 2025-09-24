@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useDateFormatter } from '../hooks/useDateFormatter';
-import { SwantronCardProps } from '../types';
-import '../styles/SwantronCard.css';
+import { useDateFormatter } from '../../hooks/useDateFormatter';
+import { SwantronCardProps } from '../../types';
+import '../../styles/SwantronCard.css';
 
 const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
   const formatDate = useDateFormatter();

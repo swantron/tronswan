@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Gangnam.css';
+import '../../styles/Gangnam.css';
 
 interface VideoPageProps {
   title: string;

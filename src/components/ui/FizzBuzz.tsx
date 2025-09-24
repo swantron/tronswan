@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import SEO from './SEO';
-import '../styles/FizzBuzz.css';
+import '../../styles/FizzBuzz.css';
 
 interface FizzBuzzDisplayProps {
   number: number;

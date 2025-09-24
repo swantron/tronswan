@@ -4,17 +4,17 @@ import { vi, expect, describe, test, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
 import Resume from './Resume';
-import { GoogleDocsService } from '../services/googleDocsService';
+import { GoogleDocsService } from '../../services/googleDocsService';
 
 // Mock the GoogleDocsService
-vi.mock('../services/googleDocsService', () => ({
+vi.mock('../../services/googleDocsService', () => ({
   GoogleDocsService: {
     getResumeContent: vi.fn(),
   },
 }));
 
 // Mock the SEO component to prevent react-helmet-async errors in tests
-vi.mock('./components/SEO', () => ({
+vi.mock('./SEO', () => ({
   default: function MockSEO() {
     return null; // Return null to render nothing
   },

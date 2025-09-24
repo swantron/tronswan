@@ -3,19 +3,19 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 
-import { wordpressService } from '../services/wordpressService';
+import { wordpressService } from '../../services/wordpressService';
 
 import RecipeDetail from './RecipeDetail';
 
 // Mock the wordpressService
-vi.mock('../services/wordpressService', () => ({
+vi.mock('../../services/wordpressService', () => ({
   wordpressService: {
     getRecipeById: vi.fn(),
   },
 }));
 
 // Mock the CSS import
-vi.mock('../styles/RecipeDetail.css', () => ({}));
+vi.mock('../../styles/RecipeDetail.css', () => ({}));
 
 // Wrapper component to provide router context
 const renderWithRouter = (component, { route = '/recipe/1' } = {}) => {

@@ -7,7 +7,7 @@ import App from './App'; // Imports the App component to be tested.
 import '@testing-library/jest-dom'; // Provides the extended matchers like toBeInTheDocument for easier DOM node assertions.
 
 // Mock the SEO component to prevent react-helmet-async errors in tests
-vi.mock('./components/SEO', () => ({
+vi.mock('./components/ui/SEO', () => ({
   default: function MockSEO() {
     return null; // Return null to render nothing
   },

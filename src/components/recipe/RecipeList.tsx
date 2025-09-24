@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { wordpressService } from '../services/wordpressService';
-import { Recipe } from '../types';
+import { wordpressService } from '../../services/wordpressService';
+import { Recipe } from '../../types';
 
 import RecipeCard from './RecipeCard';
-import '../styles/RecipeList.css';
+import '../../styles/RecipeList.css';
 
 const RecipeList: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

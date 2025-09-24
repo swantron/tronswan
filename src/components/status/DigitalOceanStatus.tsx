@@ -4,8 +4,8 @@ import {
   DigitalOceanDroplet,
   DigitalOceanLoadBalancer,
   DigitalOceanDatabase,
-} from '../services/digitalOceanService';
-import '../styles/DigitalOceanStatus.css';
+} from '../../services/digitalOceanService';
+import '../../styles/DigitalOceanStatus.css';
 
 interface DigitalOceanStatusProps {
   data: {

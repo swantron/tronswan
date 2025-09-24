@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { runtimeConfig } from '../utils/runtimeConfig';
+import { runtimeConfig } from '../../utils/runtimeConfig';
 
 const SEO = ({
   title = 'Tron Swan - Robot-Style Recipes & Tech Fun',

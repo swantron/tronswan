@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import DigitalOceanStatus from './status/DigitalOceanStatus';
+import DigitalOceanStatus from './DigitalOceanStatus';
 
 // Mock the CSS import
 vi.mock('../styles/DigitalOceanStatus.css', () => ({}));

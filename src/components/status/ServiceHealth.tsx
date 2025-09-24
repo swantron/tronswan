@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import '../styles/ServiceHealth.css';
+import '../../styles/ServiceHealth.css';
 
 interface ServiceHealthProps {
   services: {

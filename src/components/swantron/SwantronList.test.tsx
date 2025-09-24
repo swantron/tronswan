@@ -3,12 +3,12 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 
-import { swantronService } from '../services/swantronService';
+import { swantronService } from '../../services/swantronService';
 
 import SwantronList from './SwantronList';
 
 // Mock the swantronService
-vi.mock('../services/swantronService', () => ({
+vi.mock('../../services/swantronService', () => ({
   swantronService: {
     getPosts: vi.fn(),
     searchPosts: vi.fn(),
@@ -16,7 +16,7 @@ vi.mock('../services/swantronService', () => ({
 }));
 
 // Mock the SEO component
-vi.mock('./SEO', () => ({
+vi.mock('../ui/SEO', () => ({
   default: function MockSEO({ title, description, keywords, url }) {
     return (
       <div

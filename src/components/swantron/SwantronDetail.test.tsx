@@ -4,25 +4,25 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 
-import { swantronService } from '../services/swantronService';
+import { swantronService } from '../../services/swantronService';
 
 
 import SwantronDetail from './SwantronDetail';
 
 // Mock the swantronService
-vi.mock('../services/swantronService', () => ({
+vi.mock('../../services/swantronService', () => ({
   swantronService: {
     getPostById: vi.fn(),
   },
 }));
 
 // Mock the useDateFormatter hook
-vi.mock('../hooks/useDateFormatter', () => ({
+vi.mock('../../hooks/useDateFormatter', () => ({
   useDateFormatter: () => vi.fn(date => `Formatted: ${date}`),
 }));
 
 // Mock the SEO component
-vi.mock('./SEO', () => ({
+vi.mock('../ui/SEO', () => ({
   default: function MockSEO({ title, description, keywords, url, image }) {
     return (
       <div

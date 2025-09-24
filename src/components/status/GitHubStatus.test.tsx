@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import GitHubStatus from './GitHubStatus';
-import githubService from '../services/githubService';
+import githubService from '../../services/githubService';
 
 // Mock the CSS import
-vi.mock('../styles/GitHubStatus.css', () => ({}));
+vi.mock('../../styles/GitHubStatus.css', () => ({}));
 
 // Mock the githubService
-vi.mock('../services/githubService', () => ({
+vi.mock('../../services/githubService', () => ({
   default: {
     getAllRepositories: vi.fn(),
     getWorkflowRuns: vi.fn(),

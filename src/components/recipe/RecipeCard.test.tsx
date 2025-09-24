@@ -6,7 +6,7 @@ import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 import RecipeCard from './RecipeCard';
 
 // Mock the useDateFormatter hook
-vi.mock('../hooks/useDateFormatter', () => ({
+vi.mock('../../hooks/useDateFormatter', () => ({
   useDateFormatter: () => vi.fn(date => `Formatted: ${date}`),
 }));
 

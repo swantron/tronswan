@@ -1,5 +1,5 @@
 import React from 'react';
-import { useResumeData } from '../hooks/useResumeData';
+import { useResumeData } from '../../hooks/useResumeData';
 import ResumeContent from './ResumeContent';
 
 function Resume() {

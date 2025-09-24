@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { swantronService } from '../services/swantronService';
-import { Post } from '../types';
+import { swantronService } from '../../services/swantronService';
+import { Post } from '../../types';
 
-import SEO from './SEO';
+import SEO from '../ui/SEO';
 import SwantronCard from './SwantronCard';
-import '../styles/SwantronList.css';
+import '../../styles/SwantronList.css';
 
 const SwantronList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);

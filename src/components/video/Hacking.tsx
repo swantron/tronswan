@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Hacking.css';
+import '../../styles/Hacking.css';
 
 const Hacking = () => {
   return (

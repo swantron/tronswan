@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useDateFormatter } from '../hooks/useDateFormatter';
-import { swantronService } from '../services/swantronService';
-import { Post } from '../types';
+import { useDateFormatter } from '../../hooks/useDateFormatter';
+import { swantronService } from '../../services/swantronService';
+import { Post } from '../../types';
 
-import SEO from './SEO';
+import SEO from '../ui/SEO';
 
-import '../styles/SwantronDetail.css';
+import '../../styles/SwantronDetail.css';
 
 const SwantronDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -3,12 +3,12 @@ import React from 'react';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 
 import '@testing-library/jest-dom';
-import { wordpressService } from '../services/wordpressService';
+import { wordpressService } from '../../services/wordpressService';
 
 import RecipeList from './RecipeList';
 
 // Mock the wordpressService
-vi.mock('../services/wordpressService', () => ({
+vi.mock('../../services/wordpressService', () => ({
   wordpressService: {
     getRecipes: vi.fn(),
     searchRecipes: vi.fn(),

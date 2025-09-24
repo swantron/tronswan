@@ -40,9 +40,7 @@ describe('SwantronCard Component', () => {
     expect(
       screen.getByText(/This is a test post excerpt with/)
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Formatted: 2023-12-25T10:00:00Z')
-    ).toBeInTheDocument();
+    expect(screen.getByText('December 25, 2023')).toBeInTheDocument();
     expect(screen.getByText('Technology')).toBeInTheDocument();
     expect(screen.getByText('Life')).toBeInTheDocument();
     expect(screen.getByText('📖 Read on swantron.com')).toBeInTheDocument();
@@ -129,9 +127,7 @@ describe('SwantronCard Component', () => {
 
     expect(screen.getByText('Minimal Post')).toBeInTheDocument();
     expect(screen.getByText('Minimal excerpt')).toBeInTheDocument();
-    expect(
-      screen.getByText('Formatted: 2023-12-26T10:00:00Z')
-    ).toBeInTheDocument();
+    expect(screen.getByText('December 26, 2023')).toBeInTheDocument();
     expect(screen.queryByAltText('Minimal Post')).not.toBeInTheDocument();
     expect(screen.queryByText('Technology')).not.toBeInTheDocument();
   });

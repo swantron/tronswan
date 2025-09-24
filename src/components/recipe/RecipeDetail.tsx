@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { wordpressService } from '../services/wordpressService';
-import { Recipe } from '../types';
-import '../styles/RecipeDetail.css';
+import { wordpressService } from '../../services/wordpressService';
+import { Recipe } from '../../types';
+import '../../styles/RecipeDetail.css';
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

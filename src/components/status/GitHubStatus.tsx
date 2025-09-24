@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import githubService from '../services/githubService';
-import '../styles/GitHubStatus.css';
+import githubService from '../../services/githubService';
+import '../../styles/GitHubStatus.css';
 
 interface GitHubData {
   user: any;

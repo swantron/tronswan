@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import digitalOceanService from '../services/digitalOceanService';
-import { runtimeConfig } from '../utils/runtimeConfig';
+import digitalOceanService from '../../services/digitalOceanService';
+import { runtimeConfig } from '../../utils/runtimeConfig';
 
 import DigitalOceanStatus from './DigitalOceanStatus';
 import GitHubStatus from './GitHubStatus';
-import SEO from './SEO';
+import SEO from '../ui/SEO';
 import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
 
-import '../styles/HealthPage.css';
+import '../../styles/HealthPage.css';
 
 interface HealthData {
   github: {
