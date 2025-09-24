@@ -1,0 +1,88 @@
+.gangnam-container {
+  min-height: 100vh;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Removed gradient overlay to match standard background */
+
+.gangnam-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.gangnam-title {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  margin-bottom: 2rem;
+  color: var(--accent-color);
+  font-family: inherit;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(248, 152, 89, 0.3);
+  font-weight: bold;
+}
+
+.video-container {
+  margin: 2rem 0;
+  border: 1px solid rgba(248, 152, 89, 0.2);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Removed animated border glow to match standard styling */
+
+.gangnam-video {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: calc(var(--border-radius) - 2px);
+  box-shadow: 0 0 20px rgba(248, 152, 89, 0.3);
+}
+
+.video-fallback {
+  color: var(--error-color);
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: calc(var(--border-radius) - 2px);
+  margin: 1rem 0;
+}
+
+.video-fallback a {
+  color: var(--accent-color);
+  text-decoration: none;
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1rem;
+  border-radius: calc(var(--border-radius) - 5px);
+  display: inline-block;
+  margin-top: 1rem;
+  transition: all var(--transition-speed) ease;
+}
+
+.video-fallback a:hover {
+  background: var(--accent-color);
+  color: var(--primary-bg);
+  box-shadow: 0 0 15px rgba(248, 152, 89, 0.7);
+}
+
+/* Removed animations to match standard styling */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .gangnam-container {
+    padding: 1rem;
+  }
+
+  .gangnam-video {
+    max-width: 100%;
+  }
+}
