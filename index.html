@@ -6,8 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="tron swan dot com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//tronswan.com" />
     <link rel="apple-touch-icon" href="/robotard_192x192.png" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="preload" href="/robotard-removebg-preview.png" as="image" type="image/png" />
+    <style>
+      /* Critical CSS for above-the-fold content */
+      :root {
+        --primary-bg: #282c34;
+        --primary-text: #ffffff;
+        --accent-color: #f89859;
+        --transition-speed: 0.3s;
+      }
+      .App {
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .home-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        min-height: 60vh;
+      }
+      .App-logo {
+        height: 40vmin;
+        max-height: 300px;
+        pointer-events: none;
+        transition: transform var(--transition-speed) ease;
+      }
+      .App-title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        margin-bottom: 2rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .swantron-link {
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        margin: 0;
+      }
+      .swantron-link a {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: all var(--transition-speed) ease;
+      }
+    </style>
     <title>tron swan dot com</title>
   </head>
   <body>

@@ -51,15 +51,18 @@ function Home() {
       <h1 className='App-title' data-testid='app-title'>
         tronswan
       </h1>
-      <img src={logo} className='App-logo' alt='logo' data-testid='app-logo' />
+      <img
+        src={logo}
+        className='App-logo'
+        alt='logo'
+        data-testid='app-logo'
+        fetchPriority='high'
+        loading='eager'
+      />
 
       <div className='home-description'>
         <h2 className='swantron-link'>
-          <a
-            href='#'
-            onClick={handleSwantronClick}
-            data-testid='swantron-link'
-          >
+          <a href='#' onClick={handleSwantronClick} data-testid='swantron-link'>
             tron swan dot com
           </a>
         </h2>
