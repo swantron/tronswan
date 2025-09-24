@@ -56,8 +56,30 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
     lines.forEach(line => {
       const trimmedLine = line.trim();
       
+      // Skip Google Docs artifacts and unwanted headers
+      if (trimmedLine === 'Tab 1' || 
+          trimmedLine === 'Tab 2' || 
+          trimmedLine === 'Tab 3' ||
+          trimmedLine === 'Sheet 1' ||
+          trimmedLine === 'Sheet 2' ||
+          trimmedLine === 'Sheet 3' ||
+          trimmedLine.startsWith('Tab ') ||
+          trimmedLine.startsWith('Sheet ') ||
+          trimmedLine === '________________' ||
+          trimmedLine === '_________________' ||
+          trimmedLine === '__________________' ||
+          trimmedLine === '___________________' ||
+          trimmedLine === '____________________' ||
+          /^_+$/.test(trimmedLine) || // Any line that's only underscores
+          trimmedLine === '' ||
+          trimmedLine === ' ' ||
+          trimmedLine === '  ') {
+        return; // Skip this line
+      }
+      
       // Check if this is a section header (look for common resume section names)
       if (trimmedLine === 'Professional Summary' ||
+          trimmedLine === 'Summary' ||
           trimmedLine === 'Technical Skills' ||
           trimmedLine === 'Professional Experience' ||
           trimmedLine === 'Education' ||
@@ -101,9 +123,52 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
             {sections['Contact Information']?.[0] || 'Your Name'}
           </h1>
           <div className='resume-contact'>
-            {sections['Contact Information']?.slice(1, 5).map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
+            {sections['Contact Information']?.slice(1, 5).map((line, index) => {
+              // Parse the line to create clickable links
+              const parseContactLine = (text: string) => {
+                // Split by common separators and process each part
+                const parts = text.split(/(\||\n)/);
+                return parts.map((part, partIndex) => {
+                  const trimmedPart = part.trim();
+                  
+                  if (trimmedPart === 'linkedin' || trimmedPart === 'LinkedIn') {
+                    return (
+                      <a
+                        key={partIndex}
+                        href="https://www.linkedin.com/in/joseph-swanson-11092758/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="resume-link"
+                      >
+                        LinkedIn
+                      </a>
+                    );
+                  } else if (trimmedPart === 'tronswan.com') {
+                    return (
+                      <a
+                        key={partIndex}
+                        href="https://tronswan.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="resume-link"
+                      >
+                        tronswan.com
+                      </a>
+                    );
+                  } else if (trimmedPart === '|' || trimmedPart === '\n') {
+                    return <span key={partIndex}> | </span>;
+                  } else {
+                    return <span key={partIndex}>{trimmedPart}</span>;
+                  }
+                });
+              };
+
+              return (
+                <p key={index}>
+                  {parseContactLine(line)}
+                </p>
+              );
+            })}
           </div>
         </header>
 
@@ -111,6 +176,13 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
           <section className='resume-section'>
             <h2>Professional Summary</h2>
             <p>{sections['Professional Summary'].join(' ')}</p>
+          </section>
+        )}
+
+        {sections['Summary'] && (
+          <section className='resume-section'>
+            <h2>Summary</h2>
+            <p>{sections['Summary'].join(' ')}</p>
           </section>
         )}
 
