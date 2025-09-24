@@ -3,9 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import Baseball1 from './components/video/Baseball1';
+import Baseball2 from './components/video/Baseball2';
 import DealWithIt1 from './components/video/DealWithIt1';
 import DealWithIt2 from './components/video/DealWithIt2';
 import DealWithIt3 from './components/video/DealWithIt3';
+import KingKong from './components/video/KingKong';
 import FizzBuzz from './components/ui/FizzBuzz';
 import Gangnam1 from './components/video/Gangnam1';
 import Gangnam2 from './components/video/Gangnam2';
@@ -25,23 +27,27 @@ import './App.css';
 function Home() {
   const handleSwantronClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, and baseball1
+    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, and kingkong
     const random = Math.random();
     let path;
-    if (random < 0.143) {
+    if (random < 0.111) { // 1/9 chance
       path = '/gangnam1';
-    } else if (random < 0.286) {
+    } else if (random < 0.222) { // 2/9 chance
       path = '/gangnam2';
-    } else if (random < 0.429) {
+    } else if (random < 0.333) { // 3/9 chance
       path = '/hacking';
-    } else if (random < 0.571) {
+    } else if (random < 0.444) { // 4/9 chance
       path = '/dealwithit1';
-    } else if (random < 0.714) {
+    } else if (random < 0.556) { // 5/9 chance
       path = '/dealwithit2';
-    } else if (random < 0.857) {
+    } else if (random < 0.667) { // 6/9 chance
       path = '/dealwithit3';
-    } else {
+    } else if (random < 0.778) { // 7/9 chance
       path = '/baseball1';
+    } else if (random < 0.889) { // 8/9 chance
+      path = '/baseball2';
+    } else { // 9/9 chance
+      path = '/kingkong';
     }
     window.location.href = path;
   };
@@ -121,6 +127,8 @@ function App() {
                 <Route path='/dealwithit2' element={<DealWithIt2 />} />
                 <Route path='/dealwithit3' element={<DealWithIt3 />} />
                 <Route path='/baseball1' element={<Baseball1 />} />
+                <Route path='/baseball2' element={<Baseball2 />} />
+                <Route path='/kingkong' element={<KingKong />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
