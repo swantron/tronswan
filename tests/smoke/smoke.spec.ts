@@ -58,8 +58,8 @@ test.describe('Smoke Tests', () => {
     // Test click functionality (should redirect to gangnam pages, hacking, or dealwithit pages)
     await homePage.clickSwantronLink();
     
-    // Should redirect to either gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, or dealwithit3
+    // Should redirect to either gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, or baseball1
     const currentUrl = await homePage.getCurrentUrl();
-    expect(currentUrl).toMatch(/gangnam[12]|hacking|dealwithit[123]/);
+    expect(currentUrl).toMatch(/gangnam[12]|hacking|dealwithit[123]|baseball1/);
   });
 });

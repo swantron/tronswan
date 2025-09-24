@@ -89,7 +89,8 @@ test.describe('Accessibility Regression Tests', () => {
                         currentUrl.includes('/hacking') ||
                         currentUrl.includes('/dealwithit1') ||
                         currentUrl.includes('/dealwithit2') ||
-                        currentUrl.includes('/dealwithit3');
+                        currentUrl.includes('/dealwithit3') ||
+                        currentUrl.includes('/baseball1');
     expect(isRandomPage).toBe(true);
   });
 
