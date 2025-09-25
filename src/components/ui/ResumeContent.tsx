@@ -202,11 +202,68 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
         {sections['Professional Experience'] && (
           <section className='resume-section'>
             <h2>Professional Experience</h2>
-            {sections['Professional Experience'].map((line, index) => (
-              <div key={index} className='experience-item'>
-                <p>{line}</p>
-              </div>
-            ))}
+            {sections['Professional Experience'].map((line, index) => {
+              // Check if this line is a job role (contains job title, company, location, dates)
+              const isJobRole = line.includes('|') && 
+                               (line.includes('Engineer') || 
+                                line.includes('Developer') || 
+                                line.includes('Manager') || 
+                                line.includes('Director') || 
+                                line.includes('Lead') || 
+                                line.includes('Senior') || 
+                                line.includes('Staff') ||
+                                line.includes('Principal') ||
+                                line.includes('Architect') ||
+                                line.includes('Consultant') ||
+                                line.includes('Analyst') ||
+                                line.includes('Coordinator') ||
+                                line.includes('Specialist') ||
+                                line.includes('Technician') ||
+                                line.includes('Intern') ||
+                                line.includes('Associate') ||
+                                line.includes('Assistant') ||
+                                line.includes('Executive') ||
+                                line.includes('President') ||
+                                line.includes('CEO') ||
+                                line.includes('CTO') ||
+                                line.includes('VP') ||
+                                line.includes('Vice President') ||
+                                line.includes('Founder') ||
+                                line.includes('Co-founder') ||
+                                line.includes('Owner') ||
+                                line.includes('Freelance') ||
+                                line.includes('Contractor') ||
+                                line.includes('Consultant'));
+              
+              // Check if this line is a bullet point
+              const isBulletPoint = line.trim().startsWith('*') || 
+                                   line.trim().startsWith('-') || 
+                                   line.trim().startsWith('•') ||
+                                   line.trim().startsWith('◦') ||
+                                   line.trim().startsWith('▪') ||
+                                   line.trim().startsWith('▫');
+              
+              if (isJobRole) {
+                return (
+                  <div key={index} className='experience-role'>
+                    <h3>{line}</h3>
+                  </div>
+                );
+              } else if (isBulletPoint) {
+                return (
+                  <div key={index} className='experience-bullet'>
+                    <p>{line}</p>
+                  </div>
+                );
+              } else {
+                // Regular content
+                return (
+                  <div key={index} className='experience-item'>
+                    <p>{line}</p>
+                  </div>
+                );
+              }
+            })}
           </section>
         )}
 

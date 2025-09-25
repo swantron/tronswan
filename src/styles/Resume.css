@@ -154,6 +154,43 @@
   border-left: 4px solid var(--accent-color);
 }
 
+.experience-role {
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+}
+
+.experience-role h3 {
+  margin: 0;
+  color: var(--accent-color);
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(248, 152, 89, 0.3);
+}
+
+.experience-bullet {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.experience-bullet p {
+  margin: 0;
+  line-height: 1.6;
+  opacity: 0.9;
+  color: var(--primary-text);
+}
+
+.experience-bullet::before {
+  content: "•";
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.2rem;
+}
+
 .experience-header {
   display: flex;
   flex-wrap: wrap;
