@@ -190,11 +190,29 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
           <section className='resume-section'>
             <h2>Technical Skills</h2>
             <div className='skills-grid'>
-              {sections['Technical Skills'].map((skill, index) => (
-                <div key={index} className='skill-category'>
-                  <p>{skill}</p>
-                </div>
-              ))}
+              {sections['Technical Skills'].map((skill, index) => {
+                // Clean up the skill text by removing bullet points and asterisks
+                const cleanSkill = skill
+                  .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
+                  .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
+                  .trim();
+                
+                // Split by colon to separate category from skills
+                const [category, skills] = cleanSkill.split(':');
+                
+                return (
+                  <div key={index} className='skill-category'>
+                    {category && skills ? (
+                      <>
+                        <h3>{category.trim()}</h3>
+                        <p>{skills.trim()}</p>
+                      </>
+                    ) : (
+                      <p>{cleanSkill}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
