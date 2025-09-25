@@ -268,9 +268,15 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                   </div>
                 );
               } else if (isBulletPoint) {
+                // Clean up the bullet point text by removing bullet points and asterisks
+                const cleanBulletPoint = line
+                  .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
+                  .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
+                  .trim();
+                
                 return (
                   <div key={index} className='experience-bullet'>
-                    <p>{line}</p>
+                    <p>{cleanBulletPoint}</p>
                   </div>
                 );
               } else {
