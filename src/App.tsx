@@ -14,6 +14,7 @@ import FizzBuzz from './components/ui/FizzBuzz';
 import Gangnam1 from './components/video/Gangnam1';
 import Gangnam2 from './components/video/Gangnam2';
 import Hacking from './components/video/Hacking';
+import JobWellDone from './components/video/JobWellDone';
 import HealthPage from './components/status/HealthPage';
 import Hello from './components/ui/Hello';
 import RecipeDetail from './components/recipe/RecipeDetail';
@@ -29,31 +30,33 @@ import './App.css';
 function Home() {
   const handleSwantronClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, and thumbsup
+    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, thumbsup, and jobwelldone
     const random = Math.random();
     let path;
-    if (random < 0.091) { // 1/11 chance
+    if (random < 0.083) { // 1/12 chance
       path = '/gangnam1';
-    } else if (random < 0.182) { // 2/11 chance
+    } else if (random < 0.167) { // 2/12 chance
       path = '/gangnam2';
-    } else if (random < 0.273) { // 3/11 chance
+    } else if (random < 0.25) { // 3/12 chance
       path = '/hacking';
-    } else if (random < 0.364) { // 4/11 chance
+    } else if (random < 0.333) { // 4/12 chance
       path = '/dealwithit1';
-    } else if (random < 0.455) { // 5/11 chance
+    } else if (random < 0.417) { // 5/12 chance
       path = '/dealwithit2';
-    } else if (random < 0.546) { // 6/11 chance
+    } else if (random < 0.5) { // 6/12 chance
       path = '/dealwithit3';
-    } else if (random < 0.636) { // 7/11 chance
+    } else if (random < 0.583) { // 7/12 chance
       path = '/baseball1';
-    } else if (random < 0.727) { // 8/11 chance
+    } else if (random < 0.667) { // 8/12 chance
       path = '/baseball2';
-    } else if (random < 0.818) { // 9/11 chance
+    } else if (random < 0.75) { // 9/12 chance
       path = '/kingkong';
-    } else if (random < 0.909) { // 10/11 chance
+    } else if (random < 0.833) { // 10/12 chance
       path = '/buschleague';
-    } else { // 11/11 chance
+    } else if (random < 0.917) { // 11/12 chance
       path = '/thumbsup';
+    } else { // 12/12 chance
+      path = '/jobwelldone';
     }
     window.location.href = path;
   };
@@ -137,6 +140,7 @@ function App() {
                 <Route path='/kingkong' element={<KingKong />} />
                 <Route path='/buschleague' element={<BuschLeague />} />
                 <Route path='/thumbsup' element={<ThumbsUp />} />
+                <Route path='/jobwelldone' element={<JobWellDone />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
