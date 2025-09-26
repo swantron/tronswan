@@ -12,32 +12,36 @@ const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
     // Randomly choose between all video components
     const random = Math.random();
     let path;
-    if (random < 0.077) { // 1/13 chance
+    if (random < 0.067) { // 1/15 chance
       path = '/gangnam1';
-    } else if (random < 0.154) { // 2/13 chance
+    } else if (random < 0.133) { // 2/15 chance
       path = '/gangnam2';
-    } else if (random < 0.231) { // 3/13 chance
+    } else if (random < 0.2) { // 3/15 chance
       path = '/hacking';
-    } else if (random < 0.308) { // 4/13 chance
+    } else if (random < 0.267) { // 4/15 chance
       path = '/dealwithit1';
-    } else if (random < 0.385) { // 5/13 chance
+    } else if (random < 0.333) { // 5/15 chance
       path = '/dealwithit2';
-    } else if (random < 0.462) { // 6/13 chance
+    } else if (random < 0.4) { // 6/15 chance
       path = '/dealwithit3';
-    } else if (random < 0.538) { // 7/13 chance
+    } else if (random < 0.467) { // 7/15 chance
       path = '/baseball1';
-    } else if (random < 0.615) { // 8/13 chance
+    } else if (random < 0.533) { // 8/15 chance
       path = '/baseball2';
-    } else if (random < 0.692) { // 9/13 chance
+    } else if (random < 0.6) { // 9/15 chance
       path = '/kingkong';
-    } else if (random < 0.769) { // 10/13 chance
+    } else if (random < 0.667) { // 10/15 chance
       path = '/buschleague';
-    } else if (random < 0.846) { // 11/13 chance
+    } else if (random < 0.733) { // 11/15 chance
       path = '/thumbsup';
-    } else if (random < 0.923) { // 12/13 chance
+    } else if (random < 0.8) { // 12/15 chance
       path = '/jobwelldone';
-    } else { // 13/13 chance
+    } else if (random < 0.867) { // 13/15 chance
       path = '/coffee';
+    } else if (random < 0.933) { // 14/15 chance
+      path = '/mishap';
+    } else { // 15/15 chance
+      path = '/peloton';
     }
     window.location.href = path;
   };

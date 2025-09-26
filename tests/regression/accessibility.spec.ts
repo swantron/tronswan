@@ -90,7 +90,15 @@ test.describe('Accessibility Regression Tests', () => {
                         currentUrl.includes('/dealwithit1') ||
                         currentUrl.includes('/dealwithit2') ||
                         currentUrl.includes('/dealwithit3') ||
-                        currentUrl.includes('/baseball1');
+                        currentUrl.includes('/baseball1') ||
+                        currentUrl.includes('/baseball2') ||
+                        currentUrl.includes('/kingkong') ||
+                        currentUrl.includes('/buschleague') ||
+                        currentUrl.includes('/thumbsup') ||
+                        currentUrl.includes('/jobwelldone') ||
+                        currentUrl.includes('/coffee') ||
+                        currentUrl.includes('/mishap') ||
+                        currentUrl.includes('/peloton');
     expect(isRandomPage).toBe(true);
   });
 
