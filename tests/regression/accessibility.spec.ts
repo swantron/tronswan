@@ -84,8 +84,7 @@ test.describe('Accessibility Regression Tests', () => {
     
     // Should be on one of the random pages
     const currentUrl = page.url();
-    const isRandomPage = currentUrl.includes('/gangnam1') || 
-                        currentUrl.includes('/gangnam2') || 
+    const isRandomPage = currentUrl.includes('/gangamstyle') || 
                         currentUrl.includes('/hacking') ||
                         currentUrl.includes('/dealwithit1') ||
                         currentUrl.includes('/dealwithit2') ||
@@ -99,7 +98,8 @@ test.describe('Accessibility Regression Tests', () => {
                         currentUrl.includes('/coffee') ||
                         currentUrl.includes('/mishap') ||
                         currentUrl.includes('/peloton') ||
-                        currentUrl.includes('/seeya');
+                        currentUrl.includes('/seeya') ||
+                        currentUrl.includes('/dynomite');
     expect(isRandomPage).toBe(true);
   });
 

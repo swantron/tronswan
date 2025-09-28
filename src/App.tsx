@@ -9,14 +9,14 @@ import Coffee from './components/video/Coffee';
 import DealWithIt1 from './components/video/DealWithIt1';
 import DealWithIt2 from './components/video/DealWithIt2';
 import DealWithIt3 from './components/video/DealWithIt3';
+import Dynomite from './components/video/Dynomite';
 import KingKong from './components/video/KingKong';
 import Mishap from './components/video/Mishap';
 import Peloton from './components/video/Peloton';
 import Seeya from './components/video/Seeya';
 import ThumbsUp from './components/video/ThumbsUp';
 import FizzBuzz from './components/ui/FizzBuzz';
-import Gangnam1 from './components/video/Gangnam1';
-import Gangnam2 from './components/video/Gangnam2';
+import GangamStyle from './components/video/GangamStyle';
 import Hacking from './components/video/Hacking';
 import JobWellDone from './components/video/JobWellDone';
 import HealthPage from './components/status/HealthPage';
@@ -34,41 +34,41 @@ import './App.css';
 function Home() {
   const handleSwantronClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Randomly choose between gangnam1, gangnam2, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, thumbsup, jobwelldone, coffee, mishap, peloton, and seeya
+    // Randomly choose between gangamstyle, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, thumbsup, jobwelldone, coffee, mishap, peloton, seeya, and dynomite
     const random = Math.random();
     let path;
     if (random < 0.063) { // 1/16 chance
-      path = '/gangnam1';
+      path = '/gangamstyle';
     } else if (random < 0.125) { // 2/16 chance
-      path = '/gangnam2';
-    } else if (random < 0.188) { // 3/16 chance
       path = '/hacking';
-    } else if (random < 0.25) { // 4/16 chance
+    } else if (random < 0.188) { // 3/16 chance
       path = '/dealwithit1';
-    } else if (random < 0.313) { // 5/16 chance
+    } else if (random < 0.25) { // 4/16 chance
       path = '/dealwithit2';
-    } else if (random < 0.375) { // 6/16 chance
+    } else if (random < 0.313) { // 5/16 chance
       path = '/dealwithit3';
-    } else if (random < 0.438) { // 7/16 chance
+    } else if (random < 0.375) { // 6/16 chance
       path = '/baseball1';
-    } else if (random < 0.5) { // 8/16 chance
+    } else if (random < 0.438) { // 7/16 chance
       path = '/baseball2';
-    } else if (random < 0.563) { // 9/16 chance
+    } else if (random < 0.5) { // 8/16 chance
       path = '/kingkong';
-    } else if (random < 0.625) { // 10/16 chance
+    } else if (random < 0.563) { // 9/16 chance
       path = '/buschleague';
-    } else if (random < 0.688) { // 11/16 chance
+    } else if (random < 0.625) { // 10/16 chance
       path = '/thumbsup';
-    } else if (random < 0.75) { // 12/16 chance
+    } else if (random < 0.688) { // 11/16 chance
       path = '/jobwelldone';
-    } else if (random < 0.813) { // 13/16 chance
+    } else if (random < 0.75) { // 12/16 chance
       path = '/coffee';
-    } else if (random < 0.875) { // 14/16 chance
+    } else if (random < 0.813) { // 13/16 chance
       path = '/mishap';
-    } else if (random < 0.938) { // 15/16 chance
+    } else if (random < 0.875) { // 14/16 chance
       path = '/peloton';
-    } else { // 16/16 chance
+    } else if (random < 0.938) { // 15/16 chance
       path = '/seeya';
+    } else { // 16/16 chance
+      path = '/dynomite';
     }
     window.location.href = path;
   };
@@ -142,8 +142,7 @@ function App() {
                 <Route path='/swantron/:id' element={<SwantronDetail />} />
                 <Route path='/weather' element={<Weather />} />
                 <Route path='/hacking' element={<Hacking />} />
-                <Route path='/gangnam1' element={<Gangnam1 />} />
-                <Route path='/gangnam2' element={<Gangnam2 />} />
+                <Route path='/gangamstyle' element={<GangamStyle />} />
                 <Route path='/dealwithit1' element={<DealWithIt1 />} />
                 <Route path='/dealwithit2' element={<DealWithIt2 />} />
                 <Route path='/dealwithit3' element={<DealWithIt3 />} />
@@ -157,6 +156,7 @@ function App() {
                 <Route path='/mishap' element={<Mishap />} />
                 <Route path='/peloton' element={<Peloton />} />
                 <Route path='/seeya' element={<Seeya />} />
+                <Route path='/dynomite' element={<Dynomite />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
