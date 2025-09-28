@@ -2,24 +2,24 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 
-import Gangnam1 from './Gangnam1';
+import GangamStyle from './GangamStyle';
 
-describe('Gangnam1 Component', () => {
-  test('renders gangnam title', () => {
-    render(<Gangnam1 />);
-    const titleElement = screen.getByText(/gangnam style/i);
+describe('GangamStyle Component', () => {
+  test('renders gangam style title', () => {
+    render(<GangamStyle />);
+    const titleElement = screen.getByText(/gangam style/i);
     expect(titleElement).toBeInTheDocument();
   });
 
   test('renders video element', () => {
-    render(<Gangnam1 />);
-    const videoElement = screen.getByTestId('gangnam1-video');
+    render(<GangamStyle />);
+    const videoElement = screen.getByTestId('gangamstyle-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
-    render(<Gangnam1 />);
-    const videoElement = screen.getByTestId('gangnam1-video');
+    render(<GangamStyle />);
+    const videoElement = screen.getByTestId('gangamstyle-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
@@ -29,8 +29,8 @@ describe('Gangnam1 Component', () => {
   });
 
   test('renders container with correct test id', () => {
-    render(<Gangnam1 />);
-    const container = screen.getByTestId('gangnam1-container');
+    render(<GangamStyle />);
+    const container = screen.getByTestId('gangamstyle-container');
     expect(container).toBeInTheDocument();
   });
 });
