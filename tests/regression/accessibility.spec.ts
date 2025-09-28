@@ -98,7 +98,8 @@ test.describe('Accessibility Regression Tests', () => {
                         currentUrl.includes('/jobwelldone') ||
                         currentUrl.includes('/coffee') ||
                         currentUrl.includes('/mishap') ||
-                        currentUrl.includes('/peloton');
+                        currentUrl.includes('/peloton') ||
+                        currentUrl.includes('/seeya');
     expect(isRandomPage).toBe(true);
   });
 
