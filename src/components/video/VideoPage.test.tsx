@@ -8,7 +8,7 @@ describe('VideoPage Component', () => {
   const mockProps = {
     title: 'Test Video',
     videoSrc: '/test-video.mp4',
-    testId: 'test-video'
+    testId: 'test-video',
   };
 
   test('renders title correctly', () => {
@@ -21,7 +21,9 @@ describe('VideoPage Component', () => {
     render(<VideoPage {...mockProps} />);
     const videoElement = screen.getByTestId('test-video-video');
     expect(videoElement).toBeInTheDocument();
-    expect(videoElement.querySelector('source')?.getAttribute('src')).toBe('/test-video.mp4');
+    expect(videoElement.querySelector('source')?.getAttribute('src')).toBe(
+      '/test-video.mp4'
+    );
   });
 
   test('video has correct attributes', () => {
@@ -42,9 +44,11 @@ describe('VideoPage Component', () => {
 
   test('renders fallback content with download link', () => {
     render(<VideoPage {...mockProps} />);
-    const fallbackElement = screen.getByText('Your browser does not support the video tag.');
+    const fallbackElement = screen.getByText(
+      'Your browser does not support the video tag.'
+    );
     expect(fallbackElement).toBeInTheDocument();
-    
+
     const downloadLink = screen.getByText('Download MP4 version');
     expect(downloadLink).toBeInTheDocument();
     expect(downloadLink).toHaveAttribute('href', '/test-video.mp4');

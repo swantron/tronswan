@@ -1,12 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { describe, it, expect } from 'vitest';
 import Coffee from './Coffee';
 
 describe('Coffee', () => {
   it('renders the component with correct title', () => {
     render(<Coffee />);
-    
+
     const title = screen.getByText('coffee');
     expect(title).toBeInTheDocument();
     expect(title.tagName).toBe('H1');
@@ -14,7 +15,7 @@ describe('Coffee', () => {
 
   it('renders the video element with correct attributes', () => {
     render(<Coffee />);
-    
+
     const video = screen.getByTestId('coffee-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
@@ -26,7 +27,7 @@ describe('Coffee', () => {
 
   it('renders the video source with correct path', () => {
     render(<Coffee />);
-    
+
     const source = screen.getByTestId('coffee-video').querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/coffee.mp4');
@@ -35,7 +36,7 @@ describe('Coffee', () => {
 
   it('renders the container with correct test id', () => {
     render(<Coffee />);
-    
+
     const container = screen.getByTestId('coffee-container');
     expect(container).toBeInTheDocument();
     expect(container).toHaveClass('gangnam-container');
@@ -43,15 +44,17 @@ describe('Coffee', () => {
 
   it('renders fallback content for unsupported browsers', () => {
     render(<Coffee />);
-    
-    const fallback = screen.getByText('Your browser does not support the video tag.');
+
+    const fallback = screen.getByText(
+      'Your browser does not support the video tag.'
+    );
     expect(fallback).toBeInTheDocument();
     expect(fallback).toHaveClass('video-fallback');
   });
 
   it('renders download link in fallback', () => {
     render(<Coffee />);
-    
+
     const downloadLink = screen.getByText('Download MP4 version');
     expect(downloadLink).toBeInTheDocument();
     expect(downloadLink).toHaveAttribute('href', '/coffee.mp4');

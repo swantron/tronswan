@@ -3,11 +3,7 @@ import VideoPage from './VideoPage';
 
 const KingKong = () => {
   return (
-    <VideoPage
-      title="kong tron"
-      videoSrc="/kingkong.mp4"
-      testId="kingkong"
-    />
+    <VideoPage title='kong tron' videoSrc='/kingkong.mp4' testId='kingkong' />
   );
 };
 

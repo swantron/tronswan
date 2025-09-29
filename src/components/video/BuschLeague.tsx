@@ -4,9 +4,9 @@ import VideoPage from './VideoPage';
 const BuschLeague = () => {
   return (
     <VideoPage
-      title="busch dot league"
-      videoSrc="/buschleague.mp4"
-      testId="buschleague"
+      title='busch dot league'
+      videoSrc='/buschleague.mp4'
+      testId='buschleague'
     />
   );
 };

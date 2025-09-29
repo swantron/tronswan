@@ -12,37 +12,53 @@ const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
     // Randomly choose between all video components
     const random = Math.random();
     let path;
-    if (random < 0.063) { // 1/16 chance
+    if (random < 0.063) {
+      // 1/16 chance
       path = '/gangamstyle';
-    } else if (random < 0.125) { // 2/16 chance
+    } else if (random < 0.125) {
+      // 2/16 chance
       path = '/hacking';
-    } else if (random < 0.188) { // 3/16 chance
+    } else if (random < 0.188) {
+      // 3/16 chance
       path = '/dealwithit1';
-    } else if (random < 0.25) { // 4/16 chance
+    } else if (random < 0.25) {
+      // 4/16 chance
       path = '/dealwithit2';
-    } else if (random < 0.313) { // 5/16 chance
+    } else if (random < 0.313) {
+      // 5/16 chance
       path = '/dealwithit3';
-    } else if (random < 0.375) { // 6/16 chance
+    } else if (random < 0.375) {
+      // 6/16 chance
       path = '/baseball1';
-    } else if (random < 0.438) { // 7/16 chance
+    } else if (random < 0.438) {
+      // 7/16 chance
       path = '/baseball2';
-    } else if (random < 0.5) { // 8/16 chance
+    } else if (random < 0.5) {
+      // 8/16 chance
       path = '/kingkong';
-    } else if (random < 0.563) { // 9/16 chance
+    } else if (random < 0.563) {
+      // 9/16 chance
       path = '/buschleague';
-    } else if (random < 0.625) { // 10/16 chance
+    } else if (random < 0.625) {
+      // 10/16 chance
       path = '/thumbsup';
-    } else if (random < 0.688) { // 11/16 chance
+    } else if (random < 0.688) {
+      // 11/16 chance
       path = '/jobwelldone';
-    } else if (random < 0.75) { // 12/16 chance
+    } else if (random < 0.75) {
+      // 12/16 chance
       path = '/coffee';
-    } else if (random < 0.813) { // 13/16 chance
+    } else if (random < 0.813) {
+      // 13/16 chance
       path = '/mishap';
-    } else if (random < 0.875) { // 14/16 chance
+    } else if (random < 0.875) {
+      // 14/16 chance
       path = '/peloton';
-    } else if (random < 0.938) { // 15/16 chance
+    } else if (random < 0.938) {
+      // 15/16 chance
       path = '/seeya';
-    } else { // 16/16 chance
+    } else {
+      // 16/16 chance
       path = '/dynomite';
     }
     window.location.href = path;
@@ -74,7 +90,7 @@ const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
         </div>
 
         <div className='video-actions'>
-          <button 
+          <button
             onClick={handleRandomClick}
             className='random-button'
             data-testid={`${testId}-random-button`}

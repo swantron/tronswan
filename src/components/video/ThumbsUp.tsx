@@ -3,11 +3,7 @@ import VideoPage from './VideoPage';
 
 const ThumbsUp = () => {
   return (
-    <VideoPage
-      title="thumbs up"
-      videoSrc="/thumbsup.mp4"
-      testId="thumbsup"
-    />
+    <VideoPage title='thumbs up' videoSrc='/thumbsup.mp4' testId='thumbsup' />
   );
 };
 

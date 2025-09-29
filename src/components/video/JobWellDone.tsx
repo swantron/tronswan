@@ -4,9 +4,9 @@ import VideoPage from './VideoPage';
 const JobWellDone = () => {
   return (
     <VideoPage
-      title="job well done"
-      videoSrc="/jobwelldone.mp4"
-      testId="jobwelldone"
+      title='job well done'
+      videoSrc='/jobwelldone.mp4'
+      testId='jobwelldone'
     />
   );
 };
