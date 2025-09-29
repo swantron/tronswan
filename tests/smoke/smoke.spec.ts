@@ -60,6 +60,6 @@ test.describe('Smoke Tests', () => {
     
     // Should redirect to one of the video pages
     const currentUrl = await homePage.getCurrentUrl();
-    expect(currentUrl).toMatch(/gangamstyle|hacking|dealwithit[123]|baseball[12]|kingkong|buschleague|thumbsup|jobwelldone|coffee|mishap|peloton|seeya|dynomite/);
+    expect(currentUrl).toMatch(/gangamstyle|hacking|dealwithit[123]|baseball[12]|kingkong|buschleague|thumbsup|jobwelldone|coffee|mishap|peloton|seeya|dynomite|working/);
   });
 });

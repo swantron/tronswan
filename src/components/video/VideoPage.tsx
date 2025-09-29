@@ -12,54 +12,57 @@ const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
     // Randomly choose between all video components
     const random = Math.random();
     let path;
-    if (random < 0.063) {
-      // 1/16 chance
+    if (random < 0.059) {
+      // 1/17 chance
       path = '/gangamstyle';
-    } else if (random < 0.125) {
-      // 2/16 chance
+    } else if (random < 0.118) {
+      // 2/17 chance
       path = '/hacking';
-    } else if (random < 0.188) {
-      // 3/16 chance
+    } else if (random < 0.176) {
+      // 3/17 chance
       path = '/dealwithit1';
-    } else if (random < 0.25) {
-      // 4/16 chance
+    } else if (random < 0.235) {
+      // 4/17 chance
       path = '/dealwithit2';
-    } else if (random < 0.313) {
-      // 5/16 chance
+    } else if (random < 0.294) {
+      // 5/17 chance
       path = '/dealwithit3';
-    } else if (random < 0.375) {
-      // 6/16 chance
+    } else if (random < 0.353) {
+      // 6/17 chance
       path = '/baseball1';
-    } else if (random < 0.438) {
-      // 7/16 chance
+    } else if (random < 0.412) {
+      // 7/17 chance
       path = '/baseball2';
-    } else if (random < 0.5) {
-      // 8/16 chance
+    } else if (random < 0.471) {
+      // 8/17 chance
       path = '/kingkong';
-    } else if (random < 0.563) {
-      // 9/16 chance
+    } else if (random < 0.529) {
+      // 9/17 chance
       path = '/buschleague';
-    } else if (random < 0.625) {
-      // 10/16 chance
+    } else if (random < 0.588) {
+      // 10/17 chance
       path = '/thumbsup';
-    } else if (random < 0.688) {
-      // 11/16 chance
+    } else if (random < 0.647) {
+      // 11/17 chance
       path = '/jobwelldone';
-    } else if (random < 0.75) {
-      // 12/16 chance
+    } else if (random < 0.706) {
+      // 12/17 chance
       path = '/coffee';
-    } else if (random < 0.813) {
-      // 13/16 chance
+    } else if (random < 0.765) {
+      // 13/17 chance
       path = '/mishap';
-    } else if (random < 0.875) {
-      // 14/16 chance
+    } else if (random < 0.824) {
+      // 14/17 chance
       path = '/peloton';
-    } else if (random < 0.938) {
-      // 15/16 chance
+    } else if (random < 0.882) {
+      // 15/17 chance
       path = '/seeya';
-    } else {
-      // 16/16 chance
+    } else if (random < 0.941) {
+      // 16/17 chance
       path = '/dynomite';
+    } else {
+      // 17/17 chance
+      path = '/working';
     }
     window.location.href = path;
   };
