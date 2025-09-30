@@ -12,13 +12,13 @@ interface VideoItem {
 
 const Shorts: React.FC = () => {
   const videos: VideoItem[] = [
-    { id: 'gangamstyle', title: 'gangam style', path: '/gangamstyle' },
+    { id: 'gangnam_1', title: 'gangam style', path: '/gangamstyle' },
     { id: 'hacking', title: 'hacking', path: '/hacking' },
-    { id: 'dealwithit1', title: 'deal with it 1', path: '/dealwithit1' },
-    { id: 'dealwithit2', title: 'deal with it 2', path: '/dealwithit2' },
-    { id: 'dealwithit3', title: 'deal with it 3', path: '/dealwithit3' },
-    { id: 'baseball1', title: 'baseball 1', path: '/baseball1' },
-    { id: 'baseball2', title: 'glove up', path: '/baseball2' },
+    { id: 'dealwithit_1', title: 'deal with it 1', path: '/dealwithit1' },
+    { id: 'dealwithit_2', title: 'deal with it 2', path: '/dealwithit2' },
+    { id: 'dealwithit_3', title: 'deal with it 3', path: '/dealwithit3' },
+    { id: 'baseball_1', title: 'baseball 1', path: '/baseball1' },
+    { id: 'baseball_2', title: 'glove up', path: '/baseball2' },
     { id: 'kingkong', title: 'kong tron', path: '/kingkong' },
     { id: 'buschleague', title: 'busch dot league', path: '/buschleague' },
     { id: 'thumbsup', title: 'thumbs up', path: '/thumbsup' },
@@ -35,7 +35,6 @@ const Shorts: React.FC = () => {
     <div className="shorts-container">
       <div className="shorts-header">
         <h1 className="shorts-title">Shorts</h1>
-        <p className="shorts-subtitle">All your favorite videos in one place</p>
       </div>
       
       <div className="shorts-grid">
