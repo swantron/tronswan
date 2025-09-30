@@ -16,6 +16,7 @@ import Peloton from './components/video/Peloton';
 import Seeya from './components/video/Seeya';
 import ThumbsUp from './components/video/ThumbsUp';
 import Working from './components/video/Working';
+import Shorts from './components/video/Shorts';
 import FizzBuzz from './components/ui/FizzBuzz';
 import GangamStyle from './components/video/GangamStyle';
 import Hacking from './components/video/Hacking';
@@ -126,6 +127,9 @@ function App() {
               <Link to='/health' className='nav-link'>
                 health
               </Link>
+              <Link to='/shorts' className='nav-link'>
+                shorts
+              </Link>
             </nav>
 
             <ErrorBoundary>
@@ -161,6 +165,7 @@ function App() {
                 <Route path='/seeya' element={<Seeya />} />
                 <Route path='/dynomite' element={<Dynomite />} />
                 <Route path='/working' element={<Working />} />
+                <Route path='/shorts' element={<Shorts />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
