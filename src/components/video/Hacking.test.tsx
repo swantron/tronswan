@@ -13,13 +13,13 @@ describe('Hacking Component', () => {
 
   test('renders video element', () => {
     render(<Hacking />);
-    const videoElement = screen.getByTestId('hacking-video');
+    const videoElement = screen.getByTestId('hacking-modal-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
     render(<Hacking />);
-    const videoElement = screen.getByTestId('hacking-video');
+    const videoElement = screen.getByTestId('hacking-modal-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);

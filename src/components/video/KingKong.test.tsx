@@ -10,25 +10,25 @@ describe('KingKong', () => {
 
     const title = screen.getByText('kong tron');
     expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe('H1');
+    expect(title.tagName).toBe('H2');
   });
 
   it('renders the video element with correct attributes', () => {
     render(<KingKong />);
 
-    const video = screen.getByTestId('kingkong-video');
+    const video = screen.getByTestId('kingkong-modal-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
     expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).loop).toBe(true);
     expect((video as HTMLVideoElement).playsInline).toBe(true);
-    expect(video).toHaveClass('gangnam-video');
+    expect(video).toHaveClass('video-modal-video');
   });
 
   it('renders the video source with correct path', () => {
     render(<KingKong />);
 
-    const source = screen.getByTestId('kingkong-video').querySelector('source');
+    const source = screen.getByTestId('kingkong-modal-video').querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/kingkong.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

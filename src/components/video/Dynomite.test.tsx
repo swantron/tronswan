@@ -10,25 +10,25 @@ describe('Dynomite', () => {
 
     const title = screen.getByText('dynomite');
     expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe('H1');
+    expect(title.tagName).toBe('H2');
   });
 
   it('renders the video element with correct attributes', () => {
     render(<Dynomite />);
 
-    const video = screen.getByTestId('dynomite-video');
+    const video = screen.getByTestId('dynomite-modal-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
     expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).loop).toBe(true);
     expect((video as HTMLVideoElement).playsInline).toBe(true);
-    expect(video).toHaveClass('gangnam-video');
+    expect(video).toHaveClass('video-modal-video');
   });
 
   it('renders the video source with correct path', () => {
     render(<Dynomite />);
 
-    const source = screen.getByTestId('dynomite-video').querySelector('source');
+    const source = screen.getByTestId('dynomite-modal-video').querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/dynomite.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

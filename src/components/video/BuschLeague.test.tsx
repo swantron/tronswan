@@ -10,26 +10,26 @@ describe('BuschLeague', () => {
 
     const title = screen.getByText('busch dot league');
     expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe('H1');
+    expect(title.tagName).toBe('H2');
   });
 
   it('renders the video element with correct attributes', () => {
     render(<BuschLeague />);
 
-    const video = screen.getByTestId('buschleague-video');
+    const video = screen.getByTestId('buschleague-modal-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
     expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).loop).toBe(true);
     expect((video as HTMLVideoElement).playsInline).toBe(true);
-    expect(video).toHaveClass('gangnam-video');
+    expect(video).toHaveClass('video-modal-video');
   });
 
   it('renders the video source with correct path', () => {
     render(<BuschLeague />);
 
     const source = screen
-      .getByTestId('buschleague-video')
+      .getByTestId('buschleague-modal-video')
       .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/buschleague.mp4');

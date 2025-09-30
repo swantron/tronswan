@@ -19,7 +19,7 @@ describe('VideoPage Component', () => {
 
   test('renders video element with correct source', () => {
     render(<VideoPage {...mockProps} />);
-    const videoElement = screen.getByTestId('test-video-video');
+    const videoElement = screen.getByTestId('test-video-modal-video');
     expect(videoElement).toBeInTheDocument();
     expect(videoElement.querySelector('source')?.getAttribute('src')).toBe(
       '/test-video.mp4'
@@ -28,7 +28,7 @@ describe('VideoPage Component', () => {
 
   test('video has correct attributes', () => {
     render(<VideoPage {...mockProps} />);
-    const videoElement = screen.getByTestId('test-video-video');
+    const videoElement = screen.getByTestId('test-video-modal-video');
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
     expect((videoElement as HTMLVideoElement).muted).toBe(true);

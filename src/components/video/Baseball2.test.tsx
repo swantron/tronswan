@@ -10,26 +10,26 @@ describe('Baseball2', () => {
 
     const title = screen.getByText('glove up');
     expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe('H1');
+    expect(title.tagName).toBe('H2');
   });
 
   it('renders the video element with correct attributes', () => {
     render(<Baseball2 />);
 
-    const video = screen.getByTestId('baseball2-video');
+    const video = screen.getByTestId('baseball2-modal-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
     expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).loop).toBe(true);
     expect((video as HTMLVideoElement).playsInline).toBe(true);
-    expect(video).toHaveClass('gangnam-video');
+    expect(video).toHaveClass('video-modal-video');
   });
 
   it('renders the video source with correct path', () => {
     render(<Baseball2 />);
 
     const source = screen
-      .getByTestId('baseball2-video')
+      .getByTestId('baseball2-modal-video')
       .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/baseball_2.mp4');

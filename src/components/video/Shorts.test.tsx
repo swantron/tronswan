@@ -67,14 +67,16 @@ describe('Shorts Component', () => {
     });
   });
 
-  it('renders links with correct paths', () => {
+  it('renders clickable video items with correct roles', () => {
     render(<ShortsWithRouter />);
     
-    const gangamLink = screen.getByTestId('shorts-item-gangnam_1');
-    const hackingLink = screen.getByTestId('shorts-item-hacking');
+    const gangamItem = screen.getByTestId('shorts-item-gangnam_1');
+    const hackingItem = screen.getByTestId('shorts-item-hacking');
     
-    expect(gangamLink).toHaveAttribute('href', '/gangamstyle');
-    expect(hackingLink).toHaveAttribute('href', '/hacking');
+    expect(gangamItem).toHaveAttribute('role', 'button');
+    expect(gangamItem).toHaveAttribute('tabIndex', '0');
+    expect(hackingItem).toHaveAttribute('role', 'button');
+    expect(hackingItem).toHaveAttribute('tabIndex', '0');
   });
 
   it('renders container with correct classes', () => {

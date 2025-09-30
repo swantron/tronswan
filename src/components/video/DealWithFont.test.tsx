@@ -13,13 +13,13 @@ describe('DealWithFont Component', () => {
 
   test('renders video element', () => {
     render(<DealWithFont />);
-    const videoElement = screen.getByTestId('dealwithfont-video');
+    const videoElement = screen.getByTestId('dealwithfont-modal-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
     render(<DealWithFont />);
-    const videoElement = screen.getByTestId('dealwithfont-video');
+    const videoElement = screen.getByTestId('dealwithfont-modal-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);

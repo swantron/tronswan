@@ -13,13 +13,13 @@ describe('GangamStyle Component', () => {
 
   test('renders video element', () => {
     render(<GangamStyle />);
-    const videoElement = screen.getByTestId('gangamstyle-video');
+    const videoElement = screen.getByTestId('gangamstyle-modal-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
     render(<GangamStyle />);
-    const videoElement = screen.getByTestId('gangamstyle-video');
+    const videoElement = screen.getByTestId('gangamstyle-modal-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);

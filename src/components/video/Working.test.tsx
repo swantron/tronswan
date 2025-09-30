@@ -10,25 +10,25 @@ describe('Working Component', () => {
     
     const title = screen.getByText('working');
     expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe('H1');
+    expect(title.tagName).toBe('H2');
   });
 
   it('renders the video element with correct attributes', () => {
     render(<Working />);
     
-    const video = screen.getByTestId('working-video');
+    const video = screen.getByTestId('working-modal-video');
     expect(video).toBeInTheDocument();
     expect((video as HTMLVideoElement).autoplay).toBe(true);
     expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).loop).toBe(true);
     expect((video as HTMLVideoElement).playsInline).toBe(true);
-    expect(video).toHaveClass('gangnam-video');
+    expect(video).toHaveClass('video-modal-video');
   });
 
   it('renders the video source with correct path', () => {
     render(<Working />);
     
-    const source = screen.getByTestId('working-video').querySelector('source');
+    const source = screen.getByTestId('working-modal-video').querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/working.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

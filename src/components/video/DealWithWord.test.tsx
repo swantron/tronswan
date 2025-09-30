@@ -13,13 +13,13 @@ describe('DealWithWord Component', () => {
 
   test('renders video element', () => {
     render(<DealWithWord />);
-    const videoElement = screen.getByTestId('dealwithword-video');
+    const videoElement = screen.getByTestId('dealwithword-modal-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
     render(<DealWithWord />);
-    const videoElement = screen.getByTestId('dealwithword-video');
+    const videoElement = screen.getByTestId('dealwithword-modal-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);

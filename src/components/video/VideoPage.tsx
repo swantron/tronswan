@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import VideoModal from './VideoModal';
 import '../../styles/Video.css';
 
 interface VideoPageProps {
@@ -8,100 +9,26 @@ interface VideoPageProps {
 }
 
 const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
-  const handleRandomClick = () => {
-    // Randomly choose between all video components
-    const random = Math.random();
-    let path;
-    if (random < 0.059) {
-      // 1/17 chance
-      path = '/gangamstyle';
-    } else if (random < 0.118) {
-      // 2/17 chance
-      path = '/hacking';
-    } else if (random < 0.176) {
-      // 3/17 chance
-      path = '/dealwithit';
-    } else if (random < 0.235) {
-      // 4/17 chance
-      path = '/dealwithfont';
-    } else if (random < 0.294) {
-      // 5/17 chance
-      path = '/dealwithword';
-    } else if (random < 0.353) {
-      // 6/17 chance
-      path = '/wrigley';
-    } else if (random < 0.412) {
-      // 7/17 chance
-      path = '/baseball2';
-    } else if (random < 0.471) {
-      // 8/17 chance
-      path = '/kingkong';
-    } else if (random < 0.529) {
-      // 9/17 chance
-      path = '/buschleague';
-    } else if (random < 0.588) {
-      // 10/17 chance
-      path = '/thumbsup';
-    } else if (random < 0.647) {
-      // 11/17 chance
-      path = '/jobwelldone';
-    } else if (random < 0.706) {
-      // 12/17 chance
-      path = '/coffee';
-    } else if (random < 0.765) {
-      // 13/17 chance
-      path = '/mishap';
-    } else if (random < 0.824) {
-      // 14/17 chance
-      path = '/peloton';
-    } else if (random < 0.882) {
-      // 15/17 chance
-      path = '/seeya';
-    } else if (random < 0.941) {
-      // 16/17 chance
-      path = '/dynomite';
-    } else {
-      // 17/17 chance
-      path = '/working';
-    }
-    window.location.href = path;
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [currentVideo, setCurrentVideo] = useState({ title, videoSrc, testId });
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Navigate back to shorts page after a short delay
+    setTimeout(() => {
+      window.history.back();
+    }, 300);
   };
 
   return (
     <div className='gangnam-container' data-testid={`${testId}-container`}>
-      <div className='gangnam-content'>
-        <h1 className='gangnam-title'>{title}</h1>
-
-        <div className='video-container'>
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className='gangnam-video'
-            data-testid={`${testId}-video`}
-          >
-            <source src={videoSrc} type='video/mp4' />
-            <p className='video-fallback'>
-              Your browser does not support the video tag.
-              <br />
-              <a href={videoSrc} download>
-                Download MP4 version
-              </a>
-            </p>
-          </video>
-        </div>
-
-        <div className='video-actions'>
-          <button
-            onClick={handleRandomClick}
-            className='random-button'
-            data-testid={`${testId}-random-button`}
-          >
-            Random Video
-          </button>
-        </div>
-      </div>
+      <VideoModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={currentVideo.title}
+        videoSrc={currentVideo.videoSrc}
+        testId={currentVideo.testId}
+      />
     </div>
   );
 };
