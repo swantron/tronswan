@@ -79,34 +79,63 @@ describe('Weather Component', () => {
     });
   });
 
-  test('renders weather page title', () => {
+  test('renders weather page title', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     expect(screen.getByTestId('weather-title')).toHaveTextContent('weathertron');
   });
 
-  test('renders view toggle buttons', () => {
+  test('renders view toggle buttons', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     expect(screen.getByText('Current')).toBeInTheDocument();
     expect(screen.getByText('Forecast')).toBeInTheDocument();
   });
 
-  test('renders loading state initially', () => {
+  test('renders loading state initially', async () => {
     renderWeather();
     expect(screen.getByLabelText('Loading weather data')).toBeInTheDocument();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
   });
 
 
 
-  test('renders weather info section', () => {
+  test('renders weather info section', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     expect(
       screen.getByText('Real-time weather data from OpenWeatherMap API')
     ).toBeInTheDocument();
     expect(screen.getByText('Search for any city worldwide to get current conditions')).toBeInTheDocument();
   });
 
-  test('renders city search input and button', () => {
+  test('renders city search input and button', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     expect(screen.getByTestId('city-input')).toBeInTheDocument();
     expect(screen.getByTestId('search-button')).toBeInTheDocument();
   });
@@ -146,8 +175,14 @@ describe('Weather Component', () => {
   });
 
 
-  test('disables search button when input is empty', () => {
+  test('disables search button when input is empty', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     const searchButton = screen.getByTestId('search-button');
     expect(searchButton).toBeDisabled();
   });
@@ -226,15 +261,27 @@ describe('Weather Component', () => {
 
 
   // Temperature unit tests
-  test('renders temperature unit toggle buttons', () => {
+  test('renders temperature unit toggle buttons', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     expect(screen.getByText('°F')).toBeInTheDocument();
     expect(screen.getByText('°C')).toBeInTheDocument();
     expect(screen.getByText('K')).toBeInTheDocument();
   });
 
-  test('shows imperial as active by default', () => {
+  test('shows imperial as active by default', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     const fahrenheitButton = screen.getByText('°F');
     const celsiusButton = screen.getByText('°C');
     const kelvinButton = screen.getByText('K');
@@ -244,8 +291,14 @@ describe('Weather Component', () => {
     expect(kelvinButton).not.toHaveClass('active');
   });
 
-  test('unit buttons are clickable', () => {
+  test('unit buttons are clickable', async () => {
     renderWeather();
+    
+    // Wait for the component to finish loading
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+    });
+    
     const fahrenheitButton = screen.getByText('°F');
     const celsiusButton = screen.getByText('°C');
     const kelvinButton = screen.getByText('K');

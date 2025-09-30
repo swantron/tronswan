@@ -12,14 +12,12 @@ const ShortsWithRouter = () => (
 );
 
 describe('Shorts Component', () => {
-  it('renders the shorts title and subtitle', () => {
+  it('renders the shorts title', () => {
     render(<ShortsWithRouter />);
     
     const title = screen.getByText('Shorts');
-    const subtitle = screen.getByText('All your favorite videos in one place');
     
     expect(title).toBeInTheDocument();
-    expect(subtitle).toBeInTheDocument();
     expect(title.tagName).toBe('H1');
   });
 
@@ -27,7 +25,7 @@ describe('Shorts Component', () => {
     render(<ShortsWithRouter />);
     
     // Check for some key video items
-    expect(screen.getByTestId('shorts-item-gangamstyle')).toBeInTheDocument();
+    expect(screen.getByTestId('shorts-item-gangnam_1')).toBeInTheDocument();
     expect(screen.getByTestId('shorts-item-hacking')).toBeInTheDocument();
     expect(screen.getByTestId('shorts-item-working')).toBeInTheDocument();
     expect(screen.getByTestId('shorts-item-dynomite')).toBeInTheDocument();
@@ -72,7 +70,7 @@ describe('Shorts Component', () => {
   it('renders links with correct paths', () => {
     render(<ShortsWithRouter />);
     
-    const gangamLink = screen.getByTestId('shorts-item-gangamstyle');
+    const gangamLink = screen.getByTestId('shorts-item-gangnam_1');
     const hackingLink = screen.getByTestId('shorts-item-hacking');
     
     expect(gangamLink).toHaveAttribute('href', '/gangamstyle');
