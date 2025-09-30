@@ -20,16 +20,16 @@ const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
       path = '/hacking';
     } else if (random < 0.176) {
       // 3/17 chance
-      path = '/dealwithit1';
+      path = '/dealwithit';
     } else if (random < 0.235) {
       // 4/17 chance
-      path = '/dealwithit2';
+      path = '/dealwithfont';
     } else if (random < 0.294) {
       // 5/17 chance
-      path = '/dealwithit3';
+      path = '/dealwithword';
     } else if (random < 0.353) {
       // 6/17 chance
-      path = '/baseball1';
+      path = '/wrigley';
     } else if (random < 0.412) {
       // 7/17 chance
       path = '/baseball2';

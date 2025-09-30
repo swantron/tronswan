@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import ErrorBoundary from './components/ui/ErrorBoundary';
-import Baseball1 from './components/video/Baseball1';
+import Wrigley from './components/video/Wrigley';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
 import Coffee from './components/video/Coffee';
-import DealWithIt1 from './components/video/DealWithIt1';
-import DealWithIt2 from './components/video/DealWithIt2';
-import DealWithIt3 from './components/video/DealWithIt3';
+import DealWithIt from './components/video/DealWithIt';
+import DealWithFont from './components/video/DealWithFont';
+import DealWithWord from './components/video/DealWithWord';
 import Dynomite from './components/video/Dynomite';
 import KingKong from './components/video/KingKong';
 import Mishap from './components/video/Mishap';
@@ -44,13 +44,13 @@ function Home() {
     } else if (random < 0.118) { // 2/17 chance
       path = '/hacking';
     } else if (random < 0.176) { // 3/17 chance
-      path = '/dealwithit1';
+      path = '/dealwithit';
     } else if (random < 0.235) { // 4/17 chance
-      path = '/dealwithit2';
+      path = '/dealwithfont';
     } else if (random < 0.294) { // 5/17 chance
-      path = '/dealwithit3';
+      path = '/dealwithword';
     } else if (random < 0.353) { // 6/17 chance
-      path = '/baseball1';
+      path = '/wrigley';
     } else if (random < 0.412) { // 7/17 chance
       path = '/baseball2';
     } else if (random < 0.471) { // 8/17 chance
@@ -150,10 +150,10 @@ function App() {
                 <Route path='/weather' element={<Weather />} />
                 <Route path='/hacking' element={<Hacking />} />
                 <Route path='/gangamstyle' element={<GangamStyle />} />
-                <Route path='/dealwithit1' element={<DealWithIt1 />} />
-                <Route path='/dealwithit2' element={<DealWithIt2 />} />
-                <Route path='/dealwithit3' element={<DealWithIt3 />} />
-                <Route path='/baseball1' element={<Baseball1 />} />
+                <Route path='/dealwithit' element={<DealWithIt />} />
+                <Route path='/dealwithfont' element={<DealWithFont />} />
+                <Route path='/dealwithword' element={<DealWithWord />} />
+                <Route path='/wrigley' element={<Wrigley />} />
                 <Route path='/baseball2' element={<Baseball2 />} />
                 <Route path='/kingkong' element={<KingKong />} />
                 <Route path='/buschleague' element={<BuschLeague />} />

@@ -2,24 +2,24 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 
-import DealWithIt3 from './DealWithIt3';
+import DealWithWord from './DealWithWord';
 
-describe('DealWithIt3 Component', () => {
-  test('renders deal with it title', () => {
-    render(<DealWithIt3 />);
-    const titleElement = screen.getByText(/deal with it/i);
+describe('DealWithWord Component', () => {
+  test('renders deal with word title', () => {
+    render(<DealWithWord />);
+    const titleElement = screen.getByText(/deal with word/i);
     expect(titleElement).toBeInTheDocument();
   });
 
   test('renders video element', () => {
-    render(<DealWithIt3 />);
-    const videoElement = screen.getByTestId('dealwithit3-video');
+    render(<DealWithWord />);
+    const videoElement = screen.getByTestId('dealwithword-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
-    render(<DealWithIt3 />);
-    const videoElement = screen.getByTestId('dealwithit3-video');
+    render(<DealWithWord />);
+    const videoElement = screen.getByTestId('dealwithword-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
@@ -29,8 +29,8 @@ describe('DealWithIt3 Component', () => {
   });
 
   test('renders container with correct test id', () => {
-    render(<DealWithIt3 />);
-    const container = screen.getByTestId('dealwithit3-container');
+    render(<DealWithWord />);
+    const container = screen.getByTestId('dealwithword-container');
     expect(container).toBeInTheDocument();
   });
 });

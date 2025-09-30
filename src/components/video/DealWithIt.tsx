@@ -1,14 +1,14 @@
 import React from 'react';
 import VideoPage from './VideoPage';
 
-const DealWithIt3 = () => {
+const DealWithIt = () => {
   return (
     <VideoPage
       title='deal with it'
-      videoSrc='/dealwithit_3.mp4'
-      testId='dealwithit3'
+      videoSrc='/dealwithit.mp4'
+      testId='dealwithit'
     />
   );
 };
 
-export default DealWithIt3;
+export default DealWithIt;

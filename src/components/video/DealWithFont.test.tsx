@@ -2,24 +2,24 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 
-import Baseball1 from './Baseball1';
+import DealWithFont from './DealWithFont';
 
-describe('Baseball1 Component', () => {
-  test('renders baseball title', () => {
-    render(<Baseball1 />);
-    const titleElement = screen.getByText(/baseball/i);
+describe('DealWithFont Component', () => {
+  test('renders deal with font title', () => {
+    render(<DealWithFont />);
+    const titleElement = screen.getByText(/deal with font/i);
     expect(titleElement).toBeInTheDocument();
   });
 
   test('renders video element', () => {
-    render(<Baseball1 />);
-    const videoElement = screen.getByTestId('baseball1-video');
+    render(<DealWithFont />);
+    const videoElement = screen.getByTestId('dealwithfont-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
-    render(<Baseball1 />);
-    const videoElement = screen.getByTestId('baseball1-video');
+    render(<DealWithFont />);
+    const videoElement = screen.getByTestId('dealwithfont-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
@@ -29,8 +29,8 @@ describe('Baseball1 Component', () => {
   });
 
   test('renders container with correct test id', () => {
-    render(<Baseball1 />);
-    const container = screen.getByTestId('baseball1-container');
+    render(<DealWithFont />);
+    const container = screen.getByTestId('dealwithfont-container');
     expect(container).toBeInTheDocument();
   });
 });

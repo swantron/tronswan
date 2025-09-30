@@ -2,24 +2,24 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 
-import DealWithIt1 from './DealWithIt1';
+import DealWithIt from './DealWithIt';
 
-describe('DealWithIt1 Component', () => {
+describe('DealWithIt Component', () => {
   test('renders deal with it title', () => {
-    render(<DealWithIt1 />);
+    render(<DealWithIt />);
     const titleElement = screen.getByText(/deal with it/i);
     expect(titleElement).toBeInTheDocument();
   });
 
   test('renders video element', () => {
-    render(<DealWithIt1 />);
-    const videoElement = screen.getByTestId('dealwithit1-video');
+    render(<DealWithIt />);
+    const videoElement = screen.getByTestId('dealwithit-video');
     expect(videoElement).toBeInTheDocument();
   });
 
   test('video has correct attributes', () => {
-    render(<DealWithIt1 />);
-    const videoElement = screen.getByTestId('dealwithit1-video');
+    render(<DealWithIt />);
+    const videoElement = screen.getByTestId('dealwithit-video');
     // Check that video element exists and has the expected properties
     expect(videoElement).toBeInTheDocument();
     expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
@@ -29,8 +29,8 @@ describe('DealWithIt1 Component', () => {
   });
 
   test('renders container with correct test id', () => {
-    render(<DealWithIt1 />);
-    const container = screen.getByTestId('dealwithit1-container');
+    render(<DealWithIt />);
+    const container = screen.getByTestId('dealwithit-container');
     expect(container).toBeInTheDocument();
   });
 });
