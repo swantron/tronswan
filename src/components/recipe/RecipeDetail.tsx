@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { wordpressService } from '../../services/wordpressService';
 import { Recipe } from '../../types';
+import { logger } from '../../utils/logger';
 import '../../styles/RecipeDetail.css';
 
 const RecipeDetail: React.FC = () => {
@@ -22,7 +23,7 @@ const RecipeDetail: React.FC = () => {
         setError(null);
       } catch (err) {
         setError('Failed to load recipe. Please try again later.');
-        console.error('Error fetching recipe:', err);
+        logger.error('Error fetching recipe', { error: err, recipeId: id });
       } finally {
         setLoading(false);
       }

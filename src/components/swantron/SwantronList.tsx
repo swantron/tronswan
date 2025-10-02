@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { swantronService } from '../../services/swantronService';
 import { Post } from '../../types';
+import { logger } from '../../utils/logger';
 import SEO from '../ui/SEO';
 
 import SwantronCard from './SwantronCard';
@@ -30,7 +31,7 @@ const SwantronList: React.FC = () => {
         setError(
           'Failed to load posts from swantron.com. Please try again later.'
         );
-        console.error('Error fetching swantron posts:', err);
+        logger.error('Error fetching swantron posts', { error: err });
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { logger } from '../utils/logger';
+
 interface DateFormatterOptions {
   year?: 'numeric' | '2-digit';
   month?: 'numeric' | '2-digit' | 'long' | 'short' | 'narrow';
@@ -33,7 +35,12 @@ export const useDateFormatter = (
       try {
         return new Date(dateString).toLocaleDateString(locale, options);
       } catch (error) {
-        console.error('Error formatting date:', error);
+        logger.error('Error formatting date', {
+          error,
+          dateString,
+          locale,
+          options,
+        });
         return dateString;
       }
     };

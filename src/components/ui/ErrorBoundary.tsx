@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { logger } from '../../utils/logger';
+
 interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
@@ -32,7 +34,7 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error details for debugging
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    logger.error('ErrorBoundary caught an error', { error, errorInfo });
 
     this.setState({
       error: error,

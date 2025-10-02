@@ -1,4 +1,4 @@
-import { Response } from 'node-fetch';
+// Remove node-fetch import - use global Response type instead
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock runtimeConfig before importing
@@ -39,7 +39,7 @@ describe('DigitalOceanService', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockApp),
-      } as Response);
+      } as any);
 
       const result = await digitalOceanService.getApp();
 
@@ -145,7 +145,7 @@ describe('DigitalOceanService', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockDroplets),
-      } as Response);
+      } as any);
 
       const result = await digitalOceanService.getDroplets();
 
@@ -219,7 +219,7 @@ describe('DigitalOceanService', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockLoadBalancers),
-      } as Response);
+      } as any);
 
       const result = await digitalOceanService.getLoadBalancers();
 
@@ -302,7 +302,7 @@ describe('DigitalOceanService', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockDatabases),
-      } as Response);
+      } as any);
 
       const result = await digitalOceanService.getDatabases();
 
@@ -342,7 +342,7 @@ describe('DigitalOceanService', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockAccount),
-      } as Response);
+      } as any);
 
       const result = await digitalOceanService.getAccount();
 

@@ -1,4 +1,5 @@
 import { WordPressServiceResponse, Recipe, WordPressService } from '../types';
+import { logger } from '../utils/logger';
 
 // Updated API endpoint to use correct WordPress REST API format
 const WORDPRESS_API_URL = 'https://chomptron.com/index.php?rest_route=/wp/v2';
@@ -47,7 +48,11 @@ export const wordpressService: WordPressService = {
         totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
-      console.error('Error fetching recipes:', error);
+      logger.apiError(
+        'WordPress',
+        'getRecipes',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },
@@ -70,7 +75,11 @@ export const wordpressService: WordPressService = {
         tags: recipe._embedded?.['wp:term']?.[1] || [],
       };
     } catch (error) {
-      console.error('Error fetching recipe:', error);
+      logger.apiError(
+        'WordPress',
+        'getRecipe',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },
@@ -104,7 +113,11 @@ export const wordpressService: WordPressService = {
         totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
-      console.error('Error searching recipes:', error);
+      logger.apiError(
+        'WordPress',
+        'searchRecipes',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },

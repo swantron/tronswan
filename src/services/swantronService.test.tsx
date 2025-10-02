@@ -8,6 +8,19 @@ import {
   beforeEach,
 } from 'vitest';
 
+// Mock logger before importing the service
+vi.mock('../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
+import { logger } from '../utils/logger';
+
 import { swantronService } from './swantronService';
 
 // Mock fetch globally

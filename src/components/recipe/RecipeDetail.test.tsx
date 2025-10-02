@@ -3,7 +3,19 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 
+// Mock logger before importing the component
+vi.mock('../../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 import { wordpressService } from '../../services/wordpressService';
+import { logger } from '../../utils/logger';
 
 import RecipeDetail from './RecipeDetail';
 
@@ -55,13 +67,11 @@ describe('RecipeDetail Component', () => {
   });
 
   afterEach(() => {
-    if (console.error.mockRestore) {
-      console.error.mockRestore();
-    }
+    vi.restoreAllMocks();
   });
 
   test('renders loading state initially', () => {
-    wordpressService.getRecipeById.mockImplementation(
+    (wordpressService.getRecipeById as any as any).mockImplementation(
       () => new Promise(() => {})
     );
 
@@ -72,7 +82,9 @@ describe('RecipeDetail Component', () => {
   });
 
   test('renders recipe details when data is loaded successfully', async () => {
-    wordpressService.getRecipeById.mockResolvedValue(mockRecipe);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      mockRecipe
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -92,7 +104,9 @@ describe('RecipeDetail Component', () => {
   });
 
   test('renders recipe image when featuredImage is available', async () => {
-    wordpressService.getRecipeById.mockResolvedValue(mockRecipe);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      mockRecipe
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -108,7 +122,9 @@ describe('RecipeDetail Component', () => {
 
   test('does not render image when featuredImage is not available', async () => {
     const recipeWithoutImage = { ...mockRecipe, featuredImage: null };
-    wordpressService.getRecipeById.mockResolvedValue(recipeWithoutImage);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      recipeWithoutImage
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -121,7 +137,9 @@ describe('RecipeDetail Component', () => {
 
   test('renders recipe without categories when none are available', async () => {
     const recipeWithoutCategories = { ...mockRecipe, categories: [] };
-    wordpressService.getRecipeById.mockResolvedValue(recipeWithoutCategories);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      recipeWithoutCategories
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -135,7 +153,9 @@ describe('RecipeDetail Component', () => {
 
   test('renders recipe without tags when none are available', async () => {
     const recipeWithoutTags = { ...mockRecipe, tags: [] };
-    wordpressService.getRecipeById.mockResolvedValue(recipeWithoutTags);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      recipeWithoutTags
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -148,7 +168,9 @@ describe('RecipeDetail Component', () => {
   });
 
   test('renders error state when API call fails', async () => {
-    wordpressService.getRecipeById.mockRejectedValue(new Error('API Error'));
+    (wordpressService.getRecipeById as any as any).mockRejectedValue(
+      new Error('API Error')
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -162,7 +184,7 @@ describe('RecipeDetail Component', () => {
   });
 
   test('renders not found state when recipe is null', async () => {
-    wordpressService.getRecipeById.mockResolvedValue(null);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(null);
 
     renderWithRouter(<RecipeDetail />);
 
@@ -174,12 +196,14 @@ describe('RecipeDetail Component', () => {
   });
 
   test('calls wordpressService with correct ID from URL params', async () => {
-    wordpressService.getRecipeById.mockResolvedValue(mockRecipe);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      mockRecipe
+    );
 
     renderWithRouter(<RecipeDetail />, { route: '/recipe/123' });
 
     await waitFor(() => {
-      expect(wordpressService.getRecipeById).toHaveBeenCalledWith(123);
+      expect(wordpressService.getRecipeById as any).toHaveBeenCalledWith(123);
     });
   });
 
@@ -188,7 +212,9 @@ describe('RecipeDetail Component', () => {
       ...mockRecipe,
       date: '2023-06-15T14:30:00Z',
     };
-    wordpressService.getRecipeById.mockResolvedValue(recipeWithDifferentDate);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      recipeWithDifferentDate
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -204,7 +230,9 @@ describe('RecipeDetail Component', () => {
       ...mockRecipe,
       content: '<h2>Ingredients</h2><ul><li>Item 1</li><li>Item 2</li></ul>',
     };
-    wordpressService.getRecipeById.mockResolvedValue(recipeWithComplexHTML);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      recipeWithComplexHTML
+    );
 
     renderWithRouter(<RecipeDetail />);
 
@@ -228,7 +256,9 @@ describe('RecipeDetail Component', () => {
       categories: [],
       tags: [],
     };
-    wordpressService.getRecipeById.mockResolvedValue(minimalRecipe);
+    (wordpressService.getRecipeById as any as any).mockResolvedValue(
+      minimalRecipe
+    );
 
     renderWithRouter(<RecipeDetail />, { route: '/recipe/2' });
 
@@ -247,7 +277,7 @@ describe('RecipeDetail Component', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
     const apiError = new Error('Network error');
-    wordpressService.getRecipeById.mockRejectedValue(apiError);
+    (wordpressService.getRecipeById as any as any).mockRejectedValue(apiError);
 
     renderWithRouter(<RecipeDetail />);
 
@@ -255,10 +285,9 @@ describe('RecipeDetail Component', () => {
       expect(screen.getByTestId('recipe-detail-error')).toBeInTheDocument();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error fetching recipe:',
-      apiError
-    );
-    consoleErrorSpy.mockRestore();
+    expect(logger.error).toHaveBeenCalledWith('Error fetching recipe', {
+      error: apiError,
+      recipeId: '1',
+    });
   });
 });

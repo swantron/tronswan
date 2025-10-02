@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { wordpressService } from '../../services/wordpressService';
 import { Recipe } from '../../types';
+import { logger } from '../../utils/logger';
 
 import RecipeCard from './RecipeCard';
 import '../../styles/RecipeList.css';
@@ -27,7 +28,7 @@ const RecipeList: React.FC = () => {
         setError(null);
       } catch (err) {
         setError('Failed to load recipes. Please try again later.');
-        console.error('Error fetching recipes:', err);
+        logger.error('Error fetching recipes', { error: err });
       } finally {
         setLoading(false);
       }

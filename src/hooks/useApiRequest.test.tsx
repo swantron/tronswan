@@ -9,6 +9,19 @@ import {
   beforeEach,
 } from 'vitest';
 
+// Mock logger before importing the hook
+vi.mock('../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
+import { logger } from '../utils/logger';
+
 import { useApiRequest } from './useApiRequest';
 
 // Mock console.error to avoid noise in tests

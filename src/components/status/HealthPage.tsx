@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import digitalOceanService from '../../services/digitalOceanService';
+import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
 
@@ -99,7 +100,7 @@ function HealthPage() {
           digitalOceanService.getDroplets(),
         ]);
 
-        console.log('HealthPage loaded DigitalOcean data:', { app, droplets });
+        logger.info('HealthPage loaded DigitalOcean data', { app, droplets });
 
         setHealthData(prev => ({
           ...prev,
@@ -113,7 +114,7 @@ function HealthPage() {
           },
         }));
       } catch (error) {
-        console.error('Error fetching DigitalOcean data:', error);
+        logger.error('Error fetching DigitalOcean data', { error });
         setHealthData(prev => ({
           ...prev,
           digitalocean: {

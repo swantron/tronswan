@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useDateFormatter } from '../../hooks/useDateFormatter';
 import { swantronService } from '../../services/swantronService';
 import { Post } from '../../types';
+import { logger } from '../../utils/logger';
 import SEO from '../ui/SEO';
 
 import '../../styles/SwantronDetail.css';
@@ -28,7 +29,10 @@ const SwantronDetail: React.FC = () => {
         setError(
           'Failed to load post from swantron.com. Please try again later.'
         );
-        console.error('Error fetching swantron post:', err);
+        logger.error('Error fetching swantron post', {
+          error: err,
+          postId: id,
+        });
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { logger } from '../utils/logger';
+
 interface UseApiRequestOptions<T> {
   retryAttempts?: number;
   retryDelay?: number;
@@ -55,7 +57,7 @@ export const useApiRequest = <T>(
         onSuccess(result);
       }
     } catch (err) {
-      console.error('API request failed:', err);
+      logger.error('API request failed', { error: err, retryCount });
       const errorMessage =
         err instanceof Error
           ? err.message

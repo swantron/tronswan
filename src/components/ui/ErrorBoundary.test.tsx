@@ -2,7 +2,20 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { vi, expect, describe, test, beforeAll, afterAll } from 'vitest';
 
+// Mock logger before importing the component
+vi.mock('../../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 import '@testing-library/jest-dom';
+import { logger } from '../../utils/logger';
+
 import ErrorBoundary from './ErrorBoundary';
 
 // Component that throws an error for testing
@@ -226,21 +239,19 @@ describe('ErrorBoundary Component', () => {
   });
 
   test('logs error details to console', () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'ErrorBoundary caught an error:',
-      expect.any(Error),
-      expect.any(Object)
+    expect(logger.error).toHaveBeenCalledWith(
+      'ErrorBoundary caught an error',
+      expect.objectContaining({
+        error: expect.any(Error),
+        errorInfo: expect.any(Object),
+      })
     );
-
-    consoleSpy.mockRestore();
   });
 
   test('renders with data-testid attribute', () => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import githubService from '../../services/githubService';
+import { logger } from '../../utils/logger';
 import '../../styles/GitHubStatus.css';
 
 interface GitHubData {
@@ -41,7 +42,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         error: null,
       });
     } catch (error) {
-      console.error('Error loading GitHub data:', error);
+      logger.error('Error loading GitHub data', { error });
       onDataChange({
         ...data,
         loading: false,

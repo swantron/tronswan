@@ -1,4 +1,5 @@
 import { SwantronServiceResponse, Post, SwantronService } from '../types';
+import { logger } from '../utils/logger';
 
 // Swantron WordPress API service
 const SWANTRON_API_URL = 'https://swantron.com/wp-json/wp/v2';
@@ -42,7 +43,10 @@ export const swantronService: SwantronService = {
       const posts: WordPressPost[] = await response.json();
 
       if (!Array.isArray(posts)) {
-        console.error('Expected array but got:', posts);
+        logger.error('Invalid response format from swantron.com API', {
+          expected: 'array',
+          received: posts,
+        });
         throw new Error('Invalid response format from swantron.com API');
       }
 
@@ -72,7 +76,11 @@ export const swantronService: SwantronService = {
         totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
-      console.error('Error fetching swantron posts:', error);
+      logger.apiError(
+        'Swantron',
+        'getPosts',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },
@@ -106,7 +114,11 @@ export const swantronService: SwantronService = {
         link: post.link,
       };
     } catch (error) {
-      console.error('Error fetching swantron post:', error);
+      logger.apiError(
+        'Swantron',
+        'getPost',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },
@@ -128,7 +140,10 @@ export const swantronService: SwantronService = {
       const posts: WordPressPost[] = await response.json();
 
       if (!Array.isArray(posts)) {
-        console.error('Expected array but got:', posts);
+        logger.error('Invalid response format from swantron.com API', {
+          expected: 'array',
+          received: posts,
+        });
         throw new Error('Invalid response format from swantron.com API');
       }
 
@@ -158,7 +173,11 @@ export const swantronService: SwantronService = {
         totalPages: parseInt(totalPages, 10),
       };
     } catch (error) {
-      console.error('Error searching swantron posts:', error);
+      logger.apiError(
+        'Swantron',
+        'searchPosts',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   },

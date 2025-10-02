@@ -3,7 +3,19 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 
+// Mock logger before importing the component
+vi.mock('../../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 import { swantronService } from '../../services/swantronService';
+import { logger } from '../../utils/logger';
 
 import SwantronList from './SwantronList';
 
@@ -85,13 +97,13 @@ describe('SwantronList Component', () => {
   });
 
   afterEach(() => {
-    if (console.error.mockRestore) {
-      console.error.mockRestore();
-    }
+    vi.restoreAllMocks();
   });
 
   test('renders loading state initially', () => {
-    swantronService.getPosts.mockImplementation(() => new Promise(() => {}));
+    (swantronService.getPosts as any).mockImplementation(
+      () => new Promise(() => {})
+    );
 
     renderWithRouter(<SwantronList />);
 
@@ -99,7 +111,7 @@ describe('SwantronList Component', () => {
   });
 
   test('renders SEO component with correct props', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
 
     renderWithRouter(<SwantronList />);
 
@@ -124,7 +136,7 @@ describe('SwantronList Component', () => {
   });
 
   test('renders search form', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
 
     renderWithRouter(<SwantronList />);
 
@@ -137,8 +149,8 @@ describe('SwantronList Component', () => {
   });
 
   test('handles search functionality', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
-    swantronService.searchPosts.mockResolvedValue({
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
+    (swantronService.searchPosts as any).mockResolvedValue({
       posts: [mockPosts[0]],
       totalPages: 1,
     });
@@ -156,12 +168,15 @@ describe('SwantronList Component', () => {
     fireEvent.click(searchButton);
 
     await waitFor(() => {
-      expect(swantronService.searchPosts).toHaveBeenCalledWith('test query', 1);
+      expect(swantronService.searchPosts as any).toHaveBeenCalledWith(
+        'test query',
+        1
+      );
     });
   });
 
   test('renders error state when API call fails', async () => {
-    swantronService.getPosts.mockRejectedValue(new Error('API Error'));
+    (swantronService.getPosts as any).mockRejectedValue(new Error('API Error'));
 
     renderWithRouter(<SwantronList />);
 
@@ -175,18 +190,18 @@ describe('SwantronList Component', () => {
   });
 
   test('calls getPosts on initial load', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
 
     renderWithRouter(<SwantronList />);
 
     await waitFor(() => {
-      expect(swantronService.getPosts).toHaveBeenCalledWith(1);
+      expect(swantronService.getPosts as any).toHaveBeenCalledWith(1);
     });
   });
 
   test('calls searchPosts when search query is provided', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
-    swantronService.searchPosts.mockResolvedValue({
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
+    (swantronService.searchPosts as any).mockResolvedValue({
       posts: [mockPosts[0]],
       totalPages: 1,
     });
@@ -201,12 +216,15 @@ describe('SwantronList Component', () => {
     fireEvent.change(searchInput, { target: { value: 'test' } });
 
     await waitFor(() => {
-      expect(swantronService.searchPosts).toHaveBeenCalledWith('test', 1);
+      expect(swantronService.searchPosts as any).toHaveBeenCalledWith(
+        'test',
+        1
+      );
     });
   });
 
   test('handles search with empty query', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
 
     renderWithRouter(<SwantronList />);
 
@@ -218,13 +236,13 @@ describe('SwantronList Component', () => {
     fireEvent.change(searchInput, { target: { value: '' } });
 
     await waitFor(() => {
-      expect(swantronService.getPosts).toHaveBeenCalledWith(1);
+      expect(swantronService.getPosts as any).toHaveBeenCalledWith(1);
     });
   });
 
   test('handles search with special characters', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
-    swantronService.searchPosts.mockResolvedValue({
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
+    (swantronService.searchPosts as any).mockResolvedValue({
       posts: [mockPosts[0]],
       totalPages: 1,
     });
@@ -241,7 +259,7 @@ describe('SwantronList Component', () => {
     });
 
     await waitFor(() => {
-      expect(swantronService.searchPosts).toHaveBeenCalledWith(
+      expect(swantronService.searchPosts as any).toHaveBeenCalledWith(
         'test & query with special chars!',
         1
       );
@@ -249,8 +267,8 @@ describe('SwantronList Component', () => {
   });
 
   test('handles search with very long query', async () => {
-    swantronService.getPosts.mockResolvedValue(mockPostsResponse);
-    swantronService.searchPosts.mockResolvedValue({
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
+    (swantronService.searchPosts as any).mockResolvedValue({
       posts: [mockPosts[0]],
       totalPages: 1,
     });
@@ -266,7 +284,10 @@ describe('SwantronList Component', () => {
     fireEvent.change(searchInput, { target: { value: longQuery } });
 
     await waitFor(() => {
-      expect(swantronService.searchPosts).toHaveBeenCalledWith(longQuery, 1);
+      expect(swantronService.searchPosts as any).toHaveBeenCalledWith(
+        longQuery,
+        1
+      );
     });
   });
 
@@ -275,7 +296,7 @@ describe('SwantronList Component', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
     const apiError = new Error('Network error');
-    swantronService.getPosts.mockRejectedValue(apiError);
+    (swantronService.getPosts as any).mockRejectedValue(apiError);
 
     renderWithRouter(<SwantronList />);
 
@@ -287,10 +308,8 @@ describe('SwantronList Component', () => {
       ).toBeInTheDocument();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error fetching swantron posts:',
-      apiError
-    );
-    consoleErrorSpy.mockRestore();
+    expect(logger.error).toHaveBeenCalledWith('Error fetching swantron posts', {
+      error: apiError,
+    });
   });
 });

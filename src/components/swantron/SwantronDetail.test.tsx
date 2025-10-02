@@ -4,7 +4,19 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 
+// Mock logger before importing the component
+vi.mock('../../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 import { swantronService } from '../../services/swantronService';
+import { logger } from '../../utils/logger';
 
 import SwantronDetail from './SwantronDetail';
 
@@ -327,11 +339,10 @@ describe('SwantronDetail Component', () => {
       expect(screen.getByTestId('swantron-detail-error')).toBeInTheDocument();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error fetching swantron post:',
-      apiError
-    );
-    consoleErrorSpy.mockRestore();
+    expect(logger.error).toHaveBeenCalledWith('Error fetching swantron post', {
+      error: apiError,
+      postId: '1',
+    });
   });
 
   test('handles post with very long title', async () => {
