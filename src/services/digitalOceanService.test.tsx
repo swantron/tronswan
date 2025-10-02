@@ -9,10 +9,23 @@ vi.mock('../utils/runtimeConfig', () => ({
   },
 }));
 
+// Mock logger before importing
+vi.mock('../utils/logger', () => ({
+  logger: {
+    apiError: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 // Mock fetch
 global.fetch = vi.fn();
 
 // Import after mocking
+import { logger } from '../utils/logger';
+
 import digitalOceanService from './digitalOceanService';
 
 describe('DigitalOceanService', () => {
@@ -43,20 +56,16 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors and log them', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
 
       await expect(digitalOceanService.getApp()).rejects.toThrow(
         'Network error'
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching DigitalOcean app:',
+      expect(logger.apiError).toHaveBeenCalledWith(
+        'DigitalOcean',
+        'getApp',
         expect.any(Error)
       );
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -148,20 +157,16 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching droplets', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
       await expect(digitalOceanService.getDroplets()).rejects.toThrow(
         'API error'
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching DigitalOcean droplets:',
+      expect(logger.apiError).toHaveBeenCalledWith(
+        'DigitalOcean',
+        'getDroplets',
         expect.any(Error)
       );
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -226,20 +231,16 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching load balancers', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
       await expect(digitalOceanService.getLoadBalancers()).rejects.toThrow(
         'API error'
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching DigitalOcean load balancers:',
+      expect(logger.apiError).toHaveBeenCalledWith(
+        'DigitalOcean',
+        'getLoadBalancers',
         expect.any(Error)
       );
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -313,20 +314,16 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching databases', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
       await expect(digitalOceanService.getDatabases()).rejects.toThrow(
         'API error'
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching DigitalOcean databases:',
+      expect(logger.apiError).toHaveBeenCalledWith(
+        'DigitalOcean',
+        'getDatabases',
         expect.any(Error)
       );
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -357,20 +354,16 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching account info', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
       await expect(digitalOceanService.getAccount()).rejects.toThrow(
         'API error'
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching DigitalOcean account info:',
+      expect(logger.apiError).toHaveBeenCalledWith(
+        'DigitalOcean',
+        'getAccount',
         expect.any(Error)
       );
-
-      consoleSpy.mockRestore();
     });
   });
 });

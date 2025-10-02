@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { runtimeConfig } from '../utils/runtimeConfig';
 
 export interface DigitalOceanDroplet {
@@ -202,7 +203,11 @@ class DigitalOceanService {
     try {
       return await this.makeRequest(`/apps/${this.appId}`);
     } catch (error) {
-      console.error('Error fetching DigitalOcean app:', error);
+      logger.apiError(
+        'DigitalOcean',
+        'getApp',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   }
@@ -215,7 +220,11 @@ class DigitalOceanService {
       }>('/droplets');
       return response.droplets;
     } catch (error) {
-      console.error('Error fetching DigitalOcean droplets:', error);
+      logger.apiError(
+        'DigitalOcean',
+        'getDroplets',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   }
@@ -227,7 +236,11 @@ class DigitalOceanService {
       }>('/load_balancers');
       return response.load_balancers;
     } catch (error) {
-      console.error('Error fetching DigitalOcean load balancers:', error);
+      logger.apiError(
+        'DigitalOcean',
+        'getLoadBalancers',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   }
@@ -239,7 +252,11 @@ class DigitalOceanService {
       }>('/databases');
       return response.databases;
     } catch (error) {
-      console.error('Error fetching DigitalOcean databases:', error);
+      logger.apiError(
+        'DigitalOcean',
+        'getDatabases',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   }
@@ -264,7 +281,11 @@ class DigitalOceanService {
         };
       }>('/account');
     } catch (error) {
-      console.error('Error fetching DigitalOcean account info:', error);
+      logger.apiError(
+        'DigitalOcean',
+        'getAccount',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       throw error;
     }
   }

@@ -3,6 +3,8 @@
  * Supports both local .env files and runtime environment variable injection
  */
 
+import { logger } from './logger';
+
 interface RuntimeConfig {
   VITE_WEATHER_API_KEY: string;
   VITE_WEATHER_CITY: string;
@@ -61,7 +63,7 @@ class RuntimeConfigManager {
       }
     });
 
-    console.log('Loaded build-time configuration');
+    logger.info('Loaded build-time configuration');
   }
 
   /**
@@ -69,7 +71,10 @@ class RuntimeConfigManager {
    */
   get<K extends keyof RuntimeConfig>(key: K): string {
     if (!this.initialized) {
-      console.warn(`Config not initialized, getting ${key} from fallback`);
+      logger.configWarn(
+        key,
+        `Config not initialized, getting ${key} from fallback`
+      );
       return this.getFallback(key);
     }
     return this.config[key] || '';

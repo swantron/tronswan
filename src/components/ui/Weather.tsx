@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 
 import SEO from './SEO';
@@ -407,7 +408,7 @@ function Weather() {
       });
       setCurrentCity(data.name);
     } catch (error) {
-      console.error('Error fetching weather data:', error);
+      logger.error('Error fetching weather data', { error, city });
       setErrorMessage(
         error instanceof Error
           ? error.message
@@ -445,7 +446,7 @@ function Weather() {
       setForecast(dailyForecast);
       setCurrentCity(data.city.name);
     } catch (error) {
-      console.error('Error fetching forecast data:', error);
+      logger.error('Error fetching forecast data', { error, city });
       setErrorMessage(
         error instanceof Error ? error.message : 'Forecast data fetch failed'
       );

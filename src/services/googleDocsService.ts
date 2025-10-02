@@ -3,6 +3,8 @@
 
 // Using Google Docs Export API which returns plain text
 
+import { logger } from '../utils/logger';
+
 export class GoogleDocsService {
   private static readonly DOCUMENT_ID =
     '1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M';
@@ -10,9 +12,9 @@ export class GoogleDocsService {
 
   static async getResumeContent(): Promise<string> {
     try {
-      console.log('Google Docs API Key:', this.API_KEY ? 'Found' : 'Not found');
+      logger.debug('Google Docs API Key status', { hasKey: !!this.API_KEY });
       if (!this.API_KEY) {
-        console.warn('Google Docs API key not found. Using fallback content.');
+        logger.warn('Google Docs API key not found. Using fallback content.');
         return this.getFallbackContent();
       }
 
@@ -23,17 +25,26 @@ export class GoogleDocsService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(`Google Docs API error: ${response.status}`, errorText);
+        logger.apiError(
+          'GoogleDocs',
+          'getResumeContent',
+          new Error(`API error: ${response.status}`),
+          { status: response.status, errorText }
+        );
         throw new Error(
           `Google Docs API error: ${response.status} - ${errorText}`
         );
       }
 
       const content = await response.text();
-      console.log('Successfully fetched Google Doc content');
+      logger.info('Successfully fetched Google Doc content');
       return content;
     } catch (error) {
-      console.error('Error fetching Google Doc:', error);
+      logger.apiError(
+        'GoogleDocs',
+        'getResumeContent',
+        error instanceof Error ? error : new Error('Unknown error')
+      );
       return this.getFallbackContent();
     }
   }
