@@ -1,11 +1,10 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 
 import { swantronService } from '../../services/swantronService';
-
 
 import SwantronDetail from './SwantronDetail';
 
@@ -89,7 +88,9 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders loading state initially', () => {
-    (swantronService.getPostById as any).mockImplementation(() => new Promise(() => {}));
+    (swantronService.getPostById as any).mockImplementation(
+      () => new Promise(() => {})
+    );
 
     renderWithRouter(<SwantronDetail />);
 
@@ -179,7 +180,9 @@ describe('SwantronDetail Component', () => {
 
   test('renders post without categories when none are available', async () => {
     const postWithoutCategories = { ...mockPost, categories: [] };
-    (swantronService.getPostById as any).mockResolvedValue(postWithoutCategories);
+    (swantronService.getPostById as any).mockResolvedValue(
+      postWithoutCategories
+    );
 
     renderWithRouter(<SwantronDetail />);
 
@@ -222,7 +225,9 @@ describe('SwantronDetail Component', () => {
   });
 
   test('renders error state when API call fails', async () => {
-    (swantronService.getPostById as any).mockRejectedValue(new Error('API Error'));
+    (swantronService.getPostById as any).mockRejectedValue(
+      new Error('API Error')
+    );
 
     renderWithRouter(<SwantronDetail />);
 
@@ -360,7 +365,9 @@ describe('SwantronDetail Component', () => {
   test('handles post with special characters in title', async () => {
     const specialTitle = 'Post with special chars: & < > " \' é ñ 🚀';
     const postWithSpecialTitle = { ...mockPost, title: specialTitle };
-    (swantronService.getPostById as any).mockResolvedValue(postWithSpecialTitle);
+    (swantronService.getPostById as any).mockResolvedValue(
+      postWithSpecialTitle
+    );
 
     renderWithRouter(<SwantronDetail />);
 
@@ -377,7 +384,9 @@ describe('SwantronDetail Component', () => {
     const specialContent =
       '<p>Content with &amp; &lt; &gt; &quot; &#39; é ñ 🚀</p>';
     const postWithSpecialContent = { ...mockPost, content: specialContent };
-    (swantronService.getPostById as any).mockResolvedValue(postWithSpecialContent);
+    (swantronService.getPostById as any).mockResolvedValue(
+      postWithSpecialContent
+    );
 
     renderWithRouter(<SwantronDetail />);
 
@@ -392,7 +401,9 @@ describe('SwantronDetail Component', () => {
 
   test('handles post with empty content', async () => {
     const postWithEmptyContent = { ...mockPost, content: '' };
-    (swantronService.getPostById as any).mockResolvedValue(postWithEmptyContent);
+    (swantronService.getPostById as any).mockResolvedValue(
+      postWithEmptyContent
+    );
 
     renderWithRouter(<SwantronDetail />);
 

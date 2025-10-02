@@ -4,7 +4,8 @@
 // Using Google Docs Export API which returns plain text
 
 export class GoogleDocsService {
-  private static readonly DOCUMENT_ID = '1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M';
+  private static readonly DOCUMENT_ID =
+    '1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M';
   private static readonly API_KEY = import.meta.env.VITE_GOOGLE_DOCS_API_KEY;
 
   static async getResumeContent(): Promise<string> {
@@ -23,7 +24,9 @@ export class GoogleDocsService {
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`Google Docs API error: ${response.status}`, errorText);
-        throw new Error(`Google Docs API error: ${response.status} - ${errorText}`);
+        throw new Error(
+          `Google Docs API error: ${response.status} - ${errorText}`
+        );
       }
 
       const content = await response.text();

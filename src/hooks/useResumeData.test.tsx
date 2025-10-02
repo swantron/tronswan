@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useResumeData } from './useResumeData';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { GoogleDocsService } from '../services/googleDocsService';
+
+import { useResumeData } from './useResumeData';
 
 // Mock the GoogleDocsService
 vi.mock('../services/googleDocsService', () => ({
@@ -17,7 +19,7 @@ describe('useResumeData', () => {
 
   it('should start with loading state', () => {
     const { result } = renderHook(() => useResumeData());
-    
+
     expect(result.current.loading).toBe(true);
     expect(result.current.content).toBe('');
     expect(result.current.error).toBe(null);

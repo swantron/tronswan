@@ -1,8 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import RecipeDetail from './components/recipe/RecipeDetail';
+import RecipeList from './components/recipe/RecipeList';
+import HealthPage from './components/status/HealthPage';
+import SwantronDetail from './components/swantron/SwantronDetail';
+import SwantronList from './components/swantron/SwantronList';
 import ErrorBoundary from './components/ui/ErrorBoundary';
-import Wrigley from './components/video/Wrigley';
+import FizzBuzz from './components/ui/FizzBuzz';
+import Hello from './components/ui/Hello';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
 import Coffee from './components/video/Coffee';
@@ -17,19 +23,13 @@ import Seeya from './components/video/Seeya';
 import ThumbsUp from './components/video/ThumbsUp';
 import Working from './components/video/Working';
 import Shorts from './components/video/Shorts';
-import FizzBuzz from './components/ui/FizzBuzz';
 import GangamStyle from './components/video/GangamStyle';
 import Hacking from './components/video/Hacking';
 import JobWellDone from './components/video/JobWellDone';
-import HealthPage from './components/status/HealthPage';
-import Hello from './components/ui/Hello';
-import RecipeDetail from './components/recipe/RecipeDetail';
-import RecipeList from './components/recipe/RecipeList';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
-import SwantronDetail from './components/swantron/SwantronDetail';
-import SwantronList from './components/swantron/SwantronList';
 import Weather from './components/ui/Weather';
+import Wrigley from './components/video/Wrigley';
 import logo from './robotard-removebg-preview.png';
 import './App.css';
 
@@ -39,39 +39,56 @@ function Home() {
     // Randomly choose between gangamstyle, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, thumbsup, jobwelldone, coffee, mishap, peloton, seeya, dynomite, and working
     const random = Math.random();
     let path;
-    if (random < 0.059) { // 1/17 chance
+    if (random < 0.059) {
+      // 1/17 chance
       path = '/gangamstyle';
-    } else if (random < 0.118) { // 2/17 chance
+    } else if (random < 0.118) {
+      // 2/17 chance
       path = '/hacking';
-    } else if (random < 0.176) { // 3/17 chance
+    } else if (random < 0.176) {
+      // 3/17 chance
       path = '/dealwithit';
-    } else if (random < 0.235) { // 4/17 chance
+    } else if (random < 0.235) {
+      // 4/17 chance
       path = '/dealwithfont';
-    } else if (random < 0.294) { // 5/17 chance
+    } else if (random < 0.294) {
+      // 5/17 chance
       path = '/dealwithword';
-    } else if (random < 0.353) { // 6/17 chance
+    } else if (random < 0.353) {
+      // 6/17 chance
       path = '/wrigley';
-    } else if (random < 0.412) { // 7/17 chance
+    } else if (random < 0.412) {
+      // 7/17 chance
       path = '/baseball2';
-    } else if (random < 0.471) { // 8/17 chance
+    } else if (random < 0.471) {
+      // 8/17 chance
       path = '/kingkong';
-    } else if (random < 0.529) { // 9/17 chance
+    } else if (random < 0.529) {
+      // 9/17 chance
       path = '/buschleague';
-    } else if (random < 0.588) { // 10/17 chance
+    } else if (random < 0.588) {
+      // 10/17 chance
       path = '/thumbsup';
-    } else if (random < 0.647) { // 11/17 chance
+    } else if (random < 0.647) {
+      // 11/17 chance
       path = '/jobwelldone';
-    } else if (random < 0.706) { // 12/17 chance
+    } else if (random < 0.706) {
+      // 12/17 chance
       path = '/coffee';
-    } else if (random < 0.765) { // 13/17 chance
+    } else if (random < 0.765) {
+      // 13/17 chance
       path = '/mishap';
-    } else if (random < 0.824) { // 14/17 chance
+    } else if (random < 0.824) {
+      // 14/17 chance
       path = '/peloton';
-    } else if (random < 0.882) { // 15/17 chance
+    } else if (random < 0.882) {
+      // 15/17 chance
       path = '/seeya';
-    } else if (random < 0.941) { // 16/17 chance
+    } else if (random < 0.941) {
+      // 16/17 chance
       path = '/dynomite';
-    } else { // 17/17 chance
+    } else {
+      // 17/17 chance
       path = '/working';
     }
     window.location.href = path;

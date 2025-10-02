@@ -1,7 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
+
 import Peloton from './Peloton';
 
 describe('Peloton', () => {
@@ -28,7 +29,9 @@ describe('Peloton', () => {
   it('renders the video source with correct path', () => {
     render(<Peloton />);
 
-    const source = screen.getByTestId('peloton-modal-video').querySelector('source');
+    const source = screen
+      .getByTestId('peloton-modal-video')
+      .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/peloton.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

@@ -33,11 +33,13 @@ describe('GitHubService', () => {
         following_url: 'https://api.github.com/users/swantron/following',
         gists_url: 'https://api.github.com/users/swantron/gists',
         starred_url: 'https://api.github.com/users/swantron/starred',
-        subscriptions_url: 'https://api.github.com/users/swantron/subscriptions',
+        subscriptions_url:
+          'https://api.github.com/users/swantron/subscriptions',
         organizations_url: 'https://api.github.com/users/swantron/orgs',
         repos_url: 'https://api.github.com/users/swantron/repos',
         events_url: 'https://api.github.com/users/swantron/events',
-        received_events_url: 'https://api.github.com/users/swantron/received_events',
+        received_events_url:
+          'https://api.github.com/users/swantron/received_events',
         type: 'User',
         site_admin: false,
         name: 'Swantron',
@@ -197,8 +199,10 @@ describe('GitHubService', () => {
             created_at: '2023-01-01T00:00:00Z',
             updated_at: '2023-01-01T00:00:00Z',
             url: 'https://api.github.com/repos/swantron/test-repo/actions/workflows/1',
-            html_url: 'https://github.com/swantron/test-repo/actions/workflows/ci.yml',
-            badge_url: 'https://github.com/swantron/test-repo/workflows/CI/CD/badge.svg',
+            html_url:
+              'https://github.com/swantron/test-repo/actions/workflows/ci.yml',
+            badge_url:
+              'https://github.com/swantron/test-repo/workflows/CI/CD/badge.svg',
           },
         ],
       };
@@ -234,13 +238,20 @@ describe('GitHubService', () => {
             workflow_id: 1,
             url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1',
             html_url: 'https://github.com/swantron/test-repo/actions/runs/1',
-            jobs_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/jobs',
-            logs_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/logs',
-            check_suite_url: 'https://api.github.com/repos/swantron/test-repo/check-suites/1',
-            artifacts_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/artifacts',
-            cancel_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/cancel',
-            rerun_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/rerun',
-            workflow_url: 'https://api.github.com/repos/swantron/test-repo/actions/workflows/1',
+            jobs_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1/jobs',
+            logs_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1/logs',
+            check_suite_url:
+              'https://api.github.com/repos/swantron/test-repo/check-suites/1',
+            artifacts_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1/artifacts',
+            cancel_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1/cancel',
+            rerun_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1/rerun',
+            workflow_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/workflows/1',
             created_at: '2023-01-01T00:00:00Z',
             updated_at: '2023-01-01T00:00:00Z',
             head_commit: {
@@ -327,13 +338,20 @@ describe('GitHubService', () => {
         workflow_id: 1,
         url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1',
         html_url: 'https://github.com/swantron/test-repo/actions/runs/1',
-        jobs_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/jobs',
-        logs_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/logs',
-        check_suite_url: 'https://api.github.com/repos/swantron/test-repo/check-suites/1',
-        artifacts_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/artifacts',
-        cancel_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/cancel',
-        rerun_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1/rerun',
-        workflow_url: 'https://api.github.com/repos/swantron/test-repo/actions/workflows/1',
+        jobs_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/runs/1/jobs',
+        logs_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/runs/1/logs',
+        check_suite_url:
+          'https://api.github.com/repos/swantron/test-repo/check-suites/1',
+        artifacts_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/runs/1/artifacts',
+        cancel_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/runs/1/cancel',
+        rerun_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/runs/1/rerun',
+        workflow_url:
+          'https://api.github.com/repos/swantron/test-repo/actions/workflows/1',
         created_at: '2023-01-01T00:00:00Z',
         updated_at: '2023-01-01T00:00:00Z',
         head_commit: {
@@ -394,18 +412,21 @@ describe('GitHubService', () => {
           {
             id: 1,
             run_id: 1,
-            run_url: 'https://api.github.com/repos/swantron/test-repo/actions/runs/1',
+            run_url:
+              'https://api.github.com/repos/swantron/test-repo/actions/runs/1',
             node_id: 'test-node-id',
             head_sha: 'abc123',
             url: 'https://api.github.com/repos/swantron/test-repo/actions/jobs/1',
-            html_url: 'https://github.com/swantron/test-repo/actions/runs/1/jobs/1',
+            html_url:
+              'https://github.com/swantron/test-repo/actions/runs/1/jobs/1',
             status: 'completed',
             conclusion: 'success',
             started_at: '2023-01-01T00:00:00Z',
             completed_at: '2023-01-01T00:05:00Z',
             name: 'test-job',
             steps: [],
-            check_run_url: 'https://api.github.com/repos/swantron/test-repo/check-runs/1',
+            check_run_url:
+              'https://api.github.com/repos/swantron/test-repo/check-runs/1',
             labels: ['ubuntu-latest'],
             runner_id: 1,
             runner_name: 'GitHub Actions 1',
@@ -438,8 +459,16 @@ describe('GitHubService', () => {
           sha: 'abc123',
           commit: {
             message: 'Test commit',
-            author: { name: 'Swantron', email: 'swantron@example.com', date: '2023-01-01T00:00:00Z' },
-            committer: { name: 'Swantron', email: 'swantron@example.com', date: '2023-01-01T00:00:00Z' },
+            author: {
+              name: 'Swantron',
+              email: 'swantron@example.com',
+              date: '2023-01-01T00:00:00Z',
+            },
+            committer: {
+              name: 'Swantron',
+              email: 'swantron@example.com',
+              date: '2023-01-01T00:00:00Z',
+            },
           },
           author: { login: 'swantron', id: 12345 },
           committer: { login: 'swantron', id: 12345 },
@@ -469,7 +498,10 @@ describe('GitHubService', () => {
         json: () => Promise.resolve(mockCommits),
       } as Response);
 
-      const result = await githubService.getRepositoryCommits('test-repo', 'develop');
+      const result = await githubService.getRepositoryCommits(
+        'test-repo',
+        'develop'
+      );
 
       expect(fetch).toHaveBeenCalledWith(
         'https://api.github.com/repos/swantron/test-repo/commits?sha=develop&per_page=5',
@@ -484,12 +516,18 @@ describe('GitHubService', () => {
       const mockBranches = [
         {
           name: 'main',
-          commit: { sha: 'abc123', url: 'https://api.github.com/repos/swantron/test-repo/commits/abc123' },
+          commit: {
+            sha: 'abc123',
+            url: 'https://api.github.com/repos/swantron/test-repo/commits/abc123',
+          },
           protected: false,
         },
         {
           name: 'develop',
-          commit: { sha: 'def456', url: 'https://api.github.com/repos/swantron/test-repo/commits/def456' },
+          commit: {
+            sha: 'def456',
+            url: 'https://api.github.com/repos/swantron/test-repo/commits/def456',
+          },
           protected: false,
         },
       ];
@@ -547,7 +585,10 @@ describe('GitHubService', () => {
         json: () => Promise.resolve(mockIssues),
       } as Response);
 
-      const result = await githubService.getRepositoryIssues('test-repo', 'closed');
+      const result = await githubService.getRepositoryIssues(
+        'test-repo',
+        'closed'
+      );
 
       expect(fetch).toHaveBeenCalledWith(
         'https://api.github.com/repos/swantron/test-repo/issues?state=closed&per_page=10',
@@ -595,7 +636,10 @@ describe('GitHubService', () => {
         json: () => Promise.resolve(mockPRs),
       } as Response);
 
-      const result = await githubService.getRepositoryPullRequests('test-repo', 'all');
+      const result = await githubService.getRepositoryPullRequests(
+        'test-repo',
+        'all'
+      );
 
       expect(fetch).toHaveBeenCalledWith(
         'https://api.github.com/repos/swantron/test-repo/pulls?state=all&per_page=10',

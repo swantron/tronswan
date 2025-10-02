@@ -1,7 +1,14 @@
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  act,
+} from '@testing-library/react';
 import React from 'react';
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
+
 import '@testing-library/jest-dom';
 import Weather from './Weather';
 
@@ -36,7 +43,7 @@ describe('Weather Component', () => {
   beforeEach(() => {
     (global.fetch as any).mockClear();
     // Mock both current weather and forecast API calls
-    (global.fetch as any).mockImplementation((url) => {
+    (global.fetch as any).mockImplementation(url => {
       if (url.includes('/weather?')) {
         // Current weather API
         return Promise.resolve({
@@ -60,14 +67,28 @@ describe('Weather Component', () => {
             list: [
               {
                 dt: Date.now() / 1000,
-                main: { temp: 72, feels_like: 70, humidity: 45, pressure: 1013 },
-                weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
+                main: {
+                  temp: 72,
+                  feels_like: 70,
+                  humidity: 45,
+                  pressure: 1013,
+                },
+                weather: [
+                  { main: 'Clear', description: 'clear sky', icon: '01d' },
+                ],
                 dt_txt: '2024-01-01 12:00:00',
               },
               {
-                dt: (Date.now() / 1000) + 86400,
-                main: { temp: 75, feels_like: 73, humidity: 50, pressure: 1015 },
-                weather: [{ main: 'Clouds', description: 'few clouds', icon: '02d' }],
+                dt: Date.now() / 1000 + 86400,
+                main: {
+                  temp: 75,
+                  feels_like: 73,
+                  humidity: 50,
+                  pressure: 1015,
+                },
+                weather: [
+                  { main: 'Clouds', description: 'few clouds', icon: '02d' },
+                ],
                 dt_txt: '2024-01-02 12:00:00',
               },
             ],
@@ -81,23 +102,29 @@ describe('Weather Component', () => {
 
   test('renders weather page title', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
-    expect(screen.getByTestId('weather-title')).toHaveTextContent('weathertron');
+
+    expect(screen.getByTestId('weather-title')).toHaveTextContent(
+      'weathertron'
+    );
   });
 
   test('renders view toggle buttons', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByText('Current')).toBeInTheDocument();
     expect(screen.getByText('Forecast')).toBeInTheDocument();
   });
@@ -105,37 +132,45 @@ describe('Weather Component', () => {
   test('renders loading state initially', async () => {
     renderWeather();
     expect(screen.getByLabelText('Loading weather data')).toBeInTheDocument();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
   });
 
-
-
   test('renders weather info section', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     expect(
       screen.getByText('Real-time weather data from OpenWeatherMap API')
     ).toBeInTheDocument();
-    expect(screen.getByText('Search for any city worldwide to get current conditions')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Search for any city worldwide to get current conditions'
+      )
+    ).toBeInTheDocument();
   });
 
   test('renders city search input and button', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('city-input')).toBeInTheDocument();
     expect(screen.getByTestId('search-button')).toBeInTheDocument();
   });
@@ -152,7 +187,7 @@ describe('Weather Component', () => {
       sys: { country: 'US' },
     };
 
-    (global.fetch as any).mockImplementation((url) => {
+    (global.fetch as any).mockImplementation(url => {
       if (url.includes('/weather?')) {
         return Promise.resolve({
           ok: true,
@@ -174,15 +209,16 @@ describe('Weather Component', () => {
     });
   });
 
-
   test('disables search button when input is empty', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     const searchButton = screen.getByTestId('search-button');
     expect(searchButton).toBeDisabled();
   });
@@ -201,14 +237,15 @@ describe('Weather Component', () => {
     });
   });
 
-
   test('shows current location when weather data is loaded', async () => {
     renderWeather();
 
     await waitFor(() => {
-      expect(screen.getByText((content, element) => {
-        return element?.textContent === 'Currently showing: Bozeman';
-      })).toBeInTheDocument();
+      expect(
+        screen.getByText((content, element) => {
+          return element?.textContent === 'Currently showing: Bozeman';
+        })
+      ).toBeInTheDocument();
     });
   });
 
@@ -230,16 +267,23 @@ describe('Weather Component', () => {
     });
   });
 
-
   test('displays weather data correctly after loading', async () => {
     renderWeather();
 
     await waitFor(() => {
-      expect(screen.getByTestId('temperature-display')).toHaveTextContent('72°F');
-      expect(screen.getByTestId('feels-like-display')).toHaveTextContent('70°F');
-      expect(screen.getByTestId('pressure-display')).toHaveTextContent('1013 hPa');
+      expect(screen.getByTestId('temperature-display')).toHaveTextContent(
+        '72°F'
+      );
+      expect(screen.getByTestId('feels-like-display')).toHaveTextContent(
+        '70°F'
+      );
+      expect(screen.getByTestId('pressure-display')).toHaveTextContent(
+        '1013 hPa'
+      );
       expect(screen.getByTestId('humidity-display')).toHaveTextContent('45%');
-      expect(screen.getByTestId('location-display')).toHaveTextContent('📍 Bozeman, US');
+      expect(screen.getByTestId('location-display')).toHaveTextContent(
+        '📍 Bozeman, US'
+      );
     });
   });
 
@@ -259,16 +303,17 @@ describe('Weather Component', () => {
     expect(searchButton).toBeDisabled();
   });
 
-
   // Temperature unit tests
   test('renders temperature unit toggle buttons', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByText('°F')).toBeInTheDocument();
     expect(screen.getByText('°C')).toBeInTheDocument();
     expect(screen.getByText('K')).toBeInTheDocument();
@@ -276,12 +321,14 @@ describe('Weather Component', () => {
 
   test('shows imperial as active by default', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     const fahrenheitButton = screen.getByText('°F');
     const celsiusButton = screen.getByText('°C');
     const kelvinButton = screen.getByText('K');
@@ -293,12 +340,14 @@ describe('Weather Component', () => {
 
   test('unit buttons are clickable', async () => {
     renderWeather();
-    
+
     // Wait for the component to finish loading
     await waitFor(() => {
-      expect(screen.queryByLabelText('Loading weather data')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
     });
-    
+
     const fahrenheitButton = screen.getByText('°F');
     const celsiusButton = screen.getByText('°C');
     const kelvinButton = screen.getByText('K');
@@ -307,7 +356,7 @@ describe('Weather Component', () => {
     expect(fahrenheitButton).toBeInTheDocument();
     expect(celsiusButton).toBeInTheDocument();
     expect(kelvinButton).toBeInTheDocument();
-    
+
     // Buttons should have the correct classes
     expect(fahrenheitButton).toHaveClass('unit-button');
     expect(celsiusButton).toHaveClass('unit-button');

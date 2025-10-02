@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { swantronService } from '../../services/swantronService';
 import { Post } from '../../types';
-
 import SEO from '../ui/SEO';
+
 import SwantronCard from './SwantronCard';
 import '../../styles/SwantronList.css';
 

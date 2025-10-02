@@ -9,12 +9,12 @@ interface VideoModalProps {
   testId: string;
 }
 
-const VideoModal: React.FC<VideoModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  title, 
-  videoSrc, 
-  testId
+const VideoModal: React.FC<VideoModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  videoSrc,
+  testId,
 }) => {
   // Handle escape key press
   useEffect(() => {
@@ -45,36 +45,39 @@ const VideoModal: React.FC<VideoModalProps> = ({
   };
 
   return (
-    <div 
-      className="video-modal-overlay" 
+    <div
+      className='video-modal-overlay'
       onClick={handleBackdropClick}
       data-testid={`${testId}-modal-overlay`}
     >
-      <div className="video-modal-content" data-testid={`${testId}-modal-content`}>
-        <button 
-          className="video-modal-close" 
+      <div
+        className='video-modal-content'
+        data-testid={`${testId}-modal-content`}
+      >
+        <button
+          className='video-modal-close'
           onClick={onClose}
           data-testid={`${testId}-modal-close`}
-          aria-label="Close video"
+          aria-label='Close video'
         >
           ×
         </button>
-        
-        <div className="video-modal-header">
-          <h2 className="video-modal-title">{title}</h2>
+
+        <div className='video-modal-header'>
+          <h2 className='video-modal-title'>{title}</h2>
         </div>
 
-        <div className="video-modal-video-container">
+        <div className='video-modal-video-container'>
           <video
             autoPlay
             muted
             loop
             playsInline
-            className="video-modal-video"
+            className='video-modal-video'
             data-testid={`${testId}-modal-video`}
           >
-            <source src={videoSrc} type="video/mp4" />
-            <p className="video-fallback">
+            <source src={videoSrc} type='video/mp4' />
+            <p className='video-fallback'>
               Your browser does not support the video tag.
               <br />
               <a href={videoSrc} download>
@@ -83,7 +86,6 @@ const VideoModal: React.FC<VideoModalProps> = ({
             </p>
           </video>
         </div>
-
       </div>
     </div>
   );

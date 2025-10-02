@@ -59,23 +59,29 @@ interface ForecastDisplayProps {
 }
 
 // Temperature conversion utilities
-const convertTemperature = (temp: number, fromUnit: 'imperial' | 'metric' | 'kelvin', toUnit: 'imperial' | 'metric' | 'kelvin'): number => {
+const convertTemperature = (
+  temp: number,
+  fromUnit: 'imperial' | 'metric' | 'kelvin',
+  toUnit: 'imperial' | 'metric' | 'kelvin'
+): number => {
   // Convert to Celsius first
   let celsius: number;
   if (fromUnit === 'imperial') {
-    celsius = (temp - 32) * 5/9;
+    celsius = ((temp - 32) * 5) / 9;
   } else if (fromUnit === 'metric') {
     celsius = temp;
-  } else { // kelvin
+  } else {
+    // kelvin
     celsius = temp - 273.15;
   }
 
   // Convert from Celsius to target unit
   if (toUnit === 'imperial') {
-    return celsius * 9/5 + 32;
+    return (celsius * 9) / 5 + 32;
   } else if (toUnit === 'metric') {
     return celsius;
-  } else { // kelvin
+  } else {
+    // kelvin
     return celsius + 273.15;
   }
 };
@@ -83,10 +89,10 @@ const convertTemperature = (temp: number, fromUnit: 'imperial' | 'metric' | 'kel
 function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'short', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -114,13 +120,19 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
               <img
                 src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
                 alt={day.description}
-                width="50"
-                height="50"
+                width='50'
+                height='50'
               />
             </div>
             <div className='forecast-temps'>
-              <span className='forecast-high'>{Math.round(convertTempForDisplay(day.high))}{getTemperatureUnit()}</span>
-              <span className='forecast-low'>{Math.round(convertTempForDisplay(day.low))}{getTemperatureUnit()}</span>
+              <span className='forecast-high'>
+                {Math.round(convertTempForDisplay(day.high))}
+                {getTemperatureUnit()}
+              </span>
+              <span className='forecast-low'>
+                {Math.round(convertTempForDisplay(day.low))}
+                {getTemperatureUnit()}
+              </span>
             </div>
             <div className='forecast-description'>{day.description}</div>
             <div className='forecast-humidity'>💧 {day.humidity}%</div>
@@ -133,14 +145,31 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
 
 function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
   const formatTime = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp * 1000).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
   const getWindDirection = (degrees: number) => {
-    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    const directions = [
+      'N',
+      'NNE',
+      'NE',
+      'ENE',
+      'E',
+      'ESE',
+      'SE',
+      'SSE',
+      'S',
+      'SSW',
+      'SW',
+      'WSW',
+      'W',
+      'WNW',
+      'NW',
+      'NNW',
+    ];
     return directions[Math.round(degrees / 22.5) % 16];
   };
 
@@ -174,21 +203,27 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.temperature && (
           <div className='weather-item'>
             <p data-testid='temperature-display'>
-              🌡️ {Math.round(convertTempForDisplay(weather.temperature))}{getTemperatureUnit()}
+              🌡️ {Math.round(convertTempForDisplay(weather.temperature))}
+              {getTemperatureUnit()}
             </p>
           </div>
         )}
         {weather.feelsLike && (
           <div className='weather-item'>
             <p data-testid='feels-like-display'>
-              🤔 Feels like {Math.round(convertTempForDisplay(weather.feelsLike))}{getTemperatureUnit()}
+              🤔 Feels like{' '}
+              {Math.round(convertTempForDisplay(weather.feelsLike))}
+              {getTemperatureUnit()}
             </p>
           </div>
         )}
         {weather.tempMin && weather.tempMax && (
           <div className='weather-item'>
             <p data-testid='temp-range-display'>
-              📊 Range: {Math.round(convertTempForDisplay(weather.tempMin))}{getTemperatureUnit()} - {Math.round(convertTempForDisplay(weather.tempMax))}{getTemperatureUnit()}
+              📊 Range: {Math.round(convertTempForDisplay(weather.tempMin))}
+              {getTemperatureUnit()} -{' '}
+              {Math.round(convertTempForDisplay(weather.tempMax))}
+              {getTemperatureUnit()}
             </p>
           </div>
         )}
@@ -226,7 +261,10 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.windSpeed && (
           <div className='weather-item'>
             <p data-testid='wind-display'>
-              💨 Wind: {weather.windSpeed} mph {weather.windDirection ? getWindDirection(weather.windDirection) : ''}
+              💨 Wind: {weather.windSpeed} mph{' '}
+              {weather.windDirection
+                ? getWindDirection(weather.windDirection)
+                : ''}
             </p>
           </div>
         )}
@@ -264,7 +302,8 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
       {weather.city && (
         <div className='weather-item weather-location'>
           <p data-testid='location-display'>
-            📍 {weather.city}{weather.country ? `, ${weather.country}` : ''}
+            📍 {weather.city}
+            {weather.country ? `, ${weather.country}` : ''}
           </p>
         </div>
       )}
@@ -296,23 +335,33 @@ function Weather() {
   const [currentCity, setCurrentCity] = useState<string>('');
   const [viewMode, setViewMode] = useState<'current' | 'forecast'>('current');
   const [forecast, setForecast] = useState<DailyForecast[]>([]);
-  const [temperatureUnit, setTemperatureUnit] = useState<'imperial' | 'metric' | 'kelvin'>('imperial');
+  const [temperatureUnit, setTemperatureUnit] = useState<
+    'imperial' | 'metric' | 'kelvin'
+  >('imperial');
 
-  const groupForecastByDay = (forecastList: ForecastItem[]): DailyForecast[] => {
-    const grouped = forecastList.reduce((acc, item) => {
-      const date = new Date(item.dt * 1000).toDateString();
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(item);
-      return acc;
-    }, {} as Record<string, ForecastItem[]>);
-    
+  const groupForecastByDay = (
+    forecastList: ForecastItem[]
+  ): DailyForecast[] => {
+    const grouped = forecastList.reduce(
+      (acc, item) => {
+        const date = new Date(item.dt * 1000).toDateString();
+        if (!acc[date]) acc[date] = [];
+        acc[date].push(item);
+        return acc;
+      },
+      {} as Record<string, ForecastItem[]>
+    );
+
     return Object.values(grouped).map(dayItems => ({
       date: dayItems[0].dt_txt.split(' ')[0],
       high: Math.max(...dayItems.map(item => item.main.temp)),
       low: Math.min(...dayItems.map(item => item.main.temp)),
       description: dayItems[0].weather[0].description,
       icon: dayItems[0].weather[0].icon,
-      humidity: Math.round(dayItems.reduce((sum, item) => sum + item.main.humidity, 0) / dayItems.length)
+      humidity: Math.round(
+        dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
+          dayItems.length
+      ),
     }));
   };
 
@@ -332,7 +381,9 @@ function Weather() {
       const response = await fetch(url);
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('City not found. Please check the spelling and try again.');
+          throw new Error(
+            'City not found. Please check the spelling and try again.'
+          );
         }
         throw new Error('Weather data fetch failed');
       }
@@ -358,7 +409,9 @@ function Weather() {
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setErrorMessage(
-        error instanceof Error ? error.message : 'api call to openweathermap failed.. check the console'
+        error instanceof Error
+          ? error.message
+          : 'api call to openweathermap failed.. check the console'
       );
     } finally {
       setLoading(false);
@@ -371,7 +424,7 @@ function Weather() {
 
     try {
       await runtimeConfig.initialize();
-      
+
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
       // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
@@ -380,11 +433,13 @@ function Weather() {
       const response = await fetch(url);
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('City not found. Please check the spelling and try again.');
+          throw new Error(
+            'City not found. Please check the spelling and try again.'
+          );
         }
         throw new Error('Forecast data fetch failed');
       }
-      
+
       const data = await response.json();
       const dailyForecast = groupForecastByDay(data.list);
       setForecast(dailyForecast);
@@ -403,7 +458,10 @@ function Weather() {
     // Initialize runtime config and get default city
     const initializeWeather = async () => {
       await runtimeConfig.initialize();
-      const defaultCity = runtimeConfig.getWithDefault('VITE_WEATHER_CITY', 'Bozeman');
+      const defaultCity = runtimeConfig.getWithDefault(
+        'VITE_WEATHER_CITY',
+        'Bozeman'
+      );
       setCurrentCity(defaultCity);
       await fetchWeatherData(defaultCity);
       await fetchForecastData(defaultCity);
@@ -425,7 +483,9 @@ function Weather() {
     setCityInput(e.target.value);
   };
 
-  const handleTemperatureUnitChange = async (unit: 'imperial' | 'metric' | 'kelvin') => {
+  const handleTemperatureUnitChange = async (
+    unit: 'imperial' | 'metric' | 'kelvin'
+  ) => {
     setTemperatureUnit(unit);
     // Refetch data with new unit
     if (currentCity) {
@@ -460,8 +520,8 @@ function Weather() {
                 data-testid='city-input'
                 disabled={loading}
               />
-              <button 
-                type='submit' 
+              <button
+                type='submit'
                 className='search-button'
                 disabled={loading || !cityInput.trim()}
                 data-testid='search-button'
@@ -470,7 +530,7 @@ function Weather() {
               </button>
             </div>
           </form>
-          
+
           {currentCity && (
             <p className='current-location'>
               Currently showing: <strong>{currentCity}</strong>
@@ -495,7 +555,7 @@ function Weather() {
               Forecast
             </button>
           </div>
-          
+
           <div className='temperature-unit-toggle'>
             <button
               className={`unit-button ${temperatureUnit === 'imperial' ? 'active' : ''}`}
@@ -528,7 +588,10 @@ function Weather() {
         ) : viewMode === 'current' ? (
           <WeatherDisplay weather={weather} temperatureUnit={temperatureUnit} />
         ) : (
-          <ForecastDisplay forecast={forecast} temperatureUnit={temperatureUnit} />
+          <ForecastDisplay
+            forecast={forecast}
+            temperatureUnit={temperatureUnit}
+          />
         )}
 
         <div className='weather-info'>

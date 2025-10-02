@@ -21,7 +21,11 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
       <div className='resume-container'>
         <div className='resume-content'>
           <div className='resume-loading'>
-            <div className='loading-spinner' role='status' aria-label='Loading'></div>
+            <div
+              className='loading-spinner'
+              role='status'
+              aria-label='Loading'
+            />
             <p>Loading resume content from Google Doc...</p>
           </div>
         </div>
@@ -55,43 +59,46 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
     lines.forEach(line => {
       const trimmedLine = line.trim();
-      
+
       // Skip Google Docs artifacts and unwanted headers
-      if (trimmedLine === 'Tab 1' || 
-          trimmedLine === 'Tab 2' || 
-          trimmedLine === 'Tab 3' ||
-          trimmedLine === 'Sheet 1' ||
-          trimmedLine === 'Sheet 2' ||
-          trimmedLine === 'Sheet 3' ||
-          trimmedLine.startsWith('Tab ') ||
-          trimmedLine.startsWith('Sheet ') ||
-          trimmedLine === '________________' ||
-          trimmedLine === '_________________' ||
-          trimmedLine === '__________________' ||
-          trimmedLine === '___________________' ||
-          trimmedLine === '____________________' ||
-          /^_+$/.test(trimmedLine) || // Any line that's only underscores
-          trimmedLine === '' ||
-          trimmedLine === ' ' ||
-          trimmedLine === '  ') {
+      if (
+        trimmedLine === 'Tab 1' ||
+        trimmedLine === 'Tab 2' ||
+        trimmedLine === 'Tab 3' ||
+        trimmedLine === 'Sheet 1' ||
+        trimmedLine === 'Sheet 2' ||
+        trimmedLine === 'Sheet 3' ||
+        trimmedLine.startsWith('Tab ') ||
+        trimmedLine.startsWith('Sheet ') ||
+        trimmedLine === '________________' ||
+        trimmedLine === '_________________' ||
+        trimmedLine === '__________________' ||
+        trimmedLine === '___________________' ||
+        trimmedLine === '____________________' ||
+        /^_+$/.test(trimmedLine) || // Any line that's only underscores
+        trimmedLine === '' ||
+        trimmedLine === ' ' ||
+        trimmedLine === '  '
+      ) {
         return; // Skip this line
       }
-      
+
       // Check if this is a section header (look for common resume section names)
-      if (trimmedLine === 'Professional Summary' ||
-          trimmedLine === 'Summary' ||
-          trimmedLine === 'Technical Skills' ||
-          trimmedLine === 'Professional Experience' ||
-          trimmedLine === 'Education' ||
-          trimmedLine === 'Projects & Achievements' ||
-          trimmedLine === 'Certifications' ||
-          trimmedLine === 'Contact Information') {
-        
+      if (
+        trimmedLine === 'Professional Summary' ||
+        trimmedLine === 'Summary' ||
+        trimmedLine === 'Technical Skills' ||
+        trimmedLine === 'Professional Experience' ||
+        trimmedLine === 'Education' ||
+        trimmedLine === 'Projects & Achievements' ||
+        trimmedLine === 'Certifications' ||
+        trimmedLine === 'Contact Information'
+      ) {
         // Save previous section
         if (currentSection && currentContent.length > 0) {
           sections[currentSection] = [...currentContent];
         }
-        
+
         // Start new section
         currentSection = trimmedLine;
         currentContent = [];
@@ -130,15 +137,18 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                 const parts = text.split(/(\||\n)/);
                 return parts.map((part, partIndex) => {
                   const trimmedPart = part.trim();
-                  
-                  if (trimmedPart === 'linkedin' || trimmedPart === 'LinkedIn') {
+
+                  if (
+                    trimmedPart === 'linkedin' ||
+                    trimmedPart === 'LinkedIn'
+                  ) {
                     return (
                       <a
                         key={partIndex}
-                        href="https://www.linkedin.com/in/joseph-swanson-11092758/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="resume-link"
+                        href='https://www.linkedin.com/in/joseph-swanson-11092758/'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='resume-link'
                       >
                         LinkedIn
                       </a>
@@ -147,10 +157,10 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                     return (
                       <a
                         key={partIndex}
-                        href="https://tronswan.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="resume-link"
+                        href='https://tronswan.com'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='resume-link'
                       >
                         tronswan.com
                       </a>
@@ -163,11 +173,7 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                 });
               };
 
-              return (
-                <p key={index}>
-                  {parseContactLine(line)}
-                </p>
-              );
+              return <p key={index}>{parseContactLine(line)}</p>;
             })}
           </div>
         </header>
@@ -196,10 +202,10 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                   .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
                   .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
                   .trim();
-                
+
                 // Split by colon to separate category from skills
                 const [category, skills] = cleanSkill.split(':');
-                
+
                 return (
                   <div key={index} className='skill-category'>
                     {category && skills ? (
@@ -222,45 +228,47 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
             <h2>Professional Experience</h2>
             {sections['Professional Experience'].map((line, index) => {
               // Check if this line is a job role (contains job title, company, location, dates)
-              const isJobRole = line.includes('|') && 
-                               (line.includes('Engineer') || 
-                                line.includes('Developer') || 
-                                line.includes('Manager') || 
-                                line.includes('Director') || 
-                                line.includes('Lead') || 
-                                line.includes('Senior') || 
-                                line.includes('Staff') ||
-                                line.includes('Principal') ||
-                                line.includes('Architect') ||
-                                line.includes('Consultant') ||
-                                line.includes('Analyst') ||
-                                line.includes('Coordinator') ||
-                                line.includes('Specialist') ||
-                                line.includes('Technician') ||
-                                line.includes('Intern') ||
-                                line.includes('Associate') ||
-                                line.includes('Assistant') ||
-                                line.includes('Executive') ||
-                                line.includes('President') ||
-                                line.includes('CEO') ||
-                                line.includes('CTO') ||
-                                line.includes('VP') ||
-                                line.includes('Vice President') ||
-                                line.includes('Founder') ||
-                                line.includes('Co-founder') ||
-                                line.includes('Owner') ||
-                                line.includes('Freelance') ||
-                                line.includes('Contractor') ||
-                                line.includes('Consultant'));
-              
+              const isJobRole =
+                line.includes('|') &&
+                (line.includes('Engineer') ||
+                  line.includes('Developer') ||
+                  line.includes('Manager') ||
+                  line.includes('Director') ||
+                  line.includes('Lead') ||
+                  line.includes('Senior') ||
+                  line.includes('Staff') ||
+                  line.includes('Principal') ||
+                  line.includes('Architect') ||
+                  line.includes('Consultant') ||
+                  line.includes('Analyst') ||
+                  line.includes('Coordinator') ||
+                  line.includes('Specialist') ||
+                  line.includes('Technician') ||
+                  line.includes('Intern') ||
+                  line.includes('Associate') ||
+                  line.includes('Assistant') ||
+                  line.includes('Executive') ||
+                  line.includes('President') ||
+                  line.includes('CEO') ||
+                  line.includes('CTO') ||
+                  line.includes('VP') ||
+                  line.includes('Vice President') ||
+                  line.includes('Founder') ||
+                  line.includes('Co-founder') ||
+                  line.includes('Owner') ||
+                  line.includes('Freelance') ||
+                  line.includes('Contractor') ||
+                  line.includes('Consultant'));
+
               // Check if this line is a bullet point
-              const isBulletPoint = line.trim().startsWith('*') || 
-                                   line.trim().startsWith('-') || 
-                                   line.trim().startsWith('•') ||
-                                   line.trim().startsWith('◦') ||
-                                   line.trim().startsWith('▪') ||
-                                   line.trim().startsWith('▫');
-              
+              const isBulletPoint =
+                line.trim().startsWith('*') ||
+                line.trim().startsWith('-') ||
+                line.trim().startsWith('•') ||
+                line.trim().startsWith('◦') ||
+                line.trim().startsWith('▪') ||
+                line.trim().startsWith('▫');
+
               if (isJobRole) {
                 return (
                   <div key={index} className='experience-role'>
@@ -273,7 +281,7 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                   .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
                   .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
                   .trim();
-                
+
                 return (
                   <div key={index} className='experience-bullet'>
                     <p>{cleanBulletPoint}</p>
@@ -327,9 +335,11 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
         <footer className='resume-footer'>
           <p>Last updated: {lastUpdated?.toLocaleDateString() || 'Unknown'}</p>
           <p>
-            <a href="https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing" 
-               target="_blank" 
-               rel="noopener noreferrer">
+            <a
+              href='https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               View original Google Doc version
             </a>
           </p>

@@ -1,6 +1,7 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
 import DigitalOceanStatus from './DigitalOceanStatus';
 
@@ -14,7 +15,7 @@ describe('DigitalOceanStatus Component', () => {
     last_deployment_active_at: '2024-01-15T10:30:00Z',
     active_deployment: {
       id: 'deployment-123',
-      phase: 'ACTIVE'
+      phase: 'ACTIVE',
     },
     region: { label: 'New York', slug: 'nyc1' },
     tier_slug: 'basic',
@@ -22,7 +23,7 @@ describe('DigitalOceanStatus Component', () => {
     updated_at: '2024-01-15T10:30:00Z',
     live_url: 'https://tronswan.com',
     default_ingress: 'https://tronswan.com',
-    live_domain: 'tronswan.com'
+    live_domain: 'tronswan.com',
   };
 
   const mockDropletData = [
@@ -37,7 +38,7 @@ describe('DigitalOceanStatus Component', () => {
       kernel: {
         id: 1,
         name: 'Ubuntu',
-        version: '20.04'
+        version: '20.04',
       },
       created_at: '2024-01-01T00:00:00Z',
       features: ['backups', 'ipv6'],
@@ -45,7 +46,7 @@ describe('DigitalOceanStatus Component', () => {
       snapshot_ids: [],
       volume_ids: [],
       monitoring: false,
-      image: { 
+      image: {
         id: 1,
         name: 'Ubuntu 20.04',
         distribution: 'Ubuntu',
@@ -55,36 +56,52 @@ describe('DigitalOceanStatus Component', () => {
         created_at: '2024-01-01T00:00:00Z',
         min_disk_size: 20,
         type: 'snapshot',
-        size_gigabytes: 2.34
+        size_gigabytes: 2.34,
       },
-      size: { 
+      size: {
         slug: 's-2vcpu-4gb',
         memory: 4096,
         vcpus: 2,
         disk: 80,
         transfer: 4000,
-        price_monthly: 24.00,
+        price_monthly: 24.0,
         price_hourly: 0.036,
         regions: ['nyc1'],
-        available: true
+        available: true,
       },
       size_slug: 's-2vcpu-4gb',
-      region: { 
+      region: {
         name: 'New York 1',
         slug: 'nyc1',
-        features: ['virtio', 'private_networking', 'backups', 'ipv6', 'metadata'],
+        features: [
+          'virtio',
+          'private_networking',
+          'backups',
+          'ipv6',
+          'metadata',
+        ],
         available: true,
-        sizes: ['s-1vcpu-1gb']
+        sizes: ['s-1vcpu-1gb'],
       },
       networks: {
         v4: [
-          { ip_address: '192.168.1.100', type: 'public', netmask: '255.255.255.0', gateway: '192.168.1.1' },
-          { ip_address: '10.0.0.100', type: 'private', netmask: '255.255.0.0', gateway: '10.0.0.1' }
+          {
+            ip_address: '192.168.1.100',
+            type: 'public',
+            netmask: '255.255.255.0',
+            gateway: '192.168.1.1',
+          },
+          {
+            ip_address: '10.0.0.100',
+            type: 'private',
+            netmask: '255.255.0.0',
+            gateway: '10.0.0.1',
+          },
         ],
-        v6: []
+        v6: [],
       },
-      tags: ['production', 'web']
-    }
+      tags: ['production', 'web'],
+    },
   ];
 
   const defaultProps = {
@@ -94,9 +111,9 @@ describe('DigitalOceanStatus Component', () => {
       loadBalancers: [],
       databases: [],
       loading: false,
-      error: null
+      error: null,
     },
-    onDataChange: vi.fn()
+    onDataChange: vi.fn(),
   };
 
   beforeEach(() => {
@@ -113,7 +130,9 @@ describe('DigitalOceanStatus Component', () => {
       );
 
       expect(screen.getByText('🔄')).toBeInTheDocument();
-      expect(screen.getByText('Loading DigitalOcean data...')).toBeInTheDocument();
+      expect(
+        screen.getByText('Loading DigitalOcean data...')
+      ).toBeInTheDocument();
     });
   });
 
@@ -129,7 +148,9 @@ describe('DigitalOceanStatus Component', () => {
 
       expect(screen.getByText('⚠️')).toBeInTheDocument();
       expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
-      expect(screen.getByText('Check your DigitalOcean API token configuration')).toBeInTheDocument();
+      expect(
+        screen.getByText('Check your DigitalOcean API token configuration')
+      ).toBeInTheDocument();
     });
   });
 
@@ -177,7 +198,9 @@ describe('DigitalOceanStatus Component', () => {
     test('renders no data message when app data is not available', () => {
       render(<DigitalOceanStatus {...defaultProps} />);
 
-      expect(screen.getByText('App information not available')).toBeInTheDocument();
+      expect(
+        screen.getByText('App information not available')
+      ).toBeInTheDocument();
     });
 
     test('renders app information when data is available', () => {
@@ -189,7 +212,9 @@ describe('DigitalOceanStatus Component', () => {
       );
 
       expect(screen.getByText('tronswan-react-app')).toBeInTheDocument();
-      expect(screen.getByText('DigitalOcean App Platform Application')).toBeInTheDocument();
+      expect(
+        screen.getByText('DigitalOcean App Platform Application')
+      ).toBeInTheDocument();
       expect(screen.getByText('ACTIVE')).toBeInTheDocument();
       expect(screen.getByText('Phase: ACTIVE')).toBeInTheDocument();
     });
@@ -218,7 +243,9 @@ describe('DigitalOceanStatus Component', () => {
         />
       );
 
-      const liveUrlLinks = screen.getAllByRole('link', { name: 'https://tronswan.com' });
+      const liveUrlLinks = screen.getAllByRole('link', {
+        name: 'https://tronswan.com',
+      });
       expect(liveUrlLinks[0]).toHaveAttribute('href', 'https://tronswan.com');
       expect(liveUrlLinks[0]).toHaveAttribute('target', '_blank');
       expect(liveUrlLinks[0]).toHaveAttribute('rel', 'noopener noreferrer');
@@ -265,9 +292,11 @@ describe('DigitalOceanStatus Component', () => {
       expect(screen.getByText('test-droplet')).toBeInTheDocument();
       expect(screen.getByText(/active/)).toBeInTheDocument();
       expect(screen.getByText(/vCPUs:/)).toBeInTheDocument();
-      expect(screen.getByText((content, element) => {
-        return element?.textContent === 'vCPUs: 2';
-      })).toBeInTheDocument();
+      expect(
+        screen.getByText((content, element) => {
+          return element?.textContent === 'vCPUs: 2';
+        })
+      ).toBeInTheDocument();
       expect(screen.getByText(/4 GB/)).toBeInTheDocument();
       expect(screen.getByText(/80 GB/)).toBeInTheDocument();
     });
@@ -310,7 +339,13 @@ describe('DigitalOceanStatus Component', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
-          data={{ ...defaultProps.data, app: { ...mockAppData, last_deployment_active_at: '2024-01-15T10:30:00Z' } }}
+          data={{
+            ...defaultProps.data,
+            app: {
+              ...mockAppData,
+              last_deployment_active_at: '2024-01-15T10:30:00Z',
+            },
+          }}
         />
       );
 
@@ -321,7 +356,10 @@ describe('DigitalOceanStatus Component', () => {
       render(
         <DigitalOceanStatus
           {...defaultProps}
-          data={{ ...defaultProps.data, app: { ...mockAppData, last_deployment_active_at: null } }}
+          data={{
+            ...defaultProps.data,
+            app: { ...mockAppData, last_deployment_active_at: null },
+          }}
         />
       );
 
@@ -393,7 +431,7 @@ describe('DigitalOceanStatus Component', () => {
     test('handles droplets without tags', () => {
       const dropletWithoutTags = {
         ...mockDropletData[0],
-        tags: []
+        tags: [],
       } as any;
 
       render(

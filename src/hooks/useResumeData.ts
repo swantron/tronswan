@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import { GoogleDocsService } from '../services/googleDocsService';
 
 interface ResumeData {
@@ -19,9 +20,9 @@ export const useResumeData = () => {
   const fetchResumeData = async () => {
     try {
       setResumeData(prev => ({ ...prev, loading: true, error: null }));
-      
+
       const content = await GoogleDocsService.getResumeContent();
-      
+
       setResumeData({
         content,
         loading: false,
@@ -32,7 +33,8 @@ export const useResumeData = () => {
       setResumeData({
         content: '',
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load resume data',
+        error:
+          error instanceof Error ? error.message : 'Failed to load resume data',
         lastUpdated: null,
       });
     }

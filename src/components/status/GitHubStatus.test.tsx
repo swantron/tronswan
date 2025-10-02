@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import GitHubStatus from './GitHubStatus';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import githubService from '../../services/githubService';
+
+import GitHubStatus from './GitHubStatus';
 
 // Mock the CSS import
 vi.mock('../../styles/GitHubStatus.css', () => ({}));
@@ -25,8 +27,8 @@ describe('GitHubStatus Component', () => {
       forks_count: 2,
       private: false,
       html_url: 'https://github.com/swantron/tronswan',
-      updated_at: '2024-01-15T10:30:00Z'
-    }
+      updated_at: '2024-01-15T10:30:00Z',
+    },
   ];
 
   const mockWorkflowRuns = {
@@ -42,9 +44,9 @@ describe('GitHubStatus Component', () => {
         actor: { login: 'swantron' },
         created_at: '2024-01-15T10:30:00Z',
         updated_at: '2024-01-15T10:35:00Z',
-        html_url: 'https://github.com/swantron/tronswan/actions/runs/123456789'
-      }
-    ]
+        html_url: 'https://github.com/swantron/tronswan/actions/runs/123456789',
+      },
+    ],
   };
 
   const defaultProps = {
@@ -53,15 +55,19 @@ describe('GitHubStatus Component', () => {
       repositories: [],
       actions: [],
       loading: false,
-      error: null
+      error: null,
     },
-    onDataChange: vi.fn()
+    onDataChange: vi.fn(),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (githubService.getAllRepositories as vi.Mock).mockResolvedValue(mockRepositoryData);
-    (githubService.getWorkflowRuns as vi.Mock).mockResolvedValue(mockWorkflowRuns);
+    (githubService.getAllRepositories as vi.Mock).mockResolvedValue(
+      mockRepositoryData
+    );
+    (githubService.getWorkflowRuns as vi.Mock).mockResolvedValue(
+      mockWorkflowRuns
+    );
   });
 
   describe('Component Initialization', () => {
@@ -81,7 +87,7 @@ describe('GitHubStatus Component', () => {
         expect(defaultProps.onDataChange).toHaveBeenCalledWith({
           ...defaultProps.data,
           loading: true,
-          error: null
+          error: null,
         });
       });
     });
@@ -111,12 +117,18 @@ describe('GitHubStatus Component', () => {
       );
 
       expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
-      expect(screen.getByText('Check your GitHub API token configuration')).toBeInTheDocument();
+      expect(
+        screen.getByText('Check your GitHub API token configuration')
+      ).toBeInTheDocument();
     });
 
     it('handles error during data loading', async () => {
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      (githubService.getAllRepositories as vi.Mock).mockRejectedValue(new Error('Network Error'));
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      (githubService.getAllRepositories as vi.Mock).mockRejectedValue(
+        new Error('Network Error')
+      );
 
       render(<GitHubStatus {...defaultProps} />);
 
@@ -124,7 +136,7 @@ describe('GitHubStatus Component', () => {
         expect(defaultProps.onDataChange).toHaveBeenCalledWith({
           ...defaultProps.data,
           loading: false,
-          error: 'Network Error'
+          error: 'Network Error',
         });
       });
 
@@ -147,7 +159,7 @@ describe('GitHubStatus Component', () => {
           data={{
             ...defaultProps.data,
             repositories: mockRepositoryData,
-            actions: mockWorkflowRuns.workflow_runs
+            actions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -190,7 +202,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs
+            actions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -204,7 +216,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs
+            actions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -219,7 +231,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs
+            actions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -235,13 +247,18 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs
+            actions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
 
-      const viewDetailsLink = screen.getByRole('link', { name: 'View Details' });
-      expect(viewDetailsLink).toHaveAttribute('href', 'https://github.com/swantron/tronswan/actions/runs/123456789');
+      const viewDetailsLink = screen.getByRole('link', {
+        name: 'View Details',
+      });
+      expect(viewDetailsLink).toHaveAttribute(
+        'href',
+        'https://github.com/swantron/tronswan/actions/runs/123456789'
+      );
       expect(viewDetailsLink).toHaveAttribute('target', '_blank');
       expect(viewDetailsLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -263,7 +280,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            repositories: mockRepositoryData
+            repositories: mockRepositoryData,
           }}
         />
       );
@@ -280,7 +297,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            repositories: mockRepositoryData
+            repositories: mockRepositoryData,
           }}
         />
       );
@@ -298,7 +315,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            repositories: mockRepositoryData
+            repositories: mockRepositoryData,
           }}
         />
       );
@@ -316,7 +333,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            repositories: mockRepositoryData
+            repositories: mockRepositoryData,
           }}
         />
       );
@@ -324,8 +341,13 @@ describe('GitHubStatus Component', () => {
       // Switch to repos tab
       fireEvent.click(screen.getByText('Repos (1)'));
 
-      const repoLink = screen.getByRole('link', { name: 'https://github.com/swantron/tronswan' });
-      expect(repoLink).toHaveAttribute('href', 'https://github.com/swantron/tronswan');
+      const repoLink = screen.getByRole('link', {
+        name: 'https://github.com/swantron/tronswan',
+      });
+      expect(repoLink).toHaveAttribute(
+        'href',
+        'https://github.com/swantron/tronswan'
+      );
       expect(repoLink).toHaveAttribute('target', '_blank');
       expect(repoLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -339,7 +361,7 @@ describe('GitHubStatus Component', () => {
           data={{
             ...defaultProps.data,
             repositories: [],
-            actions: []
+            actions: [],
           }}
         />
       );
@@ -355,7 +377,7 @@ describe('GitHubStatus Component', () => {
           data={{
             ...defaultProps.data,
             repositories: null,
-            actions: null
+            actions: null,
           }}
         />
       );

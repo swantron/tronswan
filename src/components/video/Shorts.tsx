@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import VideoModal from './VideoModal';
 import './Shorts.css';
 
@@ -17,12 +18,24 @@ const Shorts: React.FC = () => {
     { id: 'gangnam_1', title: 'gangam style', videoSrc: '/gangnam_1.mp4' },
     { id: 'hacking', title: 'hacking', videoSrc: '/hacking.mp4' },
     { id: 'dealwithit', title: 'deal with it', videoSrc: '/dealwithit.mp4' },
-    { id: 'dealwithfont', title: 'deal with font', videoSrc: '/dealwithfont.mp4' },
-    { id: 'dealwithword', title: 'deal with word', videoSrc: '/dealwithword.mp4' },
+    {
+      id: 'dealwithfont',
+      title: 'deal with font',
+      videoSrc: '/dealwithfont.mp4',
+    },
+    {
+      id: 'dealwithword',
+      title: 'deal with word',
+      videoSrc: '/dealwithword.mp4',
+    },
     { id: 'wrigley', title: 'wrigley', videoSrc: '/wrigley.mp4' },
     { id: 'baseball_2', title: 'glove up', videoSrc: '/baseball_2.mp4' },
     { id: 'kingkong', title: 'kong tron', videoSrc: '/kingkong.mp4' },
-    { id: 'buschleague', title: 'busch dot league', videoSrc: '/buschleague.mp4' },
+    {
+      id: 'buschleague',
+      title: 'busch dot league',
+      videoSrc: '/buschleague.mp4',
+    },
     { id: 'thumbsup', title: 'thumbs up', videoSrc: '/thumbsup.mp4' },
     { id: 'jobwelldone', title: 'job well done', videoSrc: '/jobwelldone.mp4' },
     { id: 'coffee', title: 'coffee', videoSrc: '/coffee.mp4' },
@@ -43,45 +56,44 @@ const Shorts: React.FC = () => {
     setSelectedVideo(null);
   };
 
-
   return (
-    <div className="shorts-container">
-      <div className="shorts-header">
-        <h1 className="shorts-title">Shorts</h1>
+    <div className='shorts-container'>
+      <div className='shorts-header'>
+        <h1 className='shorts-title'>Shorts</h1>
       </div>
-      
-      <div className="shorts-grid">
-        {videos.map((video) => (
+
+      <div className='shorts-grid'>
+        {videos.map(video => (
           <div
             key={video.id}
-            className="shorts-item"
+            className='shorts-item'
             data-testid={`shorts-item-${video.id}`}
             onClick={() => handleVideoClick(video)}
-            role="button"
+            role='button'
             tabIndex={0}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 handleVideoClick(video);
               }
             }}
           >
-            <div className="shorts-thumbnail">
+            <div className='shorts-thumbnail'>
               <video
-                className="shorts-preview-video"
+                className='shorts-preview-video'
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload='metadata'
               >
-                <source src={video.videoSrc} type="video/mp4" />
+                <source src={video.videoSrc} type='video/mp4' />
               </video>
-              <div className="shorts-play-overlay">
-                <div className="shorts-play-button">▶</div>
+              <div className='shorts-play-overlay'>
+                <div className='shorts-play-button'>▶</div>
               </div>
             </div>
-            <div className="shorts-info">
-              <h3 className="shorts-video-title">{video.title}</h3>
+            <div className='shorts-info'>
+              <h3 className='shorts-video-title'>{video.title}</h3>
             </div>
           </div>
         ))}

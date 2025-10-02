@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { GoogleDocsService } from './googleDocsService';
 
 // Mock fetch
@@ -13,7 +14,7 @@ describe('GoogleDocsService', () => {
 
   it('should return fallback content when API key is not available', async () => {
     const content = await GoogleDocsService.getResumeContent();
-    
+
     expect(content).toContain('Resume Template');
     expect(content).toContain('Contact Information');
     expect(content).toContain('Professional Summary');
@@ -27,30 +28,30 @@ describe('GoogleDocsService', () => {
 
   it('should handle API errors gracefully', async () => {
     vi.stubEnv('VITE_GOOGLE_DOCS_API_KEY', 'test-api-key');
-    
+
     (fetch as any).mockResolvedValueOnce({
       ok: false,
       status: 404,
     });
 
     const content = await GoogleDocsService.getResumeContent();
-    
+
     expect(content).toContain('Resume Template');
     expect(content).toContain('This content is loaded from your Google Doc');
-    
+
     vi.unstubAllEnvs();
   });
 
   it('should handle network errors gracefully', async () => {
     vi.stubEnv('VITE_GOOGLE_DOCS_API_KEY', 'test-api-key');
-    
+
     (fetch as any).mockRejectedValueOnce(new Error('Network error'));
 
     const content = await GoogleDocsService.getResumeContent();
-    
+
     expect(content).toContain('Resume Template');
     expect(content).toContain('This content is loaded from your Google Doc');
-    
+
     vi.unstubAllEnvs();
   });
 });

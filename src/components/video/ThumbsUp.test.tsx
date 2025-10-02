@@ -1,7 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
+
 import ThumbsUp from './ThumbsUp';
 
 describe('ThumbsUp', () => {
@@ -28,7 +29,9 @@ describe('ThumbsUp', () => {
   it('renders the video source with correct path', () => {
     render(<ThumbsUp />);
 
-    const source = screen.getByTestId('thumbsup-modal-video').querySelector('source');
+    const source = screen
+      .getByTestId('thumbsup-modal-video')
+      .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/thumbsup.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import VideoModal from './VideoModal';
 import '../../styles/Video.css';
 

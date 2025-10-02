@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { useDateFormatter } from '../../hooks/useDateFormatter';
 import { swantronService } from '../../services/swantronService';
 import { Post } from '../../types';
-
 import SEO from '../ui/SEO';
 
 import '../../styles/SwantronDetail.css';

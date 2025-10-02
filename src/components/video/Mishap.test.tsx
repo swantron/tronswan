@@ -1,7 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
+
 import Mishap from './Mishap';
 
 describe('Mishap', () => {
@@ -28,7 +29,9 @@ describe('Mishap', () => {
   it('renders the video source with correct path', () => {
     render(<Mishap />);
 
-    const source = screen.getByTestId('mishap-modal-video').querySelector('source');
+    const source = screen
+      .getByTestId('mishap-modal-video')
+      .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/mishap.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');

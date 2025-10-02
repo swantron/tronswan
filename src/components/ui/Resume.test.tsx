@@ -3,8 +3,9 @@ import React from 'react';
 import { vi, expect, describe, test, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
-import Resume from './Resume';
 import { GoogleDocsService } from '../../services/googleDocsService';
+
+import Resume from './Resume';
 
 // Mock the GoogleDocsService
 vi.mock('../../services/googleDocsService', () => ({
@@ -26,11 +27,15 @@ describe('Resume Component', () => {
   });
 
   test('renders loading state initially', () => {
-    (GoogleDocsService.getResumeContent as any).mockResolvedValue('Test content');
-    
+    (GoogleDocsService.getResumeContent as any).mockResolvedValue(
+      'Test content'
+    );
+
     render(<Resume />);
-    
-    expect(screen.getByText('Loading resume content from Google Doc...')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Loading resume content from Google Doc...')
+    ).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument(); // loading spinner
   });
 
@@ -65,51 +70,62 @@ AWS Certified Solutions Architect
 Google Cloud Professional Developer`;
 
     (GoogleDocsService.getResumeContent as any).mockResolvedValue(mockContent);
-    
+
     render(<Resume />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
-    
+
     expect(screen.getByText('Professional Summary')).toBeInTheDocument();
     expect(screen.getByText('Technical Skills')).toBeInTheDocument();
     expect(screen.getByText('Professional Experience')).toBeInTheDocument();
   });
 
   test('renders error state when API fails', async () => {
-    (GoogleDocsService.getResumeContent as any).mockRejectedValue(new Error('API Error'));
-    
+    (GoogleDocsService.getResumeContent as any).mockRejectedValue(
+      new Error('API Error')
+    );
+
     render(<Resume />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Error Loading Resume')).toBeInTheDocument();
     });
-    
+
     expect(screen.getByText('API Error')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Try Again' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Try Again' })
+    ).toBeInTheDocument();
   });
 
   test('renders refresh button', async () => {
     const mockContent = 'Test content';
     (GoogleDocsService.getResumeContent as any).mockResolvedValue(mockContent);
-    
+
     render(<Resume />);
-    
+
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Refresh Content' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Refresh Content' })
+      ).toBeInTheDocument();
     });
   });
 
   test('renders Google Doc link in footer', async () => {
     const mockContent = 'Test content';
     (GoogleDocsService.getResumeContent as any).mockResolvedValue(mockContent);
-    
+
     render(<Resume />);
-    
+
     await waitFor(() => {
-      const googleDocLink = screen.getByRole('link', { name: 'View original Google Doc version' });
-      expect(googleDocLink).toHaveAttribute('href', 'https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing');
+      const googleDocLink = screen.getByRole('link', {
+        name: 'View original Google Doc version',
+      });
+      expect(googleDocLink).toHaveAttribute(
+        'href',
+        'https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing'
+      );
       expect(googleDocLink).toHaveAttribute('target', '_blank');
       expect(googleDocLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -118,9 +134,9 @@ Google Cloud Professional Developer`;
   test('renders last updated date', async () => {
     const mockContent = 'Test content';
     (GoogleDocsService.getResumeContent as any).mockResolvedValue(mockContent);
-    
+
     render(<Resume />);
-    
+
     await waitFor(() => {
       const lastUpdatedText = screen.getByText(/Last updated:/);
       expect(lastUpdatedText).toBeInTheDocument();

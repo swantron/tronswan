@@ -42,10 +42,14 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors and log them', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
 
-      await expect(digitalOceanService.getApp()).rejects.toThrow('Network error');
+      await expect(digitalOceanService.getApp()).rejects.toThrow(
+        'Network error'
+      );
       expect(consoleSpy).toHaveBeenCalledWith(
         'Error fetching DigitalOcean app:',
         expect.any(Error)
@@ -97,8 +101,22 @@ describe('DigitalOceanService', () => {
             },
             size_slug: 's-1vcpu-1gb',
             networks: {
-              v4: [{ ip_address: '192.168.1.1', netmask: '255.255.255.0', gateway: '192.168.1.1', type: 'public' }],
-              v6: [{ ip_address: '::1', netmask: 64, gateway: '::1', type: 'public' }],
+              v4: [
+                {
+                  ip_address: '192.168.1.1',
+                  netmask: '255.255.255.0',
+                  gateway: '192.168.1.1',
+                  type: 'public',
+                },
+              ],
+              v6: [
+                {
+                  ip_address: '::1',
+                  netmask: 64,
+                  gateway: '::1',
+                  type: 'public',
+                },
+              ],
             },
             region: {
               name: 'New York 1',
@@ -129,10 +147,14 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching droplets', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
-      await expect(digitalOceanService.getDroplets()).rejects.toThrow('API error');
+      await expect(digitalOceanService.getDroplets()).rejects.toThrow(
+        'API error'
+      );
       expect(consoleSpy).toHaveBeenCalledWith(
         'Error fetching DigitalOcean droplets:',
         expect.any(Error)
@@ -203,10 +225,14 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching load balancers', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
-      await expect(digitalOceanService.getLoadBalancers()).rejects.toThrow('API error');
+      await expect(digitalOceanService.getLoadBalancers()).rejects.toThrow(
+        'API error'
+      );
       expect(consoleSpy).toHaveBeenCalledWith(
         'Error fetching DigitalOcean load balancers:',
         expect.any(Error)
@@ -286,10 +312,14 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching databases', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
-      await expect(digitalOceanService.getDatabases()).rejects.toThrow('API error');
+      await expect(digitalOceanService.getDatabases()).rejects.toThrow(
+        'API error'
+      );
       expect(consoleSpy).toHaveBeenCalledWith(
         'Error fetching DigitalOcean databases:',
         expect.any(Error)
@@ -326,10 +356,14 @@ describe('DigitalOceanService', () => {
     });
 
     it('should handle errors when fetching account info', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
 
-      await expect(digitalOceanService.getAccount()).rejects.toThrow('API error');
+      await expect(digitalOceanService.getAccount()).rejects.toThrow(
+        'API error'
+      );
       expect(consoleSpy).toHaveBeenCalledWith(
         'Error fetching DigitalOcean account info:',
         expect.any(Error)

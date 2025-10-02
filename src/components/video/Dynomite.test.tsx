@@ -1,7 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
+
 import Dynomite from './Dynomite';
 
 describe('Dynomite', () => {
@@ -28,7 +29,9 @@ describe('Dynomite', () => {
   it('renders the video source with correct path', () => {
     render(<Dynomite />);
 
-    const source = screen.getByTestId('dynomite-modal-video').querySelector('source');
+    const source = screen
+      .getByTestId('dynomite-modal-video')
+      .querySelector('source');
     expect(source).toBeInTheDocument();
     expect(source).toHaveAttribute('src', '/dynomite.mp4');
     expect(source).toHaveAttribute('type', 'video/mp4');
