@@ -61,7 +61,7 @@ describe('App Component', () => {
 
     const swantronLink = screen.getByTestId('swantron-link');
     expect(swantronLink).toBeInTheDocument();
-    expect(swantronLink).toHaveAttribute('href', '#');
+    expect(swantronLink.tagName).toBe('BUTTON');
     expect(swantronLink).toHaveTextContent('tron swan dot com');
   });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import VideoModal from './VideoModal';
 import '../../styles/Video.css';
@@ -11,7 +11,7 @@ interface VideoPageProps {
 
 const VideoPage: React.FC<VideoPageProps> = ({ title, videoSrc, testId }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [currentVideo, setCurrentVideo] = useState({ title, videoSrc, testId });
+  const currentVideo = { title, videoSrc, testId };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

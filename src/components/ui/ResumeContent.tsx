@@ -199,8 +199,8 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
               {sections['Technical Skills'].map((skill, index) => {
                 // Clean up the skill text by removing bullet points and asterisks
                 const cleanSkill = skill
-                  .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
-                  .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
+                  .replace(/^\s*[*\-•◦▪▫]\s*/, '') // Remove leading bullet points
+                  .replace(/\s*[*\-•◦▪▫]\s*$/, '') // Remove trailing bullet points
                   .trim();
 
                 // Split by colon to separate category from skills
@@ -278,8 +278,8 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
               } else if (isBulletPoint) {
                 // Clean up the bullet point text by removing bullet points and asterisks
                 const cleanBulletPoint = line
-                  .replace(/^\s*[\*\-\•\◦\▪\▫]\s*/, '') // Remove leading bullet points
-                  .replace(/\s*[\*\-\•\◦\▪\▫]\s*$/, '') // Remove trailing bullet points
+                  .replace(/^\s*[*\-•◦▪▫]\s*/, '') // Remove leading bullet points
+                  .replace(/\s*[*\-•◦▪▫]\s*$/, '') // Remove trailing bullet points
                   .trim();
 
                 return (

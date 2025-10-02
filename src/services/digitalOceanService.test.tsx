@@ -1,3 +1,4 @@
+import { Response } from 'node-fetch';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock runtimeConfig before importing

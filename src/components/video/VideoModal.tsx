@@ -18,7 +18,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
 }) => {
   // Handle escape key press
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
       }
@@ -48,6 +48,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
     <div
       className='video-modal-overlay'
       onClick={handleBackdropClick}
+      onKeyDown={handleBackdropClick}
+      role='button'
+      tabIndex={0}
       data-testid={`${testId}-modal-overlay`}
     >
       <div
