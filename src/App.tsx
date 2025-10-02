@@ -110,9 +110,9 @@ function Home() {
 
       <div className='home-description'>
         <h2 className='swantron-link'>
-          <button onClick={handleSwantronClick} data-testid='swantron-link'>
+          <a href='#' onClick={handleSwantronClick} data-testid='swantron-link'>
             tron swan dot com
-          </button>
+          </a>
         </h2>
       </div>
     </div>
