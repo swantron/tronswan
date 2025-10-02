@@ -48,7 +48,11 @@ const VideoModal: React.FC<VideoModalProps> = ({
     <div
       className='video-modal-overlay'
       onClick={handleBackdropClick}
-      onKeyDown={handleBackdropClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleBackdropClick(e as any);
+        }
+      }}
       role='button'
       tabIndex={0}
       data-testid={`${testId}-modal-overlay`}

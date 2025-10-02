@@ -128,7 +128,7 @@ class Logger {
       service,
       operation,
       error,
-      ...additionalContext,
+      ...(additionalContext && typeof additionalContext === 'object' ? additionalContext : {}),
     });
   }
 
@@ -136,7 +136,7 @@ class Logger {
   configWarn(key: string, message: string, context?: LogContext): void {
     this.warn(`Configuration warning for ${key}: ${message}`, {
       configKey: key,
-      ...context,
+      ...(context && typeof context === 'object' ? context : {}),
     });
   }
 }
