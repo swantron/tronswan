@@ -89,14 +89,11 @@ describe('SwantronDetail Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock console.error to avoid noise in tests
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    // Console mocking no longer needed since we use logger
   });
 
   afterEach(() => {
-    if ((console.error as any).mockRestore) {
-      (console.error as any).mockRestore();
-    }
+    vi.restoreAllMocks();
   });
 
   test('renders loading state initially', () => {

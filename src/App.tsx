@@ -110,7 +110,14 @@ function Home() {
 
       <div className='home-description'>
         <h2 className='swantron-link'>
-          <a href='#' onClick={handleSwantronClick} data-testid='swantron-link'>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a
+            href='#'
+            onClick={handleSwantronClick}
+            data-testid='swantron-link'
+            role='button'
+            aria-label='Navigate to random video'
+          >
             tron swan dot com
           </a>
         </h2>

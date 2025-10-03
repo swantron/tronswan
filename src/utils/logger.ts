@@ -128,7 +128,9 @@ class Logger {
       service,
       operation,
       error,
-      ...(additionalContext && typeof additionalContext === 'object' ? additionalContext : {}),
+      ...(additionalContext && typeof additionalContext === 'object'
+        ? additionalContext
+        : {}),
     });
   }
 

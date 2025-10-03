@@ -26,15 +26,7 @@ import { wordpressService } from './wordpressService';
 // Mock fetch globally
 global.fetch = vi.fn();
 
-// Mock console.error to avoid noise in tests
-const originalConsoleError = console.error;
-beforeAll(() => {
-  console.error = vi.fn();
-});
-
-afterAll(() => {
-  console.error = originalConsoleError;
-});
+// Console mocking no longer needed since we use logger
 
 describe('wordpressService', () => {
   beforeEach(() => {

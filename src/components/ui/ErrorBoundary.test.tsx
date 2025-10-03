@@ -26,15 +26,7 @@ const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
   return <div>No error</div>;
 };
 
-// Mock console.error to avoid noise in tests
-const originalError = console.error;
-beforeAll(() => {
-  console.error = vi.fn();
-});
-
-afterAll(() => {
-  console.error = originalError;
-});
+// Console mocking no longer needed since we use logger
 
 describe('ErrorBoundary Component', () => {
   test('renders children when no error occurs', () => {

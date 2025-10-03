@@ -62,8 +62,7 @@ describe('RecipeDetail Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock console.error to avoid noise in tests
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    // Console mocking no longer needed since we use logger
   });
 
   afterEach(() => {
