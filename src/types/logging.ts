@@ -18,6 +18,10 @@ export interface LoggerConfig {
   enableConsole: boolean;
   enableProductionLogging: boolean;
   serviceName?: string;
+  maxContextDepth?: number;
+  enableStackTrace?: boolean;
+  enablePerformanceLogging?: boolean;
+  logRetentionDays?: number;
 }
 
 export type LogContext =

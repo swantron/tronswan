@@ -10,9 +10,11 @@ building / deploying / learning
 
 ## 📚 Documentation
 
-- **[Environment Configuration](ENVIRONMENT_CONFIG.md)** - Complete guide for setting up environment variables and API tokens
-- **[CI/CD Setup](CI_SETUP.md)** - Automated testing and deployment verification setup
-- **[Health Page Guide](HEALTH_PAGE_README.md)** - Service health monitoring and deployment status features
+- **[Environment Configuration](docs/ENVIRONMENT_CONFIG.md)** - Complete guide for setting up environment variables and API tokens
+- **[CI/CD Setup](docs/CI_SETUP.md)** - Automated testing and deployment verification setup
+- **[Health Page Guide](docs/HEALTH_PAGE_README.md)** - Service health monitoring and deployment status features
+- **[Logging Guide](docs/LOGGING_GUIDE.md)** - Comprehensive guide to the structured logging system and best practices
+- **[Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md)** - Guide for setting up Google Docs API for dynamic resume content
 
 ## Features
 
@@ -20,11 +22,11 @@ building / deploying / learning
 - 🍳 **Recipe Collection** - Displays recipes from chomptron.com  
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
-- 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](HEALTH_PAGE_README.md))
+- 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
 - 📱 **Responsive Design** - Works on all devices
 - ⚡ **Fast Performance** - Optimized with modern React patterns
 - 🧪 **High Test Coverage** - 93.98% test coverage with Vitest
-- 🚀 **Automated Deployment** - CI/CD pipeline with post-deployment verification ([see CI/CD Setup](CI_SETUP.md))
+- 🚀 **Automated Deployment** - CI/CD pipeline with post-deployment verification ([see CI/CD Setup](docs/CI_SETUP.md))
 
 ## Tech Stack
 
@@ -58,7 +60,7 @@ building / deploying / learning
    yarn install
    ```
 
-3. Create a `.env` file in the root directory. See [Environment Configuration](ENVIRONMENT_CONFIG.md) for detailed setup:
+3. Create a `.env` file in the root directory. See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup:
    ```bash
    # Basic weather configuration
    VITE_WEATHER_API_KEY=your_openweathermap_api_key
@@ -126,7 +128,7 @@ The application includes a comprehensive health monitoring system accessible at 
 - **Service Health Checks**: Real-time monitoring of external services
 - **Deployment Status**: Track application deployment and health metrics
 
-See [Health Page Guide](HEALTH_PAGE_README.md) for detailed information about the health monitoring features.
+See [Health Page Guide](docs/HEALTH_PAGE_README.md) for detailed information about the health monitoring features.
 
 ### Testing
 
@@ -169,11 +171,11 @@ The project includes a complete CI/CD pipeline that:
 - Runs Playwright tests against the deployed site
 - Provides detailed test reports and artifacts
 
-See [CI/CD Setup](CI_SETUP.md) for detailed information about the automated testing and deployment process.
+See [CI/CD Setup](docs/CI_SETUP.md) for detailed information about the automated testing and deployment process.
 
 ### Environment Variables
 
-For detailed environment variable setup, see [Environment Configuration](ENVIRONMENT_CONFIG.md).
+For detailed environment variable setup, see [Environment Configuration](docs/ENVIRONMENT_CONFIG.md).
 
 **Required for basic functionality:**
 - `VITE_WEATHER_API_KEY`: OpenWeatherMap API key
@@ -207,7 +209,7 @@ The project includes utility scripts for development and testing. All scripts ar
 **Weather data not loading**
 - Verify your OpenWeatherMap API key is set in `.env`
 - Check that `VITE_WEATHER_API_KEY` is correctly configured
-- See [Environment Configuration](ENVIRONMENT_CONFIG.md) for detailed setup
+- See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup
 
 **Blog posts not loading**
 - Check network connectivity to swantron.com and chomptron.com
@@ -216,7 +218,7 @@ The project includes utility scripts for development and testing. All scripts ar
 **Health page not loading**
 - Ensure GitHub and DigitalOcean tokens are configured
 - Check that API tokens have the correct permissions
-- See [Health Page Guide](HEALTH_PAGE_README.md) for troubleshooting
+- See [Health Page Guide](docs/HEALTH_PAGE_README.md) for troubleshooting
 
 **Tests failing**
 - Run `yarn install` to ensure all dependencies are installed
@@ -226,7 +228,7 @@ The project includes utility scripts for development and testing. All scripts ar
 **Deployment issues**
 - Check GitHub Actions logs for detailed error information
 - Verify DigitalOcean App Platform configuration
-- See [CI/CD Setup](CI_SETUP.md) for deployment troubleshooting
+- See [CI/CD Setup](docs/CI_SETUP.md) for deployment troubleshooting
 
 ## License
 
