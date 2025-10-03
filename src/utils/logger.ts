@@ -217,11 +217,14 @@ class Logger {
     this.startTimer(label);
     try {
       const result = await fn();
-      this.endTimer(label, { ...context, success: true });
+      this.endTimer(label, { 
+        ...(context && typeof context === 'object' ? context : {}), 
+        success: true 
+      });
       return result;
     } catch (error) {
       this.endTimer(label, { 
-        ...context, 
+        ...(context && typeof context === 'object' ? context : {}), 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error' 
       });
@@ -238,11 +241,14 @@ class Logger {
     this.startTimer(label);
     try {
       const result = fn();
-      this.endTimer(label, { ...context, success: true });
+      this.endTimer(label, { 
+        ...(context && typeof context === 'object' ? context : {}), 
+        success: true 
+      });
       return result;
     } catch (error) {
       this.endTimer(label, { 
-        ...context, 
+        ...(context && typeof context === 'object' ? context : {}), 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error' 
       });
