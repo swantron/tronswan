@@ -8,7 +8,7 @@ export enum LogLevel {
 export interface LogEntry {
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   timestamp: string;
   source?: string;
 }
@@ -25,7 +25,7 @@ export interface LoggerConfig {
 }
 
 export type LogContext =
-  | Record<string, any>
+  | Record<string, unknown>
   | Error
   | string
   | number

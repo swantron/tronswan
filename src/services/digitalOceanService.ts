@@ -1,6 +1,32 @@
 import { logger } from '../utils/logger';
 import { runtimeConfig } from '../utils/runtimeConfig';
 
+export interface DigitalOceanApp {
+  id: string;
+  name: string;
+  region: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  spec: {
+    name: string;
+    region: string;
+    services: Array<{
+      name: string;
+      source_dir: string;
+      github: {
+        repo: string;
+        branch: string;
+        deploy_on_push: boolean;
+      };
+      run_command: string;
+      environment_slug: string;
+      instance_count: number;
+      instance_size_slug: string;
+    }>;
+  };
+}
+
 export interface DigitalOceanDroplet {
   id: number;
   name: string;
@@ -199,9 +225,9 @@ class DigitalOceanService {
     return data;
   }
 
-  async getApp(): Promise<any> {
+  async getApp(): Promise<{ app: DigitalOceanApp }> {
     try {
-      return await this.makeRequest(`/apps/${this.appId}`);
+      return await this.makeRequest(`/apps/${this.appId}`) as { app: DigitalOceanApp };
     } catch (error) {
       logger.apiError(
         'DigitalOcean',

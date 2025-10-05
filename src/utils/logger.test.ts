@@ -1,6 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Logger, logger } from './logger';
+
 import { LogLevel } from '../types/logging';
+
+import { Logger, logger } from './logger';
+
+// Performance API types for TypeScript
+declare global {
+  interface Performance {
+    now(): number;
+  }
+}
 
 // Mock console methods
 const mockConsole = {
@@ -19,12 +28,12 @@ const mockPerformance = {
 describe('Logger', () => {
   let testLogger: Logger;
   let originalConsole: typeof console;
-  let originalPerformance: typeof performance;
+  let originalPerformance: typeof globalThis.performance;
 
   beforeEach(() => {
     // Store original implementations
     originalConsole = { ...console };
-    originalPerformance = performance;
+    originalPerformance = globalThis.performance;
 
     // Mock console
     Object.assign(console, mockConsole);
@@ -243,7 +252,7 @@ describe('Logger', () => {
 
     it('should measure async functions', async () => {
       const asyncFn = vi.fn().mockResolvedValue('result');
-      
+
       const result = await testLogger.measureAsync('async-test', asyncFn);
 
       expect(result).toBe('result');
@@ -259,7 +268,7 @@ describe('Logger', () => {
 
     it('should measure sync functions', () => {
       const syncFn = vi.fn().mockReturnValue('result');
-      
+
       const result = testLogger.measureSync('sync-test', syncFn);
 
       expect(result).toBe('result');
@@ -275,7 +284,7 @@ describe('Logger', () => {
 
     it('should handle errors in measured functions', async () => {
       const errorFn = vi.fn().mockRejectedValue(new Error('Test error'));
-      
+
       await expect(
         testLogger.measureAsync('error-test', errorFn)
       ).rejects.toThrow('Test error');

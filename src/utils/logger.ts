@@ -1,5 +1,12 @@
-import { LogLevel, LogEntry, LoggerConfig, LogContext } from '../types/logging';
 import { getLoggingConfig } from '../config/logging';
+import { LogLevel, LogEntry, LoggerConfig, LogContext } from '../types/logging';
+
+// Performance API types for TypeScript
+declare global {
+  interface Performance {
+    now(): number;
+  }
+}
 
 class Logger {
   private config: LoggerConfig;
@@ -35,11 +42,13 @@ class Logger {
     };
   }
 
-  private formatContext(context?: LogContext): Record<string, any> | undefined {
+  private formatContext(
+    context?: LogContext
+  ): Record<string, unknown> | undefined {
     if (!context) return undefined;
 
     if (context instanceof Error) {
-      const errorContext: Record<string, any> = {
+      const errorContext: Record<string, unknown> = {
         name: context.name,
         message: context.message,
       };
@@ -52,22 +61,25 @@ class Logger {
     }
 
     if (typeof context === 'object' && context !== null) {
-      return this.limitContextDepth(context as Record<string, any>);
+      return this.limitContextDepth(context as Record<string, unknown>);
     }
 
     return { value: context };
   }
 
-  private limitContextDepth(obj: Record<string, any>, depth = 0): Record<string, any> {
+  private limitContextDepth(
+    obj: Record<string, unknown>,
+    depth = 0
+  ): Record<string, unknown> {
     if (depth >= (this.config.maxContextDepth || 5)) {
       return { '[truncated]': 'Maximum context depth reached' };
     }
 
-    const result: Record<string, any> = {};
-    
+    const result: Record<string, unknown> = {};
+
     for (const [key, value] of Object.entries(obj)) {
       if (value && typeof value === 'object' && !Array.isArray(value)) {
-        result[key] = this.limitContextDepth(value, depth + 1);
+        result[key] = this.limitContextDepth(value as Record<string, unknown>, depth + 1);
       } else {
         result[key] = value;
       }
@@ -98,15 +110,19 @@ class Logger {
 
     switch (level) {
       case LogLevel.DEBUG:
+        // eslint-disable-next-line no-console
         console.log(prefix, message, context || '');
         break;
       case LogLevel.INFO:
+        // eslint-disable-next-line no-console
         console.info(prefix, message, context || '');
         break;
       case LogLevel.WARN:
+        // eslint-disable-next-line no-console
         console.warn(prefix, message, context || '');
         break;
       case LogLevel.ERROR:
+        // eslint-disable-next-line no-console
         console.error(prefix, message, context || '');
         break;
     }
@@ -122,7 +138,7 @@ class Logger {
     // - Custom logging endpoint
     // - Log aggregation service
     // - CloudWatch, DataDog, etc.
-    
+
     // For now, use structured console logging in production
     const productionLog = {
       timestamp: entry.timestamp,
@@ -133,8 +149,10 @@ class Logger {
     };
 
     if (entry.level === LogLevel.ERROR) {
+      // eslint-disable-next-line no-console
       console.error(`[PROD] ${entry.message}`, productionLog);
     } else {
+      // eslint-disable-next-line no-console
       console.log(`[PROD] ${entry.message}`, productionLog);
     }
   }
@@ -184,8 +202,8 @@ class Logger {
   // Performance logging methods
   startTimer(label: string): void {
     if (!this.config.enablePerformanceLogging) return;
-    
-    this.performanceStartTimes.set(label, performance.now());
+
+    this.performanceStartTimes.set(label, globalThis.performance.now());
     this.debug(`Timer started: ${label}`, { timerLabel: label });
   }
 
@@ -198,7 +216,7 @@ class Logger {
       return;
     }
 
-    const duration = performance.now() - startTime;
+    const duration = globalThis.performance.now() - startTime;
     this.performanceStartTimes.delete(label);
 
     this.info(`Timer completed: ${label}`, {
@@ -217,40 +235,36 @@ class Logger {
     this.startTimer(label);
     try {
       const result = await fn();
-      this.endTimer(label, { 
-        ...(context && typeof context === 'object' ? context : {}), 
-        success: true 
+      this.endTimer(label, {
+        ...(context && typeof context === 'object' ? context : {}),
+        success: true,
       });
       return result;
     } catch (error) {
-      this.endTimer(label, { 
-        ...(context && typeof context === 'object' ? context : {}), 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      this.endTimer(label, {
+        ...(context && typeof context === 'object' ? context : {}),
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
   }
 
   // Method to measure synchronous function execution time
-  measureSync<T>(
-    label: string,
-    fn: () => T,
-    context?: LogContext
-  ): T {
+  measureSync<T>(label: string, fn: () => T, context?: LogContext): T {
     this.startTimer(label);
     try {
       const result = fn();
-      this.endTimer(label, { 
-        ...(context && typeof context === 'object' ? context : {}), 
-        success: true 
+      this.endTimer(label, {
+        ...(context && typeof context === 'object' ? context : {}),
+        success: true,
       });
       return result;
     } catch (error) {
-      this.endTimer(label, { 
-        ...(context && typeof context === 'object' ? context : {}), 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      this.endTimer(label, {
+        ...(context && typeof context === 'object' ? context : {}),
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
