@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test, vi } from 'vitest';
+import '@testing-library/jest-dom';
 
 import VideoModal from './VideoModal';
 

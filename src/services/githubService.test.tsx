@@ -1,5 +1,6 @@
 import { Response } from 'node-fetch';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock runtimeConfig before importing
 vi.mock('../utils/runtimeConfig', () => ({

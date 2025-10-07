@@ -1,5 +1,6 @@
 // Remove node-fetch import - use global Response type instead
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock runtimeConfig before importing
 vi.mock('../utils/runtimeConfig', () => ({

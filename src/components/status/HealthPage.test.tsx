@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { vi, expect, describe, it, beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 import HealthPage from './HealthPage';
 

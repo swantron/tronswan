@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock logger before importing the component
 vi.mock('../../utils/logger', () => ({

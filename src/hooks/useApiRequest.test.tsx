@@ -8,6 +8,7 @@ import {
   afterAll,
   beforeEach,
 } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock logger before importing the hook
 vi.mock('../utils/logger', () => ({
