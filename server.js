@@ -1,6 +1,18 @@
 const express = require('express');
 const path = require('path');
-const { logger } = require('./build/src/utils/logger');
+
+// Simple logger for the server
+const logger = {
+  info: (message, context = {}) => {
+    console.log(`[${new Date().toISOString()}] [INFO] ${message}`, context);
+  },
+  warn: (message, context = {}) => {
+    console.warn(`[${new Date().toISOString()}] [WARN] ${message}`, context);
+  },
+  error: (message, context = {}) => {
+    console.error(`[${new Date().toISOString()}] [ERROR] ${message}`, context);
+  }
+};
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -103,6 +115,14 @@ app.listen(PORT, () => {
   logger.info('Server started', {
     port: PORT,
     nodeEnv: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    platform: 'Digital Ocean App Platform',
+    buildpack: 'Node.js'
+  });
+  
+  // Log that we're ready to serve requests
+  logger.info('Application ready to serve requests', {
+    staticFilesPath: path.join(__dirname, 'build'),
+    spaFallback: true
   });
 });
