@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { logger } from './utils/logger';
 
 import RecipeDetail from './components/recipe/RecipeDetail';
 import RecipeList from './components/recipe/RecipeList';
@@ -34,6 +35,14 @@ import logo from './robotard-removebg-preview.png';
 import './App.css';
 
 function Home() {
+  React.useEffect(() => {
+    logger.info('Home page loaded', {
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      referrer: document.referrer
+    });
+  }, []);
+
   const handleSwantronClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // Randomly choose between gangamstyle, hacking, dealwithit1, dealwithit2, dealwithit3, baseball1, baseball2, kingkong, buschleague, thumbsup, jobwelldone, coffee, mishap, peloton, seeya, dynomite, and working
@@ -91,6 +100,13 @@ function Home() {
       // 17/17 chance
       path = '/working';
     }
+    
+    logger.info('Swantron link clicked', {
+      selectedPath: path,
+      randomValue: random,
+      timestamp: new Date().toISOString()
+    });
+    
     window.location.href = path;
   };
 
@@ -127,6 +143,14 @@ function Home() {
 }
 
 function App() {
+  React.useEffect(() => {
+    logger.info('App initialized', {
+      timestamp: new Date().toISOString(),
+      nodeEnv: process.env.NODE_ENV,
+      userAgent: navigator.userAgent
+    });
+  }, []);
+
   return (
     <Router>
       <div className='App' data-testid='app-container'>
