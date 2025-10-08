@@ -1,5 +1,10 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Simple logger for the server
 const logger = {
@@ -82,8 +87,8 @@ app.use((req, res, next) => {
 // Serve static files
 app.use(express.static(path.join(__dirname, 'build')));
 
-// Handle client-side routing (SPA)
-app.get('*', (req, res) => {
+// Handle client-side routing (SPA) - catch all non-API routes
+app.get(/^(?!\/api).*$/, (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
@@ -125,4 +130,11 @@ app.listen(PORT, () => {
     staticFilesPath: path.join(__dirname, 'build'),
     spaFallback: true
   });
+}).on('error', (err) => {
+  logger.error('Server failed to start', {
+    error: err.message,
+    port: PORT,
+    code: err.code
+  });
+  process.exit(1);
 });
