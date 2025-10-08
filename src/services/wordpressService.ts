@@ -24,12 +24,29 @@ export const wordpressService: WordPressService = {
     page: number = 1,
     perPage: number = 10
   ): Promise<WordPressServiceResponse> {
+    logger.info('Fetching WordPress recipes', {
+      page,
+      perPage,
+      timestamp: new Date().toISOString()
+    });
+
     try {
       const url = `${WORDPRESS_API_URL}/posts&_embed&page=${page}&per_page=${perPage}`;
 
-      const response = await fetch(url);
+      const response = await logger.measureAsync('wordpress-api-call', async () => {
+        return await fetch(url);
+      }, { endpoint: 'getRecipes', page, perPage });
+
       const recipes: WordPressRecipe[] = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
+
+      logger.info('WordPress recipes fetched successfully', {
+        recipeCount: recipes.length,
+        totalPages: parseInt(totalPages, 10),
+        page,
+        perPage,
+        timestamp: new Date().toISOString()
+      });
 
       return {
         recipes: recipes.map(
@@ -51,17 +68,34 @@ export const wordpressService: WordPressService = {
       logger.apiError(
         'WordPress',
         'getRecipes',
-        error instanceof Error ? error : new Error('Unknown error')
+        error instanceof Error ? error : new Error('Unknown error'),
+        { page, perPage }
       );
       throw error;
     }
   },
 
   async getRecipeById(id: number): Promise<Recipe> {
+    logger.info('Fetching WordPress recipe by ID', {
+      recipeId: id,
+      timestamp: new Date().toISOString()
+    });
+
     try {
-      const response = await fetch(`${WORDPRESS_API_URL}/posts/${id}&_embed`);
+      const response = await logger.measureAsync('wordpress-api-call', async () => {
+        return await fetch(`${WORDPRESS_API_URL}/posts/${id}&_embed`);
+      }, { endpoint: 'getRecipeById', recipeId: id });
 
       const recipe: WordPressRecipe = await response.json();
+
+      logger.info('WordPress recipe fetched successfully', {
+        recipeId: recipe.id,
+        title: recipe.title.rendered,
+        hasFeaturedImage: !!recipe._embedded?.['wp:featuredmedia']?.[0]?.source_url,
+        categoriesCount: recipe._embedded?.['wp:term']?.[0]?.length || 0,
+        tagsCount: recipe._embedded?.['wp:term']?.[1]?.length || 0,
+        timestamp: new Date().toISOString()
+      });
 
       return {
         id: recipe.id,
@@ -78,7 +112,8 @@ export const wordpressService: WordPressService = {
       logger.apiError(
         'WordPress',
         'getRecipe',
-        error instanceof Error ? error : new Error('Unknown error')
+        error instanceof Error ? error : new Error('Unknown error'),
+        { recipeId: id }
       );
       throw error;
     }
@@ -89,12 +124,31 @@ export const wordpressService: WordPressService = {
     page: number = 1,
     perPage: number = 10
   ): Promise<WordPressServiceResponse> {
+    logger.info('Searching WordPress recipes', {
+      query,
+      page,
+      perPage,
+      timestamp: new Date().toISOString()
+    });
+
     try {
       const url = `${WORDPRESS_API_URL}/posts&search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
 
-      const response = await fetch(url);
+      const response = await logger.measureAsync('wordpress-api-call', async () => {
+        return await fetch(url);
+      }, { endpoint: 'searchRecipes', query, page, perPage });
+
       const recipes: WordPressRecipe[] = await response.json();
       const totalPages = response.headers.get('X-WP-TotalPages') || '1';
+
+      logger.info('WordPress recipe search completed successfully', {
+        query,
+        recipeCount: recipes.length,
+        totalPages: parseInt(totalPages, 10),
+        page,
+        perPage,
+        timestamp: new Date().toISOString()
+      });
 
       return {
         recipes: recipes.map(
@@ -116,7 +170,8 @@ export const wordpressService: WordPressService = {
       logger.apiError(
         'WordPress',
         'searchRecipes',
-        error instanceof Error ? error : new Error('Unknown error')
+        error instanceof Error ? error : new Error('Unknown error'),
+        { query, page, perPage }
       );
       throw error;
     }

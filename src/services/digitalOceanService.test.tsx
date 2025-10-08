@@ -18,6 +18,7 @@ vi.mock('../utils/logger', () => ({
     warn: vi.fn(),
     info: vi.fn(),
     debug: vi.fn(),
+    measureAsync: vi.fn((label, fn) => fn()),
   },
 }));
 
@@ -65,7 +66,8 @@ describe('DigitalOceanService', () => {
       expect(logger.apiError).toHaveBeenCalledWith(
         'DigitalOcean',
         'getApp',
-        expect.any(Error)
+        expect.any(Error),
+        { appId: 'test-app-id' }
       );
     });
   });

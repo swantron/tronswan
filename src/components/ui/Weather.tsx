@@ -370,6 +370,12 @@ function Weather() {
     setLoading(true);
     setErrorMessage('');
 
+    logger.info('Weather data fetch started', { 
+      city, 
+      temperatureUnit,
+      timestamp: new Date().toISOString() 
+    });
+
     try {
       // Initialize runtime config if not already done
       await runtimeConfig.initialize();
@@ -379,16 +385,36 @@ function Weather() {
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
-      const response = await fetch(url);
+      const response = await logger.measureAsync('weather-api-call', async () => {
+        return await fetch(url);
+      }, { city, apiUnit });
+
       if (!response.ok) {
         if (response.status === 404) {
+          logger.warn('City not found in weather API', { city, status: response.status });
           throw new Error(
             'City not found. Please check the spelling and try again.'
           );
         }
+        logger.error('Weather API error', { 
+          city, 
+          status: response.status, 
+          statusText: response.statusText 
+        });
         throw new Error('Weather data fetch failed');
       }
+      
       const data = await response.json();
+      
+      logger.info('Weather data fetched successfully', {
+        city: data.name,
+        country: data.sys.country,
+        temperature: data.main.temp,
+        description: data.weather?.[0]?.description,
+        temperatureUnit,
+        timestamp: new Date().toISOString()
+      });
+
       setWeather({
         temperature: data.main.temp,
         feelsLike: data.main.feels_like,
@@ -423,6 +449,12 @@ function Weather() {
     setLoading(true);
     setErrorMessage('');
 
+    logger.info('Forecast data fetch started', { 
+      city, 
+      temperatureUnit,
+      timestamp: new Date().toISOString() 
+    });
+
     try {
       await runtimeConfig.initialize();
 
@@ -431,18 +463,35 @@ function Weather() {
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
       const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
-      const response = await fetch(url);
+      const response = await logger.measureAsync('forecast-api-call', async () => {
+        return await fetch(url);
+      }, { city, apiUnit });
+
       if (!response.ok) {
         if (response.status === 404) {
+          logger.warn('City not found in forecast API', { city, status: response.status });
           throw new Error(
             'City not found. Please check the spelling and try again.'
           );
         }
+        logger.error('Forecast API error', { 
+          city, 
+          status: response.status, 
+          statusText: response.statusText 
+        });
         throw new Error('Forecast data fetch failed');
       }
 
       const data = await response.json();
       const dailyForecast = groupForecastByDay(data.list);
+      
+      logger.info('Forecast data fetched successfully', {
+        city: data.city.name,
+        forecastDays: dailyForecast.length,
+        temperatureUnit,
+        timestamp: new Date().toISOString()
+      });
+
       setForecast(dailyForecast);
       setCurrentCity(data.city.name);
     } catch (error) {
@@ -458,11 +507,23 @@ function Weather() {
   useEffect(() => {
     // Initialize runtime config and get default city
     const initializeWeather = async () => {
+      logger.info('Weather component initializing', {
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      });
+
       await runtimeConfig.initialize();
       const defaultCity = runtimeConfig.getWithDefault(
         'VITE_WEATHER_CITY',
         'Bozeman'
       );
+      
+      logger.info('Weather component initialized with default city', {
+        defaultCity,
+        temperatureUnit,
+        timestamp: new Date().toISOString()
+      });
+
       setCurrentCity(defaultCity);
       await fetchWeatherData(defaultCity);
       await fetchForecastData(defaultCity);
@@ -474,6 +535,12 @@ function Weather() {
   const handleCitySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cityInput.trim()) {
+      logger.info('Weather city search submitted', {
+        city: cityInput.trim(),
+        temperatureUnit,
+        timestamp: new Date().toISOString()
+      });
+      
       await fetchWeatherData(cityInput.trim());
       await fetchForecastData(cityInput.trim());
       setCityInput('');
@@ -487,6 +554,13 @@ function Weather() {
   const handleTemperatureUnitChange = async (
     unit: 'imperial' | 'metric' | 'kelvin'
   ) => {
+    logger.info('Weather temperature unit changed', {
+      from: temperatureUnit,
+      to: unit,
+      currentCity,
+      timestamp: new Date().toISOString()
+    });
+
     setTemperatureUnit(unit);
     // Refetch data with new unit
     if (currentCity) {
@@ -543,14 +617,30 @@ function Weather() {
           <div className='view-toggle'>
             <button
               className={`toggle-button ${viewMode === 'current' ? 'active' : ''}`}
-              onClick={() => setViewMode('current')}
+              onClick={() => {
+                logger.info('Weather view mode changed', {
+                  from: viewMode,
+                  to: 'current',
+                  currentCity,
+                  timestamp: new Date().toISOString()
+                });
+                setViewMode('current');
+              }}
               disabled={loading}
             >
               Current
             </button>
             <button
               className={`toggle-button ${viewMode === 'forecast' ? 'active' : ''}`}
-              onClick={() => setViewMode('forecast')}
+              onClick={() => {
+                logger.info('Weather view mode changed', {
+                  from: viewMode,
+                  to: 'forecast',
+                  currentCity,
+                  timestamp: new Date().toISOString()
+                });
+                setViewMode('forecast');
+              }}
               disabled={loading}
             >
               Forecast

@@ -1,5 +1,5 @@
-import { logger } from '../utils/logger';
 import { runtimeConfig } from '../utils/runtimeConfig';
+import { logger } from '../utils/logger';
 
 export interface DigitalOceanApp {
   id: string;
@@ -208,42 +208,96 @@ class DigitalOceanService {
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
-      },
+    
+    logger.debug('Making DigitalOcean API request', {
+      endpoint,
+      url,
+      timestamp: new Date().toISOString()
     });
 
+    const response = await logger.measureAsync('digitalocean-api-call', async () => {
+      return await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    }, { endpoint });
+
     if (!response.ok) {
+      logger.error('DigitalOcean API request failed', {
+        endpoint,
+        status: response.status,
+        statusText: response.statusText,
+        url
+      });
       throw new Error(
         `DigitalOcean API error: ${response.status} ${response.statusText}`
       );
     }
 
     const data = await response.json();
+    
+    logger.info('DigitalOcean API request successful', {
+      endpoint,
+      status: response.status,
+      url
+    });
+
     return data;
   }
 
   async getApp(): Promise<{ app: DigitalOceanApp }> {
+    logger.info('Fetching DigitalOcean app data', {
+      appId: this.appId,
+      timestamp: new Date().toISOString()
+    });
+
     try {
-      return await this.makeRequest(`/apps/${this.appId}`) as { app: DigitalOceanApp };
+      const result = await this.makeRequest(`/apps/${this.appId}`) as { app: DigitalOceanApp };
+      
+      logger.info('DigitalOcean app data fetched successfully', {
+        appId: result.app.id,
+        appName: result.app.name,
+        region: result.app.region,
+        status: result.app.status,
+        timestamp: new Date().toISOString()
+      });
+      
+      return result;
     } catch (error) {
       logger.apiError(
         'DigitalOcean',
         'getApp',
-        error instanceof Error ? error : new Error('Unknown error')
+        error instanceof Error ? error : new Error('Unknown error'),
+        { appId: this.appId }
       );
       throw error;
     }
   }
 
   async getDroplets(): Promise<DigitalOceanDroplet[]> {
+    logger.info('Fetching DigitalOcean droplets data', {
+      timestamp: new Date().toISOString()
+    });
+
     try {
       // Get all droplets in the account
       const response = await this.makeRequest<{
         droplets: DigitalOceanDroplet[];
       }>('/droplets');
+      
+      logger.info('DigitalOcean droplets data fetched successfully', {
+        dropletCount: response.droplets.length,
+        droplets: response.droplets.map(d => ({ 
+          id: d.id, 
+          name: d.name, 
+          status: d.status,
+          region: d.region?.slug 
+        })),
+        timestamp: new Date().toISOString()
+      });
+      
       return response.droplets;
     } catch (error) {
       logger.apiError(

@@ -1,4 +1,5 @@
 import { runtimeConfig } from '../utils/runtimeConfig';
+import { logger } from '../utils/logger';
 
 interface GitHubRepository {
   id: number;
@@ -406,43 +407,107 @@ class GitHubService {
 
   private async makeRequest(endpoint: string): Promise<unknown> {
     if (!this.token) {
+      logger.error('GitHub token not configured', { endpoint });
       throw new Error('GitHub token not configured');
     }
 
     const url = `${this.baseUrl}${endpoint}`;
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `token ${this.token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'User-Agent': 'TronSwan-Health-Monitor',
-      },
+    
+    logger.debug('Making GitHub API request', {
+      endpoint,
+      url,
+      timestamp: new Date().toISOString()
     });
 
+    const response = await logger.measureAsync('github-api-call', async () => {
+      return await fetch(url, {
+        headers: {
+          Authorization: `token ${this.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'User-Agent': 'TronSwan-Health-Monitor',
+        },
+      });
+    }, { endpoint });
+
     if (!response.ok) {
+      logger.error('GitHub API request failed', {
+        endpoint,
+        status: response.status,
+        statusText: response.statusText,
+        url
+      });
       throw new Error(
         `GitHub API error: ${response.status} ${response.statusText}`
       );
     }
 
+    logger.info('GitHub API request successful', {
+      endpoint,
+      status: response.status,
+      url
+    });
+
     return response.json();
   }
 
   async getUser(): Promise<GitHubUser> {
-    return this.makeRequest('/user') as Promise<GitHubUser>;
+    logger.info('Fetching GitHub user data', {
+      timestamp: new Date().toISOString()
+    });
+    
+    const user = await this.makeRequest('/user') as GitHubUser;
+    
+    logger.info('GitHub user data fetched successfully', {
+      userId: user.id,
+      username: user.login,
+      name: user.name,
+      timestamp: new Date().toISOString()
+    });
+    
+    return user;
   }
 
   async getRepositories(): Promise<GitHubRepository[]> {
+    logger.info('Fetching GitHub repositories', {
+      owner: this.owner,
+      repository: 'tronswan',
+      timestamp: new Date().toISOString()
+    });
+    
     // Only get the specific tronswan repository
-    return this.makeRequest(`/repos/${this.owner}/tronswan`).then(repo => [
-      repo as GitHubRepository,
-    ]);
+    const repo = await this.makeRequest(`/repos/${this.owner}/tronswan`) as GitHubRepository;
+    
+    logger.info('GitHub repository data fetched successfully', {
+      repositoryId: repo.id,
+      repositoryName: repo.name,
+      fullName: repo.full_name,
+      private: repo.private,
+      timestamp: new Date().toISOString()
+    });
+    
+    return [repo];
   }
 
   async getAllRepositories(): Promise<GitHubRepository[]> {
+    logger.info('Fetching all GitHub repositories', {
+      owner: this.owner,
+      sort: 'updated',
+      perPage: 10,
+      timestamp: new Date().toISOString()
+    });
+    
     // Get all repositories for the swantron organization
-    return this.makeRequest(
+    const repos = await this.makeRequest(
       `/users/${this.owner}/repos?sort=updated&per_page=10`
-    ) as Promise<GitHubRepository[]>;
+    ) as GitHubRepository[];
+    
+    logger.info('All GitHub repositories fetched successfully', {
+      repositoryCount: repos.length,
+      repositories: repos.map(r => ({ id: r.id, name: r.name, private: r.private })),
+      timestamp: new Date().toISOString()
+    });
+    
+    return repos;
   }
 
   async getRepository(name: string): Promise<GitHubRepository> {

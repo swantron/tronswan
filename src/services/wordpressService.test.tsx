@@ -17,6 +17,7 @@ vi.mock('../utils/logger', () => ({
     warn: vi.fn(),
     info: vi.fn(),
     debug: vi.fn(),
+    measureAsync: vi.fn((label, fn) => fn()),
   },
 }));
 
