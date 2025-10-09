@@ -16,6 +16,7 @@ const Music: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [user, setUser] = useState<SpotifyUser | null>(null);
   const [topTracks, setTopTracks] = useState<SpotifyTrack[]>([]);
   const [topArtists, setTopArtists] = useState<SpotifyArtist[]>([]);
@@ -169,14 +170,13 @@ const Music: React.FC = () => {
       timestamp: new Date().toISOString(),
     });
 
+    setAuthError(null); // Clear any previous errors
+
     try {
       spotifyService.initiateAuth();
     } catch (error) {
       logger.error('Spotify authentication failed', { error });
-      // Show user-friendly error message
-      alert(
-        "Spotify authentication requires HTTPS or localhost. Please ensure you're accessing the site securely."
-      );
+      setAuthError('Spotify authentication failed. Please try again.');
     }
   };
 
@@ -232,6 +232,14 @@ const Music: React.FC = () => {
             Connect your Spotify account to view your music taste and listening
             history.
           </p>
+          {authError && (
+            <div
+              className='auth-error'
+              style={{ color: 'red', marginBottom: '1rem' }}
+            >
+              {authError}
+            </div>
+          )}
           <button
             className='spotify-login-btn'
             onClick={handleLogin}
