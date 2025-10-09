@@ -143,7 +143,9 @@ const Music: React.FC = () => {
       logger.info('Music component initializing', {
         timestamp: new Date().toISOString(),
         url: window.location.href,
+        pathname: window.location.pathname,
         hasCodeParam: !!searchParams.get('code'),
+        codeValue: searchParams.get('code')?.substring(0, 20) + '...', // Log first 20 chars for debugging
       });
 
       // Initialize runtime config first
@@ -156,13 +158,20 @@ const Music: React.FC = () => {
 
       // Check for callback code
       const code = searchParams.get('code');
+      const isCallbackRoute = window.location.pathname === '/music/callback';
+      
       if (code) {
         logger.info('Found authorization code in URL, processing callback', {
           codeLength: code.length,
+          isCallbackRoute,
+          pathname: window.location.pathname,
         });
         handleAuthCallback(code);
       } else {
-        logger.info('No authorization code found, checking auth status');
+        logger.info('No authorization code found, checking auth status', {
+          isCallbackRoute,
+          pathname: window.location.pathname,
+        });
         checkAuthStatus();
       }
     };

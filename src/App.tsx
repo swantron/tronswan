@@ -291,6 +291,7 @@ function App() {
                 <Route path='/working' element={<Working />} />
                 <Route path='/shorts' element={<Shorts />} />
                 <Route path='/music' element={<Music />} />
+                <Route path='/music/callback' element={<Music />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
