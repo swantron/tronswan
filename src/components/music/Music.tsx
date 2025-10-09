@@ -215,7 +215,7 @@ const Music: React.FC = () => {
     setActiveTab(tab);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     logger.info('Spotify login initiated', {
       timestamp: new Date().toISOString(),
     });
@@ -223,7 +223,7 @@ const Music: React.FC = () => {
     setAuthError(null); // Clear any previous errors
 
     try {
-      spotifyService.initiateAuth();
+      await spotifyService.initiateAuth();
     } catch (error) {
       logger.error('Spotify authentication failed', { error });
       setAuthError('Spotify authentication failed. Please try again.');

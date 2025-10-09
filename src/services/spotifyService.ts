@@ -153,23 +153,27 @@ class SpotifyService {
     // This is not cryptographically secure but will work for Spotify's PKCE implementation
     logger.warn('Using fallback code challenge generation');
 
-    // Create a deterministic hash from the code verifier
+    // Create a more robust deterministic hash from the code verifier
     let hash = 0;
     for (let i = 0; i < codeVerifier.length; i++) {
       const char = codeVerifier.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      hash = ((hash << 5) - hash + char) & 0xffffffff; // Ensure 32-bit
     }
 
-    // Convert to a base64url-like string
-    const hashStr = Math.abs(hash).toString(36) + codeVerifier.slice(-8);
-    return btoa(hashStr)
+    // Create a base64url-compatible string
+    const hashStr = Math.abs(hash).toString(16).padStart(8, '0') + 
+                   codeVerifier.slice(-12).replace(/[^a-zA-Z0-9]/g, 'a');
+    
+    // Ensure it's long enough for PKCE (at least 43 characters)
+    const paddedStr = hashStr.padEnd(43, '0');
+    
+    return btoa(paddedStr)
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, '');
   }
 
-  public initiateAuth(): void {
+  public async initiateAuth(): Promise<void> {
     logger.info('Initiating Spotify authentication', {
       clientId: this.clientId,
       redirectUri: this.redirectUri,
@@ -177,9 +181,28 @@ class SpotifyService {
     });
 
     const codeVerifier = this.generateCodeVerifier();
+    logger.debug('Generated code verifier', {
+      verifierLength: codeVerifier.length,
+      verifierStart: codeVerifier.substring(0, 10) + '...',
+    });
+    
     sessionStorage.setItem('spotify_code_verifier', codeVerifier);
+    
+    // Verify storage worked
+    const storedVerifier = sessionStorage.getItem('spotify_code_verifier');
+    logger.debug('Code verifier storage verification', {
+      stored: !!storedVerifier,
+      matches: storedVerifier === codeVerifier,
+      storedLength: storedVerifier?.length || 0,
+    });
 
-    this.generateCodeChallenge(codeVerifier).then(codeChallenge => {
+    try {
+      const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+      logger.debug('Generated code challenge', {
+        challengeLength: codeChallenge.length,
+        challengeStart: codeChallenge.substring(0, 10) + '...',
+      });
+
       const params = new URLSearchParams({
         client_id: this.clientId,
         response_type: 'code',
@@ -192,17 +215,31 @@ class SpotifyService {
       });
 
       const authUrl = `https://accounts.spotify.com/authorize?${params.toString()}`;
+      logger.info('Redirecting to Spotify authorization', {
+        authUrl: authUrl.substring(0, 100) + '...',
+      });
+      
       window.location.href = authUrl;
-    });
+    } catch (error) {
+      logger.error('Failed to generate code challenge', { error });
+      throw error;
+    }
   }
 
   public async handleCallback(code: string): Promise<boolean> {
     logger.info('Handling Spotify authentication callback', {
       hasCode: !!code,
+      codeLength: code.length,
       timestamp: new Date().toISOString(),
     });
 
     const codeVerifier = sessionStorage.getItem('spotify_code_verifier');
+    logger.debug('Code verifier check', {
+      hasVerifier: !!codeVerifier,
+      verifierLength: codeVerifier?.length || 0,
+      verifierStart: codeVerifier?.substring(0, 10) + '...' || 'none',
+    });
+
     if (!codeVerifier) {
       logger.error('No code verifier found in session storage');
       return false;
