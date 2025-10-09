@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 
+import { logger } from '../../utils/logger';
+
 import SEO from './SEO';
 import '../../styles/FizzBuzz.css';
 
 interface FizzBuzzDisplayProps {
   number: number;
+  onGenerate?: () => void;
 }
 
-function FizzBuzzDisplay({ number }: FizzBuzzDisplayProps) {
+function FizzBuzzDisplay({ number, onGenerate }: FizzBuzzDisplayProps) {
   const generateFizzBuzz = (num: number): string => {
     const result = [];
     for (let i = 1; i <= num; i++) {
@@ -24,6 +27,13 @@ function FizzBuzzDisplay({ number }: FizzBuzzDisplayProps) {
     return result.join(', ');
   };
 
+  // Call onGenerate when component renders with a valid number
+  React.useEffect(() => {
+    if (onGenerate && number > 0) {
+      onGenerate();
+    }
+  }, [number, onGenerate]);
+
   return (
     <div className='fizzbuzz-container'>
       <h2 className='fizzbuzz-title'>FizzBuzz</h2>
@@ -36,7 +46,15 @@ function FizzBuzz() {
   const [inputNumber, setInputNumber] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputNumber(event.target.value);
+    const value = event.target.value;
+
+    logger.debug('FizzBuzz input changed', {
+      inputValue: value,
+      isValidNumber: !isNaN(Number(value)) && parseInt(value) > 0,
+      timestamp: new Date().toISOString(),
+    });
+
+    setInputNumber(value);
   };
 
   return (
@@ -76,7 +94,16 @@ function FizzBuzz() {
         {inputNumber &&
           !isNaN(Number(inputNumber)) &&
           parseInt(inputNumber) > 0 && (
-            <FizzBuzzDisplay number={parseInt(inputNumber)} />
+            <FizzBuzzDisplay
+              number={parseInt(inputNumber)}
+              onGenerate={() => {
+                logger.info('FizzBuzz sequence generated', {
+                  inputNumber: parseInt(inputNumber),
+                  sequenceLength: parseInt(inputNumber),
+                  timestamp: new Date().toISOString(),
+                });
+              }}
+            />
           )}
 
         <div className='fizzbuzz-rules'>

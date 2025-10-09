@@ -19,6 +19,14 @@ const RecipeList: React.FC = () => {
     const fetchRecipes = async (): Promise<void> => {
       try {
         setLoading(true);
+
+        logger.info('RecipeList fetching data', {
+          page,
+          searchQuery,
+          isSearch: !!searchQuery,
+          timestamp: new Date().toISOString(),
+        });
+
         const data = searchQuery
           ? await wordpressService.searchRecipes(searchQuery, page)
           : await wordpressService.getRecipes(page);
@@ -26,6 +34,14 @@ const RecipeList: React.FC = () => {
         setRecipes(data.recipes);
         setTotalPages(data.totalPages);
         setError(null);
+
+        logger.info('RecipeList data loaded successfully', {
+          recipeCount: data.recipes.length,
+          totalPages: data.totalPages,
+          page,
+          searchQuery,
+          timestamp: new Date().toISOString(),
+        });
       } catch (err) {
         setError('Failed to load recipes. Please try again later.');
         logger.error('Error fetching recipes', { error: err });
@@ -39,6 +55,13 @@ const RecipeList: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    logger.info('Recipe search submitted', {
+      searchQuery,
+      currentPage: page,
+      timestamp: new Date().toISOString(),
+    });
+
     setPage(1); // Reset to first page when searching
   };
 
@@ -50,7 +73,15 @@ const RecipeList: React.FC = () => {
           <input
             type='text'
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => {
+              const value = e.target.value;
+              logger.debug('Recipe search input changed', {
+                searchQuery: value,
+                queryLength: value.length,
+                timestamp: new Date().toISOString(),
+              });
+              setSearchQuery(value);
+            }}
             placeholder='Search recipes...'
             className='recipe-search-input'
           />
@@ -79,7 +110,16 @@ const RecipeList: React.FC = () => {
           {totalPages > 1 && (
             <div className='pagination'>
               <button
-                onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => {
+                  const newPage = Math.max(page - 1, 1);
+                  logger.info('Recipe pagination - Previous clicked', {
+                    fromPage: page,
+                    toPage: newPage,
+                    searchQuery,
+                    timestamp: new Date().toISOString(),
+                  });
+                  setPage(newPage);
+                }}
                 disabled={page === 1}
                 className='pagination-button'
               >
@@ -89,7 +129,16 @@ const RecipeList: React.FC = () => {
                 Page {page} of {totalPages}
               </span>
               <button
-                onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() => {
+                  const newPage = Math.min(page + 1, totalPages);
+                  logger.info('Recipe pagination - Next clicked', {
+                    fromPage: page,
+                    toPage: newPage,
+                    searchQuery,
+                    timestamp: new Date().toISOString(),
+                  });
+                  setPage(newPage);
+                }}
                 disabled={page === totalPages}
                 className='pagination-button'
               >

@@ -61,58 +61,58 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
     const serviceDataRef = useRef(serviceData);
     serviceDataRef.current = serviceData;
 
-  const checkServiceHealth = async (service: ServiceInfo) => {
-    logger.debug('Starting health check for service', {
-      serviceName: service.name,
-      url: service.url,
-      timestamp: new Date().toISOString()
-    });
-
-    try {
-      const startTime = Date.now();
-      await fetch(service.url, {
-        method: 'HEAD',
-        mode: 'no-cors',
-        cache: 'no-cache',
-      });
-      const responseTime = Date.now() - startTime;
-
-      logger.info('Service health check successful', {
+    const checkServiceHealth = async (service: ServiceInfo) => {
+      logger.debug('Starting health check for service', {
         serviceName: service.name,
         url: service.url,
-        responseTime: `${responseTime}ms`,
-        status: 'healthy',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
-      return {
-        ...service,
-        status: 'healthy' as const,
-        responseTime,
-        lastChecked: new Date(),
-      };
-    } catch (error) {
-      logger.warn('Service health check failed', {
-        serviceName: service.name,
-        url: service.url,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'down',
-        timestamp: new Date().toISOString()
-      });
+      try {
+        const startTime = Date.now();
+        await fetch(service.url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-cache',
+        });
+        const responseTime = Date.now() - startTime;
 
-      return {
-        ...service,
-        status: 'down' as const,
-        lastChecked: new Date(),
-      };
-    }
-  };
+        logger.info('Service health check successful', {
+          serviceName: service.name,
+          url: service.url,
+          responseTime: `${responseTime}ms`,
+          status: 'healthy',
+          timestamp: new Date().toISOString(),
+        });
+
+        return {
+          ...service,
+          status: 'healthy' as const,
+          responseTime,
+          lastChecked: new Date(),
+        };
+      } catch (error) {
+        logger.warn('Service health check failed', {
+          serviceName: service.name,
+          url: service.url,
+          error: error instanceof Error ? error.message : 'Unknown error',
+          status: 'down',
+          timestamp: new Date().toISOString(),
+        });
+
+        return {
+          ...service,
+          status: 'down' as const,
+          lastChecked: new Date(),
+        };
+      }
+    };
 
     const checkAllServices = useCallback(async () => {
       logger.info('Starting health check for all services', {
         serviceCount: serviceDataRef.current.length,
         services: serviceDataRef.current.map(s => s.name),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       const updatedServices = await Promise.all(
@@ -120,15 +120,21 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       );
 
       // Log summary of health check results
-      const healthyCount = updatedServices.filter(s => s.status === 'healthy').length;
+      const healthyCount = updatedServices.filter(
+        s => s.status === 'healthy'
+      ).length;
       const downCount = updatedServices.filter(s => s.status === 'down').length;
-      
+
       logger.info('Health check completed for all services', {
         totalServices: updatedServices.length,
         healthyServices: healthyCount,
         downServices: downCount,
-        services: updatedServices.map(s => ({ name: s.name, status: s.status, responseTime: s.responseTime })),
-        timestamp: new Date().toISOString()
+        services: updatedServices.map(s => ({
+          name: s.name,
+          status: s.status,
+          responseTime: s.responseTime,
+        })),
+        timestamp: new Date().toISOString(),
       });
 
       setServiceData(updatedServices);
@@ -142,20 +148,20 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
     useEffect(() => {
       logger.info('ServiceHealth component initialized', {
         timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
       });
 
       checkAllServices();
       const interval = setInterval(() => {
         logger.debug('Periodic health check triggered', {
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         checkAllServices();
       }, 60000); // Check every minute
-      
+
       return () => {
         logger.debug('ServiceHealth component cleanup - clearing interval', {
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         clearInterval(interval);
       };

@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { logger } from './utils/logger';
 
 import RecipeDetail from './components/recipe/RecipeDetail';
 import RecipeList from './components/recipe/RecipeList';
@@ -32,6 +31,7 @@ import ThumbsUp from './components/video/ThumbsUp';
 import Working from './components/video/Working';
 import Wrigley from './components/video/Wrigley';
 import logo from './robotard-removebg-preview.png';
+import { logger } from './utils/logger';
 import './App.css';
 
 function Home() {
@@ -39,7 +39,7 @@ function Home() {
     logger.info('Home page loaded', {
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      referrer: document.referrer
+      referrer: document.referrer,
     });
   }, []);
 
@@ -100,13 +100,13 @@ function Home() {
       // 17/17 chance
       path = '/working';
     }
-    
+
     logger.info('Swantron link clicked', {
       selectedPath: path,
       randomValue: random,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-    
+
     window.location.href = path;
   };
 
@@ -147,7 +147,7 @@ function App() {
     logger.info('App initialized', {
       timestamp: new Date().toISOString(),
       nodeEnv: process.env.NODE_ENV,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     });
   }, []);
 
@@ -157,25 +157,88 @@ function App() {
         <header className='App-header' data-testid='app-header'>
           <div className='App-container'>
             <nav className='main-nav'>
-              <Link to='/' className='nav-link'>
+              <Link
+                to='/'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Home', {
+                    target: '/',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 tronswan
               </Link>
-              <Link to='/swantron' className='nav-link'>
+              <Link
+                to='/swantron'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Swantron', {
+                    target: '/swantron',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 swantron
               </Link>
-              <Link to='/weather' className='nav-link'>
+              <Link
+                to='/weather'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Weather', {
+                    target: '/weather',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 weathertron
               </Link>
-              <Link to='/recipes' className='nav-link'>
+              <Link
+                to='/recipes'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Recipes', {
+                    target: '/recipes',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 chomptron
               </Link>
-              <Link to='/hello' className='nav-link'>
+              <Link
+                to='/hello'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Hello', {
+                    target: '/hello',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 hello
               </Link>
-              <Link to='/health' className='nav-link'>
+              <Link
+                to='/health'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Health', {
+                    target: '/health',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 health
               </Link>
-              <Link to='/shorts' className='nav-link'>
+              <Link
+                to='/shorts'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Shorts', {
+                    target: '/shorts',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
                 shorts
               </Link>
             </nav>

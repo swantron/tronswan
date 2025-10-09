@@ -20,6 +20,14 @@ const SwantronList: React.FC = () => {
     const fetchPosts = async (): Promise<void> => {
       try {
         setLoading(true);
+
+        logger.info('SwantronList fetching data', {
+          page,
+          searchQuery,
+          isSearch: !!searchQuery,
+          timestamp: new Date().toISOString(),
+        });
+
         const data = searchQuery
           ? await swantronService.searchPosts(searchQuery, page)
           : await swantronService.getPosts(page);
@@ -27,6 +35,14 @@ const SwantronList: React.FC = () => {
         setPosts(data.posts);
         setTotalPages(data.totalPages);
         setError(null);
+
+        logger.info('SwantronList data loaded successfully', {
+          postCount: data.posts.length,
+          totalPages: data.totalPages,
+          page,
+          searchQuery,
+          timestamp: new Date().toISOString(),
+        });
       } catch (err) {
         setError(
           'Failed to load posts from swantron.com. Please try again later.'
@@ -42,6 +58,13 @@ const SwantronList: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    logger.info('Swantron search submitted', {
+      searchQuery,
+      currentPage: page,
+      timestamp: new Date().toISOString(),
+    });
+
     setPage(1); // Reset to first page when searching
   };
 
@@ -61,7 +84,15 @@ const SwantronList: React.FC = () => {
             <input
               type='text'
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={e => {
+                const value = e.target.value;
+                logger.debug('Swantron search input changed', {
+                  searchQuery: value,
+                  queryLength: value.length,
+                  timestamp: new Date().toISOString(),
+                });
+                setSearchQuery(value);
+              }}
               placeholder='Search posts...'
               className='swantron-search-input'
             />
@@ -90,7 +121,16 @@ const SwantronList: React.FC = () => {
             {totalPages > 1 && (
               <div className='pagination'>
                 <button
-                  onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => {
+                    const newPage = Math.max(page - 1, 1);
+                    logger.info('Swantron pagination - Previous clicked', {
+                      fromPage: page,
+                      toPage: newPage,
+                      searchQuery,
+                      timestamp: new Date().toISOString(),
+                    });
+                    setPage(newPage);
+                  }}
                   disabled={page === 1}
                   className='pagination-button'
                 >
@@ -100,9 +140,16 @@ const SwantronList: React.FC = () => {
                   Page {page} of {totalPages}
                 </span>
                 <button
-                  onClick={() =>
-                    setPage(prev => Math.min(prev + 1, totalPages))
-                  }
+                  onClick={() => {
+                    const newPage = Math.min(page + 1, totalPages);
+                    logger.info('Swantron pagination - Next clicked', {
+                      fromPage: page,
+                      toPage: newPage,
+                      searchQuery,
+                      timestamp: new Date().toISOString(),
+                    });
+                    setPage(newPage);
+                  }}
                   disabled={page === totalPages}
                   className='pagination-button'
                 >

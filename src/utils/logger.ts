@@ -79,7 +79,10 @@ class Logger {
 
     for (const [key, value] of Object.entries(obj)) {
       if (value && typeof value === 'object' && !Array.isArray(value)) {
-        result[key] = this.limitContextDepth(value as Record<string, unknown>, depth + 1);
+        result[key] = this.limitContextDepth(
+          value as Record<string, unknown>,
+          depth + 1
+        );
       } else {
         result[key] = value;
       }

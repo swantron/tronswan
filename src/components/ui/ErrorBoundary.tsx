@@ -48,6 +48,12 @@ class ErrorBoundary extends React.Component<
   }
 
   handleRetry = () => {
+    logger.info('ErrorBoundary retry clicked', {
+      error: this.state.error?.message,
+      componentStack: this.state.errorInfo?.componentStack,
+      timestamp: new Date().toISOString(),
+    });
+
     this.setState({ hasError: false, error: null, errorInfo: null });
   };
 
@@ -85,7 +91,14 @@ class ErrorBoundary extends React.Component<
                 Try Again
               </button>
               <button
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  logger.info('ErrorBoundary reload clicked', {
+                    error: this.state.error?.message,
+                    componentStack: this.state.errorInfo?.componentStack,
+                    timestamp: new Date().toISOString(),
+                  });
+                  window.location.reload();
+                }}
                 className='error-boundary-reload-button'
                 aria-label='Reload page'
               >

@@ -370,10 +370,10 @@ function Weather() {
     setLoading(true);
     setErrorMessage('');
 
-    logger.info('Weather data fetch started', { 
-      city, 
+    logger.info('Weather data fetch started', {
+      city,
       temperatureUnit,
-      timestamp: new Date().toISOString() 
+      timestamp: new Date().toISOString(),
     });
 
     try {
@@ -385,34 +385,41 @@ function Weather() {
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
-      const response = await logger.measureAsync('weather-api-call', async () => {
-        return await fetch(url);
-      }, { city, apiUnit });
+      const response = await logger.measureAsync(
+        'weather-api-call',
+        async () => {
+          return await fetch(url);
+        },
+        { city, apiUnit }
+      );
 
       if (!response.ok) {
         if (response.status === 404) {
-          logger.warn('City not found in weather API', { city, status: response.status });
+          logger.warn('City not found in weather API', {
+            city,
+            status: response.status,
+          });
           throw new Error(
             'City not found. Please check the spelling and try again.'
           );
         }
-        logger.error('Weather API error', { 
-          city, 
-          status: response.status, 
-          statusText: response.statusText 
+        logger.error('Weather API error', {
+          city,
+          status: response.status,
+          statusText: response.statusText,
         });
         throw new Error('Weather data fetch failed');
       }
-      
+
       const data = await response.json();
-      
+
       logger.info('Weather data fetched successfully', {
         city: data.name,
         country: data.sys.country,
         temperature: data.main.temp,
         description: data.weather?.[0]?.description,
         temperatureUnit,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       setWeather({
@@ -449,10 +456,10 @@ function Weather() {
     setLoading(true);
     setErrorMessage('');
 
-    logger.info('Forecast data fetch started', { 
-      city, 
+    logger.info('Forecast data fetch started', {
+      city,
       temperatureUnit,
-      timestamp: new Date().toISOString() 
+      timestamp: new Date().toISOString(),
     });
 
     try {
@@ -463,33 +470,40 @@ function Weather() {
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
       const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
 
-      const response = await logger.measureAsync('forecast-api-call', async () => {
-        return await fetch(url);
-      }, { city, apiUnit });
+      const response = await logger.measureAsync(
+        'forecast-api-call',
+        async () => {
+          return await fetch(url);
+        },
+        { city, apiUnit }
+      );
 
       if (!response.ok) {
         if (response.status === 404) {
-          logger.warn('City not found in forecast API', { city, status: response.status });
+          logger.warn('City not found in forecast API', {
+            city,
+            status: response.status,
+          });
           throw new Error(
             'City not found. Please check the spelling and try again.'
           );
         }
-        logger.error('Forecast API error', { 
-          city, 
-          status: response.status, 
-          statusText: response.statusText 
+        logger.error('Forecast API error', {
+          city,
+          status: response.status,
+          statusText: response.statusText,
         });
         throw new Error('Forecast data fetch failed');
       }
 
       const data = await response.json();
       const dailyForecast = groupForecastByDay(data.list);
-      
+
       logger.info('Forecast data fetched successfully', {
         city: data.city.name,
         forecastDays: dailyForecast.length,
         temperatureUnit,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       setForecast(dailyForecast);
@@ -509,7 +523,7 @@ function Weather() {
     const initializeWeather = async () => {
       logger.info('Weather component initializing', {
         timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
       });
 
       await runtimeConfig.initialize();
@@ -517,11 +531,11 @@ function Weather() {
         'VITE_WEATHER_CITY',
         'Bozeman'
       );
-      
+
       logger.info('Weather component initialized with default city', {
         defaultCity,
         temperatureUnit,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       setCurrentCity(defaultCity);
@@ -538,9 +552,9 @@ function Weather() {
       logger.info('Weather city search submitted', {
         city: cityInput.trim(),
         temperatureUnit,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
-      
+
       await fetchWeatherData(cityInput.trim());
       await fetchForecastData(cityInput.trim());
       setCityInput('');
@@ -558,7 +572,7 @@ function Weather() {
       from: temperatureUnit,
       to: unit,
       currentCity,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     setTemperatureUnit(unit);
@@ -622,7 +636,7 @@ function Weather() {
                   from: viewMode,
                   to: 'current',
                   currentCity,
-                  timestamp: new Date().toISOString()
+                  timestamp: new Date().toISOString(),
                 });
                 setViewMode('current');
               }}
@@ -637,7 +651,7 @@ function Weather() {
                   from: viewMode,
                   to: 'forecast',
                   currentCity,
-                  timestamp: new Date().toISOString()
+                  timestamp: new Date().toISOString(),
                 });
                 setViewMode('forecast');
               }}
