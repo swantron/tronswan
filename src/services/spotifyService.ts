@@ -132,45 +132,33 @@ class SpotifyService {
   }
 
   private async generateCodeChallenge(codeVerifier: string): Promise<string> {
-    try {
-      // Try Web Crypto API first (preferred method)
-      if (window.isSecureContext && window.crypto && window.crypto.subtle) {
+    // Always try Web Crypto API first
+    if (window.isSecureContext && window.crypto && window.crypto.subtle) {
+      try {
         const encoder = new TextEncoder();
         const data = encoder.encode(codeVerifier);
         const digest = await crypto.subtle.digest('SHA256', data);
-        return btoa(String.fromCharCode(...new Uint8Array(digest)))
+        const challenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=/g, '');
+        
+        logger.debug('Generated code challenge using Web Crypto API', {
+          challengeLength: challenge.length,
+          challengeStart: challenge.substring(0, 10) + '...',
+        });
+        
+        return challenge;
+      } catch (error) {
+        logger.warn('Web Crypto API failed, trying alternative approach', {
+          error: error instanceof Error ? error.message : error,
+        });
       }
-    } catch (error) {
-      logger.warn('Web Crypto API failed, falling back to alternative method', {
-        error,
-      });
     }
 
-    // Fallback: Use a simple deterministic hash for PKCE
-    // This is not cryptographically secure but will work for Spotify's PKCE implementation
-    logger.warn('Using fallback code challenge generation');
-
-    // Create a more robust deterministic hash from the code verifier
-    let hash = 0;
-    for (let i = 0; i < codeVerifier.length; i++) {
-      const char = codeVerifier.charCodeAt(i);
-      hash = ((hash << 5) - hash + char) & 0xffffffff; // Ensure 32-bit
-    }
-
-    // Create a base64url-compatible string
-    const hashStr = Math.abs(hash).toString(16).padStart(8, '0') + 
-                   codeVerifier.slice(-12).replace(/[^a-zA-Z0-9]/g, 'a');
-    
-    // Ensure it's long enough for PKCE (at least 43 characters)
-    const paddedStr = hashStr.padEnd(43, '0');
-    
-    return btoa(paddedStr)
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+    // If Web Crypto API is not available or fails, we need to handle this differently
+    logger.error('Web Crypto API not available - PKCE requires SHA256 hash');
+    throw new Error('PKCE requires SHA256 hash generation, but Web Crypto API is not available. Please use HTTPS or a modern browser.');
   }
 
   public async initiateAuth(): Promise<void> {
@@ -201,6 +189,8 @@ class SpotifyService {
       logger.debug('Generated code challenge', {
         challengeLength: codeChallenge.length,
         challengeStart: codeChallenge.substring(0, 10) + '...',
+        verifierLength: codeVerifier.length,
+        verifierStart: codeVerifier.substring(0, 10) + '...',
       });
 
       const params = new URLSearchParams({
@@ -238,6 +228,8 @@ class SpotifyService {
       hasVerifier: !!codeVerifier,
       verifierLength: codeVerifier?.length || 0,
       verifierStart: codeVerifier?.substring(0, 10) + '...' || 'none',
+      codeLength: code.length,
+      codeStart: code.substring(0, 20) + '...',
     });
 
     if (!codeVerifier) {
