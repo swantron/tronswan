@@ -34,6 +34,12 @@ export default [
         clearInterval: 'readonly',
         process: 'readonly',
         global: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        crypto: 'readonly',
+        btoa: 'readonly',
+        TextEncoder: 'readonly',
+        URLSearchParams: 'readonly',
         // DOM types
         HTMLInputElement: 'readonly',
         HTMLVideoElement: 'readonly',

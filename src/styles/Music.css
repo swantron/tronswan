@@ -1,0 +1,458 @@
+.music-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.music-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.music-loading p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.music-auth {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.music-auth h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1db954;
+}
+
+.music-auth p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.spotify-login-btn {
+  background: #1db954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.spotify-login-btn:hover {
+  background: #1ed760;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+.spotify-icon {
+  font-size: 1.2rem;
+}
+
+.music-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.music-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.music-user-info h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #333;
+}
+
+.user-stats {
+  color: #666;
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.time-range-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.time-range-selector label {
+  font-weight: 600;
+  color: #333;
+}
+
+.time-range-selector select {
+  padding: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #ff6666;
+}
+
+.currently-playing {
+  background: linear-gradient(135deg, #1db954, #1ed760);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.currently-playing h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+}
+
+.current-track {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.current-album-art {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.current-track-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+}
+
+.current-track-info p {
+  margin: 0.25rem 0;
+  opacity: 0.9;
+}
+
+.current-album {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.music-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #1db954;
+}
+
+.tab-btn.active {
+  color: #1db954;
+  border-bottom-color: #1db954;
+}
+
+.music-content {
+  min-height: 400px;
+}
+
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.track-card {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.track-card:hover {
+  border-color: #1db954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.1);
+}
+
+.track-rank {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #1db954;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.track-album-art {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.track-info {
+  flex: 1;
+}
+
+.track-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.track-artist {
+  margin: 0 0 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.track-album {
+  margin: 0 0 0.5rem 0;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.track-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.spotify-link {
+  color: #1db954;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.spotify-link:hover {
+  background: #1db954;
+  color: white;
+}
+
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.artist-card {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.artist-card:hover {
+  border-color: #1db954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.1);
+}
+
+.artist-rank {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #1db954;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.artist-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.artist-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.artist-genres {
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.artist-meta {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.recent-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recent-track {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.recent-track:hover {
+  border-color: #1db954;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.1);
+}
+
+.recent-album-art {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.recent-track-info {
+  flex: 1;
+}
+
+.recent-track-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.recent-track-info p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.recent-album {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .music-page {
+    padding: 1rem;
+  }
+  
+  .music-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .music-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .tracks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .artists-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .track-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .track-album-art {
+    width: 80px;
+    height: 80px;
+  }
+}

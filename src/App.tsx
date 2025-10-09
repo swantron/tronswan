@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import Music from './components/music/Music';
 import RecipeDetail from './components/recipe/RecipeDetail';
 import RecipeList from './components/recipe/RecipeList';
 import HealthPage from './components/status/HealthPage';
@@ -241,6 +242,18 @@ function App() {
               >
                 shorts
               </Link>
+              <Link
+                to='/music'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Music', {
+                    target: '/music',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
+                music
+              </Link>
             </nav>
 
             <ErrorBoundary>
@@ -277,6 +290,7 @@ function App() {
                 <Route path='/dynomite' element={<Dynomite />} />
                 <Route path='/working' element={<Working />} />
                 <Route path='/shorts' element={<Shorts />} />
+                <Route path='/music' element={<Music />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
