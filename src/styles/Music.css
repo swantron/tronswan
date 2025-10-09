@@ -1,8 +1,16 @@
+/* Music page styles - matching site theme */
 .music-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
   min-height: 100vh;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  padding: 2rem;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.music-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .music-loading {
@@ -10,55 +18,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  min-height: 60vh;
   gap: 1rem;
 }
 
 .music-loading p {
-  color: #666;
+  color: var(--primary-text);
   font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .music-auth {
   text-align: center;
   padding: 4rem 2rem;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .music-auth h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 1rem;
-  color: #1db954;
+  color: var(--accent-color);
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .music-auth p {
-  font-size: 1.1rem;
-  color: #666;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: var(--primary-text);
   margin-bottom: 2rem;
   line-height: 1.6;
+  opacity: 0.9;
 }
 
 .spotify-login-btn {
-  background: #1db954;
-  color: white;
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
-  border-radius: 25px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  border-radius: var(--border-radius);
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: bold;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin: 0 auto;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
+  text-transform: lowercase;
+  font-family: inherit;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .spotify-login-btn:hover {
-  background: #1ed760;
+  background-color: #e6894a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+  box-shadow: 0 6px 12px rgba(248, 152, 89, 0.4);
+}
+
+.spotify-login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .spotify-icon {
@@ -71,7 +91,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .music-user-info {
@@ -85,24 +105,28 @@
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--accent-color);
 }
 
 .music-user-info h1 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   margin: 0;
-  color: #333;
+  color: var(--primary-text);
+  font-weight: bold;
 }
 
 .user-stats {
-  color: #666;
+  color: var(--primary-text);
   margin: 0.25rem 0 0 0;
   font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .music-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .time-range-selector {
@@ -113,43 +137,54 @@
 
 .time-range-selector label {
   font-weight: 600;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .time-range-selector select {
-  padding: 0.5rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  background: white;
+  padding: 0.5rem 1rem;
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
   font-size: 0.9rem;
+  transition: all var(--transition-speed) ease;
+}
+
+.time-range-selector select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .logout-btn {
-  background: #ff4444;
+  background-color: var(--error-color);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .logout-btn:hover {
-  background: #ff6666;
+  background-color: #ff6666;
+  transform: translateY(-1px);
 }
 
 .currently-playing {
-  background: linear-gradient(135deg, #1db954, #1ed760);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-color), #e67e22);
+  color: var(--primary-bg);
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
 }
 
 .currently-playing h3 {
   margin: 0 0 1rem 0;
   font-size: 1.3rem;
+  font-weight: bold;
 }
 
 .current-track {
@@ -184,7 +219,9 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -194,18 +231,21 @@
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
-  color: #666;
+  color: var(--primary-text);
   border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
+  opacity: 0.7;
 }
 
 .tab-btn:hover {
-  color: #1db954;
+  color: var(--accent-color);
+  opacity: 1;
 }
 
 .tab-btn.active {
-  color: #1db954;
-  border-bottom-color: #1db954;
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+  opacity: 1;
 }
 
 .music-content {
@@ -214,34 +254,36 @@
 
 .tracks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
 .track-card {
-  background: white;
-  border: 2px solid #f0f0f0;
-  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   position: relative;
 }
 
 .track-card:hover {
-  border-color: #1db954;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.1);
+  border-color: var(--accent-color);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.2);
+  background-color: rgba(248, 152, 89, 0.1);
 }
 
 .track-rank {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: #1db954;
-  color: white;
+  background: var(--accent-color);
+  color: var(--primary-bg);
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -267,70 +309,75 @@
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .track-artist {
   margin: 0 0 0.25rem 0;
-  color: #666;
+  color: var(--primary-text);
   font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .track-album {
   margin: 0 0 0.5rem 0;
-  color: #999;
+  color: var(--primary-text);
   font-size: 0.8rem;
+  opacity: 0.6;
 }
 
 .track-meta {
   display: flex;
   gap: 1rem;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--primary-text);
+  opacity: 0.6;
 }
 
 .spotify-link {
-  color: #1db954;
+  color: var(--accent-color);
   text-decoration: none;
   font-size: 1.2rem;
   padding: 0.5rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .spotify-link:hover {
-  background: #1db954;
-  color: white;
+  background: var(--accent-color);
+  color: var(--primary-bg);
 }
 
 .artists-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
 .artist-card {
-  background: white;
-  border: 2px solid #f0f0f0;
-  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
   padding: 1.5rem;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   position: relative;
 }
 
 .artist-card:hover {
-  border-color: #1db954;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.1);
+  border-color: var(--accent-color);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.2);
+  background-color: rgba(248, 152, 89, 0.1);
 }
 
 .artist-rank {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: #1db954;
-  color: white;
+  background: var(--accent-color);
+  color: var(--primary-bg);
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -348,48 +395,53 @@
   object-fit: cover;
   margin: 0 auto 1rem auto;
   display: block;
+  border: 2px solid var(--accent-color);
 }
 
 .artist-name {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .artist-genres {
   margin: 0 0 1rem 0;
-  color: #666;
+  color: var(--primary-text);
   font-size: 0.9rem;
   font-style: italic;
+  opacity: 0.8;
 }
 
 .artist-meta {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--primary-text);
+  opacity: 0.6;
 }
 
 .recent-tracks {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 }
 
 .recent-track {
-  background: white;
-  border: 2px solid #f0f0f0;
-  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .recent-track:hover {
-  border-color: #1db954;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.1);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.2);
+  background-color: rgba(248, 152, 89, 0.1);
 }
 
 .recent-album-art {
@@ -407,18 +459,20 @@
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .recent-track-info p {
   margin: 0.25rem 0;
-  color: #666;
+  color: var(--primary-text);
   font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .recent-album {
-  color: #999;
+  color: var(--primary-text);
   font-size: 0.8rem;
+  opacity: 0.6;
 }
 
 /* Responsive Design */
@@ -436,14 +490,17 @@
   .music-controls {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   
   .tracks-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .artists-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
   }
   
   .track-card {
@@ -454,5 +511,34 @@
   .track-album-art {
     width: 80px;
     height: 80px;
+  }
+  
+  .music-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .tab-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .music-content {
+    padding: 0 0.5rem;
+  }
+  
+  .music-auth {
+    padding: 2rem 1rem;
+  }
+  
+  .tracks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .artists-grid {
+    grid-template-columns: 1fr;
   }
 }
