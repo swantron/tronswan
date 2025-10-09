@@ -39,6 +39,7 @@ const Music: React.FC = () => {
     try {
       setLoading(true);
 
+      logger.info('Starting parallel API calls for user data');
       const [userData, tracks, artists, recent, current] = await Promise.all([
         spotifyService.getUserProfile(),
         spotifyService.getTopTracks(timeRange),
@@ -47,22 +48,34 @@ const Music: React.FC = () => {
         spotifyService.getCurrentlyPlaying(),
       ]);
 
+      logger.info('All API calls completed successfully', {
+        hasUserData: !!userData,
+        trackCount: tracks?.length || 0,
+        artistCount: artists?.length || 0,
+        recentCount: recent?.length || 0,
+        hasCurrentTrack: !!current,
+      });
+
       setUser(userData);
-      setTopTracks(tracks);
-      setTopArtists(artists);
-      setRecentlyPlayed(recent);
+      setTopTracks(tracks || []);
+      setTopArtists(artists || []);
+      setRecentlyPlayed(recent || []);
       setCurrentlyPlaying(current);
 
       logger.info('Spotify user data loaded successfully', {
-        userId: userData.id,
-        trackCount: tracks.length,
-        artistCount: artists.length,
-        recentCount: recent.length,
+        userId: userData?.id,
+        trackCount: tracks?.length || 0,
+        artistCount: artists?.length || 0,
+        recentCount: recent?.length || 0,
         hasCurrentTrack: !!current,
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      logger.error('Failed to load Spotify user data', { error });
+      logger.error('Failed to load Spotify user data', { 
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      throw error; // Re-throw so calling code can handle it
     } finally {
       setLoading(false);
     }
@@ -72,19 +85,37 @@ const Music: React.FC = () => {
     async (code: string) => {
       logger.info('Handling Spotify auth callback', {
         hasCode: !!code,
+        codeLength: code.length,
         timestamp: new Date().toISOString(),
       });
 
       setLoading(true);
-      const success = await spotifyService.handleCallback(code);
+      setAuthError(null);
 
-      if (success) {
-        setIsAuthenticated(true);
-        await loadUserData();
-        // Clean up URL
-        window.history.replaceState({}, document.title, '/music');
-      } else {
-        logger.error('Spotify authentication failed');
+      try {
+        const success = await spotifyService.handleCallback(code);
+
+        if (success) {
+          logger.info('Spotify callback successful, setting authenticated state');
+          setIsAuthenticated(true);
+          
+          try {
+            await loadUserData();
+            logger.info('User data loaded successfully after callback');
+          } catch (dataError) {
+            logger.error('Failed to load user data after callback', { dataError });
+            setAuthError('Authentication successful but failed to load music data. Please refresh the page.');
+          }
+          
+          // Clean up URL
+          window.history.replaceState({}, document.title, '/music');
+        } else {
+          logger.error('Spotify authentication failed during callback');
+          setAuthError('Spotify authentication failed. Please try again.');
+        }
+      } catch (error) {
+        logger.error('Error during Spotify callback handling', { error });
+        setAuthError('An error occurred during authentication. Please try again.');
       }
 
       setLoading(false);
@@ -109,6 +140,12 @@ const Music: React.FC = () => {
 
   useEffect(() => {
     const initializeMusic = async () => {
+      logger.info('Music component initializing', {
+        timestamp: new Date().toISOString(),
+        url: window.location.href,
+        hasCodeParam: !!searchParams.get('code'),
+      });
+
       // Initialize runtime config first
       await runtimeConfig.initialize();
 
@@ -120,8 +157,12 @@ const Music: React.FC = () => {
       // Check for callback code
       const code = searchParams.get('code');
       if (code) {
+        logger.info('Found authorization code in URL, processing callback', {
+          codeLength: code.length,
+        });
         handleAuthCallback(code);
       } else {
+        logger.info('No authorization code found, checking auth status');
         checkAuthStatus();
       }
     };
@@ -212,6 +253,15 @@ const Music: React.FC = () => {
         <div className='music-loading'>
           <div className='loading-spinner' aria-label='Loading music data' />
           <p>Loading your music data...</p>
+          {process.env.NODE_ENV === 'development' && (
+            <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666' }}>
+              <p>Debug Info:</p>
+              <p>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</p>
+              <p>Has User: {user ? 'Yes' : 'No'}</p>
+              <p>Has Tracks: {topTracks.length > 0 ? 'Yes' : 'No'}</p>
+              <p>URL: {window.location.href}</p>
+            </div>
+          )}
         </div>
       </div>
     );

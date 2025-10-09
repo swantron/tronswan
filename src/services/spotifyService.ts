@@ -329,6 +329,7 @@ class SpotifyService {
     logger.debug('Making Spotify API request', {
       endpoint,
       url,
+      hasToken: !!this.accessToken,
       timestamp: new Date().toISOString(),
     });
 
@@ -346,11 +347,13 @@ class SpotifyService {
     );
 
     if (!response.ok) {
+      const errorText = await response.text();
       logger.error('Spotify API request failed', {
         endpoint,
         status: response.status,
         statusText: response.statusText,
         url,
+        error: errorText,
       });
       throw new Error(
         `Spotify API error: ${response.status} ${response.statusText}`
