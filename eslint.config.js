@@ -40,6 +40,7 @@ export default [
         btoa: 'readonly',
         TextEncoder: 'readonly',
         URLSearchParams: 'readonly',
+        alert: 'readonly',
         // DOM types
         HTMLInputElement: 'readonly',
         HTMLVideoElement: 'readonly',

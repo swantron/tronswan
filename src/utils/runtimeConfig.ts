@@ -14,6 +14,8 @@ interface RuntimeConfig {
   VITE_GITHUB_OWNER: string;
   VITE_DIGITALOCEAN_TOKEN: string;
   VITE_DIGITALOCEAN_APP_ID: string;
+  VITE_SPOTIFY_CLIENT_ID: string;
+  VITE_SPOTIFY_REDIRECT_URI: string;
 }
 
 class RuntimeConfigManager {
@@ -47,6 +49,8 @@ class RuntimeConfigManager {
       'VITE_GITHUB_OWNER',
       'VITE_DIGITALOCEAN_TOKEN',
       'VITE_DIGITALOCEAN_APP_ID',
+      'VITE_SPOTIFY_CLIENT_ID',
+      'VITE_SPOTIFY_REDIRECT_URI',
     ];
 
     envVars.forEach(key => {

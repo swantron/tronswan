@@ -1,4 +1,5 @@
 import { logger } from '../utils/logger';
+import { runtimeConfig } from '../utils/runtimeConfig';
 
 export interface SpotifyTrack {
   id: string;
@@ -76,8 +77,8 @@ class SpotifyService {
   private tokenExpiry: number = 0;
 
   constructor() {
-    this.clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-    this.redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
+    this.clientId = runtimeConfig.get('VITE_SPOTIFY_CLIENT_ID');
+    this.redirectUri = runtimeConfig.get('VITE_SPOTIFY_REDIRECT_URI');
 
     // Load tokens from localStorage
     this.loadTokens();
@@ -131,6 +132,13 @@ class SpotifyService {
   }
 
   private async generateCodeChallenge(codeVerifier: string): Promise<string> {
+    // Check if we're in a secure context (HTTPS or localhost)
+    if (!window.isSecureContext) {
+      throw new Error(
+        'Crypto operations require a secure context (HTTPS or localhost)'
+      );
+    }
+
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const digest = await crypto.subtle.digest('SHA256', data);

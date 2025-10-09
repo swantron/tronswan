@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -8,6 +8,7 @@ import {
   SpotifyUser,
 } from '../../services/spotifyService';
 import { logger } from '../../utils/logger';
+import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
 import '../../styles/Music.css';
 
@@ -30,42 +31,52 @@ const Music: React.FC = () => {
   );
 
   useEffect(() => {
-    logger.info('Music page loaded', {
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-    });
+    const initializeMusic = async () => {
+      // Initialize runtime config first
+      await runtimeConfig.initialize();
 
-    // Check for callback code
-    const code = searchParams.get('code');
-    if (code) {
-      handleAuthCallback(code);
-    } else {
-      checkAuthStatus();
-    }
-  }, [searchParams]);
+      logger.info('Music page loaded', {
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+      });
 
-  const handleAuthCallback = async (code: string) => {
-    logger.info('Handling Spotify auth callback', {
-      hasCode: !!code,
-      timestamp: new Date().toISOString(),
-    });
+      // Check for callback code
+      const code = searchParams.get('code');
+      if (code) {
+        handleAuthCallback(code);
+      } else {
+        checkAuthStatus();
+      }
+    };
 
-    setLoading(true);
-    const success = await spotifyService.handleCallback(code);
+    initializeMusic();
+  }, [searchParams, checkAuthStatus, handleAuthCallback]);
 
-    if (success) {
-      setIsAuthenticated(true);
-      await loadUserData();
-      // Clean up URL
-      window.history.replaceState({}, document.title, '/music');
-    } else {
-      logger.error('Spotify authentication failed');
-    }
+  const handleAuthCallback = useCallback(
+    async (code: string) => {
+      logger.info('Handling Spotify auth callback', {
+        hasCode: !!code,
+        timestamp: new Date().toISOString(),
+      });
 
-    setLoading(false);
-  };
+      setLoading(true);
+      const success = await spotifyService.handleCallback(code);
 
-  const checkAuthStatus = async () => {
+      if (success) {
+        setIsAuthenticated(true);
+        await loadUserData();
+        // Clean up URL
+        window.history.replaceState({}, document.title, '/music');
+      } else {
+        logger.error('Spotify authentication failed');
+      }
+
+      setLoading(false);
+    },
+    [loadUserData]
+  );
+
+  const checkAuthStatus = useCallback(async () => {
     logger.debug('Checking Spotify authentication status', {
       timestamp: new Date().toISOString(),
     });
@@ -78,9 +89,9 @@ const Music: React.FC = () => {
     }
 
     setLoading(false);
-  };
+  }, [loadUserData]);
 
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
       timestamp: new Date().toISOString(),
     });
@@ -115,7 +126,7 @@ const Music: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange]);
 
   const handleTimeRangeChange = async (
     newTimeRange: 'short_term' | 'medium_term' | 'long_term'
@@ -158,7 +169,15 @@ const Music: React.FC = () => {
       timestamp: new Date().toISOString(),
     });
 
-    spotifyService.initiateAuth();
+    try {
+      spotifyService.initiateAuth();
+    } catch (error) {
+      logger.error('Spotify authentication failed', { error });
+      // Show user-friendly error message
+      alert(
+        "Spotify authentication requires HTTPS or localhost. Please ensure you're accessing the site securely."
+      );
+    }
   };
 
   const handleLogout = () => {
