@@ -30,27 +30,42 @@ const Music: React.FC = () => {
     'tracks'
   );
 
-  useEffect(() => {
-    const initializeMusic = async () => {
-      // Initialize runtime config first
-      await runtimeConfig.initialize();
+  const loadUserData = useCallback(async () => {
+    logger.info('Loading Spotify user data', {
+      timestamp: new Date().toISOString(),
+    });
 
-      logger.info('Music page loaded', {
+    try {
+      setLoading(true);
+
+      const [userData, tracks, artists, recent, current] = await Promise.all([
+        spotifyService.getUserProfile(),
+        spotifyService.getTopTracks(timeRange),
+        spotifyService.getTopArtists(timeRange),
+        spotifyService.getRecentlyPlayed(),
+        spotifyService.getCurrentlyPlaying(),
+      ]);
+
+      setUser(userData);
+      setTopTracks(tracks);
+      setTopArtists(artists);
+      setRecentlyPlayed(recent);
+      setCurrentlyPlaying(current);
+
+      logger.info('Spotify user data loaded successfully', {
+        userId: userData.id,
+        trackCount: tracks.length,
+        artistCount: artists.length,
+        recentCount: recent.length,
+        hasCurrentTrack: !!current,
         timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
       });
-
-      // Check for callback code
-      const code = searchParams.get('code');
-      if (code) {
-        handleAuthCallback(code);
-      } else {
-        checkAuthStatus();
-      }
-    };
-
-    initializeMusic();
-  }, [searchParams, checkAuthStatus, handleAuthCallback]);
+    } catch (error) {
+      logger.error('Failed to load Spotify user data', { error });
+    } finally {
+      setLoading(false);
+    }
+  }, [timeRange]);
 
   const handleAuthCallback = useCallback(
     async (code: string) => {
@@ -91,42 +106,27 @@ const Music: React.FC = () => {
     setLoading(false);
   }, [loadUserData]);
 
-  const loadUserData = useCallback(async () => {
-    logger.info('Loading Spotify user data', {
-      timestamp: new Date().toISOString(),
-    });
+  useEffect(() => {
+    const initializeMusic = async () => {
+      // Initialize runtime config first
+      await runtimeConfig.initialize();
 
-    try {
-      setLoading(true);
-
-      const [userData, tracks, artists, recent, current] = await Promise.all([
-        spotifyService.getUserProfile(),
-        spotifyService.getTopTracks(timeRange),
-        spotifyService.getTopArtists(timeRange),
-        spotifyService.getRecentlyPlayed(),
-        spotifyService.getCurrentlyPlaying(),
-      ]);
-
-      setUser(userData);
-      setTopTracks(tracks);
-      setTopArtists(artists);
-      setRecentlyPlayed(recent);
-      setCurrentlyPlaying(current);
-
-      logger.info('Spotify user data loaded successfully', {
-        userId: userData.id,
-        trackCount: tracks.length,
-        artistCount: artists.length,
-        recentCount: recent.length,
-        hasCurrentTrack: !!current,
+      logger.info('Music page loaded', {
         timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
       });
-    } catch (error) {
-      logger.error('Failed to load Spotify user data', { error });
-    } finally {
-      setLoading(false);
-    }
-  }, [timeRange]);
+
+      // Check for callback code
+      const code = searchParams.get('code');
+      if (code) {
+        handleAuthCallback(code);
+      } else {
+        checkAuthStatus();
+      }
+    };
+
+    initializeMusic();
+  }, [searchParams, checkAuthStatus, handleAuthCallback]);
 
   const handleTimeRangeChange = async (
     newTimeRange: 'short_term' | 'medium_term' | 'long_term'
