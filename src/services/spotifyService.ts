@@ -49,6 +49,7 @@ export interface SpotifyAudioFeatures {
   liveness: number;
   speechiness: number;
   tempo: number;
+  loudness: number;
   key: number;
   mode: number;
   time_signature: number;
@@ -753,6 +754,48 @@ class SpotifyService {
       playlists: data.items,
       total: data.total,
       hasMore,
+    };
+  }
+
+  public async getAudioFeaturesAnalysis(trackIds: string[]): Promise<{
+    averageFeatures: SpotifyAudioFeatures;
+    features: SpotifyAudioFeatures[];
+  }> {
+    logger.info('Fetching audio features analysis', {
+      trackCount: trackIds.length,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Get audio features for all tracks
+    const features = await this.getAudioFeatures(trackIds);
+
+    // Calculate average features
+    const averageFeatures: SpotifyAudioFeatures = {
+      danceability: features.reduce((sum, f) => sum + f.danceability, 0) / features.length,
+      energy: features.reduce((sum, f) => sum + f.energy, 0) / features.length,
+      valence: features.reduce((sum, f) => sum + f.valence, 0) / features.length,
+      acousticness: features.reduce((sum, f) => sum + f.acousticness, 0) / features.length,
+      instrumentalness: features.reduce((sum, f) => sum + f.instrumentalness, 0) / features.length,
+      liveness: features.reduce((sum, f) => sum + f.liveness, 0) / features.length,
+      speechiness: features.reduce((sum, f) => sum + f.speechiness, 0) / features.length,
+      tempo: features.reduce((sum, f) => sum + f.tempo, 0) / features.length,
+      loudness: features.reduce((sum, f) => sum + f.loudness, 0) / features.length,
+      key: Math.round(features.reduce((sum, f) => sum + f.key, 0) / features.length),
+      mode: Math.round(features.reduce((sum, f) => sum + f.mode, 0) / features.length),
+      time_signature: Math.round(features.reduce((sum, f) => sum + f.time_signature, 0) / features.length),
+    };
+
+    logger.info('Audio features analysis completed', {
+      trackCount: features.length,
+      averageDanceability: averageFeatures.danceability,
+      averageEnergy: averageFeatures.energy,
+      averageValence: averageFeatures.valence,
+      timestamp: new Date().toISOString(),
+    });
+
+    return {
+      averageFeatures,
+      features,
     };
   }
 

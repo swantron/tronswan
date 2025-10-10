@@ -7,6 +7,7 @@ import {
   SpotifyArtist,
   SpotifyUser,
   SpotifyPlaylist,
+  SpotifyAudioFeatures,
 } from '../../services/spotifyService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
@@ -28,7 +29,7 @@ const Music: React.FC = () => {
   const [timeRange, setTimeRange] = useState<
     'short_term' | 'medium_term' | 'long_term'
   >('medium_term');
-  const [activeTab, setActiveTab] = useState<'tracks' | 'artists' | 'recent' | 'liked' | 'playlists'>(
+  const [activeTab, setActiveTab] = useState<'tracks' | 'artists' | 'recent' | 'liked' | 'playlists' | 'visualizer'>(
     'tracks'
   );
   const [likedSongs, setLikedSongs] = useState<SpotifyTrack[]>([]);
@@ -39,6 +40,8 @@ const Music: React.FC = () => {
   const [playlistsTotal, setPlaylistsTotal] = useState(0);
   const [playlistsOffset, setPlaylistsOffset] = useState(0);
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
+  const [audioFeatures, setAudioFeatures] = useState<SpotifyAudioFeatures | null>(null);
+  const [visualizerLoading, setVisualizerLoading] = useState(false);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -228,7 +231,7 @@ const Music: React.FC = () => {
     }
   };
 
-  const handleTabChange = (tab: 'tracks' | 'artists' | 'recent' | 'liked' | 'playlists') => {
+  const handleTabChange = (tab: 'tracks' | 'artists' | 'recent' | 'liked' | 'playlists' | 'visualizer') => {
     logger.info('Music page tab changed', {
       from: activeTab,
       to: tab,
@@ -236,6 +239,11 @@ const Music: React.FC = () => {
     });
 
     setActiveTab(tab);
+
+    // Load audio features when visualizer tab is selected
+    if (tab === 'visualizer') {
+      loadAudioFeatures();
+    }
   };
 
   const handleLogin = async () => {
@@ -307,6 +315,35 @@ const Music: React.FC = () => {
     }
   }, [playlistsOffset, playlists.length, playlistsHasMore]);
 
+  const loadAudioFeatures = useCallback(async () => {
+    if (audioFeatures || visualizerLoading) return;
+
+    logger.info('Loading audio features for visualizer', {
+      trackCount: topTracks.length,
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      setVisualizerLoading(true);
+      const trackIds = topTracks.slice(0, 50).map(track => track.id); // Limit to 50 tracks for performance
+      const analysis = await spotifyService.getAudioFeaturesAnalysis(trackIds);
+      
+      setAudioFeatures(analysis.averageFeatures);
+
+      logger.info('Audio features loaded successfully', {
+        trackCount: trackIds.length,
+        danceability: analysis.averageFeatures.danceability,
+        energy: analysis.averageFeatures.energy,
+        valence: analysis.averageFeatures.valence,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error('Failed to load audio features', { error });
+    } finally {
+      setVisualizerLoading(false);
+    }
+  }, [topTracks, audioFeatures, visualizerLoading]);
+
   const handleLogout = () => {
     logger.info('Spotify logout initiated', {
       timestamp: new Date().toISOString(),
@@ -327,6 +364,8 @@ const Music: React.FC = () => {
     setPlaylistsTotal(0);
     setPlaylistsOffset(0);
     setPlaylistsHasMore(false);
+    setAudioFeatures(null);
+    setVisualizerLoading(false);
   };
 
   const formatDuration = (ms: number): string => {
@@ -498,6 +537,12 @@ const Music: React.FC = () => {
           onClick={() => handleTabChange('playlists')}
         >
           Playlists ({playlistsTotal})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'visualizer' ? 'active' : ''}`}
+          onClick={() => handleTabChange('visualizer')}
+        >
+          Visualizer
         </button>
       </div>
 
@@ -729,6 +774,120 @@ const Music: React.FC = () => {
                 >
                   {loading ? 'Loading...' : 'Load More Playlists'}
                 </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'visualizer' && (
+          <div className='visualizer-container'>
+            <div className='visualizer-header'>
+              <h3>Your Music DNA</h3>
+              <p className='visualizer-subtitle'>
+                Audio analysis of your top tracks
+              </p>
+            </div>
+
+            {visualizerLoading ? (
+              <div className='visualizer-loading'>
+                <div className='loading-spinner' aria-label='Loading audio analysis' />
+                <p>Analyzing your music taste...</p>
+              </div>
+            ) : audioFeatures ? (
+              <div className='visualizer-content'>
+                {/* Main Features Radar Chart */}
+                <div className='features-radar'>
+                  <h4>Music Characteristics</h4>
+                  <div className='radar-chart'>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.danceability * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Danceability</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.danceability * 100)}%</div>
+                    </div>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.energy * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Energy</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.energy * 100)}%</div>
+                    </div>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.valence * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Valence (Mood)</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.valence * 100)}%</div>
+                    </div>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.acousticness * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Acousticness</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.acousticness * 100)}%</div>
+                    </div>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.instrumentalness * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Instrumentalness</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.instrumentalness * 100)}%</div>
+                    </div>
+                    <div className='radar-feature' style={{ '--value': audioFeatures.speechiness * 100 + '%' } as React.CSSProperties}>
+                      <div className='feature-label'>Speechiness</div>
+                      <div className='feature-bar'>
+                        <div className='feature-fill'></div>
+                      </div>
+                      <div className='feature-value'>{Math.round(audioFeatures.speechiness * 100)}%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Metrics */}
+                <div className='additional-metrics'>
+                  <div className='metric-card'>
+                    <h5>Tempo</h5>
+                    <div className='metric-value'>{Math.round(audioFeatures.tempo)} BPM</div>
+                  </div>
+                  <div className='metric-card'>
+                    <h5>Loudness</h5>
+                    <div className='metric-value'>{Math.round(audioFeatures.loudness)} dB</div>
+                  </div>
+                  <div className='metric-card'>
+                    <h5>Liveness</h5>
+                    <div className='metric-value'>{Math.round(audioFeatures.liveness * 100)}%</div>
+                  </div>
+                </div>
+
+                {/* Music Personality */}
+                <div className='music-personality'>
+                  <h4>Your Music Personality</h4>
+                  <div className='personality-traits'>
+                    {audioFeatures.valence > 0.6 && (
+                      <span className='personality-trait positive'>Upbeat & Positive</span>
+                    )}
+                    {audioFeatures.energy > 0.7 && (
+                      <span className='personality-trait energetic'>High Energy</span>
+                    )}
+                    {audioFeatures.danceability > 0.7 && (
+                      <span className='personality-trait danceable'>Danceable</span>
+                    )}
+                    {audioFeatures.acousticness > 0.5 && (
+                      <span className='personality-trait acoustic'>Acoustic</span>
+                    )}
+                    {audioFeatures.instrumentalness > 0.5 && (
+                      <span className='personality-trait instrumental'>Instrumental</span>
+                    )}
+                    {audioFeatures.speechiness > 0.3 && (
+                      <span className='personality-trait speechy'>Lyrical</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='visualizer-error'>
+                <p>Unable to load audio analysis. Please try again.</p>
               </div>
             )}
           </div>
