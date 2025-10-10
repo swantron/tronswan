@@ -70,6 +70,29 @@ export interface SpotifyUser {
   };
 }
 
+export interface SpotifyPlaylist {
+  id: string;
+  name: string;
+  description: string;
+  images: Array<{
+    url: string;
+    height: number;
+    width: number;
+  }>;
+  owner: {
+    display_name: string;
+    id: string;
+  };
+  tracks: {
+    total: number;
+  };
+  public: boolean;
+  collaborative: boolean;
+  external_urls: {
+    spotify: string;
+  };
+}
+
 class SpotifyService {
   private clientId: string;
   private redirectUri: string;
@@ -693,6 +716,41 @@ class SpotifyService {
 
     return {
       tracks,
+      total: data.total,
+      hasMore,
+    };
+  }
+
+  public async getPlaylists(limit: number = 20, offset: number = 0): Promise<{
+    playlists: SpotifyPlaylist[];
+    total: number;
+    hasMore: boolean;
+  }> {
+    logger.info('Fetching playlists', {
+      limit,
+      offset,
+      timestamp: new Date().toISOString(),
+    });
+
+    const data = await this.makeRequest<{
+      items: SpotifyPlaylist[];
+      total: number;
+      limit: number;
+      offset: number;
+      next: string | null;
+    }>(`/me/playlists?limit=${limit}&offset=${offset}`);
+
+    const hasMore = !!data.next;
+
+    logger.info('Playlists fetched successfully', {
+      playlistCount: data.items.length,
+      total: data.total,
+      hasMore,
+      timestamp: new Date().toISOString(),
+    });
+
+    return {
+      playlists: data.items,
       total: data.total,
       hasMore,
     };

@@ -6,6 +6,7 @@ import {
   SpotifyTrack,
   SpotifyArtist,
   SpotifyUser,
+  SpotifyPlaylist,
 } from '../../services/spotifyService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
@@ -27,13 +28,17 @@ const Music: React.FC = () => {
   const [timeRange, setTimeRange] = useState<
     'short_term' | 'medium_term' | 'long_term'
   >('medium_term');
-  const [activeTab, setActiveTab] = useState<'tracks' | 'artists' | 'recent' | 'liked'>(
+  const [activeTab, setActiveTab] = useState<'tracks' | 'artists' | 'recent' | 'liked' | 'playlists'>(
     'tracks'
   );
   const [likedSongs, setLikedSongs] = useState<SpotifyTrack[]>([]);
   const [likedSongsTotal, setLikedSongsTotal] = useState(0);
   const [likedSongsOffset, setLikedSongsOffset] = useState(0);
   const [likedSongsHasMore, setLikedSongsHasMore] = useState(false);
+  const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
+  const [playlistsTotal, setPlaylistsTotal] = useState(0);
+  const [playlistsOffset, setPlaylistsOffset] = useState(0);
+  const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -44,13 +49,14 @@ const Music: React.FC = () => {
       setLoading(true);
 
       logger.info('Starting parallel API calls for user data');
-      const [userData, tracks, artists, recent, current, likedData] = await Promise.all([
+      const [userData, tracks, artists, recent, current, likedData, playlistsData] = await Promise.all([
         spotifyService.getUserProfile(),
         spotifyService.getTopTracks(timeRange),
         spotifyService.getTopArtists(timeRange),
         spotifyService.getRecentlyPlayed(),
         spotifyService.getCurrentlyPlaying(),
         spotifyService.getLikedSongs(20, 0),
+        spotifyService.getPlaylists(20, 0),
       ]);
 
       logger.info('All API calls completed successfully', {
@@ -70,6 +76,10 @@ const Music: React.FC = () => {
       setLikedSongsTotal(likedData?.total || 0);
       setLikedSongsHasMore(likedData?.hasMore || false);
       setLikedSongsOffset(0);
+      setPlaylists(playlistsData?.playlists || []);
+      setPlaylistsTotal(playlistsData?.total || 0);
+      setPlaylistsHasMore(playlistsData?.hasMore || false);
+      setPlaylistsOffset(0);
 
       logger.info('Spotify user data loaded successfully', {
         userId: userData?.id,
@@ -78,6 +88,8 @@ const Music: React.FC = () => {
         recentCount: recent?.length || 0,
         likedCount: likedData?.tracks?.length || 0,
         likedTotal: likedData?.total || 0,
+        playlistCount: playlistsData?.playlists?.length || 0,
+        playlistTotal: playlistsData?.total || 0,
         hasCurrentTrack: !!current,
         timestamp: new Date().toISOString(),
       });
@@ -216,7 +228,7 @@ const Music: React.FC = () => {
     }
   };
 
-  const handleTabChange = (tab: 'tracks' | 'artists' | 'recent' | 'liked') => {
+  const handleTabChange = (tab: 'tracks' | 'artists' | 'recent' | 'liked' | 'playlists') => {
     logger.info('Music page tab changed', {
       from: activeTab,
       to: tab,
@@ -268,6 +280,33 @@ const Music: React.FC = () => {
     }
   }, [likedSongsOffset, likedSongs.length, likedSongsHasMore]);
 
+  const loadMorePlaylists = useCallback(async () => {
+    if (!playlistsHasMore) return;
+
+    logger.info('Loading more playlists', {
+      currentOffset: playlistsOffset,
+      currentCount: playlists.length,
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      const newOffset = playlistsOffset + 20;
+      const playlistsData = await spotifyService.getPlaylists(20, newOffset);
+      
+      setPlaylists(prev => [...prev, ...playlistsData.playlists]);
+      setPlaylistsOffset(newOffset);
+      setPlaylistsHasMore(playlistsData.hasMore);
+
+      logger.info('More playlists loaded successfully', {
+        newCount: playlists.length + playlistsData.playlists.length,
+        hasMore: playlistsData.hasMore,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error('Failed to load more playlists', { error });
+    }
+  }, [playlistsOffset, playlists.length, playlistsHasMore]);
+
   const handleLogout = () => {
     logger.info('Spotify logout initiated', {
       timestamp: new Date().toISOString(),
@@ -284,6 +323,10 @@ const Music: React.FC = () => {
     setLikedSongsTotal(0);
     setLikedSongsOffset(0);
     setLikedSongsHasMore(false);
+    setPlaylists([]);
+    setPlaylistsTotal(0);
+    setPlaylistsOffset(0);
+    setPlaylistsHasMore(false);
   };
 
   const formatDuration = (ms: number): string => {
@@ -374,9 +417,6 @@ const Music: React.FC = () => {
           )}
           <div>
             <h1>🎵 {user?.display_name}&apos;s Music</h1>
-            <p className='user-stats'>
-              {user?.followers?.total.toLocaleString()} followers
-            </p>
           </div>
         </div>
 
@@ -452,6 +492,12 @@ const Music: React.FC = () => {
           onClick={() => handleTabChange('liked')}
         >
           Liked Songs ({likedSongsTotal})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'playlists' ? 'active' : ''}`}
+          onClick={() => handleTabChange('playlists')}
+        >
+          Playlists ({playlistsTotal})
         </button>
       </div>
 
@@ -614,6 +660,74 @@ const Music: React.FC = () => {
                   disabled={loading}
                 >
                   {loading ? 'Loading...' : 'Load More Songs'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'playlists' && (
+          <div className='playlists-container'>
+            <div className='playlists-header'>
+              <h3>Your Playlists</h3>
+              <p className='playlists-count'>
+                {playlists.length} of {playlistsTotal} playlists
+              </p>
+            </div>
+            
+            <div className='playlists-grid'>
+              {playlists.map((playlist) => (
+                <div key={playlist.id} className='playlist-card'>
+                  <div className='playlist-image-container'>
+                    <img
+                      src={playlist.images[0]?.url || '/placeholder-playlist.png'}
+                      alt={`${playlist.name} cover`}
+                      className='playlist-image'
+                    />
+                    <div className='playlist-overlay'>
+                      <a
+                        href={playlist.external_urls.spotify}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='playlist-link'
+                        aria-label={`Open ${playlist.name} on Spotify`}
+                      >
+                        ♪
+                      </a>
+                    </div>
+                  </div>
+                  <div className='playlist-info'>
+                    <h4 className='playlist-name'>{playlist.name}</h4>
+                    <p className='playlist-owner'>
+                      by {playlist.owner.display_name}
+                    </p>
+                    <p className='playlist-description'>
+                      {playlist.description || 'No description'}
+                    </p>
+                    <div className='playlist-meta'>
+                      <span className='playlist-tracks'>
+                        {playlist.tracks.total} tracks
+                      </span>
+                      <span className='playlist-visibility'>
+                        {playlist.public ? 'Public' : 'Private'}
+                      </span>
+                      {playlist.collaborative && (
+                        <span className='playlist-collaborative'>Collaborative</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {playlistsHasMore && (
+              <div className='load-more-container'>
+                <button
+                  className='load-more-btn'
+                  onClick={loadMorePlaylists}
+                  disabled={loading}
+                >
+                  {loading ? 'Loading...' : 'Load More Playlists'}
                 </button>
               </div>
             )}
