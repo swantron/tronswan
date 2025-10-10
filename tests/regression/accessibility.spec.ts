@@ -86,10 +86,10 @@ test.describe('Accessibility Regression Tests', () => {
     const currentUrl = page.url();
     const isRandomPage = currentUrl.includes('/gangamstyle') ||
                         currentUrl.includes('/hacking') ||
-                        currentUrl.includes('/dealwithit1') ||
-                        currentUrl.includes('/dealwithit2') ||
-                        currentUrl.includes('/dealwithit3') ||
-                        currentUrl.includes('/baseball1') ||
+                        currentUrl.includes('/dealwithit') ||
+                        currentUrl.includes('/dealwithfont') ||
+                        currentUrl.includes('/dealwithword') ||
+                        currentUrl.includes('/wrigley') ||
                         currentUrl.includes('/baseball2') ||
                         currentUrl.includes('/kingkong') ||
                         currentUrl.includes('/buschleague') ||
