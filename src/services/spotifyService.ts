@@ -760,43 +760,80 @@ class SpotifyService {
   public async getAudioFeaturesAnalysis(trackIds: string[]): Promise<{
     averageFeatures: SpotifyAudioFeatures;
     features: SpotifyAudioFeatures[];
+    isRestricted: boolean;
   }> {
     logger.info('Fetching audio features analysis', {
       trackCount: trackIds.length,
       timestamp: new Date().toISOString(),
     });
 
-    // Get audio features for all tracks
-    const features = await this.getAudioFeatures(trackIds);
+    try {
+      // Get audio features for all tracks
+      const features = await this.getAudioFeatures(trackIds);
 
-    // Calculate average features
-    const averageFeatures: SpotifyAudioFeatures = {
-      danceability: features.reduce((sum, f) => sum + f.danceability, 0) / features.length,
-      energy: features.reduce((sum, f) => sum + f.energy, 0) / features.length,
-      valence: features.reduce((sum, f) => sum + f.valence, 0) / features.length,
-      acousticness: features.reduce((sum, f) => sum + f.acousticness, 0) / features.length,
-      instrumentalness: features.reduce((sum, f) => sum + f.instrumentalness, 0) / features.length,
-      liveness: features.reduce((sum, f) => sum + f.liveness, 0) / features.length,
-      speechiness: features.reduce((sum, f) => sum + f.speechiness, 0) / features.length,
-      tempo: features.reduce((sum, f) => sum + f.tempo, 0) / features.length,
-      loudness: features.reduce((sum, f) => sum + f.loudness, 0) / features.length,
-      key: Math.round(features.reduce((sum, f) => sum + f.key, 0) / features.length),
-      mode: Math.round(features.reduce((sum, f) => sum + f.mode, 0) / features.length),
-      time_signature: Math.round(features.reduce((sum, f) => sum + f.time_signature, 0) / features.length),
-    };
+      // Calculate average features
+      const averageFeatures: SpotifyAudioFeatures = {
+        danceability: features.reduce((sum, f) => sum + f.danceability, 0) / features.length,
+        energy: features.reduce((sum, f) => sum + f.energy, 0) / features.length,
+        valence: features.reduce((sum, f) => sum + f.valence, 0) / features.length,
+        acousticness: features.reduce((sum, f) => sum + f.acousticness, 0) / features.length,
+        instrumentalness: features.reduce((sum, f) => sum + f.instrumentalness, 0) / features.length,
+        liveness: features.reduce((sum, f) => sum + f.liveness, 0) / features.length,
+        speechiness: features.reduce((sum, f) => sum + f.speechiness, 0) / features.length,
+        tempo: features.reduce((sum, f) => sum + f.tempo, 0) / features.length,
+        loudness: features.reduce((sum, f) => sum + f.loudness, 0) / features.length,
+        key: Math.round(features.reduce((sum, f) => sum + f.key, 0) / features.length),
+        mode: Math.round(features.reduce((sum, f) => sum + f.mode, 0) / features.length),
+        time_signature: Math.round(features.reduce((sum, f) => sum + f.time_signature, 0) / features.length),
+      };
 
-    logger.info('Audio features analysis completed', {
-      trackCount: features.length,
-      averageDanceability: averageFeatures.danceability,
-      averageEnergy: averageFeatures.energy,
-      averageValence: averageFeatures.valence,
-      timestamp: new Date().toISOString(),
-    });
+      logger.info('Audio features analysis completed', {
+        trackCount: features.length,
+        averageDanceability: averageFeatures.danceability,
+        averageEnergy: averageFeatures.energy,
+        averageValence: averageFeatures.valence,
+        timestamp: new Date().toISOString(),
+      });
 
-    return {
-      averageFeatures,
-      features,
-    };
+      return {
+        averageFeatures,
+        features,
+        isRestricted: false,
+      };
+    } catch (error: any) {
+      // Check if this is a 403 error (restricted access)
+      if (error.status === 403) {
+        logger.warn('Audio features access restricted by Spotify', {
+          error: error.message,
+          timestamp: new Date().toISOString(),
+        });
+
+        // Return mock data for demonstration purposes
+        const mockFeatures: SpotifyAudioFeatures = {
+          danceability: 0.7,
+          energy: 0.8,
+          valence: 0.6,
+          acousticness: 0.3,
+          instrumentalness: 0.1,
+          liveness: 0.2,
+          speechiness: 0.1,
+          tempo: 120,
+          loudness: -5,
+          key: 0,
+          mode: 1,
+          time_signature: 4,
+        };
+
+        return {
+          averageFeatures: mockFeatures,
+          features: [mockFeatures],
+          isRestricted: true,
+        };
+      }
+
+      // Re-throw other errors
+      throw error;
+    }
   }
 
   public isAuthenticated(): boolean {

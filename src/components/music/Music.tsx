@@ -42,6 +42,7 @@ const Music: React.FC = () => {
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
   const [audioFeatures, setAudioFeatures] = useState<SpotifyAudioFeatures | null>(null);
   const [visualizerLoading, setVisualizerLoading] = useState(false);
+  const [isAudioFeaturesRestricted, setIsAudioFeaturesRestricted] = useState(false);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -329,12 +330,14 @@ const Music: React.FC = () => {
       const analysis = await spotifyService.getAudioFeaturesAnalysis(trackIds);
       
       setAudioFeatures(analysis.averageFeatures);
+      setIsAudioFeaturesRestricted(analysis.isRestricted);
 
       logger.info('Audio features loaded successfully', {
         trackCount: trackIds.length,
         danceability: analysis.averageFeatures.danceability,
         energy: analysis.averageFeatures.energy,
         valence: analysis.averageFeatures.valence,
+        isRestricted: analysis.isRestricted,
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
@@ -366,6 +369,7 @@ const Music: React.FC = () => {
     setPlaylistsHasMore(false);
     setAudioFeatures(null);
     setVisualizerLoading(false);
+    setIsAudioFeaturesRestricted(false);
   };
 
   const formatDuration = (ms: number): string => {
@@ -795,6 +799,18 @@ const Music: React.FC = () => {
               </div>
             ) : audioFeatures ? (
               <div className='visualizer-content'>
+                {isAudioFeaturesRestricted && (
+                  <div className='restriction-notice'>
+                    <div className='notice-icon'>⚠️</div>
+                    <div className='notice-content'>
+                      <h4>Audio Features Access Restricted</h4>
+                      <p>
+                        Spotify has restricted access to audio features data. 
+                        This visualization shows sample data for demonstration purposes.
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {/* Main Features Radar Chart */}
                 <div className='features-radar'>
                   <h4>Music Characteristics</h4>
