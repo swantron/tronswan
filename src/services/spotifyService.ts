@@ -11,6 +11,7 @@ export interface SpotifyTrack {
   album: {
     id: string;
     name: string;
+    release_date: string;
     images: Array<{
       url: string;
       height: number;
@@ -320,7 +321,7 @@ class SpotifyService {
         response_type: 'code',
         redirect_uri: this.redirectUri,
         scope:
-          'user-top-read user-read-recently-played user-read-currently-playing user-read-playback-state',
+          'user-top-read user-read-recently-played user-read-currently-playing user-read-playback-state user-library-read',
         code_challenge_method: 'S256',
         code_challenge: codeChallenge,
         show_dialog: 'true',
@@ -659,6 +660,42 @@ class SpotifyService {
     });
 
     return features;
+  }
+
+  public async getLikedSongs(limit: number = 20, offset: number = 0): Promise<{
+    tracks: SpotifyTrack[];
+    total: number;
+    hasMore: boolean;
+  }> {
+    logger.info('Fetching liked songs', {
+      limit,
+      offset,
+      timestamp: new Date().toISOString(),
+    });
+
+    const data = await this.makeRequest<{
+      items: Array<{ track: SpotifyTrack; added_at: string }>;
+      total: number;
+      limit: number;
+      offset: number;
+      next: string | null;
+    }>(`/me/tracks?limit=${limit}&offset=${offset}`);
+
+    const tracks = data.items.map(item => item.track);
+    const hasMore = !!data.next;
+
+    logger.info('Liked songs fetched successfully', {
+      trackCount: tracks.length,
+      total: data.total,
+      hasMore,
+      timestamp: new Date().toISOString(),
+    });
+
+    return {
+      tracks,
+      total: data.total,
+      hasMore,
+    };
   }
 
   public isAuthenticated(): boolean {
