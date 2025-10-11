@@ -350,6 +350,38 @@
   color: var(--primary-bg);
 }
 
+.track-actions,
+.playlist-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.play-btn {
+  background: var(--accent-color);
+  color: var(--primary-bg);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.play-btn:hover {
+  background: #e67e22;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(248, 152, 89, 0.3);
+}
+
+.play-btn:active {
+  transform: translateY(0);
+}
+
 .artists-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -11,6 +11,7 @@ import {
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
+import MusicPlayer from './MusicPlayer';
 import '../../styles/Music.css';
 
 const Music: React.FC = () => {
@@ -39,6 +40,7 @@ const Music: React.FC = () => {
   const [playlistsTotal, setPlaylistsTotal] = useState(0);
   const [playlistsOffset, setPlaylistsOffset] = useState(0);
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -335,6 +337,62 @@ const Music: React.FC = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handlePlayTrack = async (track: SpotifyTrack) => {
+    logger.info('Playing track', {
+      trackName: track.name,
+      trackId: track.id,
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
+      const success = await spotifyPlaybackService.playTrack(track.uri);
+      
+      if (success) {
+        setShowMusicPlayer(true);
+        logger.info('Track playback started successfully', {
+          trackName: track.name,
+          timestamp: new Date().toISOString(),
+        });
+      } else {
+        logger.error('Failed to start track playback', {
+          trackName: track.name,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      logger.error('Error starting track playback', { error });
+    }
+  };
+
+  const handlePlayPlaylist = async (playlist: SpotifyPlaylist) => {
+    logger.info('Playing playlist', {
+      playlistName: playlist.name,
+      playlistId: playlist.id,
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
+      const success = await spotifyPlaybackService.playPlaylist(playlist.uri);
+      
+      if (success) {
+        setShowMusicPlayer(true);
+        logger.info('Playlist playback started successfully', {
+          playlistName: playlist.name,
+          timestamp: new Date().toISOString(),
+        });
+      } else {
+        logger.error('Failed to start playlist playback', {
+          playlistName: playlist.name,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      logger.error('Error starting playlist playback', { error });
+    }
+  };
+
   if (loading) {
     return (
       <div className='music-page'>
@@ -528,6 +586,15 @@ const Music: React.FC = () => {
                       Popularity: {track.popularity}
                     </span>
                   </div>
+                  <div className='track-actions'>
+                    <button
+                      className='play-btn'
+                      onClick={() => handlePlayTrack(track)}
+                      aria-label={`Play ${track.name}`}
+                    >
+                      ▶ Play
+                    </button>
+                  </div>
                 </div>
                 <a
                   href={track.external_urls.spotify}
@@ -638,6 +705,15 @@ const Music: React.FC = () => {
                       <span>{formatDuration(track.duration_ms)}</span>
                       <span>{new Date(track.album.release_date).getFullYear()}</span>
                     </div>
+                    <div className='track-actions'>
+                      <button
+                        className='play-btn'
+                        onClick={() => handlePlayTrack(track)}
+                        aria-label={`Play ${track.name}`}
+                      >
+                        ▶ Play
+                      </button>
+                    </div>
                   </div>
                   <a
                     href={track.external_urls.spotify}
@@ -715,6 +791,15 @@ const Music: React.FC = () => {
                         <span className='playlist-collaborative'>Collaborative</span>
                       )}
                     </div>
+                    <div className='playlist-actions'>
+                      <button
+                        className='play-btn'
+                        onClick={() => handlePlayPlaylist(playlist)}
+                        aria-label={`Play ${playlist.name}`}
+                      >
+                        ▶ Play Playlist
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -734,6 +819,11 @@ const Music: React.FC = () => {
           </div>
         )}
       </div>
+
+      <MusicPlayer 
+        isVisible={showMusicPlayer}
+        onClose={() => setShowMusicPlayer(false)}
+      />
     </div>
   );
 };

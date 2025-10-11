@@ -20,6 +20,7 @@ export interface SpotifyTrack {
   };
   duration_ms: number;
   popularity: number;
+  uri: string;
   external_urls: {
     spotify: string;
   };
@@ -74,6 +75,7 @@ export interface SpotifyPlaylist {
   };
   public: boolean;
   collaborative: boolean;
+  uri: string;
   external_urls: {
     spotify: string;
   };
@@ -330,7 +332,7 @@ class SpotifyService {
         response_type: 'code',
         redirect_uri: this.redirectUri,
         scope:
-          'user-top-read user-read-recently-played user-read-currently-playing user-read-playback-state user-library-read',
+          'user-top-read user-read-recently-played user-read-currently-playing user-read-playback-state user-library-read user-modify-playback-state streaming',
         code_challenge_method: 'S256',
         code_challenge: codeChallenge,
         show_dialog: 'true',
