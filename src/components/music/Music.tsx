@@ -346,6 +346,20 @@ const Music: React.FC = () => {
 
     try {
       const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
+      
+      // Initialize player if not already done
+      if (!spotifyPlaybackService.isPlayerReady()) {
+        logger.info('Initializing Spotify player for track playback');
+        const initialized = await spotifyPlaybackService.initialize();
+        if (!initialized) {
+          logger.error('Failed to initialize Spotify player');
+          return;
+        }
+        
+        // Wait a bit for the player to be ready
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
       const success = await spotifyPlaybackService.playTrack(track.uri);
       
       if (success) {
@@ -374,6 +388,20 @@ const Music: React.FC = () => {
 
     try {
       const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
+      
+      // Initialize player if not already done
+      if (!spotifyPlaybackService.isPlayerReady()) {
+        logger.info('Initializing Spotify player for playlist playback');
+        const initialized = await spotifyPlaybackService.initialize();
+        if (!initialized) {
+          logger.error('Failed to initialize Spotify player');
+          return;
+        }
+        
+        // Wait a bit for the player to be ready
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
       const success = await spotifyPlaybackService.playPlaylist(playlist.uri);
       
       if (success) {

@@ -416,10 +416,10 @@ class SpotifyService {
     }
   }
 
-  private async refreshAccessToken(): Promise<boolean> {
+  public async refreshAccessToken(): Promise<{ accessToken: string; refreshToken: string } | null> {
     if (!this.refreshToken) {
       logger.error('No refresh token available');
-      return false;
+      return null;
     }
 
     logger.debug('Refreshing Spotify access token');
@@ -441,7 +441,7 @@ class SpotifyService {
         logger.error('Spotify token refresh failed', {
           status: response.status,
         });
-        return false;
+        return null;
       }
 
       const data = await response.json();
@@ -459,10 +459,18 @@ class SpotifyService {
         timestamp: new Date().toISOString(),
       });
 
-      return true;
+      if (!this.accessToken || !this.refreshToken) {
+        logger.error('Missing tokens after refresh');
+        return null;
+      }
+
+      return {
+        accessToken: this.accessToken,
+        refreshToken: this.refreshToken,
+      };
     } catch (error) {
       logger.error('Spotify token refresh failed', { error });
-      return false;
+      return null;
     }
   }
 
@@ -475,7 +483,8 @@ class SpotifyService {
     if (Date.now() >= this.tokenExpiry - 60000) {
       // Refresh 1 minute before expiry
       logger.debug('Spotify token expired, refreshing');
-      return await this.refreshAccessToken();
+      const result = await this.refreshAccessToken();
+      return result !== null;
     }
 
     return true;
