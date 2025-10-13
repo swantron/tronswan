@@ -629,38 +629,38 @@ const Music: React.FC = () => {
                   />
                 )}
                 <div className='track-info'>
-                  <h4 className='track-name'>{track.name}</h4>
-                  <p className='track-artist'>
+                  <h4 className='track-name' title={track.name}>{track.name}</h4>
+                  <p className='track-artist' title={track.artists.map(a => a.name).join(', ')}>
                     {track.artists.map(a => a.name).join(', ')}
                   </p>
-                  <p className='track-album'>{track.album.name}</p>
-                  <div className='track-meta'>
-                    <span className='track-duration'>
-                      {formatDuration(track.duration_ms)}
-                    </span>
-                    <span className='track-popularity'>
-                      Popularity: {track.popularity}
-                    </span>
-                  </div>
-                  <div className='track-actions'>
-                    <button
-                      className='play-btn'
-                      onClick={() => handlePlayTrack(track)}
-                      aria-label={`Play ${track.name}`}
-                    >
-                      ▶ Play
-                    </button>
-                  </div>
+                  <p className='track-album' title={track.album.name}>{track.album.name}</p>
                 </div>
-                <a
-                  href={track.external_urls.spotify}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='spotify-link'
-                  aria-label={`Open ${track.name} on Spotify`}
-                >
-                  ♪
-                </a>
+                <div className='track-meta'>
+                  <span className='track-duration'>
+                    {formatDuration(track.duration_ms)}
+                  </span>
+                  <span className='track-popularity'>
+                    Popularity: {track.popularity}
+                  </span>
+                </div>
+                <div className='track-actions'>
+                  <button
+                    className='play-btn'
+                    onClick={() => handlePlayTrack(track)}
+                    aria-label={`Play ${track.name}`}
+                  >
+                    ▶ Play
+                  </button>
+                  <a
+                    href={track.external_urls.spotify}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='spotify-link'
+                    aria-label={`Open ${track.name} on Spotify`}
+                  >
+                    ♪
+                  </a>
+                </div>
               </div>
             ))}
           </div>
