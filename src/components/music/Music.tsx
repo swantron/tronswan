@@ -350,14 +350,18 @@ const Music: React.FC = () => {
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for track playback');
+        // Show a brief message to user
+        alert('Setting up music player... This may take a moment.');
+        
         const initialized = await spotifyPlaybackService.initialize();
         if (!initialized) {
           logger.error('Failed to initialize Spotify player');
+          alert('Failed to initialize music player. Please make sure you have Spotify open and try again.');
           return;
         }
         
         // Wait a bit for the player to be ready
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
       }
 
       const success = await spotifyPlaybackService.playTrack(track.uri);
@@ -373,9 +377,11 @@ const Music: React.FC = () => {
           trackName: track.name,
           timestamp: new Date().toISOString(),
         });
+        alert('Failed to start playback. Please make sure you have Spotify open and try again.');
       }
     } catch (error) {
       logger.error('Error starting track playback', { error });
+      alert('Error starting playback. Please try again.');
     }
   };
 
@@ -392,14 +398,18 @@ const Music: React.FC = () => {
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for playlist playback');
+        // Show a brief message to user
+        alert('Setting up music player... This may take a moment.');
+        
         const initialized = await spotifyPlaybackService.initialize();
         if (!initialized) {
           logger.error('Failed to initialize Spotify player');
+          alert('Failed to initialize music player. Please make sure you have Spotify open and try again.');
           return;
         }
         
         // Wait a bit for the player to be ready
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
       }
 
       const success = await spotifyPlaybackService.playPlaylist(playlist.uri);
@@ -415,9 +425,11 @@ const Music: React.FC = () => {
           playlistName: playlist.name,
           timestamp: new Date().toISOString(),
         });
+        alert('Failed to start playback. Please make sure you have Spotify open and try again.');
       }
     } catch (error) {
       logger.error('Error starting playlist playback', { error });
+      alert('Error starting playback. Please try again.');
     }
   };
 
@@ -531,6 +543,22 @@ const Music: React.FC = () => {
           >
             Logout
           </button>
+        </div>
+        
+        <div className='music-help'>
+          <details>
+            <summary>🎵 How to play music on this site</summary>
+            <div className='help-content'>
+              <p><strong>To play music directly on this website:</strong></p>
+              <ol>
+                <li>Make sure you have <strong>Spotify open</strong> on your device (desktop app, mobile app, or web player)</li>
+                <li>Click any "▶ Play" button below</li>
+                <li>The music will transfer to this website and play here instead of Spotify</li>
+                <li>Use the music player controls to pause, skip, or adjust volume</li>
+              </ol>
+              <p><em>Note: You need an active Spotify Premium account for web playback.</em></p>
+            </div>
+          </details>
         </div>
       </div>
 

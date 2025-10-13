@@ -278,6 +278,9 @@ export class SpotifyPlaybackService {
     }
 
     try {
+      // First, ensure our device is active
+      await this.ensureDeviceIsActive();
+
       const url = `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`;
       logger.debug('Making playback request', { url, trackUri });
 
@@ -322,13 +325,71 @@ export class SpotifyPlaybackService {
     }
   }
 
+  private async ensureDeviceIsActive(): Promise<boolean> {
+    if (!this.deviceId || !this.accessToken) {
+      return false;
+    }
+
+    try {
+      // Get current playback state
+      const response = await fetch('https://api.spotify.com/v1/me/player', {
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.device && data.device.id === this.deviceId) {
+          logger.debug('Our device is already active');
+          return true;
+        }
+      }
+
+      // Transfer playback to our device
+      logger.info('Transferring playback to our device', { deviceId: this.deviceId });
+      const transferResponse = await fetch('https://api.spotify.com/v1/me/player', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          device_ids: [this.deviceId],
+          play: false
+        }),
+      });
+
+      if (transferResponse.ok) {
+        logger.info('Successfully transferred playback to our device');
+        return true;
+      } else {
+        logger.warn('Failed to transfer playback to our device', {
+          status: transferResponse.status,
+        });
+        return false;
+      }
+    } catch (error) {
+      logger.error('Error ensuring device is active', { error });
+      return false;
+    }
+  }
+
   public async playPlaylist(playlistUri: string, offset: number = 0): Promise<boolean> {
     if (!this.isReady || !this.deviceId) {
       logger.warn('Spotify player not ready, cannot play playlist');
       return false;
     }
 
+    if (!this.accessToken) {
+      logger.error('No access token available for playlist playback');
+      return false;
+    }
+
     try {
+      // First, ensure our device is active
+      await this.ensureDeviceIsActive();
+
       const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`, {
         method: 'PUT',
         headers: {

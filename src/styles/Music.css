@@ -382,6 +382,72 @@
   transform: translateY(0);
 }
 
+.music-help {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.music-help details {
+  cursor: pointer;
+}
+
+.music-help summary {
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  list-style: none;
+  outline: none;
+}
+
+.music-help summary::-webkit-details-marker {
+  display: none;
+}
+
+.music-help summary::before {
+  content: '▶ ';
+  transition: transform var(--transition-speed) ease;
+}
+
+.music-help details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.help-content {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.help-content p {
+  margin: 0.5rem 0;
+  color: var(--primary-text);
+  line-height: 1.5;
+}
+
+.help-content ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  color: var(--primary-text);
+}
+
+.help-content li {
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.help-content strong {
+  color: var(--accent-color);
+}
+
+.help-content em {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
 .artists-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
