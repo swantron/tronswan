@@ -135,18 +135,66 @@ export class SpotifyPlaybackService {
     }
   }
 
-  private async waitForSpotifySDK(timeout: number = 10000): Promise<void> {
+  private async waitForSpotifySDK(timeout: number = 15000): Promise<void> {
     const startTime = Date.now();
     
+    logger.info('Waiting for Spotify Web Playback SDK to load...');
+    
     while (!window.Spotify && (Date.now() - startTime) < timeout) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
     }
     
     if (window.Spotify) {
       logger.info('Spotify Web Playback SDK loaded successfully');
     } else {
-      logger.error('Spotify Web Playback SDK failed to load within timeout', { timeout });
+      logger.warn('Spotify Web Playback SDK not found, attempting to load manually...');
+      
+      // Try to load the SDK manually as a fallback
+      try {
+        await this.loadSpotifySDKManually();
+        
+        // Wait a bit more for the manual load
+        const retryStartTime = Date.now();
+        while (!window.Spotify && (Date.now() - retryStartTime) < 5000) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        
+        if (window.Spotify) {
+          logger.info('Spotify Web Playback SDK loaded successfully via fallback');
+        } else {
+          throw new Error('Failed to load Spotify SDK even with fallback');
+        }
+      } catch (fallbackError) {
+        logger.error('Spotify Web Playback SDK failed to load', { 
+          timeout,
+          windowSpotify: !!window.Spotify,
+          userAgent: navigator.userAgent,
+          fallbackError: fallbackError instanceof Error ? fallbackError.message : fallbackError,
+          timestamp: new Date().toISOString()
+        });
+        throw new Error('Spotify Web Playback SDK failed to load. Please refresh the page and try again.');
+      }
     }
+  }
+
+  private async loadSpotifySDKManually(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://sdk.scdn.co/spotify-player.js';
+      script.async = true;
+      
+      script.onload = () => {
+        logger.info('Spotify SDK loaded manually');
+        resolve();
+      };
+      
+      script.onerror = (error) => {
+        logger.error('Failed to load Spotify SDK manually', { error });
+        reject(new Error('Failed to load Spotify SDK manually'));
+      };
+      
+      document.head.appendChild(script);
+    });
   }
 
   public async initialize(): Promise<boolean> {
@@ -155,25 +203,21 @@ export class SpotifyPlaybackService {
       return true;
     }
 
-    // Wait for Spotify SDK to load if not available
-    if (!window.Spotify) {
-      logger.warn('Spotify Web Playback SDK not loaded, waiting...');
-      await this.waitForSpotifySDK();
-      
-      if (!window.Spotify) {
-        logger.error('Spotify Web Playback SDK failed to load after waiting');
-        return false;
-      }
-    }
-
-    if (!this.accessToken) {
-      logger.error('No Spotify access token available');
-      return false;
-    }
-
     try {
+      // Wait for Spotify SDK to load if not available
+      if (!window.Spotify) {
+        logger.warn('Spotify Web Playback SDK not loaded, waiting...');
+        await this.waitForSpotifySDK();
+      }
+
+      if (!this.accessToken) {
+        logger.error('No Spotify access token available');
+        throw new Error('No Spotify access token available. Please authenticate first.');
+      }
+
       logger.info('Creating Spotify player instance', {
         hasAccessToken: !!this.accessToken,
+        hasSpotifySDK: !!window.Spotify,
         timestamp: new Date().toISOString(),
       });
 
@@ -198,11 +242,15 @@ export class SpotifyPlaybackService {
         return true;
       } else {
         logger.error('Failed to connect to Spotify Web Playback SDK');
-        return false;
+        throw new Error('Failed to connect to Spotify. Please make sure you have Spotify open and try again.');
       }
     } catch (error) {
-      logger.error('Failed to initialize Spotify Web Playback SDK', { error });
-      return false;
+      logger.error('Failed to initialize Spotify Web Playback SDK', { 
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
+      throw error;
     }
   }
 

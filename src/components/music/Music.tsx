@@ -350,18 +350,21 @@ const Music: React.FC = () => {
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for track playback');
-        // Show a brief message to user
-        alert('Setting up music player... This may take a moment.');
         
-        const initialized = await spotifyPlaybackService.initialize();
-        if (!initialized) {
-          logger.error('Failed to initialize Spotify player');
-          alert('Failed to initialize music player. Please make sure you have Spotify open and try again.');
+        try {
+          const initialized = await spotifyPlaybackService.initialize();
+          if (!initialized) {
+            throw new Error('Failed to initialize Spotify player');
+          }
+          
+          // Wait a bit for the player to be ready
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        } catch (initError) {
+          logger.error('Failed to initialize Spotify player', { error: initError });
+          const errorMessage = initError instanceof Error ? initError.message : 'Unknown error occurred';
+          alert(`Failed to initialize music player: ${errorMessage}\n\nPlease make sure:\n1. You have Spotify open\n2. You're logged into Spotify\n3. Your browser allows popups\n4. Try refreshing the page`);
           return;
         }
-        
-        // Wait a bit for the player to be ready
-        await new Promise(resolve => setTimeout(resolve, 2000));
       }
 
       const success = await spotifyPlaybackService.playTrack(track.uri);
@@ -381,7 +384,8 @@ const Music: React.FC = () => {
       }
     } catch (error) {
       logger.error('Error starting track playback', { error });
-      alert('Error starting playback. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Error starting playback: ${errorMessage}\n\nPlease try again or refresh the page.`);
     }
   };
 
