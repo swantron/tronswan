@@ -706,6 +706,17 @@ export class SpotifyPlaybackService {
       }
 
       const user = await response.json();
+      
+      // Log the full user object to debug
+      logger.info('Full Spotify user profile response', {
+        user: user,
+        keys: Object.keys(user),
+        product: user.product,
+        type: user.type,
+        subscription_level: user.subscription_level,
+        explicit_content: user.explicit_content,
+      });
+      
       const hasPremium = user.product === 'premium';
       
       logger.info('Spotify account status checked', {

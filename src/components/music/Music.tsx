@@ -366,7 +366,12 @@ const Music: React.FC = () => {
       
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
-      if (!premiumCheck.hasPremium) {
+      
+      // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
+      // We'll remove this once we figure out the API response issue
+      const debugBypass = true; // Set to false to re-enable premium check
+      
+      if (!premiumCheck.hasPremium && !debugBypass) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
@@ -383,6 +388,13 @@ const Music: React.FC = () => {
           );
         }
         return;
+      }
+      
+      if (debugBypass) {
+        logger.info('📝 DEBUG: Bypassing premium check for testing', {
+          actualPremiumStatus: premiumCheck.hasPremium,
+          user: premiumCheck.user,
+        });
       }
       
       // Initialize player if not already done
@@ -470,9 +482,13 @@ const Music: React.FC = () => {
     try {
       const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
       
-      // Check Premium status first
+      // Check Premium status first  
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
-      if (!premiumCheck.hasPremium) {
+      
+      // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
+      const debugBypass = true; // Set to false to re-enable premium check
+      
+      if (!premiumCheck.hasPremium && !debugBypass) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
