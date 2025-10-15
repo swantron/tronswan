@@ -957,3 +957,220 @@
     height: 120px;
   }
 }
+
+/* Playlist Tracks Styles */
+.playlist-tracks-container {
+  background: var(--primary-bg);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.playlist-tracks-header {
+  background: linear-gradient(135deg, var(--accent-color), #e67e22);
+  color: var(--primary-bg);
+  padding: 1.5rem;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--primary-bg);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  transition: all var(--transition-speed) ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.playlist-header-info {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.playlist-header-image {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-header-details h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-bg);
+}
+
+.playlist-description {
+  margin: 0 0 1rem 0;
+  opacity: 0.9;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.playlist-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.playlist-tracks-list {
+  padding: 1rem;
+}
+
+.playlist-track-item {
+  display: grid;
+  grid-template-columns: auto 50px 1fr auto;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+  align-items: center;
+}
+
+.playlist-track-item:hover {
+  background: rgba(248, 152, 89, 0.1);
+  transform: translateX(5px);
+}
+
+.track-number {
+  color: var(--primary-text);
+  font-weight: bold;
+  opacity: 0.6;
+  text-align: center;
+  min-width: 30px;
+}
+
+.track-item-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.track-item-info {
+  min-width: 0;
+}
+
+.track-item-name {
+  margin: 0 0 0.25rem 0;
+  color: var(--primary-text);
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-item-artist {
+  margin: 0 0 0.25rem 0;
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-item-album {
+  margin: 0;
+  color: var(--primary-text);
+  font-size: 0.8rem;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.track-duration {
+  color: var(--primary-text);
+  font-size: 0.9rem;
+  opacity: 0.7;
+  min-width: 45px;
+  text-align: right;
+}
+
+.view-tracks-btn {
+  background: rgba(248, 152, 89, 0.2);
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+  margin-right: 0.5rem;
+}
+
+.view-tracks-btn:hover {
+  background: var(--accent-color);
+  color: var(--primary-bg);
+  transform: translateY(-1px);
+}
+
+.playlist-tracks-loading,
+.playlist-tracks-error,
+.no-tracks {
+  text-align: center;
+  padding: 2rem;
+}
+
+.playlist-tracks-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@media (max-width: 768px) {
+  .playlist-header-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .playlist-header-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .playlist-header-details h2 {
+    font-size: 1.5rem;
+  }
+  
+  .playlist-track-item {
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+  }
+  
+  .track-number {
+    display: none;
+  }
+  
+  .track-item-image {
+    width: 40px;
+    height: 40px;
+  }
+}

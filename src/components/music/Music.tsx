@@ -12,6 +12,7 @@ import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
 import MusicPlayer from './MusicPlayer';
+import PlaylistTracks from './PlaylistTracks';
 import '../../styles/Music.css';
 
 const Music: React.FC = () => {
@@ -41,6 +42,7 @@ const Music: React.FC = () => {
   const [playlistsOffset, setPlaylistsOffset] = useState(0);
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -309,6 +311,20 @@ const Music: React.FC = () => {
     }
   }, [playlistsOffset, playlists.length, playlistsHasMore]);
 
+  const handleViewPlaylist = (playlist: SpotifyPlaylist) => {
+    logger.info('Viewing playlist tracks', {
+      playlistName: playlist.name,
+      playlistId: playlist.id,
+      timestamp: new Date().toISOString(),
+    });
+    setSelectedPlaylist(playlist);
+  };
+
+  const handleBackToPlaylists = () => {
+    logger.info('Back to playlists view');
+    setSelectedPlaylist(null);
+  };
+
   const handleLogout = () => {
     logger.info('Spotify logout initiated', {
       timestamp: new Date().toISOString(),
@@ -329,6 +345,7 @@ const Music: React.FC = () => {
     setPlaylistsTotal(0);
     setPlaylistsOffset(0);
     setPlaylistsHasMore(false);
+    setSelectedPlaylist(null);
   };
 
   const formatDuration = (ms: number): string => {
@@ -347,6 +364,18 @@ const Music: React.FC = () => {
     try {
       const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
       
+      // Check Premium status first
+      const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
+      if (!premiumCheck.hasPremium) {
+        alert(
+          '🎵 Spotify Premium Required\n\n' +
+          'To play music directly on this website, you need a Spotify Premium account.\n\n' +
+          'Premium allows for web playback control. You can still browse your music and \n' +
+          'click the Spotify links (♪) to play songs in your Spotify app.'
+        );
+        return;
+      }
+      
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for track playback');
@@ -362,7 +391,16 @@ const Music: React.FC = () => {
         } catch (initError) {
           logger.error('Failed to initialize Spotify player', { error: initError });
           const errorMessage = initError instanceof Error ? initError.message : 'Unknown error occurred';
-          alert(`Failed to initialize music player: ${errorMessage}\n\nPlease make sure:\n1. You have Spotify open\n2. You're logged into Spotify\n3. Your browser allows popups\n4. Try refreshing the page`);
+          alert(
+            `🎵 Music Player Setup Failed\n\n` +
+            `${errorMessage}\n\n` +
+            `Please make sure:\n` +
+            `1. You have Spotify Premium\n` +
+            `2. Spotify is open on another device/tab\n` +
+            `3. You're logged into the same Spotify account\n` +
+            `4. Your browser allows popups\n` +
+            `5. Try refreshing the page`
+          );
           return;
         }
       }
@@ -399,6 +437,18 @@ const Music: React.FC = () => {
     try {
       const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
       
+      // Check Premium status first
+      const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
+      if (!premiumCheck.hasPremium) {
+        alert(
+          '🎵 Spotify Premium Required\n\n' +
+          'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
+          'Premium allows for web playback control. You can still browse your playlists and \n' +
+          'click the Spotify links (♪) to open them in your Spotify app.'
+        );
+        return;
+      }
+      
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for playlist playback');
@@ -408,7 +458,11 @@ const Music: React.FC = () => {
         const initialized = await spotifyPlaybackService.initialize();
         if (!initialized) {
           logger.error('Failed to initialize Spotify player');
-          alert('Failed to initialize music player. Please make sure you have Spotify open and try again.');
+          alert(
+            '🎵 Music Player Setup Failed\n\n' +
+            'Failed to initialize music player.\n\n' +
+            'Please make sure you have Spotify Premium and Spotify is open.'
+          );
           return;
         }
         
@@ -802,7 +856,7 @@ const Music: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'playlists' && (
+        {activeTab === 'playlists' && !selectedPlaylist && (
           <div className='playlists-container'>
             <div className='playlists-header'>
               <h3>Your Playlists</h3>
@@ -853,6 +907,13 @@ const Music: React.FC = () => {
                     </div>
                     <div className='playlist-actions'>
                       <button
+                        className='view-tracks-btn'
+                        onClick={() => handleViewPlaylist(playlist)}
+                        aria-label={`View tracks in ${playlist.name}`}
+                      >
+                        📝 View Tracks
+                      </button>
+                      <button
                         className='play-btn'
                         onClick={() => handlePlayPlaylist(playlist)}
                         aria-label={`Play ${playlist.name}`}
@@ -878,9 +939,17 @@ const Music: React.FC = () => {
             )}
           </div>
         )}
+
+        {activeTab === 'playlists' && selectedPlaylist && (
+          <PlaylistTracks
+            playlist={selectedPlaylist}
+            onPlayTrack={handlePlayTrack}
+            onBack={handleBackToPlaylists}
+          />
+        )}
       </div>
 
-      <MusicPlayer 
+      <MusicPlayer
         isVisible={showMusicPlayer}
         onClose={() => setShowMusicPlayer(false)}
       />

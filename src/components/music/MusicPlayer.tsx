@@ -19,6 +19,11 @@ interface PlaybackState {
     position: number;
   } | null;
   volume: number;
+  queue?: {
+    current_track: any;
+    next_tracks: any[];
+    previous_tracks: any[];
+  };
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
@@ -72,6 +77,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
             image: currentTrack.album.images[0]?.url || '',
             duration: currentTrack.duration_ms,
             position: state.position,
+          },
+          queue: {
+            current_track: state.track_window.current_track,
+            next_tracks: state.track_window.next_tracks || [],
+            previous_tracks: state.track_window.previous_tracks || [],
           },
         }));
       }
@@ -156,20 +166,40 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
     return (playbackState.currentTrack.position / playbackState.currentTrack.duration) * 100;
   };
 
+  const handleProgressClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!playbackState.currentTrack || !spotifyPlaybackService.isPlayerReady()) return;
+    
+    const progressBar = event.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const percentage = clickX / rect.width;
+    const newPosition = Math.floor(percentage * playbackState.currentTrack.duration);
+    
+    try {
+      await spotifyPlaybackService.seek(newPosition);
+      logger.info('Seeked to position', { position: newPosition, percentage });
+    } catch (error) {
+      logger.error('Error seeking to position', { error });
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
-    <div className="music-player-overlay">
+    <div className={`music-player-container ${isVisible ? 'visible' : ''}`}>
       <div className="music-player">
         <div className="music-player-header">
-          <h3>Now Playing</h3>
-          <button 
-            className="close-btn"
-            onClick={onClose}
-            aria-label="Close player"
-          >
-            ×
-          </button>
+          <h3>🎵 Now Playing</h3>
+          <div className="player-header-controls">
+            <button 
+              className="minimize-btn"
+              onClick={onClose}
+              aria-label="Minimize player"
+              title="Minimize player (music will continue playing)"
+            >
+              ➖
+            </button>
+          </div>
         </div>
 
         {isLoading ? (
@@ -211,7 +241,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                 <span className="time current">
                   {formatTime(playbackState.currentTrack.position)}
                 </span>
-                <div className="progress-bar">
+                <div 
+                  className="progress-bar"
+                  onClick={handleProgressClick}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div 
                     className="progress-fill"
                     style={{ width: `${getProgressPercentage()}%` }}
@@ -260,6 +294,29 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                 <span className="volume-value">{playbackState.volume}%</span>
               </div>
             </div>
+
+            {playbackState.queue?.next_tracks && playbackState.queue.next_tracks.length > 0 && (
+              <div className="queue-info">
+                <h5>Coming Up Next:</h5>
+                <div className="next-tracks">
+                  {playbackState.queue.next_tracks.slice(0, 3).map((track, index) => (
+                    <div key={track.id || index} className="next-track">
+                      <img 
+                        src={track.album.images[0]?.url} 
+                        alt={track.album.name}
+                        className="next-track-image"
+                      />
+                      <div className="next-track-info">
+                        <span className="next-track-name">{track.name}</span>
+                        <span className="next-track-artist">
+                          {track.artists.map((a: any) => a.name).join(', ')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

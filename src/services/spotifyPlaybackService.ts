@@ -11,6 +11,7 @@ declare global {
     Spotify: {
       Player: new (options: SpotifyPlayerOptions) => SpotifyPlayer;
     };
+    onSpotifyWebPlaybackSDKReady?: () => void;
   }
 }
 
@@ -139,6 +140,17 @@ export class SpotifyPlaybackService {
     const startTime = Date.now();
     
     logger.info('Waiting for Spotify Web Playback SDK to load...');
+    
+    // Check if SDK is ready via global callback
+    if (typeof window.onSpotifyWebPlaybackSDKReady === 'function') {
+      await new Promise<void>((resolve) => {
+        const originalCallback = window.onSpotifyWebPlaybackSDKReady;
+        window.onSpotifyWebPlaybackSDKReady = () => {
+          if (originalCallback) originalCallback();
+          resolve();
+        };
+      });
+    }
     
     while (!window.Spotify && (Date.now() - startTime) < timeout) {
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -562,6 +574,22 @@ export class SpotifyPlaybackService {
     }
   }
 
+  public async seek(positionMs: number): Promise<boolean> {
+    if (!this.isReady) {
+      logger.warn('Spotify player not ready, cannot seek');
+      return false;
+    }
+
+    try {
+      await this.player!.seek(positionMs);
+      logger.info('Seeked to position', { positionMs });
+      return true;
+    } catch (error) {
+      logger.error('Error seeking to position', { error });
+      return false;
+    }
+  }
+
   public async getCurrentState(): Promise<SpotifyPlaybackState | null> {
     if (!this.isReady) {
       logger.warn('Spotify player not ready, cannot get current state');
@@ -583,6 +611,38 @@ export class SpotifyPlaybackService {
 
   public getDeviceId(): string | null {
     return this.deviceId;
+  }
+
+  public async checkPremiumStatus(): Promise<{ hasPremium: boolean; user?: any; error?: string }> {
+    if (!this.accessToken) {
+      return { hasPremium: false, error: 'No access token available' };
+    }
+
+    try {
+      const response = await fetch('https://api.spotify.com/v1/me', {
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        return { hasPremium: false, error: 'Failed to fetch user profile' };
+      }
+
+      const user = await response.json();
+      const hasPremium = user.product === 'premium';
+      
+      logger.info('Spotify account status checked', {
+        product: user.product,
+        hasPremium,
+        country: user.country,
+      });
+
+      return { hasPremium, user };
+    } catch (error) {
+      logger.error('Error checking premium status', { error });
+      return { hasPremium: false, error: 'Error checking account status' };
+    }
   }
 
   public disconnect(): void {

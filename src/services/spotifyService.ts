@@ -734,6 +734,48 @@ class SpotifyService {
     };
   }
 
+  public async getPlaylistTracks(playlistId: string, limit: number = 50, offset: number = 0): Promise<{
+    tracks: SpotifyTrack[];
+    total: number;
+    hasMore: boolean;
+  }> {
+    logger.info('Fetching playlist tracks', {
+      playlistId,
+      limit,
+      offset,
+      timestamp: new Date().toISOString(),
+    });
+
+    const data = await this.makeRequest<{
+      items: Array<{ track: SpotifyTrack | null; added_at: string }>;
+      total: number;
+      limit: number;
+      offset: number;
+      next: string | null;
+    }>(`/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`);
+
+    // Filter out null tracks (can happen with local files or unavailable tracks)
+    const tracks = data.items
+      .map(item => item.track)
+      .filter((track): track is SpotifyTrack => track !== null);
+    
+    const hasMore = !!data.next;
+
+    logger.info('Playlist tracks fetched successfully', {
+      playlistId,
+      trackCount: tracks.length,
+      total: data.total,
+      hasMore,
+      timestamp: new Date().toISOString(),
+    });
+
+    return {
+      tracks,
+      total: data.total,
+      hasMore,
+    };
+  }
+
   public isAuthenticated(): boolean {
     return !!this.accessToken && Date.now() < this.tokenExpiry;
   }
