@@ -367,12 +367,21 @@ const Music: React.FC = () => {
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
       if (!premiumCheck.hasPremium) {
-        alert(
-          '🎵 Spotify Premium Required\n\n' +
-          'To play music directly on this website, you need a Spotify Premium account.\n\n' +
-          'Premium allows for web playback control. You can still browse your music and \n' +
-          'click the Spotify links (♪) to play songs in your Spotify app.'
-        );
+        if (premiumCheck.error === 'Failed to refresh access token') {
+          alert(
+            '🎵 Session Expired\n\n' +
+            'Your Spotify session has expired. Please refresh the page to log in again.'
+          );
+          // Optionally redirect to re-authenticate
+          window.location.reload();
+        } else {
+          alert(
+            '🎵 Spotify Premium Required\n\n' +
+            'To play music directly on this website, you need a Spotify Premium account.\n\n' +
+            'Premium allows for web playback control. You can still browse your music and \n' +
+            'click the Spotify links (♪) to play songs in your Spotify app.'
+          );
+        }
         return;
       }
       
@@ -440,12 +449,20 @@ const Music: React.FC = () => {
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
       if (!premiumCheck.hasPremium) {
-        alert(
-          '🎵 Spotify Premium Required\n\n' +
-          'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
-          'Premium allows for web playback control. You can still browse your playlists and \n' +
-          'click the Spotify links (♪) to open them in your Spotify app.'
-        );
+        if (premiumCheck.error === 'Failed to refresh access token') {
+          alert(
+            '🎵 Session Expired\n\n' +
+            'Your Spotify session has expired. Please refresh the page to log in again.'
+          );
+          window.location.reload();
+        } else {
+          alert(
+            '🎵 Spotify Premium Required\n\n' +
+            'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
+            'Premium allows for web playback control. You can still browse your playlists and \n' +
+            'click the Spotify links (♪) to open them in your Spotify app.'
+          );
+        }
         return;
       }
       

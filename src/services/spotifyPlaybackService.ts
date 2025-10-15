@@ -619,14 +619,34 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      const response = await fetch('https://api.spotify.com/v1/me', {
+      let response = await fetch('https://api.spotify.com/v1/me', {
         headers: {
           'Authorization': `Bearer ${this.accessToken}`,
         },
       });
 
+      // If token is expired, try to refresh it
+      if (response.status === 401) {
+        logger.info('Access token expired during premium check, attempting to refresh');
+        const refreshed = await this.refreshAccessToken();
+        if (refreshed) {
+          // Retry with new token
+          response = await fetch('https://api.spotify.com/v1/me', {
+            headers: {
+              'Authorization': `Bearer ${this.accessToken}`,
+            },
+          });
+        } else {
+          return { hasPremium: false, error: 'Failed to refresh access token' };
+        }
+      }
+
       if (!response.ok) {
-        return { hasPremium: false, error: 'Failed to fetch user profile' };
+        logger.error('Failed to fetch user profile after token refresh', {
+          status: response.status,
+          statusText: response.statusText,
+        });
+        return { hasPremium: false, error: `Failed to fetch user profile: ${response.status}` };
       }
 
       const user = await response.json();
