@@ -389,14 +389,30 @@ const Music: React.FC = () => {
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for track playback');
         
+        // Show loading message
+        const loadingAlert = alert('🎵 Setting up music player...\n\nThis may take a few seconds. Please wait.');
+        
         try {
           const initialized = await spotifyPlaybackService.initialize();
           if (!initialized) {
             throw new Error('Failed to initialize Spotify player');
           }
           
-          // Wait a bit for the player to be ready
-          await new Promise(resolve => setTimeout(resolve, 3000));
+          // Wait for player to be fully ready with better timeout handling
+          let attempts = 0;
+          const maxAttempts = 15; // 15 seconds max
+          
+          while (!spotifyPlaybackService.isPlayerReady() && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            attempts++;
+            logger.debug(`Waiting for player to be ready, attempt ${attempts}/${maxAttempts}`);
+          }
+          
+          if (!spotifyPlaybackService.isPlayerReady()) {
+            throw new Error('Player initialization timed out. Please make sure Spotify is open on another device.');
+          }
+          
+          logger.info('Spotify player is ready for playback');
         } catch (initError) {
           logger.error('Failed to initialize Spotify player', { error: initError });
           const errorMessage = initError instanceof Error ? initError.message : 'Unknown error occurred';
@@ -404,30 +420,38 @@ const Music: React.FC = () => {
             `🎵 Music Player Setup Failed\n\n` +
             `${errorMessage}\n\n` +
             `Please make sure:\n` +
-            `1. You have Spotify Premium\n` +
-            `2. Spotify is open on another device/tab\n` +
-            `3. You're logged into the same Spotify account\n` +
-            `4. Your browser allows popups\n` +
-            `5. Try refreshing the page`
+            `1. Spotify is open in another browser tab or app\n` +
+            `2. You're logged into the same Spotify account\n` +
+            `3. Your browser allows the Spotify player to load\n` +
+            `4. Try refreshing the page and trying again`
           );
           return;
         }
       }
 
+      logger.info('Attempting to play track', {
+        trackName: track.name,
+        trackUri: track.uri,
+        playerReady: spotifyPlaybackService.isPlayerReady(),
+        deviceId: spotifyPlaybackService.getDeviceId(),
+      });
+      
       const success = await spotifyPlaybackService.playTrack(track.uri);
       
       if (success) {
         setShowMusicPlayer(true);
-        logger.info('Track playback started successfully', {
+        logger.info('✅ Track playback started successfully', {
           trackName: track.name,
           timestamp: new Date().toISOString(),
         });
       } else {
-        logger.error('Failed to start track playback', {
+        logger.error('❌ Failed to start track playback', {
           trackName: track.name,
+          playerReady: spotifyPlaybackService.isPlayerReady(),
+          deviceId: spotifyPlaybackService.getDeviceId(),
           timestamp: new Date().toISOString(),
         });
-        alert('Failed to start playback. Please make sure you have Spotify open and try again.');
+        alert('❌ Failed to start playback.\n\nPlease make sure:\n1. Spotify is open on another device/tab\n2. You\'re logged into the same account\n3. Try refreshing and trying again');
       }
     } catch (error) {
       logger.error('Error starting track playback', { error });
