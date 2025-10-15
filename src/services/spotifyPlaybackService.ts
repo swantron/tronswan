@@ -248,6 +248,9 @@ export class SpotifyPlaybackService {
         volume: 0.5,
       });
 
+      // Wait a moment for the player to be fully initialized
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Set up event listeners
       this.setupEventListeners();
 
@@ -277,59 +280,79 @@ export class SpotifyPlaybackService {
   }
 
   private setupEventListeners(): void {
-    if (!this.player) return;
+    if (!this.player) {
+      logger.error('Cannot setup event listeners - player is null');
+      return;
+    }
 
-    // Ready event
-    this.player.addListener('ready', ({ device_id }) => {
-      logger.info('✅ Spotify player is ready!', { 
-        device_id,
-        timestamp: new Date().toISOString()
+    logger.debug('Setting up Spotify player event listeners');
+
+    try {
+      // Ready event
+      this.player.addListener('ready', ({ device_id }) => {
+        logger.info('✅ Spotify player is ready!', { 
+          device_id,
+          timestamp: new Date().toISOString()
+        });
+        this.deviceId = device_id;
+        this.isReady = true;
       });
-      this.deviceId = device_id;
-      this.isReady = true;
-    });
 
-    // Not Ready event
-    this.player.addListener('not_ready', ({ device_id }) => {
-      logger.warn('❌ Spotify player has gone offline', { 
-        device_id,
-        timestamp: new Date().toISOString()
+      // Not Ready event
+      this.player.addListener('not_ready', ({ device_id }) => {
+        logger.warn('❌ Spotify player has gone offline', { 
+          device_id,
+          timestamp: new Date().toISOString()
+        });
+        this.isReady = false;
       });
-      this.isReady = false;
-    });
 
-    // Initialization Error event
-    this.player.addListener('initialization_error', ({ message }) => {
-      logger.error('Spotify player initialization error', { message });
-    });
-
-    // Authentication Error event
-    this.player.addListener('authentication_error', ({ message }) => {
-      logger.error('Spotify player authentication error', { message });
-    });
-
-    // Account Error event
-    this.player.addListener('account_error', ({ message }) => {
-      logger.error('Spotify player account error', { message });
-    });
-
-    // Playback Status Update event
-    this.player.addListener('playback_status_update', (state) => {
-      logger.debug('Spotify playback status update', { 
-        paused: state.paused,
-        position: state.position,
-        track: state.track_window?.current_track?.name 
+      // Initialization Error event
+      this.player.addListener('initialization_error', ({ message }) => {
+        logger.error('Spotify player initialization error', { message });
       });
-    });
 
-    // Player State Changed event
-    this.player.addListener('player_state_changed', (state) => {
-      logger.debug('Spotify player state changed', {
-        paused: state.paused,
-        track: state.track_window?.current_track?.name,
-        position: state.position
+      // Authentication Error event
+      this.player.addListener('authentication_error', ({ message }) => {
+        logger.error('Spotify player authentication error', { message });
       });
-    });
+
+      // Account Error event
+      this.player.addListener('account_error', ({ message }) => {
+        logger.error('Spotify player account error', { message });
+      });
+
+      // Playback Status Update event - wrap in try/catch
+      try {
+        this.player.addListener('playback_status_update', (state) => {
+          logger.debug('Spotify playback status update', { 
+            paused: state?.paused,
+            position: state?.position,
+            track: state?.track_window?.current_track?.name 
+          });
+        });
+      } catch (error) {
+        logger.warn('Failed to add playback_status_update listener', { error });
+      }
+
+      // Player State Changed event - wrap in try/catch
+      try {
+        this.player.addListener('player_state_changed', (state) => {
+          logger.debug('Spotify player state changed', {
+            paused: state?.paused,
+            track: state?.track_window?.current_track?.name,
+            position: state?.position
+          });
+        });
+      } catch (error) {
+        logger.warn('Failed to add player_state_changed listener', { error });
+      }
+
+      logger.debug('Event listeners setup completed');
+    } catch (error) {
+      logger.error('Error setting up event listeners', { error });
+      throw error;
+    }
   }
 
   public async playTrack(trackUri: string): Promise<boolean> {
@@ -709,7 +732,7 @@ export class SpotifyPlaybackService {
       
       // Log the full user object to debug
       logger.info('Full Spotify user profile response', {
-        user: user,
+        userStringified: JSON.stringify(user, null, 2),
         keys: Object.keys(user),
         product: user.product,
         type: user.type,
