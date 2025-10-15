@@ -578,16 +578,19 @@ const Music: React.FC = () => {
     return (
       <div className='music-page'>
         <SEO
-          title='Music - Spotify Integration | Tron Swan'
-          description='Connect your Spotify account to view your music taste, top tracks, and recently played songs.'
-          keywords='spotify, music, authentication, music taste, top tracks'
+          title='Enhanced Spotify Player | Tron Swan'
+          description='Experience a better Spotify player with enhanced controls, personal analytics, and superior interface for your music.'
+          keywords='spotify player, enhanced music player, better spotify, music analytics, personal music dashboard'
           url='/music'
         />
         <div className='music-auth'>
-          <h1>🎵 Music Dashboard</h1>
+          <h1>🎵 A Better Spotify Player</h1>
+          <p className='auth-tagline'>
+            Experience your music like never before with our enhanced Spotify player
+          </p>
           <p>
-            Connect your Spotify account to view your music taste and listening
-            history.
+            Connect your Spotify account to access <strong>your personal</strong> music taste, 
+            top tracks, playlists, and listening history with superior controls and interface.
           </p>
           {authError && (
             <div
@@ -613,9 +616,9 @@ const Music: React.FC = () => {
   return (
     <div className='music-page'>
       <SEO
-        title='Music - Spotify Integration | Tron Swan'
-        description={`${user?.display_name}'s music taste on Spotify. View top tracks, artists, and recently played songs.`}
-        keywords='spotify, music, top tracks, artists, recently played, music taste'
+        title='Enhanced Spotify Player | Tron Swan'
+        description={`${user?.display_name}'s enhanced Spotify player with superior controls and personal music analytics.`}
+        keywords='enhanced spotify player, better spotify, music analytics, personal music dashboard, spotify alternative'
         url='/music'
       />
 
@@ -629,7 +632,8 @@ const Music: React.FC = () => {
             />
           )}
           <div>
-            <h1>🎵 {user?.display_name}&apos;s Music</h1>
+            <h1>🎵 {user?.display_name}&apos;s Enhanced Music Player</h1>
+            <p className='user-subtitle'>A better way to experience your Spotify</p>
           </div>
         </div>
 
@@ -662,14 +666,23 @@ const Music: React.FC = () => {
         
         <div className='music-help'>
           <details>
-            <summary>🎵 How to play music on this site</summary>
+            <summary>🎵 Why this is better than Spotify</summary>
             <div className='help-content'>
-              <p><strong>To play music directly on this website:</strong></p>
+              <p><strong>Enhanced Features:</strong></p>
+              <ul>
+                <li>🎯 <strong>Better Organization:</strong> View all your music in one clean interface</li>
+                <li>📊 <strong>Personal Analytics:</strong> See your top tracks, artists, and listening patterns</li>
+                <li>🎵 <strong>Instant Playback:</strong> Play any song with one click</li>
+                <li>📱 <strong>Responsive Design:</strong> Works perfectly on any device</li>
+                <li>🔍 <strong>Advanced Search:</strong> Find your music faster than ever</li>
+              </ul>
+              <p><strong>How to use your enhanced player:</strong></p>
               <ol>
-                <li>Make sure you have <strong>Spotify open</strong> on your device (desktop app, mobile app, or web player)</li>
                 <li>Click any "▶ Play" button below</li>
-                <li>The music will transfer to this website and play here instead of Spotify</li>
-                <li>Use the music player controls to pause, skip, or adjust volume</li>
+                <li>You'll be prompted with a Spotify login page (if not already logged in)</li>
+                <li>Make sure you have <strong>Spotify open</strong> on another device (desktop app, mobile app, or web player)</li>
+                <li>Your music will transfer to this enhanced player</li>
+                <li>Enjoy superior controls and interface</li>
               </ol>
               <p><em>Note: You need an active Spotify Premium account for web playback.</em></p>
             </div>

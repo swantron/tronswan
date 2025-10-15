@@ -95,7 +95,6 @@ export class SpotifyPlaybackService {
       if (storedTokens) {
         const { accessToken } = JSON.parse(storedTokens);
         this.accessToken = accessToken;
-        logger.debug('Loaded Spotify access token from storage');
       } else {
         logger.warn('No Spotify tokens found in storage');
       }
@@ -227,20 +226,13 @@ export class SpotifyPlaybackService {
         throw new Error('No Spotify access token available. Please authenticate first.');
       }
 
-      logger.info('Creating Spotify player instance', {
-        hasAccessToken: !!this.accessToken,
-        hasSpotifySDK: !!window.Spotify,
-        userAgent: navigator.userAgent,
-        timestamp: new Date().toISOString(),
-      });
+      logger.info('Creating Spotify player instance');
 
       this.player = new window.Spotify.Player({
         name: 'Tron Swan Music Player',
         getOAuthToken: (cb) => {
-          logger.debug('OAuth token requested by Spotify player');
           if (this.accessToken) {
             cb(this.accessToken);
-            logger.debug('OAuth token provided to Spotify player');
           } else {
             logger.error('No access token available when requested by player');
           }
@@ -258,7 +250,6 @@ export class SpotifyPlaybackService {
       logger.info('Connecting to Spotify Web Playback SDK');
       const success = await this.player.connect();
       
-      logger.info('Spotify player connect result', { success });
       
       if (success) {
         logger.info('Spotify Web Playback SDK connected successfully - waiting for ready event');
@@ -285,7 +276,6 @@ export class SpotifyPlaybackService {
       return;
     }
 
-    logger.debug('Setting up Spotify player event listeners');
 
     try {
       // Ready event
@@ -325,11 +315,6 @@ export class SpotifyPlaybackService {
       // Playback Status Update event - wrap in try/catch
       try {
         this.player.addListener('playback_status_update', (state) => {
-          logger.debug('Spotify playback status update', { 
-            paused: state?.paused,
-            position: state?.position,
-            track: state?.track_window?.current_track?.name 
-          });
         });
       } catch (error) {
         logger.warn('Failed to add playback_status_update listener', { error });
@@ -338,17 +323,11 @@ export class SpotifyPlaybackService {
       // Player State Changed event - wrap in try/catch
       try {
         this.player.addListener('player_state_changed', (state) => {
-          logger.debug('Spotify player state changed', {
-            paused: state?.paused,
-            track: state?.track_window?.current_track?.name,
-            position: state?.position
-          });
         });
       } catch (error) {
         logger.warn('Failed to add player_state_changed listener', { error });
       }
 
-      logger.debug('Event listeners setup completed');
     } catch (error) {
       logger.error('Error setting up event listeners', { error });
       throw error;
@@ -381,7 +360,6 @@ export class SpotifyPlaybackService {
       await this.ensureDeviceIsActive();
 
       const url = `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`;
-      logger.debug('Making playback request', { url, trackUri });
 
       const response = await fetch(url, {
         method: 'PUT',
@@ -446,7 +424,6 @@ export class SpotifyPlaybackService {
 
     try {
       // Get current playback state
-      logger.debug('Checking current playback state');
       const response = await fetch('https://api.spotify.com/v1/me/player', {
         headers: {
           'Authorization': `Bearer ${this.accessToken}`,
@@ -455,20 +432,12 @@ export class SpotifyPlaybackService {
 
       if (response.ok) {
         const data = await response.json();
-        logger.debug('Current playback state', {
-          hasDevice: !!data.device,
-          deviceId: data.device?.id,
-          ourDeviceId: this.deviceId,
-          isOurDevice: data.device?.id === this.deviceId,
-        });
         
         if (data.device && data.device.id === this.deviceId) {
-          logger.debug('✅ Our device is already the active device');
           return true;
         }
       } else if (response.status === 204) {
         // No active device - this is normal, we'll transfer to ours
-        logger.debug('No currently active device found');
       } else {
         logger.warn('Failed to get current playback state', { 
           status: response.status,
@@ -730,15 +699,6 @@ export class SpotifyPlaybackService {
 
       const user = await response.json();
       
-      // Log the full user object to debug
-      logger.info('Full Spotify user profile response', {
-        userStringified: JSON.stringify(user, null, 2),
-        keys: Object.keys(user),
-        product: user.product,
-        type: user.type,
-        subscription_level: user.subscription_level,
-        explicit_content: user.explicit_content,
-      });
       
       const hasPremium = user.product === 'premium';
       

@@ -43,6 +43,14 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.auth-tagline {
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .music-auth p {
   font-size: clamp(1rem, 3vw, 1.2rem);
   color: var(--primary-text);
@@ -113,6 +121,14 @@
   margin: 0;
   color: var(--primary-text);
   font-weight: bold;
+}
+
+.user-subtitle {
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  margin: 0.25rem 0 0 0;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 .user-stats {
