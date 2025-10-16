@@ -167,17 +167,6 @@
   flex-wrap: wrap;
 }
 
-.music-source-toggle {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.music-source-toggle label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--accent-color);
-}
 
 .time-range-selector {
   display: flex;
