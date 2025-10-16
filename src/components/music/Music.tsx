@@ -697,6 +697,13 @@ const Music: React.FC = () => {
           <p className='auth-tagline'>
             Experience your music like never before with our enhanced Spotify player
           </p>
+          
+          <div className='premium-notice'>
+            <h3>🔒 Spotify Premium Required for Playback</h3>
+            <p>This enhanced player requires Spotify Premium to play music directly on the website. 
+            You can still explore and discover music without Premium!</p>
+          </div>
+          
           <p>
             Connect your Spotify account to access <strong>your personal</strong> music taste, 
             top tracks, playlists, and listening history with superior controls and interface.
@@ -792,25 +799,54 @@ const Music: React.FC = () => {
         
         <div className='music-help'>
           <details>
-            <summary>🎵 Why this is better than Spotify</summary>
+            <summary>🎵 How this enhanced music player works</summary>
             <div className='help-content'>
-              <p><strong>Enhanced Features:</strong></p>
-              <ul>
-                <li>🎯 <strong>Better Organization:</strong> View all your music in one clean interface</li>
-                <li>📊 <strong>Personal Analytics:</strong> See your top tracks, artists, and listening patterns</li>
-                <li>🎵 <strong>Instant Playback:</strong> Play any song with one click</li>
-                <li>📱 <strong>Responsive Design:</strong> Works perfectly on any device</li>
-                <li>🔍 <strong>Advanced Search:</strong> Find your music faster than ever</li>
-              </ul>
-              <p><strong>How to use your enhanced player:</strong></p>
-              <ol>
-                <li>Click any "▶ Play" button below</li>
-                <li>You'll be prompted with a Spotify login page (if not already logged in)</li>
-                <li>Make sure you have <strong>Spotify open</strong> on another device (desktop app, mobile app, or web player)</li>
-                <li>Your music will transfer to this enhanced player</li>
-                <li>Enjoy superior controls and interface</li>
-              </ol>
-              <p><em>Note: You need an active Spotify Premium account for web playback.</em></p>
+              <div className='premium-requirement'>
+                <h4>🔒 Spotify Premium Required for Playback</h4>
+                <p><strong>To play music directly on this website, you need Spotify Premium.</strong></p>
+                <p>This is a requirement from Spotify, not our limitation. Here's what you can do:</p>
+              </div>
+
+              <div className='user-experience'>
+                <h4>🎵 What You Can Do:</h4>
+                <ul>
+                  <li>✅ <strong>Browse Music:</strong> Explore {musicSource === 'user' ? 'your' : 'Tron Swan\'s'} playlists, top tracks, and artists</li>
+                  <li>✅ <strong>Discover New Music:</strong> See what {musicSource === 'user' ? 'you\'ve' : 'Tron Swan has'} been listening to</li>
+                  <li>✅ <strong>Click Spotify Links:</strong> Use the ♪ buttons to open songs in your Spotify app</li>
+                  {musicSource === 'user' ? (
+                    <li>✅ <strong>Play Your Music:</strong> If you have Premium, click ▶ to play directly here</li>
+                  ) : (
+                    <li>✅ <strong>Play Tron Swan's Music:</strong> If you have Premium, click ▶ to play his music here</li>
+                  )}
+                </ul>
+              </div>
+
+              <div className='premium-benefits'>
+                <h4>💎 With Spotify Premium:</h4>
+                <ul>
+                  <li>🎯 <strong>Enhanced Player:</strong> Superior interface and controls</li>
+                  <li>📊 <strong>Personal Analytics:</strong> See your top tracks, artists, and listening patterns</li>
+                  <li>🎵 <strong>Instant Playback:</strong> Play any song with one click</li>
+                  <li>📱 <strong>Responsive Design:</strong> Works perfectly on any device</li>
+                  <li>🔄 <strong>Seamless Switching:</strong> Toggle between your music and Tron Swan's music</li>
+                </ul>
+              </div>
+
+              <div className='how-to-play'>
+                <h4>▶ How to Play Music (Premium Users):</h4>
+                <ol>
+                  <li>Click any "▶ Play" button below</li>
+                  <li>You'll be prompted with a Spotify login page (if not already logged in)</li>
+                  <li>Make sure you have <strong>Spotify open</strong> on another device (desktop app, mobile app, or web player)</li>
+                  <li>Your music will transfer to this enhanced player</li>
+                  <li>Enjoy superior controls and interface</li>
+                </ol>
+              </div>
+
+              <div className='no-premium'>
+                <h4>🆓 Without Premium:</h4>
+                <p>You can still explore and discover music, but playback will redirect you to Spotify. Consider upgrading to Premium for the full enhanced experience!</p>
+              </div>
             </div>
           </details>
         </div>
