@@ -634,14 +634,6 @@ const Music: React.FC = () => {
           <h1>🎵 Non-janky Spotify</h1>
           <p className='auth-tagline'>Spotify, but not janky</p>
 
-          <div className='premium-notice'>
-            <p>
-              <strong>🔒 Spotify Premium Required for Playback</strong>
-              <br />
-              You can still explore and discover music without Premium!
-            </p>
-          </div>
-
           <p>
             Connect your Spotify account to access{' '}
             <strong>your personal</strong> music taste, top tracks, playlists,
