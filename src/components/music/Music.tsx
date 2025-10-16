@@ -688,31 +688,33 @@ const Music: React.FC = () => {
         </div>
 
         <div className='music-controls'>
-          <div className='time-range-selector'>
-            <label htmlFor='time-range'>Time Range:</label>
-            <select
-              id='time-range'
-              value={timeRange}
-              onChange={e =>
-                handleTimeRangeChange(
-                  e.target.value as 'short_term' | 'medium_term' | 'long_term'
-                )
-              }
-            >
-              <option value='short_term'>Last 4 weeks</option>
-              <option value='medium_term'>Last 6 months</option>
-              <option value='long_term'>All time</option>
-            </select>
-          </div>
+          <div className='time-range-block'>
+            <div className='time-range-selector'>
+              <label htmlFor='time-range'>Time Range:</label>
+              <select
+                id='time-range'
+                value={timeRange}
+                onChange={e =>
+                  handleTimeRangeChange(
+                    e.target.value as 'short_term' | 'medium_term' | 'long_term'
+                  )
+                }
+              >
+                <option value='short_term'>Last 4 weeks</option>
+                <option value='medium_term'>Last 6 months</option>
+                <option value='long_term'>All time</option>
+              </select>
+            </div>
 
-          <div className='logout-container'>
-            <button
-              className='logout-btn'
-              onClick={handleLogout}
-              aria-label='Logout from Spotify'
-            >
-              Logout
-            </button>
+            <div className='logout-container'>
+              <button
+                className='logout-btn'
+                onClick={handleLogout}
+                aria-label='Logout from Spotify'
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
 
