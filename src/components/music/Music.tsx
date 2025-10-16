@@ -45,6 +45,7 @@ const Music: React.FC = () => {
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] =
     useState<SpotifyPlaylist | null>(null);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -712,55 +713,74 @@ const Music: React.FC = () => {
         </div>
 
         <div className='music-help'>
-          <details>
-            <summary>🎵 How this enhanced music player works</summary>
-            <div className='help-content'>
-              <div className='help-section'>
-                <h4>🔒 Spotify Premium Required</h4>
-                <p>
-                  To play music directly on this website, you need Spotify
-                  Premium. This is a requirement from Spotify, not our
-                  limitation.
-                </p>
-              </div>
+          <button 
+            className='help-button'
+            onClick={() => setShowHelpModal(true)}
+          >
+            🎵 How this enhanced music player works
+          </button>
+        </div>
 
-              <div className='help-section'>
-                <h4>What You Can Do</h4>
-                <ul>
-                  <li>Browse your playlists, top tracks, and artists</li>
-                  <li>Discover new music through your listening history</li>
-                  <li>Click the ♪ buttons to open songs in your Spotify app</li>
-                  <li>If you have Premium, click ▶ to play directly here</li>
-                </ul>
+        {showHelpModal && (
+          <div className='help-modal-overlay' onClick={() => setShowHelpModal(false)}>
+            <div className='help-modal' onClick={(e) => e.stopPropagation()}>
+              <div className='help-modal-header'>
+                <h3>🎵 How this enhanced music player works</h3>
+                <button 
+                  className='help-modal-close'
+                  onClick={() => setShowHelpModal(false)}
+                >
+                  ✕
+                </button>
               </div>
+              <div className='help-modal-content'>
+                <div className='help-section'>
+                  <h4>🔒 Spotify Premium Required</h4>
+                  <p>
+                    To play music directly on this website, you need Spotify
+                    Premium. This is a requirement from Spotify, not our
+                    limitation.
+                  </p>
+                </div>
 
-              <div className='help-section'>
-                <h4>How to Play Music (Premium Users)</h4>
-                <ol>
-                  <li>Click any "▶ Play" button below</li>
-                  <li>
-                    You'll be prompted with a Spotify login page (if not already
-                    logged in)
-                  </li>
-                  <li>
-                    Make sure you have <strong>Spotify open</strong> on another
-                    device
-                  </li>
-                  <li>Your music will transfer to this enhanced player</li>
-                </ol>
-              </div>
+                <div className='help-section'>
+                  <h4>What You Can Do</h4>
+                  <ul>
+                    <li>Browse your playlists, top tracks, and artists</li>
+                    <li>Discover new music through your listening history</li>
+                    <li>Click the ♪ buttons to open songs in your Spotify app</li>
+                    <li>If you have Premium, click ▶ to play directly here</li>
+                  </ul>
+                </div>
 
-              <div className='help-section'>
-                <h4>Without Premium</h4>
-                <p>
-                  You can still explore and discover music, but playback will
-                  redirect you to Spotify. Consider upgrading to Premium for the
-                  full enhanced experience!
-                </p>
+                <div className='help-section'>
+                  <h4>How to Play Music (Premium Users)</h4>
+                  <ol>
+                    <li>Click any "▶ Play" button below</li>
+                    <li>
+                      You'll be prompted with a Spotify login page (if not already
+                      logged in)
+                    </li>
+                    <li>
+                      Make sure you have <strong>Spotify open</strong> on another
+                      device
+                    </li>
+                    <li>Your music will transfer to this enhanced player</li>
+                  </ol>
+                </div>
+
+                <div className='help-section'>
+                  <h4>Without Premium</h4>
+                  <p>
+                    You can still explore and discover music, but playback will
+                    redirect you to Spotify. Consider upgrading to Premium for the
+                    full enhanced experience!
+                  </p>
+                </div>
               </div>
             </div>
-          </details>
-        </div>
+          </div>
+        )}
       </div>
 
       {currentlyPlaying && (
