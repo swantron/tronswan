@@ -639,7 +639,9 @@ const Music: React.FC = () => {
             Connect your Spotify account to access your top tracks, playlists,
             and listening history with better controls and a cleaner interface.
           </p>
-          <p><strong>Requires Spotify Premium.</strong></p>
+          <p>
+            <strong>Requires Spotify Premium.</strong>
+          </p>
           {authError && (
             <div
               className='auth-error'
@@ -713,7 +715,7 @@ const Music: React.FC = () => {
         </div>
 
         <div className='music-help'>
-          <button 
+          <button
             className='help-button'
             onClick={() => setShowHelpModal(true)}
           >
@@ -722,11 +724,14 @@ const Music: React.FC = () => {
         </div>
 
         {showHelpModal && (
-          <div className='help-modal-overlay' onClick={() => setShowHelpModal(false)}>
-            <div className='help-modal' onClick={(e) => e.stopPropagation()}>
+          <div
+            className='help-modal-overlay'
+            onClick={() => setShowHelpModal(false)}
+          >
+            <div className='help-modal' onClick={e => e.stopPropagation()}>
               <div className='help-modal-header'>
                 <h3>🎵 How this enhanced music player works</h3>
-                <button 
+                <button
                   className='help-modal-close'
                   onClick={() => setShowHelpModal(false)}
                 >
@@ -746,9 +751,13 @@ const Music: React.FC = () => {
                 <div className='help-section'>
                   <h4>What You Can Do (After Login)</h4>
                   <ul>
-                    <li>Browse your personal playlists, top tracks, and artists</li>
+                    <li>
+                      Browse your personal playlists, top tracks, and artists
+                    </li>
                     <li>Discover new music through your listening history</li>
-                    <li>Click the ♪ buttons to open songs in your Spotify app</li>
+                    <li>
+                      Click the ♪ buttons to open songs in your Spotify app
+                    </li>
                     <li>If you have Premium, click ▶ to play directly here</li>
                   </ul>
                 </div>
@@ -758,12 +767,12 @@ const Music: React.FC = () => {
                   <ol>
                     <li>Click any "▶ Play" button below</li>
                     <li>
-                      You'll be prompted with a Spotify login page (if not already
-                      logged in)
+                      You'll be prompted with a Spotify login page (if not
+                      already logged in)
                     </li>
                     <li>
-                      Make sure you have <strong>Spotify open</strong> on another
-                      device
+                      Make sure you have <strong>Spotify open</strong> on
+                      another device
                     </li>
                     <li>Your music will transfer to this enhanced player</li>
                   </ol>
@@ -772,9 +781,10 @@ const Music: React.FC = () => {
                 <div className='help-section'>
                   <h4>Login Required</h4>
                   <p>
-                    You need to log in with your Spotify account to access your music data. 
-                    Once logged in, you can browse your playlists, top tracks, and artists. 
-                    Premium is only required for direct playback on this site.
+                    You need to log in with your Spotify account to access your
+                    music data. Once logged in, you can browse your playlists,
+                    top tracks, and artists. Premium is only required for direct
+                    playback on this site.
                   </p>
                 </div>
               </div>
