@@ -8,6 +8,13 @@ import {
   SpotifyUser,
   SpotifyPlaylist,
 } from '../../services/spotifyService';
+import {
+  tronSwanSpotifyService,
+  SpotifyTrack as TronSpotifyTrack,
+  SpotifyArtist as TronSpotifyArtist,
+  SpotifyUser as TronSpotifyUser,
+  SpotifyPlaylist as TronSpotifyPlaylist,
+} from '../../services/tronSwanSpotifyService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
@@ -43,6 +50,86 @@ const Music: React.FC = () => {
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null);
+  const [musicSource, setMusicSource] = useState<'user' | 'tron'>('user');
+  
+  // Tron Swan's data
+  const [tronUser, setTronUser] = useState<TronSpotifyUser | null>(null);
+  const [tronTopTracks, setTronTopTracks] = useState<TronSpotifyTrack[]>([]);
+  const [tronTopArtists, setTronTopArtists] = useState<TronSpotifyArtist[]>([]);
+  const [tronRecentlyPlayed, setTronRecentlyPlayed] = useState<TronSpotifyTrack[]>([]);
+  const [tronCurrentlyPlaying, setTronCurrentlyPlaying] = useState<TronSpotifyTrack | null>(null);
+  const [tronLikedSongs, setTronLikedSongs] = useState<TronSpotifyTrack[]>([]);
+  const [tronLikedSongsTotal, setTronLikedSongsTotal] = useState(0);
+  const [tronLikedSongsOffset, setTronLikedSongsOffset] = useState(0);
+  const [tronLikedSongsHasMore, setTronLikedSongsHasMore] = useState(false);
+  const [tronPlaylists, setTronPlaylists] = useState<TronSpotifyPlaylist[]>([]);
+  const [tronPlaylistsTotal, setTronPlaylistsTotal] = useState(0);
+  const [tronPlaylistsOffset, setTronPlaylistsOffset] = useState(0);
+  const [tronPlaylistsHasMore, setTronPlaylistsHasMore] = useState(false);
+
+  const loadTronSwanData = useCallback(async () => {
+    logger.info('Loading Tron Swan Spotify data', {
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      setLoading(true);
+
+      logger.info('Starting parallel API calls for Tron Swan data');
+      const [userData, tracks, artists, recent, current, likedData, playlistsData] = await Promise.all([
+        tronSwanSpotifyService.getUserProfile(),
+        tronSwanSpotifyService.getTopTracks(timeRange),
+        tronSwanSpotifyService.getTopArtists(timeRange),
+        tronSwanSpotifyService.getRecentlyPlayed(),
+        tronSwanSpotifyService.getCurrentlyPlaying(),
+        tronSwanSpotifyService.getLikedSongs(20, 0),
+        tronSwanSpotifyService.getPlaylists(20, 0),
+      ]);
+
+      logger.info('All Tron Swan API calls completed successfully', {
+        hasUserData: !!userData,
+        trackCount: tracks?.length || 0,
+        artistCount: artists?.length || 0,
+        recentCount: recent?.length || 0,
+        hasCurrentTrack: !!current,
+      });
+
+      setTronUser(userData);
+      setTronTopTracks(tracks || []);
+      setTronTopArtists(artists || []);
+      setTronRecentlyPlayed(recent || []);
+      setTronCurrentlyPlaying(current);
+      setTronLikedSongs(likedData?.tracks || []);
+      setTronLikedSongsTotal(likedData?.total || 0);
+      setTronLikedSongsHasMore(likedData?.hasMore || false);
+      setTronLikedSongsOffset(0);
+      setTronPlaylists(playlistsData?.playlists || []);
+      setTronPlaylistsTotal(playlistsData?.total || 0);
+      setTronPlaylistsHasMore(playlistsData?.hasMore || false);
+      setTronPlaylistsOffset(0);
+
+      logger.info('Tron Swan Spotify data loaded successfully', {
+        userId: userData?.id,
+        trackCount: tracks?.length || 0,
+        artistCount: artists?.length || 0,
+        recentCount: recent?.length || 0,
+        likedCount: likedData?.tracks?.length || 0,
+        likedTotal: likedData?.total || 0,
+        playlistCount: playlistsData?.playlists?.length || 0,
+        playlistTotal: playlistsData?.total || 0,
+        hasCurrentTrack: !!current,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error('Failed to load Tron Swan Spotify data', { 
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      throw error; // Re-throw so calling code can handle it
+    } finally {
+      setLoading(false);
+    }
+  }, [timeRange]);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -240,6 +327,28 @@ const Music: React.FC = () => {
     });
 
     setActiveTab(tab);
+  };
+
+  const handleMusicSourceChange = async (source: 'user' | 'tron') => {
+    logger.info('Music source changed', {
+      from: musicSource,
+      to: source,
+      timestamp: new Date().toISOString(),
+    });
+
+    setMusicSource(source);
+    
+    if (source === 'tron') {
+      // Load Tron Swan's data if not already loaded
+      if (!tronUser) {
+        try {
+          await loadTronSwanData();
+        } catch (error) {
+          logger.error('Failed to load Tron Swan data', { error });
+          // You might want to show an error message to the user here
+        }
+      }
+    }
   };
 
   const handleLogin = async () => {
@@ -624,20 +733,37 @@ const Music: React.FC = () => {
 
       <div className='music-header'>
         <div className='music-user-info'>
-          {user?.images?.[0] && (
+          {(musicSource === 'user' ? user?.images?.[0] : tronUser?.images?.[0]) && (
             <img
-              src={user.images[0].url}
-              alt={user.display_name}
+              src={musicSource === 'user' ? user?.images?.[0]?.url : tronUser?.images?.[0]?.url}
+              alt={musicSource === 'user' ? user?.display_name : tronUser?.display_name}
               className='user-avatar'
             />
           )}
           <div>
-            <h1>🎵 {user?.display_name}&apos;s Enhanced Music Player</h1>
-            <p className='user-subtitle'>A better way to experience your Spotify</p>
+            <h1>🎵 {(musicSource === 'user' ? user?.display_name : tronUser?.display_name || 'Tron Swan')}&apos;s Enhanced Music Player</h1>
+            <p className='user-subtitle'>
+              {musicSource === 'user' 
+                ? 'A better way to experience your Spotify' 
+                : 'Discover Tron Swan\'s music taste and playlists'
+              }
+            </p>
           </div>
         </div>
 
         <div className='music-controls'>
+          <div className='music-source-toggle'>
+            <label htmlFor='music-source'>Music Source:</label>
+            <select
+              id='music-source'
+              value={musicSource}
+              onChange={e => handleMusicSourceChange(e.target.value as 'user' | 'tron')}
+            >
+              <option value='user'>Your Music</option>
+              <option value='tron'>Tron Swan's Music</option>
+            </select>
+          </div>
+
           <div className='time-range-selector'>
             <label htmlFor='time-range'>Time Range:</label>
             <select
@@ -690,21 +816,24 @@ const Music: React.FC = () => {
         </div>
       </div>
 
-      {currentlyPlaying && (
+      {(musicSource === 'user' ? currentlyPlaying : tronCurrentlyPlaying) && (
         <div className='currently-playing'>
           <h3>🎧 Currently Playing</h3>
           <div className='current-track'>
-            {currentlyPlaying.album.images[0] && (
+            {(musicSource === 'user' ? currentlyPlaying?.album.images[0] : tronCurrentlyPlaying?.album.images[0]) && (
               <img
-                src={currentlyPlaying.album.images[0].url}
-                alt={currentlyPlaying.album.name}
+                src={musicSource === 'user' ? currentlyPlaying?.album.images[0]?.url : tronCurrentlyPlaying?.album.images[0]?.url}
+                alt={musicSource === 'user' ? currentlyPlaying?.album.name : tronCurrentlyPlaying?.album.name}
                 className='current-album-art'
               />
             )}
             <div className='current-track-info'>
-              <h4>{currentlyPlaying.name}</h4>
-              <p>{currentlyPlaying.artists.map(a => a.name).join(', ')}</p>
-              <p className='current-album'>{currentlyPlaying.album.name}</p>
+              <h4>{musicSource === 'user' ? currentlyPlaying?.name : tronCurrentlyPlaying?.name}</h4>
+              <p>{musicSource === 'user' 
+                ? currentlyPlaying?.artists.map(a => a.name).join(', ')
+                : tronCurrentlyPlaying?.artists.map(a => a.name).join(', ')
+              }</p>
+              <p className='current-album'>{musicSource === 'user' ? currentlyPlaying?.album.name : tronCurrentlyPlaying?.album.name}</p>
             </div>
           </div>
         </div>
@@ -715,38 +844,38 @@ const Music: React.FC = () => {
           className={`tab-btn ${activeTab === 'tracks' ? 'active' : ''}`}
           onClick={() => handleTabChange('tracks')}
         >
-          Top Tracks ({topTracks.length})
+          Top Tracks ({musicSource === 'user' ? topTracks.length : tronTopTracks.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'artists' ? 'active' : ''}`}
           onClick={() => handleTabChange('artists')}
         >
-          Top Artists ({topArtists.length})
+          Top Artists ({musicSource === 'user' ? topArtists.length : tronTopArtists.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'recent' ? 'active' : ''}`}
           onClick={() => handleTabChange('recent')}
         >
-          Recently Played ({recentlyPlayed.length})
+          Recently Played ({musicSource === 'user' ? recentlyPlayed.length : tronRecentlyPlayed.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'liked' ? 'active' : ''}`}
           onClick={() => handleTabChange('liked')}
         >
-          Liked Songs ({likedSongsTotal})
+          Liked Songs ({musicSource === 'user' ? likedSongsTotal : tronLikedSongsTotal})
         </button>
         <button
           className={`tab-btn ${activeTab === 'playlists' ? 'active' : ''}`}
           onClick={() => handleTabChange('playlists')}
         >
-          Playlists ({playlistsTotal})
+          Playlists ({musicSource === 'user' ? playlistsTotal : tronPlaylistsTotal})
         </button>
       </div>
 
       <div className='music-content'>
         {activeTab === 'tracks' && (
           <div className='tracks-grid'>
-            {topTracks.map((track, index) => (
+            {(musicSource === 'user' ? topTracks : tronTopTracks).map((track, index) => (
               <div key={track.id} className='track-card'>
                 <div className='track-rank'>#{index + 1}</div>
                 {track.album.images[0] && (
@@ -796,7 +925,7 @@ const Music: React.FC = () => {
 
         {activeTab === 'artists' && (
           <div className='artists-grid'>
-            {topArtists.map((artist, index) => (
+            {(musicSource === 'user' ? topArtists : tronTopArtists).map((artist, index) => (
               <div key={artist.id} className='artist-card'>
                 <div className='artist-rank'>#{index + 1}</div>
                 {artist.images[0] && (
@@ -833,7 +962,7 @@ const Music: React.FC = () => {
 
         {activeTab === 'recent' && (
           <div className='recent-tracks'>
-            {recentlyPlayed.map((track, index) => (
+            {(musicSource === 'user' ? recentlyPlayed : tronRecentlyPlayed).map((track, index) => (
               <div key={`${track.id}-${index}`} className='recent-track'>
                 {track.album.images[0] && (
                   <img
@@ -864,16 +993,16 @@ const Music: React.FC = () => {
         {activeTab === 'liked' && (
           <div className='liked-songs-container'>
             <div className='liked-songs-header'>
-              <h3>Your Liked Songs</h3>
+              <h3>{musicSource === 'user' ? 'Your Liked Songs' : 'Tron Swan\'s Liked Songs'}</h3>
               <p className='liked-songs-count'>
-                {likedSongs.length} of {likedSongsTotal} songs
+                {musicSource === 'user' ? likedSongs.length : tronLikedSongs.length} of {musicSource === 'user' ? likedSongsTotal : tronLikedSongsTotal} songs
               </p>
             </div>
             
             <div className='tracks-grid'>
-              {likedSongs.map((track, index) => (
+              {(musicSource === 'user' ? likedSongs : tronLikedSongs).map((track, index) => (
                 <div key={track.id} className='track-card'>
-                  <div className='track-rank'>{likedSongsOffset + index + 1}</div>
+                  <div className='track-rank'>{(musicSource === 'user' ? likedSongsOffset : tronLikedSongsOffset) + index + 1}</div>
                   <img
                     src={track.album.images[0]?.url}
                     alt={`${track.album.name} cover`}
@@ -929,14 +1058,14 @@ const Music: React.FC = () => {
         {activeTab === 'playlists' && !selectedPlaylist && (
           <div className='playlists-container'>
             <div className='playlists-header'>
-              <h3>Your Playlists</h3>
+              <h3>{musicSource === 'user' ? 'Your Playlists' : 'Tron Swan\'s Playlists'}</h3>
               <p className='playlists-count'>
-                {playlists.length} of {playlistsTotal} playlists
+                {musicSource === 'user' ? playlists.length : tronPlaylists.length} of {musicSource === 'user' ? playlistsTotal : tronPlaylistsTotal} playlists
               </p>
             </div>
             
             <div className='playlists-grid'>
-              {playlists.map((playlist) => (
+              {(musicSource === 'user' ? playlists : tronPlaylists).map((playlist) => (
                 <div key={playlist.id} className='playlist-card'>
                   <div className='playlist-image-container'>
                     <img

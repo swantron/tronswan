@@ -15,6 +15,7 @@ interface RuntimeConfig {
   VITE_DIGITALOCEAN_TOKEN: string;
   VITE_DIGITALOCEAN_APP_ID: string;
   VITE_SPOTIFY_CLIENT_ID: string;
+  VITE_SPOTIFY_CLIENT_SECRET: string;
   VITE_SPOTIFY_REDIRECT_URI: string;
 }
 
@@ -50,6 +51,7 @@ class RuntimeConfigManager {
       'VITE_DIGITALOCEAN_TOKEN',
       'VITE_DIGITALOCEAN_APP_ID',
       'VITE_SPOTIFY_CLIENT_ID',
+      'VITE_SPOTIFY_CLIENT_SECRET',
       'VITE_SPOTIFY_REDIRECT_URI',
     ];
 
