@@ -120,7 +120,7 @@ export class SpotifyPlaybackService {
       // Import the Spotify service to refresh the token
       const { spotifyService } = await import('./spotifyService');
       const newTokens = await spotifyService.refreshAccessToken();
-      
+
       if (newTokens) {
         this.accessToken = newTokens.accessToken;
         logger.info('Successfully refreshed Spotify access token');
@@ -137,12 +137,12 @@ export class SpotifyPlaybackService {
 
   private async waitForSpotifySDK(timeout: number = 15000): Promise<void> {
     const startTime = Date.now();
-    
+
     logger.info('Waiting for Spotify Web Playback SDK to load...');
-    
+
     // Check if SDK is ready via global callback
     if (typeof window.onSpotifyWebPlaybackSDKReady === 'function') {
-      await new Promise<void>((resolve) => {
+      await new Promise<void>(resolve => {
         const originalCallback = window.onSpotifyWebPlaybackSDKReady;
         window.onSpotifyWebPlaybackSDKReady = () => {
           if (originalCallback) originalCallback();
@@ -150,40 +150,49 @@ export class SpotifyPlaybackService {
         };
       });
     }
-    
-    while (!window.Spotify && (Date.now() - startTime) < timeout) {
+
+    while (!window.Spotify && Date.now() - startTime < timeout) {
       await new Promise(resolve => setTimeout(resolve, 200));
     }
-    
+
     if (window.Spotify) {
       logger.info('Spotify Web Playback SDK loaded successfully');
     } else {
-      logger.warn('Spotify Web Playback SDK not found, attempting to load manually...');
-      
+      logger.warn(
+        'Spotify Web Playback SDK not found, attempting to load manually...'
+      );
+
       // Try to load the SDK manually as a fallback
       try {
         await this.loadSpotifySDKManually();
-        
+
         // Wait a bit more for the manual load
         const retryStartTime = Date.now();
-        while (!window.Spotify && (Date.now() - retryStartTime) < 5000) {
+        while (!window.Spotify && Date.now() - retryStartTime < 5000) {
           await new Promise(resolve => setTimeout(resolve, 200));
         }
-        
+
         if (window.Spotify) {
-          logger.info('Spotify Web Playback SDK loaded successfully via fallback');
+          logger.info(
+            'Spotify Web Playback SDK loaded successfully via fallback'
+          );
         } else {
           throw new Error('Failed to load Spotify SDK even with fallback');
         }
       } catch (fallbackError) {
-        logger.error('Spotify Web Playback SDK failed to load', { 
+        logger.error('Spotify Web Playback SDK failed to load', {
           timeout,
           windowSpotify: !!window.Spotify,
           userAgent: navigator.userAgent,
-          fallbackError: fallbackError instanceof Error ? fallbackError.message : fallbackError,
-          timestamp: new Date().toISOString()
+          fallbackError:
+            fallbackError instanceof Error
+              ? fallbackError.message
+              : fallbackError,
+          timestamp: new Date().toISOString(),
         });
-        throw new Error('Spotify Web Playback SDK failed to load. Please refresh the page and try again.');
+        throw new Error(
+          'Spotify Web Playback SDK failed to load. Please refresh the page and try again.'
+        );
       }
     }
   }
@@ -193,17 +202,17 @@ export class SpotifyPlaybackService {
       const script = document.createElement('script');
       script.src = 'https://sdk.scdn.co/spotify-player.js';
       script.async = true;
-      
+
       script.onload = () => {
         logger.info('Spotify SDK loaded manually');
         resolve();
       };
-      
-      script.onerror = (error) => {
+
+      script.onerror = error => {
         logger.error('Failed to load Spotify SDK manually', { error });
         reject(new Error('Failed to load Spotify SDK manually'));
       };
-      
+
       document.head.appendChild(script);
     });
   }
@@ -223,14 +232,16 @@ export class SpotifyPlaybackService {
 
       if (!this.accessToken) {
         logger.error('No Spotify access token available');
-        throw new Error('No Spotify access token available. Please authenticate first.');
+        throw new Error(
+          'No Spotify access token available. Please authenticate first.'
+        );
       }
 
       logger.info('Creating Spotify player instance');
 
       this.player = new window.Spotify.Player({
         name: 'Tron Swan Music Player',
-        getOAuthToken: (cb) => {
+        getOAuthToken: cb => {
           if (this.accessToken) {
             cb(this.accessToken);
           } else {
@@ -249,22 +260,25 @@ export class SpotifyPlaybackService {
       // Connect to Spotify
       logger.info('Connecting to Spotify Web Playback SDK');
       const success = await this.player.connect();
-      
-      
+
       if (success) {
-        logger.info('Spotify Web Playback SDK connected successfully - waiting for ready event');
+        logger.info(
+          'Spotify Web Playback SDK connected successfully - waiting for ready event'
+        );
         return true;
       } else {
         logger.error('Failed to connect to Spotify Web Playback SDK');
-        throw new Error('Failed to connect to Spotify Web Playback SDK. Make sure you have Spotify open on another device or in another browser tab.');
+        throw new Error(
+          'Failed to connect to Spotify Web Playback SDK. Make sure you have Spotify open on another device or in another browser tab.'
+        );
       }
     } catch (error) {
-      logger.error('Failed to initialize Spotify Web Playback SDK', { 
+      logger.error('Failed to initialize Spotify Web Playback SDK', {
         error: error instanceof Error ? error.message : error,
         stack: error instanceof Error ? error.stack : undefined,
         hasSpotifySDK: !!window.Spotify,
         hasAccessToken: !!this.accessToken,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       throw error;
     }
@@ -276,13 +290,12 @@ export class SpotifyPlaybackService {
       return;
     }
 
-
     try {
       // Ready event
       this.player.addListener('ready', ({ device_id }) => {
-        logger.info('✅ Spotify player is ready!', { 
+        logger.info('✅ Spotify player is ready!', {
           device_id,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         this.deviceId = device_id;
         this.isReady = true;
@@ -290,9 +303,9 @@ export class SpotifyPlaybackService {
 
       // Not Ready event
       this.player.addListener('not_ready', ({ device_id }) => {
-        logger.warn('❌ Spotify player has gone offline', { 
+        logger.warn('❌ Spotify player has gone offline', {
           device_id,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         this.isReady = false;
       });
@@ -314,20 +327,17 @@ export class SpotifyPlaybackService {
 
       // Playback Status Update event - wrap in try/catch
       try {
-        this.player.addListener('playback_status_update', (state) => {
-        });
+        this.player.addListener('playback_status_update', state => {});
       } catch (error) {
         logger.warn('Failed to add playback_status_update listener', { error });
       }
 
       // Player State Changed event - wrap in try/catch
       try {
-        this.player.addListener('player_state_changed', (state) => {
-        });
+        this.player.addListener('player_state_changed', state => {});
       } catch (error) {
         logger.warn('Failed to add player_state_changed listener', { error });
       }
-
     } catch (error) {
       logger.error('Error setting up event listeners', { error });
       throw error;
@@ -364,11 +374,11 @@ export class SpotifyPlaybackService {
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          Authorization: `Bearer ${this.accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          uris: [trackUri]
+          uris: [trackUri],
         }),
       });
 
@@ -389,7 +399,7 @@ export class SpotifyPlaybackService {
         }
       } else {
         const errorText = await response.text();
-        logger.error('❌ Failed to start track playback via API', { 
+        logger.error('❌ Failed to start track playback via API', {
           status: response.status,
           statusText: response.statusText,
           error: errorText,
@@ -397,14 +407,16 @@ export class SpotifyPlaybackService {
           deviceId: this.deviceId,
           isReady: this.isReady,
         });
-        
+
         // Provide more specific error messages
         if (response.status === 404) {
           logger.error('Device not found - may need to transfer playback');
         } else if (response.status === 403) {
-          logger.error('Playback forbidden - check Premium status or device restrictions');
+          logger.error(
+            'Playback forbidden - check Premium status or device restrictions'
+          );
         }
-        
+
         return false;
       }
     } catch (error) {
@@ -415,10 +427,13 @@ export class SpotifyPlaybackService {
 
   private async ensureDeviceIsActive(): Promise<boolean> {
     if (!this.deviceId || !this.accessToken) {
-      logger.error('Cannot ensure device is active - missing deviceId or accessToken', {
-        hasDeviceId: !!this.deviceId,
-        hasAccessToken: !!this.accessToken,
-      });
+      logger.error(
+        'Cannot ensure device is active - missing deviceId or accessToken',
+        {
+          hasDeviceId: !!this.deviceId,
+          hasAccessToken: !!this.accessToken,
+        }
+      );
       return false;
     }
 
@@ -426,41 +441,44 @@ export class SpotifyPlaybackService {
       // Get current playback state
       const response = await fetch('https://api.spotify.com/v1/me/player', {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          Authorization: `Bearer ${this.accessToken}`,
         },
       });
 
       if (response.ok) {
         const data = await response.json();
-        
+
         if (data.device && data.device.id === this.deviceId) {
           return true;
         }
       } else if (response.status === 204) {
         // No active device - this is normal, we'll transfer to ours
       } else {
-        logger.warn('Failed to get current playback state', { 
+        logger.warn('Failed to get current playback state', {
           status: response.status,
-          statusText: response.statusText 
+          statusText: response.statusText,
         });
       }
 
       // Transfer playback to our device
-      logger.info('🔄 Transferring playback to our device', { 
-        deviceId: this.deviceId 
+      logger.info('🔄 Transferring playback to our device', {
+        deviceId: this.deviceId,
       });
-      
-      const transferResponse = await fetch('https://api.spotify.com/v1/me/player', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          device_ids: [this.deviceId],
-          play: false
-        }),
-      });
+
+      const transferResponse = await fetch(
+        'https://api.spotify.com/v1/me/player',
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            device_ids: [this.deviceId],
+            play: false,
+          }),
+        }
+      );
 
       if (transferResponse.ok || transferResponse.status === 204) {
         logger.info('✅ Successfully transferred playback to our device');
@@ -483,7 +501,10 @@ export class SpotifyPlaybackService {
     }
   }
 
-  public async playPlaylist(playlistUri: string, offset: number = 0): Promise<boolean> {
+  public async playPlaylist(
+    playlistUri: string,
+    offset: number = 0
+  ): Promise<boolean> {
     if (!this.isReady || !this.deviceId) {
       logger.warn('Spotify player not ready, cannot play playlist');
       return false;
@@ -498,25 +519,28 @@ export class SpotifyPlaybackService {
       // First, ensure our device is active
       await this.ensureDeviceIsActive();
 
-      const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          context_uri: playlistUri,
-          offset: { position: offset }
-        }),
-      });
+      const response = await fetch(
+        `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            context_uri: playlistUri,
+            offset: { position: offset },
+          }),
+        }
+      );
 
       if (response.ok) {
         logger.info('Playlist playback started', { playlistUri, offset });
         return true;
       } else {
-        logger.error('Failed to start playlist playback', { 
+        logger.error('Failed to start playlist playback', {
           status: response.status,
-          statusText: response.statusText 
+          statusText: response.statusText,
         });
         return false;
       }
@@ -661,7 +685,11 @@ export class SpotifyPlaybackService {
     return this.deviceId;
   }
 
-  public async checkPremiumStatus(): Promise<{ hasPremium: boolean; user?: any; error?: string }> {
+  public async checkPremiumStatus(): Promise<{
+    hasPremium: boolean;
+    user?: any;
+    error?: string;
+  }> {
     if (!this.accessToken) {
       return { hasPremium: false, error: 'No access token available' };
     }
@@ -669,19 +697,21 @@ export class SpotifyPlaybackService {
     try {
       let response = await fetch('https://api.spotify.com/v1/me', {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          Authorization: `Bearer ${this.accessToken}`,
         },
       });
 
       // If token is expired, try to refresh it
       if (response.status === 401) {
-        logger.info('Access token expired during premium check, attempting to refresh');
+        logger.info(
+          'Access token expired during premium check, attempting to refresh'
+        );
         const refreshed = await this.refreshAccessToken();
         if (refreshed) {
           // Retry with new token
           response = await fetch('https://api.spotify.com/v1/me', {
             headers: {
-              'Authorization': `Bearer ${this.accessToken}`,
+              Authorization: `Bearer ${this.accessToken}`,
             },
           });
         } else {
@@ -694,14 +724,16 @@ export class SpotifyPlaybackService {
           status: response.status,
           statusText: response.statusText,
         });
-        return { hasPremium: false, error: `Failed to fetch user profile: ${response.status}` };
+        return {
+          hasPremium: false,
+          error: `Failed to fetch user profile: ${response.status}`,
+        };
       }
 
       const user = await response.json();
-      
-      
+
       const hasPremium = user.product === 'premium';
-      
+
       logger.info('Spotify account status checked', {
         product: user.product,
         hasPremium,

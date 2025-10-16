@@ -154,12 +154,12 @@ class SpotifyService {
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=/g, '');
-        
+
         logger.debug('Generated code challenge using Web Crypto API', {
           challengeLength: challenge.length,
           challengeStart: challenge.substring(0, 10) + '...',
         });
-        
+
         return challenge;
       } catch (error) {
         logger.warn('Web Crypto API failed, using fallback SHA256', {
@@ -170,18 +170,18 @@ class SpotifyService {
 
     // Fallback: Use a reliable SHA256 implementation
     logger.warn('Using fallback SHA256 implementation for code challenge');
-    
+
     const sha256Hash = await this.sha256Fallback(codeVerifier);
     const challenge = btoa(String.fromCharCode(...new Uint8Array(sha256Hash)))
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, '');
-    
+
     logger.debug('Generated code challenge using fallback SHA256', {
       challengeLength: challenge.length,
       challengeStart: challenge.substring(0, 10) + '...',
     });
-    
+
     return challenge;
   }
 
@@ -189,17 +189,20 @@ class SpotifyService {
   private async sha256Fallback(message: string): Promise<Uint8Array> {
     // Convert string to bytes
     const msgBytes = new TextEncoder().encode(message);
-    
+
     // SHA256 constants
     const K = [
-      0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-      0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-      0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-      0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-      0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-      0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-      0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-      0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
+      0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+      0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
+      0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+      0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+      0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+      0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+      0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+      0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
+      0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+      0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
     ];
 
     // Initial hash values
@@ -215,13 +218,13 @@ class SpotifyService {
     // Pre-processing
     const msgLength = msgBytes.length;
     const msgBits = msgLength * 8;
-    
+
     // Add padding
     const paddedLength = Math.ceil((msgLength + 9) / 64) * 64;
     const padded = new Uint8Array(paddedLength);
     padded.set(msgBytes);
     padded[msgLength] = 0x80;
-    
+
     // Add length as 64-bit big-endian
     const view = new DataView(padded.buffer);
     view.setUint32(paddedLength - 8, Math.floor(msgBits / 0x100000000), false);
@@ -230,31 +233,50 @@ class SpotifyService {
     // Process each 512-bit chunk
     for (let chunk = 0; chunk < paddedLength; chunk += 64) {
       const w = new Array(64);
-      
+
       // Copy chunk into first 16 words
       for (let i = 0; i < 16; i++) {
         w[i] = view.getUint32(chunk + i * 4, false);
       }
-      
+
       // Extend the first 16 words into the remaining 48 words
       for (let i = 16; i < 64; i++) {
-        const s0 = this.rightRotate(w[i-15], 7) ^ this.rightRotate(w[i-15], 18) ^ (w[i-15] >>> 3);
-        const s1 = this.rightRotate(w[i-2], 17) ^ this.rightRotate(w[i-2], 19) ^ (w[i-2] >>> 10);
-        w[i] = (w[i-16] + s0 + w[i-7] + s1) & 0xffffffff;
+        const s0 =
+          this.rightRotate(w[i - 15], 7) ^
+          this.rightRotate(w[i - 15], 18) ^
+          (w[i - 15] >>> 3);
+        const s1 =
+          this.rightRotate(w[i - 2], 17) ^
+          this.rightRotate(w[i - 2], 19) ^
+          (w[i - 2] >>> 10);
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) & 0xffffffff;
       }
-      
+
       // Initialize hash value for this chunk
-      let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
-      
+      let a = h0,
+        b = h1,
+        c = h2,
+        d = h3,
+        e = h4,
+        f = h5,
+        g = h6,
+        h = h7;
+
       // Main loop
       for (let i = 0; i < 64; i++) {
-        const S1 = this.rightRotate(e, 6) ^ this.rightRotate(e, 11) ^ this.rightRotate(e, 25);
-        const ch = (e & f) ^ ((~e) & g);
+        const S1 =
+          this.rightRotate(e, 6) ^
+          this.rightRotate(e, 11) ^
+          this.rightRotate(e, 25);
+        const ch = (e & f) ^ (~e & g);
         const temp1 = (h + S1 + ch + K[i] + w[i]) & 0xffffffff;
-        const S0 = this.rightRotate(a, 2) ^ this.rightRotate(a, 13) ^ this.rightRotate(a, 22);
+        const S0 =
+          this.rightRotate(a, 2) ^
+          this.rightRotate(a, 13) ^
+          this.rightRotate(a, 22);
         const maj = (a & b) ^ (a & c) ^ (b & c);
         const temp2 = (S0 + maj) & 0xffffffff;
-        
+
         h = g;
         g = f;
         f = e;
@@ -264,7 +286,7 @@ class SpotifyService {
         b = a;
         a = (temp1 + temp2) & 0xffffffff;
       }
-      
+
       // Add this chunk's hash to result so far
       h0 = (h0 + a) & 0xffffffff;
       h1 = (h1 + b) & 0xffffffff;
@@ -275,7 +297,7 @@ class SpotifyService {
       h6 = (h6 + g) & 0xffffffff;
       h7 = (h7 + h) & 0xffffffff;
     }
-    
+
     // Produce the final hash value
     const hash = new Uint8Array(32);
     const hashView = new DataView(hash.buffer);
@@ -287,7 +309,7 @@ class SpotifyService {
     hashView.setUint32(20, h5, false);
     hashView.setUint32(24, h6, false);
     hashView.setUint32(28, h7, false);
-    
+
     return hash;
   }
 
@@ -307,9 +329,9 @@ class SpotifyService {
       verifierLength: codeVerifier.length,
       verifierStart: codeVerifier.substring(0, 10) + '...',
     });
-    
+
     sessionStorage.setItem('spotify_code_verifier', codeVerifier);
-    
+
     // Verify storage worked
     const storedVerifier = sessionStorage.getItem('spotify_code_verifier');
     logger.debug('Code verifier storage verification', {
@@ -342,7 +364,7 @@ class SpotifyService {
       logger.info('Redirecting to Spotify authorization', {
         authUrl: authUrl.substring(0, 100) + '...',
       });
-      
+
       window.location.href = authUrl;
     } catch (error) {
       logger.error('Failed to generate code challenge', { error });
@@ -416,7 +438,10 @@ class SpotifyService {
     }
   }
 
-  public async refreshAccessToken(): Promise<{ accessToken: string; refreshToken: string } | null> {
+  public async refreshAccessToken(): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  } | null> {
     if (!this.refreshToken) {
       logger.error('No refresh token available');
       return null;
@@ -527,7 +552,7 @@ class SpotifyService {
         url,
         error: errorText,
       });
-      
+
       // Create error with status property for proper handling
       const error = new Error(
         `Spotify API error: ${response.status} ${response.statusText}`
@@ -663,7 +688,10 @@ class SpotifyService {
     }
   }
 
-  public async getLikedSongs(limit: number = 20, offset: number = 0): Promise<{
+  public async getLikedSongs(
+    limit: number = 20,
+    offset: number = 0
+  ): Promise<{
     tracks: SpotifyTrack[];
     total: number;
     hasMore: boolean;
@@ -699,7 +727,10 @@ class SpotifyService {
     };
   }
 
-  public async getPlaylists(limit: number = 20, offset: number = 0): Promise<{
+  public async getPlaylists(
+    limit: number = 20,
+    offset: number = 0
+  ): Promise<{
     playlists: SpotifyPlaylist[];
     total: number;
     hasMore: boolean;
@@ -734,7 +765,11 @@ class SpotifyService {
     };
   }
 
-  public async getPlaylistTracks(playlistId: string, limit: number = 50, offset: number = 0): Promise<{
+  public async getPlaylistTracks(
+    playlistId: string,
+    limit: number = 50,
+    offset: number = 0
+  ): Promise<{
     tracks: SpotifyTrack[];
     total: number;
     hasMore: boolean;
@@ -758,7 +793,7 @@ class SpotifyService {
     const tracks = data.items
       .map(item => item.track)
       .filter((track): track is SpotifyTrack => track !== null);
-    
+
     const hasMore = !!data.next;
 
     logger.info('Playlist tracks fetched successfully', {

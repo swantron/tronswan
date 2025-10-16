@@ -11,6 +11,7 @@ import {
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
+
 import MusicPlayer from './MusicPlayer';
 import PlaylistTracks from './PlaylistTracks';
 import '../../styles/Music.css';
@@ -30,9 +31,9 @@ const Music: React.FC = () => {
   const [timeRange, setTimeRange] = useState<
     'short_term' | 'medium_term' | 'long_term'
   >('medium_term');
-  const [activeTab, setActiveTab] = useState<'tracks' | 'artists' | 'recent' | 'liked' | 'playlists'>(
-    'tracks'
-  );
+  const [activeTab, setActiveTab] = useState<
+    'tracks' | 'artists' | 'recent' | 'liked' | 'playlists'
+  >('tracks');
   const [likedSongs, setLikedSongs] = useState<SpotifyTrack[]>([]);
   const [likedSongsTotal, setLikedSongsTotal] = useState(0);
   const [likedSongsOffset, setLikedSongsOffset] = useState(0);
@@ -42,8 +43,8 @@ const Music: React.FC = () => {
   const [playlistsOffset, setPlaylistsOffset] = useState(0);
   const [playlistsHasMore, setPlaylistsHasMore] = useState(false);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null);
-
+  const [selectedPlaylist, setSelectedPlaylist] =
+    useState<SpotifyPlaylist | null>(null);
 
   const loadUserData = useCallback(async () => {
     logger.info('Loading Spotify user data', {
@@ -54,7 +55,15 @@ const Music: React.FC = () => {
       setLoading(true);
 
       logger.info('Starting parallel API calls for user data');
-      const [userData, tracks, artists, recent, current, likedData, playlistsData] = await Promise.all([
+      const [
+        userData,
+        tracks,
+        artists,
+        recent,
+        current,
+        likedData,
+        playlistsData,
+      ] = await Promise.all([
         spotifyService.getUserProfile(),
         spotifyService.getTopTracks(timeRange),
         spotifyService.getTopArtists(timeRange),
@@ -99,7 +108,7 @@ const Music: React.FC = () => {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      logger.error('Failed to load Spotify user data', { 
+      logger.error('Failed to load Spotify user data', {
         error: error instanceof Error ? error.message : error,
         stack: error instanceof Error ? error.stack : undefined,
       });
@@ -124,17 +133,23 @@ const Music: React.FC = () => {
         const success = await spotifyService.handleCallback(code);
 
         if (success) {
-          logger.info('Spotify callback successful, setting authenticated state');
+          logger.info(
+            'Spotify callback successful, setting authenticated state'
+          );
           setIsAuthenticated(true);
-          
+
           try {
             await loadUserData();
             logger.info('User data loaded successfully after callback');
           } catch (dataError) {
-            logger.error('Failed to load user data after callback', { dataError });
-            setAuthError('Authentication successful but failed to load music data. Please refresh the page.');
+            logger.error('Failed to load user data after callback', {
+              dataError,
+            });
+            setAuthError(
+              'Authentication successful but failed to load music data. Please refresh the page.'
+            );
           }
-          
+
           // Clean up URL
           window.history.replaceState({}, document.title, '/music');
         } else {
@@ -143,7 +158,9 @@ const Music: React.FC = () => {
         }
       } catch (error) {
         logger.error('Error during Spotify callback handling', { error });
-        setAuthError('An error occurred during authentication. Please try again.');
+        setAuthError(
+          'An error occurred during authentication. Please try again.'
+        );
       }
 
       setLoading(false);
@@ -187,7 +204,7 @@ const Music: React.FC = () => {
       // Check for callback code
       const code = searchParams.get('code');
       const isCallbackRoute = window.location.pathname === '/music/callback';
-      
+
       if (code) {
         logger.info('Found authorization code in URL, processing callback', {
           codeLength: code.length,
@@ -233,7 +250,9 @@ const Music: React.FC = () => {
     }
   };
 
-  const handleTabChange = (tab: 'tracks' | 'artists' | 'recent' | 'liked' | 'playlists') => {
+  const handleTabChange = (
+    tab: 'tracks' | 'artists' | 'recent' | 'liked' | 'playlists'
+  ) => {
     logger.info('Music page tab changed', {
       from: activeTab,
       to: tab,
@@ -242,8 +261,6 @@ const Music: React.FC = () => {
 
     setActiveTab(tab);
   };
-
-
 
   const handleLogin = async () => {
     logger.info('Spotify login initiated', {
@@ -272,7 +289,7 @@ const Music: React.FC = () => {
     try {
       const newOffset = likedSongsOffset + 20;
       const likedData = await spotifyService.getLikedSongs(20, newOffset);
-      
+
       setLikedSongs(prev => [...prev, ...likedData.tracks]);
       setLikedSongsOffset(newOffset);
       setLikedSongsHasMore(likedData.hasMore);
@@ -299,7 +316,7 @@ const Music: React.FC = () => {
     try {
       const newOffset = playlistsOffset + 20;
       const playlistsData = await spotifyService.getPlaylists(20, newOffset);
-      
+
       setPlaylists(prev => [...prev, ...playlistsData.playlists]);
       setPlaylistsOffset(newOffset);
       setPlaylistsHasMore(playlistsData.hasMore);
@@ -365,80 +382,96 @@ const Music: React.FC = () => {
     });
 
     try {
-      const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
-      
+      const { spotifyPlaybackService } = await import(
+        '../../services/spotifyPlaybackService'
+      );
+
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
-      
+
       // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
       // We'll remove this once we figure out the API response issue
       const debugBypass = true; // Set to false to re-enable premium check
-      
+
       if (!premiumCheck.hasPremium && !debugBypass) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
-            'Your Spotify session has expired. Please refresh the page to log in again.'
+              'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           // Optionally redirect to re-authenticate
           window.location.reload();
         } else {
           alert(
             '🎵 Spotify Premium Required\n\n' +
-            'To play music directly on this website, you need a Spotify Premium account.\n\n' +
-            'Premium allows for web playback control. You can still browse your music and \n' +
-            'click the Spotify links (♪) to play songs in your Spotify app.'
+              'To play music directly on this website, you need a Spotify Premium account.\n\n' +
+              'Premium allows for web playback control. You can still browse your music and \n' +
+              'click the Spotify links (♪) to play songs in your Spotify app.'
           );
         }
         return;
       }
-      
+
       if (debugBypass) {
         logger.info('📝 DEBUG: Bypassing premium check for testing', {
           actualPremiumStatus: premiumCheck.hasPremium,
           user: premiumCheck.user,
         });
       }
-      
+
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for track playback');
-        
+
         // Show loading message
-        const loadingAlert = alert('🎵 Setting up music player...\n\nThis may take a few seconds. Please wait.');
-        
+        const loadingAlert = alert(
+          '🎵 Setting up music player...\n\nThis may take a few seconds. Please wait.'
+        );
+
         try {
           const initialized = await spotifyPlaybackService.initialize();
           if (!initialized) {
             throw new Error('Failed to initialize Spotify player');
           }
-          
+
           // Wait for player to be fully ready with better timeout handling
           let attempts = 0;
           const maxAttempts = 15; // 15 seconds max
-          
-          while (!spotifyPlaybackService.isPlayerReady() && attempts < maxAttempts) {
+
+          while (
+            !spotifyPlaybackService.isPlayerReady() &&
+            attempts < maxAttempts
+          ) {
             await new Promise(resolve => setTimeout(resolve, 1000));
             attempts++;
-            logger.debug(`Waiting for player to be ready, attempt ${attempts}/${maxAttempts}`);
+            logger.debug(
+              `Waiting for player to be ready, attempt ${attempts}/${maxAttempts}`
+            );
           }
-          
+
           if (!spotifyPlaybackService.isPlayerReady()) {
-            throw new Error('Player initialization timed out. Please make sure Spotify is open on another device.');
+            throw new Error(
+              'Player initialization timed out. Please make sure Spotify is open on another device.'
+            );
           }
-          
+
           logger.info('Spotify player is ready for playback');
         } catch (initError) {
-          logger.error('Failed to initialize Spotify player', { error: initError });
-          const errorMessage = initError instanceof Error ? initError.message : 'Unknown error occurred';
+          logger.error('Failed to initialize Spotify player', {
+            error: initError,
+          });
+          const errorMessage =
+            initError instanceof Error
+              ? initError.message
+              : 'Unknown error occurred';
           alert(
             `🎵 Music Player Setup Failed\n\n` +
-            `${errorMessage}\n\n` +
-            `Please make sure:\n` +
-            `1. Spotify is open in another browser tab or app\n` +
-            `2. You're logged into the same Spotify account\n` +
-            `3. Your browser allows the Spotify player to load\n` +
-            `4. Try refreshing the page and trying again`
+              `${errorMessage}\n\n` +
+              `Please make sure:\n` +
+              `1. Spotify is open in another browser tab or app\n` +
+              `2. You're logged into the same Spotify account\n` +
+              `3. Your browser allows the Spotify player to load\n` +
+              `4. Try refreshing the page and trying again`
           );
           return;
         }
@@ -450,9 +483,9 @@ const Music: React.FC = () => {
         playerReady: spotifyPlaybackService.isPlayerReady(),
         deviceId: spotifyPlaybackService.getDeviceId(),
       });
-      
+
       const success = await spotifyPlaybackService.playTrack(track.uri);
-      
+
       if (success) {
         setShowMusicPlayer(true);
         logger.info('✅ Track playback started successfully', {
@@ -466,12 +499,17 @@ const Music: React.FC = () => {
           deviceId: spotifyPlaybackService.getDeviceId(),
           timestamp: new Date().toISOString(),
         });
-        alert('❌ Failed to start playback.\n\nPlease make sure:\n1. Spotify is open on another device/tab\n2. You\'re logged into the same account\n3. Try refreshing and trying again');
+        alert(
+          "❌ Failed to start playback.\n\nPlease make sure:\n1. Spotify is open on another device/tab\n2. You're logged into the same account\n3. Try refreshing and trying again"
+        );
       }
     } catch (error) {
       logger.error('Error starting track playback', { error });
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      alert(`Error starting playback: ${errorMessage}\n\nPlease try again or refresh the page.`);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(
+        `Error starting playback: ${errorMessage}\n\nPlease try again or refresh the page.`
+      );
     }
   };
 
@@ -483,55 +521,57 @@ const Music: React.FC = () => {
     });
 
     try {
-      const { spotifyPlaybackService } = await import('../../services/spotifyPlaybackService');
-      
-      // Check Premium status first  
+      const { spotifyPlaybackService } = await import(
+        '../../services/spotifyPlaybackService'
+      );
+
+      // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
-      
+
       // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
       const debugBypass = true; // Set to false to re-enable premium check
-      
+
       if (!premiumCheck.hasPremium && !debugBypass) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
-            'Your Spotify session has expired. Please refresh the page to log in again.'
+              'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           window.location.reload();
         } else {
           alert(
             '🎵 Spotify Premium Required\n\n' +
-            'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
-            'Premium allows for web playback control. You can still browse your playlists and \n' +
-            'click the Spotify links (♪) to open them in your Spotify app.'
+              'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
+              'Premium allows for web playback control. You can still browse your playlists and \n' +
+              'click the Spotify links (♪) to open them in your Spotify app.'
           );
         }
         return;
       }
-      
+
       // Initialize player if not already done
       if (!spotifyPlaybackService.isPlayerReady()) {
         logger.info('Initializing Spotify player for playlist playback');
         // Show a brief message to user
         alert('Setting up music player... This may take a moment.');
-        
+
         const initialized = await spotifyPlaybackService.initialize();
         if (!initialized) {
           logger.error('Failed to initialize Spotify player');
           alert(
             '🎵 Music Player Setup Failed\n\n' +
-            'Failed to initialize music player.\n\n' +
-            'Please make sure you have Spotify Premium and Spotify is open.'
+              'Failed to initialize music player.\n\n' +
+              'Please make sure you have Spotify Premium and Spotify is open.'
           );
           return;
         }
-        
+
         // Wait a bit for the player to be ready
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
 
       const success = await spotifyPlaybackService.playPlaylist(playlist.uri);
-      
+
       if (success) {
         setShowMusicPlayer(true);
         logger.info('Playlist playback started successfully', {
@@ -543,7 +583,9 @@ const Music: React.FC = () => {
           playlistName: playlist.name,
           timestamp: new Date().toISOString(),
         });
-        alert('Failed to start playback. Please make sure you have Spotify open and try again.');
+        alert(
+          'Failed to start playback. Please make sure you have Spotify open and try again.'
+        );
       }
     } catch (error) {
       logger.error('Error starting playlist playback', { error });
@@ -564,7 +606,9 @@ const Music: React.FC = () => {
           <div className='loading-spinner' aria-label='Loading music data' />
           <p>Loading your music data...</p>
           {process.env.NODE_ENV === 'development' && (
-            <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666' }}>
+            <div
+              style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666' }}
+            >
               <p>Debug Info:</p>
               <p>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</p>
               <p>Has User: {user ? 'Yes' : 'No'}</p>
@@ -587,19 +631,21 @@ const Music: React.FC = () => {
           url='/music'
         />
         <div className='music-auth'>
-          <h1>🎵 A Better Spotify Player</h1>
-          <p className='auth-tagline'>
-            Experience your music like never before with our enhanced Spotify player
-          </p>
-          
+          <h1>🎵 Non-janky Spotify</h1>
+          <p className='auth-tagline'>Spotify, but not janky</p>
+
           <div className='premium-notice'>
-            <p><strong>🔒 Spotify Premium Required for Playback</strong><br />
-            You can still explore and discover music without Premium!</p>
+            <p>
+              <strong>🔒 Spotify Premium Required for Playback</strong>
+              <br />
+              You can still explore and discover music without Premium!
+            </p>
           </div>
-          
+
           <p>
-            Connect your Spotify account to access <strong>your personal</strong> music taste, 
-            top tracks, playlists, and listening history with superior controls and interface.
+            Connect your Spotify account to access{' '}
+            <strong>your personal</strong> music taste, top tracks, playlists,
+            and listening history with superior controls and interface.
           </p>
           {authError && (
             <div
@@ -641,8 +687,8 @@ const Music: React.FC = () => {
             />
           )}
           <div>
-            <h1>🎵 {user?.display_name}&apos;s Enhanced Music Player</h1>
-            <p className='user-subtitle'>A better way to experience your Spotify</p>
+            <h1>🎵 Spotify Interface</h1>
+            <p className='user-subtitle'>Spotify, but not janky</p>
           </div>
         </div>
 
@@ -672,14 +718,18 @@ const Music: React.FC = () => {
             Logout
           </button>
         </div>
-        
+
         <div className='music-help'>
           <details>
             <summary>🎵 How this enhanced music player works</summary>
             <div className='help-content'>
               <div className='help-section'>
                 <h4>🔒 Spotify Premium Required</h4>
-                <p>To play music directly on this website, you need Spotify Premium. This is a requirement from Spotify, not our limitation.</p>
+                <p>
+                  To play music directly on this website, you need Spotify
+                  Premium. This is a requirement from Spotify, not our
+                  limitation.
+                </p>
               </div>
 
               <div className='help-section'>
@@ -696,15 +746,25 @@ const Music: React.FC = () => {
                 <h4>How to Play Music (Premium Users)</h4>
                 <ol>
                   <li>Click any "▶ Play" button below</li>
-                  <li>You'll be prompted with a Spotify login page (if not already logged in)</li>
-                  <li>Make sure you have <strong>Spotify open</strong> on another device</li>
+                  <li>
+                    You'll be prompted with a Spotify login page (if not already
+                    logged in)
+                  </li>
+                  <li>
+                    Make sure you have <strong>Spotify open</strong> on another
+                    device
+                  </li>
                   <li>Your music will transfer to this enhanced player</li>
                 </ol>
               </div>
 
               <div className='help-section'>
                 <h4>Without Premium</h4>
-                <p>You can still explore and discover music, but playback will redirect you to Spotify. Consider upgrading to Premium for the full enhanced experience!</p>
+                <p>
+                  You can still explore and discover music, but playback will
+                  redirect you to Spotify. Consider upgrading to Premium for the
+                  full enhanced experience!
+                </p>
               </div>
             </div>
           </details>
@@ -778,11 +838,18 @@ const Music: React.FC = () => {
                   />
                 )}
                 <div className='track-info'>
-                  <h4 className='track-name' title={track.name}>{track.name}</h4>
-                  <p className='track-artist' title={track.artists.map(a => a.name).join(', ')}>
+                  <h4 className='track-name' title={track.name}>
+                    {track.name}
+                  </h4>
+                  <p
+                    className='track-artist'
+                    title={track.artists.map(a => a.name).join(', ')}
+                  >
                     {track.artists.map(a => a.name).join(', ')}
                   </p>
-                  <p className='track-album' title={track.album.name}>{track.album.name}</p>
+                  <p className='track-album' title={track.album.name}>
+                    {track.album.name}
+                  </p>
                 </div>
                 <div className='track-meta'>
                   <span className='track-duration'>
@@ -890,11 +957,13 @@ const Music: React.FC = () => {
                 {likedSongs.length} of {likedSongsTotal} songs
               </p>
             </div>
-            
+
             <div className='tracks-grid'>
               {likedSongs.map((track, index) => (
                 <div key={track.id} className='track-card'>
-                  <div className='track-rank'>{likedSongsOffset + index + 1}</div>
+                  <div className='track-rank'>
+                    {likedSongsOffset + index + 1}
+                  </div>
                   <img
                     src={track.album.images[0]?.url}
                     alt={`${track.album.name} cover`}
@@ -908,7 +977,9 @@ const Music: React.FC = () => {
                     <p className='track-album'>{track.album.name}</p>
                     <div className='track-meta'>
                       <span>{formatDuration(track.duration_ms)}</span>
-                      <span>{new Date(track.album.release_date).getFullYear()}</span>
+                      <span>
+                        {new Date(track.album.release_date).getFullYear()}
+                      </span>
                     </div>
                     <div className='track-actions'>
                       <button
@@ -955,13 +1026,15 @@ const Music: React.FC = () => {
                 {playlists.length} of {playlistsTotal} playlists
               </p>
             </div>
-            
+
             <div className='playlists-grid'>
-              {playlists.map((playlist) => (
+              {playlists.map(playlist => (
                 <div key={playlist.id} className='playlist-card'>
                   <div className='playlist-image-container'>
                     <img
-                      src={playlist.images[0]?.url || '/placeholder-playlist.png'}
+                      src={
+                        playlist.images[0]?.url || '/placeholder-playlist.png'
+                      }
                       alt={`${playlist.name} cover`}
                       className='playlist-image'
                     />
@@ -993,7 +1066,9 @@ const Music: React.FC = () => {
                         {playlist.public ? 'Public' : 'Private'}
                       </span>
                       {playlist.collaborative && (
-                        <span className='playlist-collaborative'>Collaborative</span>
+                        <span className='playlist-collaborative'>
+                          Collaborative
+                        </span>
                       )}
                     </div>
                     <div className='playlist-actions'>

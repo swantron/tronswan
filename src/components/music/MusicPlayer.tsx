@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+
 import { spotifyPlaybackService } from '../../services/spotifyPlaybackService';
 import { logger } from '../../utils/logger';
 import '../../styles/MusicPlayer.css';
@@ -45,7 +46,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
     try {
       setIsLoading(true);
       const success = await spotifyPlaybackService.initialize();
-      
+
       if (success) {
         setIsInitialized(true);
         logger.info('Spotify Web Playback SDK initialized successfully');
@@ -64,7 +65,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
 
     try {
       const state = await spotifyPlaybackService.getCurrentState();
-      
+
       if (state) {
         const currentTrack = state.track_window.current_track;
         setPlaybackState(prev => ({
@@ -163,18 +164,27 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
 
   const getProgressPercentage = (): number => {
     if (!playbackState.currentTrack) return 0;
-    return (playbackState.currentTrack.position / playbackState.currentTrack.duration) * 100;
+    return (
+      (playbackState.currentTrack.position /
+        playbackState.currentTrack.duration) *
+      100
+    );
   };
 
-  const handleProgressClick = async (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!playbackState.currentTrack || !spotifyPlaybackService.isPlayerReady()) return;
-    
+  const handleProgressClick = async (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (!playbackState.currentTrack || !spotifyPlaybackService.isPlayerReady())
+      return;
+
     const progressBar = event.currentTarget;
     const rect = progressBar.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const percentage = clickX / rect.width;
-    const newPosition = Math.floor(percentage * playbackState.currentTrack.duration);
-    
+    const newPosition = Math.floor(
+      percentage * playbackState.currentTrack.duration
+    );
+
     try {
       await spotifyPlaybackService.seek(newPosition);
       logger.info('Seeked to position', { position: newPosition, percentage });
@@ -187,15 +197,15 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
 
   return (
     <div className={`music-player-container ${isVisible ? 'visible' : ''}`}>
-      <div className="music-player">
-        <div className="music-player-header">
+      <div className='music-player'>
+        <div className='music-player-header'>
           <h3>🎵 Now Playing</h3>
-          <div className="player-header-controls">
-            <button 
-              className="minimize-btn"
+          <div className='player-header-controls'>
+            <button
+              className='minimize-btn'
               onClick={onClose}
-              aria-label="Minimize player"
-              title="Minimize player (music will continue playing)"
+              aria-label='Minimize player'
+              title='Minimize player (music will continue playing)'
             >
               ➖
             </button>
@@ -203,120 +213,131 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
         </div>
 
         {isLoading ? (
-          <div className="music-player-loading">
-            <div className="loading-spinner" />
+          <div className='music-player-loading'>
+            <div className='loading-spinner' />
             <p>Initializing player...</p>
           </div>
         ) : !isInitialized ? (
-          <div className="music-player-error">
+          <div className='music-player-error'>
             <p>Failed to initialize music player</p>
-            <button onClick={initializePlayer} className="retry-btn">
+            <button onClick={initializePlayer} className='retry-btn'>
               Retry
             </button>
           </div>
         ) : !playbackState.currentTrack ? (
-          <div className="music-player-empty">
+          <div className='music-player-empty'>
             <p>No track playing</p>
-            <p className="empty-subtitle">Play a track from your music to see it here</p>
+            <p className='empty-subtitle'>
+              Play a track from your music to see it here
+            </p>
           </div>
         ) : (
-          <div className="music-player-content">
-            <div className="track-info">
+          <div className='music-player-content'>
+            <div className='track-info'>
               <img
                 src={playbackState.currentTrack.image}
                 alt={`${playbackState.currentTrack.album} cover`}
-                className="track-image"
+                className='track-image'
               />
-              <div className="track-details">
-                <h4 className="track-name">{playbackState.currentTrack.name}</h4>
-                <p className="track-artist">
+              <div className='track-details'>
+                <h4 className='track-name'>
+                  {playbackState.currentTrack.name}
+                </h4>
+                <p className='track-artist'>
                   {playbackState.currentTrack.artists.join(', ')}
                 </p>
-                <p className="track-album">{playbackState.currentTrack.album}</p>
+                <p className='track-album'>
+                  {playbackState.currentTrack.album}
+                </p>
               </div>
             </div>
 
-            <div className="player-controls">
-              <div className="progress-container">
-                <span className="time current">
+            <div className='player-controls'>
+              <div className='progress-container'>
+                <span className='time current'>
                   {formatTime(playbackState.currentTrack.position)}
                 </span>
-                <div 
-                  className="progress-bar"
+                <div
+                  className='progress-bar'
                   onClick={handleProgressClick}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div 
-                    className="progress-fill"
+                  <div
+                    className='progress-fill'
                     style={{ width: `${getProgressPercentage()}%` }}
                   />
                 </div>
-                <span className="time total">
+                <span className='time total'>
                   {formatTime(playbackState.currentTrack.duration)}
                 </span>
               </div>
 
-              <div className="control-buttons">
+              <div className='control-buttons'>
                 <button
-                  className="control-btn prev-btn"
+                  className='control-btn prev-btn'
                   onClick={handlePreviousTrack}
-                  aria-label="Previous track"
+                  aria-label='Previous track'
                 >
                   ⏮
                 </button>
                 <button
-                  className="control-btn play-pause-btn"
+                  className='control-btn play-pause-btn'
                   onClick={handlePlayPause}
                   aria-label={playbackState.isPlaying ? 'Pause' : 'Play'}
                 >
                   {playbackState.isPlaying ? '⏸' : '▶'}
                 </button>
                 <button
-                  className="control-btn next-btn"
+                  className='control-btn next-btn'
                   onClick={handleNextTrack}
-                  aria-label="Next track"
+                  aria-label='Next track'
                 >
                   ⏭
                 </button>
               </div>
 
-              <div className="volume-control">
-                <span className="volume-icon">🔊</span>
+              <div className='volume-control'>
+                <span className='volume-icon'>🔊</span>
                 <input
-                  type="range"
-                  min="0"
-                  max="100"
+                  type='range'
+                  min='0'
+                  max='100'
                   value={playbackState.volume}
-                  onChange={(e) => handleVolumeChange(Number(e.target.value))}
-                  className="volume-slider"
-                  aria-label="Volume control"
+                  onChange={e => handleVolumeChange(Number(e.target.value))}
+                  className='volume-slider'
+                  aria-label='Volume control'
                 />
-                <span className="volume-value">{playbackState.volume}%</span>
+                <span className='volume-value'>{playbackState.volume}%</span>
               </div>
             </div>
 
-            {playbackState.queue?.next_tracks && playbackState.queue.next_tracks.length > 0 && (
-              <div className="queue-info">
-                <h5>Coming Up Next:</h5>
-                <div className="next-tracks">
-                  {playbackState.queue.next_tracks.slice(0, 3).map((track, index) => (
-                    <div key={track.id || index} className="next-track">
-                      <img 
-                        src={track.album.images[0]?.url} 
-                        alt={track.album.name}
-                        className="next-track-image"
-                      />
-                      <div className="next-track-info">
-                        <span className="next-track-name">{track.name}</span>
-                        <span className="next-track-artist">
-                          {track.artists.map((a: any) => a.name).join(', ')}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+            {playbackState.queue?.next_tracks &&
+              playbackState.queue.next_tracks.length > 0 && (
+                <div className='queue-info'>
+                  <h5>Coming Up Next:</h5>
+                  <div className='next-tracks'>
+                    {playbackState.queue.next_tracks
+                      .slice(0, 3)
+                      .map((track, index) => (
+                        <div key={track.id || index} className='next-track'>
+                          <img
+                            src={track.album.images[0]?.url}
+                            alt={track.album.name}
+                            className='next-track-image'
+                          />
+                          <div className='next-track-info'>
+                            <span className='next-track-name'>
+                              {track.name}
+                            </span>
+                            <span className='next-track-artist'>
+                              {track.artists.map((a: any) => a.name).join(', ')}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         )}
       </div>
