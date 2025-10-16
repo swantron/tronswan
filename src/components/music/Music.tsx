@@ -705,13 +705,15 @@ const Music: React.FC = () => {
             </select>
           </div>
 
-          <button
-            className='logout-btn'
-            onClick={handleLogout}
-            aria-label='Logout from Spotify'
-          >
-            Logout
-          </button>
+          <div className='logout-container'>
+            <button
+              className='logout-btn'
+              onClick={handleLogout}
+              aria-label='Logout from Spotify'
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         <div className='music-help'>

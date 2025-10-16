@@ -156,7 +156,7 @@
 
 .music-controls {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   flex-wrap: wrap;
 }
@@ -168,6 +168,12 @@
   gap: 0.5rem;
 }
 
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .time-range-selector label {
   font-weight: 600;
   color: var(--primary-text);
@@ -177,16 +183,24 @@
   padding: 0.5rem 1rem;
   border: 2px solid rgba(248, 152, 89, 0.3);
   border-radius: var(--border-radius);
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--secondary-bg);
   color: var(--primary-text);
   font-size: 0.9rem;
   transition: all var(--transition-speed) ease;
+  min-width: 150px;
 }
 
 .time-range-selector select:focus {
   outline: none;
   border-color: var(--accent-color);
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--secondary-bg);
+  box-shadow: 0 0 0 2px rgba(248, 152, 89, 0.2);
+}
+
+.time-range-selector select option {
+  background-color: var(--secondary-bg);
+  color: var(--primary-text);
+  padding: 0.5rem;
 }
 
 .logout-btn {
@@ -199,6 +213,8 @@
   font-size: 0.9rem;
   transition: all var(--transition-speed) ease;
   font-weight: bold;
+  min-width: 150px;
+  width: 100%;
 }
 
 .logout-btn:hover {
