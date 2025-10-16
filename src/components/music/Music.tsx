@@ -237,6 +237,30 @@ const Music: React.FC = () => {
     [loadUserData]
   );
 
+  const initializeTronSwanFromCurrentUser = useCallback(async () => {
+    try {
+      // Get the current user's tokens from localStorage
+      const userTokens = localStorage.getItem('spotify_tokens');
+      if (!userTokens) {
+        throw new Error('No user tokens found');
+      }
+
+      const { accessToken, refreshToken, expiresAt } = JSON.parse(userTokens);
+      
+      // Initialize Tron Swan's service with the same tokens
+      await tronSwanSpotifyService.initializeTokens(
+        accessToken, 
+        refreshToken, 
+        Math.floor((expiresAt - Date.now()) / 1000) // Convert to seconds
+      );
+      
+      logger.info('Tron Swan service initialized with current user tokens');
+    } catch (error) {
+      logger.error('Failed to initialize Tron Swan with current user tokens', { error });
+      throw error;
+    }
+  }, []);
+
   const checkAuthStatus = useCallback(async () => {
     logger.debug('Checking Spotify authentication status', {
       timestamp: new Date().toISOString(),
@@ -247,10 +271,19 @@ const Music: React.FC = () => {
 
     if (authenticated) {
       await loadUserData();
+      
+      // Also initialize Tron Swan's service with the same tokens
+      try {
+        await initializeTronSwanFromCurrentUser();
+        logger.info('Tron Swan service pre-initialized with user tokens');
+      } catch (error) {
+        logger.warn('Failed to pre-initialize Tron Swan service', { error });
+        // This is not critical, so we don't throw
+      }
     }
 
     setLoading(false);
-  }, [loadUserData]);
+  }, [loadUserData, initializeTronSwanFromCurrentUser]);
 
   useEffect(() => {
     const initializeMusic = async () => {
@@ -342,14 +375,18 @@ const Music: React.FC = () => {
       // Load Tron Swan's data if not already loaded
       if (!tronUser) {
         try {
+          // First, try to initialize Tron Swan's tokens from the current user's session
+          await initializeTronSwanFromCurrentUser();
           await loadTronSwanData();
         } catch (error) {
           logger.error('Failed to load Tron Swan data', { error });
-          // You might want to show an error message to the user here
+          // Show error message to user
+          alert('Failed to load Tron Swan\'s music data. Please make sure you\'re logged in and try again.');
         }
       }
     }
   };
+
 
   const handleLogin = async () => {
     logger.info('Spotify login initiated', {
