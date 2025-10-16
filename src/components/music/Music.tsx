@@ -633,13 +633,13 @@ const Music: React.FC = () => {
         />
         <div className='music-auth'>
           <h1>🎵 Non-janky Spotify</h1>
-          <p className='auth-tagline'>Spotify, but not janky</p>
+          <p className='auth-tagline'>it's Spotify, but less janky</p>
 
           <p>
-            Connect your Spotify account to access{' '}
-            <strong>your personal</strong> music taste, top tracks, playlists,
-            and listening history with superior controls and interface.
+            Connect your Spotify account to access your top tracks, playlists,
+            and listening history with better controls and a cleaner interface.
           </p>
+          <p><strong>Requires Spotify Premium.</strong></p>
           {authError && (
             <div
               className='auth-error'
@@ -681,7 +681,7 @@ const Music: React.FC = () => {
           )}
           <div>
             <h1>🎵 Spotify Interface</h1>
-            <p className='user-subtitle'>Spotify, but not janky</p>
+            <p className='user-subtitle'>it's Spotify, but less janky</p>
           </div>
         </div>
 
@@ -744,9 +744,9 @@ const Music: React.FC = () => {
                 </div>
 
                 <div className='help-section'>
-                  <h4>What You Can Do</h4>
+                  <h4>What You Can Do (After Login)</h4>
                   <ul>
-                    <li>Browse your playlists, top tracks, and artists</li>
+                    <li>Browse your personal playlists, top tracks, and artists</li>
                     <li>Discover new music through your listening history</li>
                     <li>Click the ♪ buttons to open songs in your Spotify app</li>
                     <li>If you have Premium, click ▶ to play directly here</li>
@@ -770,11 +770,11 @@ const Music: React.FC = () => {
                 </div>
 
                 <div className='help-section'>
-                  <h4>Without Premium</h4>
+                  <h4>Login Required</h4>
                   <p>
-                    You can still explore and discover music, but playback will
-                    redirect you to Spotify. Consider upgrading to Premium for the
-                    full enhanced experience!
+                    You need to log in with your Spotify account to access your music data. 
+                    Once logged in, you can browse your playlists, top tracks, and artists. 
+                    Premium is only required for direct playback on this site.
                   </p>
                 </div>
               </div>
