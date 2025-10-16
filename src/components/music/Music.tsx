@@ -593,8 +593,7 @@ const Music: React.FC = () => {
           </p>
           
           <div className='premium-notice'>
-            <h3>🔒 Spotify Premium Required for Playback</h3>
-            <p>This enhanced player requires Spotify Premium to play music directly on the website. 
+            <p><strong>🔒 Spotify Premium Required for Playback</strong><br />
             You can still explore and discover music without Premium!</p>
           </div>
           
@@ -678,45 +677,33 @@ const Music: React.FC = () => {
           <details>
             <summary>🎵 How this enhanced music player works</summary>
             <div className='help-content'>
-              <div className='premium-requirement'>
-                <h4>🔒 Spotify Premium Required for Playback</h4>
-                <p><strong>To play music directly on this website, you need Spotify Premium.</strong></p>
-                <p>This is a requirement from Spotify, not our limitation. Here's what you can do:</p>
+              <div className='help-section'>
+                <h4>🔒 Spotify Premium Required</h4>
+                <p>To play music directly on this website, you need Spotify Premium. This is a requirement from Spotify, not our limitation.</p>
               </div>
 
-              <div className='user-experience'>
-                <h4>🎵 What You Can Do:</h4>
+              <div className='help-section'>
+                <h4>What You Can Do</h4>
                 <ul>
-                  <li>✅ <strong>Browse Music:</strong> Explore your playlists, top tracks, and artists</li>
-                  <li>✅ <strong>Discover New Music:</strong> See what you've been listening to</li>
-                  <li>✅ <strong>Click Spotify Links:</strong> Use the ♪ buttons to open songs in your Spotify app</li>
-                  <li>✅ <strong>Play Your Music:</strong> If you have Premium, click ▶ to play directly here</li>
+                  <li>Browse your playlists, top tracks, and artists</li>
+                  <li>Discover new music through your listening history</li>
+                  <li>Click the ♪ buttons to open songs in your Spotify app</li>
+                  <li>If you have Premium, click ▶ to play directly here</li>
                 </ul>
               </div>
 
-              <div className='premium-benefits'>
-                <h4>💎 With Spotify Premium:</h4>
-                <ul>
-                  <li>🎯 <strong>Enhanced Player:</strong> Superior interface and controls</li>
-                  <li>📊 <strong>Personal Analytics:</strong> See your top tracks, artists, and listening patterns</li>
-                  <li>🎵 <strong>Instant Playback:</strong> Play any song with one click</li>
-                  <li>📱 <strong>Responsive Design:</strong> Works perfectly on any device</li>
-                </ul>
-              </div>
-
-              <div className='how-to-play'>
-                <h4>▶ How to Play Music (Premium Users):</h4>
+              <div className='help-section'>
+                <h4>How to Play Music (Premium Users)</h4>
                 <ol>
                   <li>Click any "▶ Play" button below</li>
                   <li>You'll be prompted with a Spotify login page (if not already logged in)</li>
-                  <li>Make sure you have <strong>Spotify open</strong> on another device (desktop app, mobile app, or web player)</li>
+                  <li>Make sure you have <strong>Spotify open</strong> on another device</li>
                   <li>Your music will transfer to this enhanced player</li>
-                  <li>Enjoy superior controls and interface</li>
                 </ol>
               </div>
 
-              <div className='no-premium'>
-                <h4>🆓 Without Premium:</h4>
+              <div className='help-section'>
+                <h4>Without Premium</h4>
                 <p>You can still explore and discover music, but playback will redirect you to Spotify. Consider upgrading to Premium for the full enhanced experience!</p>
               </div>
             </div>

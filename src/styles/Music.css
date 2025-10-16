@@ -52,25 +52,19 @@
 }
 
 .premium-notice {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: var(--accent-color);
+  padding: 1rem;
+  border-radius: 8px;
   margin: 1.5rem 0;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-}
-
-.premium-notice h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.3rem;
-  font-weight: bold;
 }
 
 .premium-notice p {
   margin: 0;
-  font-size: 1rem;
-  opacity: 0.95;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .music-auth p {
@@ -542,71 +536,34 @@
   font-size: 0.9rem;
 }
 
-.premium-requirement {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-  color: white;
-  padding: 1rem;
+.help-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  padding: 1rem;
   margin: 1rem 0;
 }
 
-.premium-requirement h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+.help-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: var(--accent-color);
+  font-weight: 600;
 }
 
-.user-experience {
-  background: linear-gradient(135deg, #4ecdc4, #44a08d);
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
+.help-section p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
 }
 
-.user-experience h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+.help-section ul, .help-section ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
 }
 
-.premium-benefits {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-
-.premium-benefits h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.how-to-play {
-  background: linear-gradient(135deg, #f093fb, #f5576c);
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-
-.how-to-play h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.no-premium {
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
-  color: #333;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  border-left: 4px solid #ff6b6b;
-}
-
-.no-premium h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  color: #ff6b6b;
+.help-section li {
+  margin: 0.25rem 0;
+  line-height: 1.4;
 }
 
 .artists-grid {
