@@ -36,10 +36,14 @@ export class BasePage {
   // Navigation menu
   get navLinks() {
     return {
-      home: this.page.locator('a.nav-link').filter({ hasText: 'tronswan' }),
+      home: this.page.locator('a.nav-link').filter({ hasText: 'Home' }),
       recipes: this.page.locator('a.nav-link').filter({ hasText: 'chomptron' }),
       swantron: this.page.locator('a.nav-link').filter({ hasText: 'swantron' }),
-      weather: this.page.locator('a.nav-link').filter({ hasText: 'weathertron' }),
+      music: this.page.locator('a.nav-link').filter({ hasText: 'music' }),
+      mlb: this.page.locator('a.nav-link').filter({ hasText: 'mlb' }),
+      weather: this.page
+        .locator('a.nav-link')
+        .filter({ hasText: 'weathertron' }),
       hello: this.page.locator('a.nav-link').filter({ hasText: 'hello' }),
       health: this.page.locator('a.nav-link').filter({ hasText: 'health' }),
     };
@@ -61,6 +65,8 @@ export class BasePage {
 
   // Error handling
   async isErrorVisible(): Promise<boolean> {
-    return await this.page.locator('[data-testid="error-boundary"]').isVisible();
+    return await this.page
+      .locator('[data-testid="error-boundary"]')
+      .isVisible();
   }
 }
