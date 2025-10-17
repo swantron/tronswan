@@ -701,7 +701,10 @@ const Music: React.FC = () => {
                 }
               >
                 <option value='short_term'>Last 4 weeks</option>
+                <option value='short_term'>Last month</option>
                 <option value='medium_term'>Last 6 months</option>
+                <option value='medium_term'>Last year</option>
+                <option value='long_term'>Last two years</option>
                 <option value='long_term'>All time</option>
               </select>
             </div>
