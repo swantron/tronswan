@@ -39,7 +39,7 @@ describe('App Component', () => {
     expect(navLinks).toHaveLength(9);
 
     // Check specific navigation text
-    expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'weathertron' })

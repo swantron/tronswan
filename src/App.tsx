@@ -169,7 +169,7 @@ function App() {
                   })
                 }
               >
-                tronswan
+                home
               </Link>
               <Link
                 to='/swantron'
@@ -182,6 +182,30 @@ function App() {
                 }
               >
                 swantron
+              </Link>
+              <Link
+                to='/music'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - Music', {
+                    target: '/music',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
+                music
+              </Link>
+              <Link
+                to='/mlb'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - MLB', {
+                    target: '/mlb',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
+                mlb
               </Link>
               <Link
                 to='/weather'
@@ -208,18 +232,6 @@ function App() {
                 chomptron
               </Link>
               <Link
-                to='/hello'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Hello', {
-                    target: '/hello',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                hello
-              </Link>
-              <Link
                 to='/health'
                 className='nav-link'
                 onClick={() =>
@@ -244,28 +256,16 @@ function App() {
                 shorts
               </Link>
               <Link
-                to='/music'
+                to='/hello'
                 className='nav-link'
                 onClick={() =>
-                  logger.info('Navigation clicked - Music', {
-                    target: '/music',
+                  logger.info('Navigation clicked - Hello', {
+                    target: '/hello',
                     timestamp: new Date().toISOString(),
                   })
                 }
               >
-                music
-              </Link>
-              <Link
-                to='/mlb'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - MLB', {
-                    target: '/mlb',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                mlb
+                hello
               </Link>
             </nav>
 
