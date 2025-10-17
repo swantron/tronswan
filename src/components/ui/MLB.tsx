@@ -506,6 +506,15 @@ function MLB() {
                     onClick={() =>
                       setExpandedTeam(isExpanded ? null : team.team.id)
                     }
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setExpandedTeam(isExpanded ? null : team.team.id);
+                      }
+                    }}
+                    role='button'
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
                   >
                     <div className='team-stats-rank'>#{index + 1}</div>
                     <div className='team-stats-name'>
@@ -692,7 +701,7 @@ function MLB() {
               </tr>
             </thead>
             <tbody>
-              {teams.map((team, idx) => {
+              {teams.map(team => {
                 const isInPlayoff =
                   team.divisionChamp ||
                   team.wildCardLeader ||

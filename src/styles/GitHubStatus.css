@@ -135,7 +135,6 @@
   font-size: var(--font-sm);
 }
 
-
 /* Actions List */
 .actions-list {
   display: flex;
@@ -324,7 +323,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-
   .action-details,
   .repo-details {
     grid-template-columns: 1fr;

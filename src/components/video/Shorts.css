@@ -107,7 +107,6 @@
   transform: scale(1.1);
 }
 
-
 .shorts-info {
   padding: 1.5rem;
 }
@@ -125,16 +124,16 @@
   .shorts-container {
     padding: 1rem;
   }
-  
+
   .shorts-title {
     font-size: 2rem;
   }
-  
+
   .shorts-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .shorts-thumbnail {
     height: 150px;
   }
@@ -144,7 +143,7 @@
   .shorts-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .shorts-thumbnail {
     height: 180px;
   }
