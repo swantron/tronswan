@@ -36,7 +36,7 @@ describe('App Component', () => {
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(8);
+    expect(navLinks).toHaveLength(9);
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'tronswan' })).toBeInTheDocument();
@@ -49,6 +49,7 @@ describe('App Component', () => {
     expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'shorts' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'music' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'mlb' })).toBeInTheDocument();
   });
 
   // Test to check if the home page content is rendered by default.
