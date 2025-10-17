@@ -4,13 +4,13 @@ import { Helmet } from 'react-helmet-async';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 
 const SEO = ({
-  title = 'Tron Swan - Robot-Style Recipes & Tech Fun',
-  description = 'Explore robot-style recipes from ChompTron and enjoy tech-inspired fun at Tron Swan. Weather updates, FizzBuzz games, and futuristic cooking adventures await!',
-  keywords = 'recipes, robot cooking, tech fun, weather, FizzBuzz, ChompTron, cooking',
+  title = 'tronswan - Software Development Portfolio & Projects',
+  description = "Explore tronswan's portfolio featuring real-time weather updates, MLB statistics, Spotify music integration, service health monitoring, and links to chomptron recipes and swantron blog. Built by Joseph Swanson.",
+  keywords = 'Joseph Swanson, software development, portfolio, weather app, MLB stats, Spotify integration, health monitoring, DevOps, chomptron, swantron, React, TypeScript',
   image = '/robotard_512x512.png',
   url = 'https://tronswan.com',
   type = 'website',
-  author = 'SwanTron',
+  author = 'Joseph Swanson',
   structuredData = null,
 }) => {
   const siteUrl = runtimeConfig.getWithDefault(
@@ -35,7 +35,7 @@ const SEO = ({
       <meta property='og:title' content={title} />
       <meta property='og:description' content={description} />
       <meta property='og:image' content={imageUrl} />
-      <meta property='og:site_name' content='Tron Swan' />
+      <meta property='og:site_name' content='tronswan' />
 
       {/* Twitter */}
       <meta property='twitter:card' content='summary_large_image' />
