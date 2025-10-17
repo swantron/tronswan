@@ -64,6 +64,9 @@ function HealthPage() {
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState<
+    'services' | 'deployments' | 'infrastructure'
+  >('services');
   const serviceHealthRef = useRef<ServiceHealthRef>(null);
 
   const refreshData = async () => {
@@ -148,13 +151,10 @@ function HealthPage() {
         url='/health'
       />
 
-      <div className='health-header'>
+      <div className='health-content'>
         <h1 className='health-title' data-testid='health-title'>
-          Service Health
+          Service Health & Status
         </h1>
-        <p className='health-subtitle'>
-          Monitor deployments, infrastructure, and service status
-        </p>
 
         <div className='health-controls'>
           <button
@@ -169,39 +169,84 @@ function HealthPage() {
             Last updated: {lastUpdated.toLocaleTimeString()}
           </span>
         </div>
+
+        {/* Tab Navigation */}
+        <div className='tab-navigation'>
+          <button
+            className={`tab-button ${activeTab === 'services' ? 'active' : ''}`}
+            onClick={() => {
+              logger.info('Health tab changed', {
+                from: activeTab,
+                to: 'services',
+                timestamp: new Date().toISOString(),
+              });
+              setActiveTab('services');
+            }}
+          >
+            🌐 Services & APIs
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'deployments' ? 'active' : ''}`}
+            onClick={() => {
+              logger.info('Health tab changed', {
+                from: activeTab,
+                to: 'deployments',
+                timestamp: new Date().toISOString(),
+              });
+              setActiveTab('deployments');
+            }}
+          >
+            🚀 Deployments
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'infrastructure' ? 'active' : ''}`}
+            onClick={() => {
+              logger.info('Health tab changed', {
+                from: activeTab,
+                to: 'infrastructure',
+                timestamp: new Date().toISOString(),
+              });
+              setActiveTab('infrastructure');
+            }}
+          >
+            ☁️ Infrastructure
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className='tab-content'>
+          {activeTab === 'services' && (
+            <div className='health-section'>
+              <ServiceHealth
+                ref={serviceHealthRef}
+                services={healthData.services}
+              />
+            </div>
+          )}
+
+          {activeTab === 'deployments' && (
+            <div className='health-section'>
+              <GitHubStatus
+                data={healthData.github}
+                onDataChange={githubData =>
+                  setHealthData(prev => ({ ...prev, github: githubData }))
+                }
+              />
+            </div>
+          )}
+
+          {activeTab === 'infrastructure' && (
+            <div className='health-section'>
+              <DigitalOceanStatus
+                data={healthData.digitalocean}
+                onDataChange={doData =>
+                  setHealthData(prev => ({ ...prev, digitalocean: doData }))
+                }
+              />
+            </div>
+          )}
+        </div>
       </div>
-
-      <div className='health-grid'>
-        <div className='health-section'>
-          <h2 className='section-title'>🚀 Deployment Status</h2>
-          <GitHubStatus
-            data={healthData.github}
-            onDataChange={githubData =>
-              setHealthData(prev => ({ ...prev, github: githubData }))
-            }
-          />
-        </div>
-
-        <div className='health-section'>
-          <h2 className='section-title'>☁️ Infrastructure</h2>
-          <DigitalOceanStatus
-            data={healthData.digitalocean}
-            onDataChange={doData =>
-              setHealthData(prev => ({ ...prev, digitalocean: doData }))
-            }
-          />
-        </div>
-
-        <div className='health-section'>
-          <h2 className='section-title'>🌐 Services & APIs</h2>
-          <ServiceHealth
-            ref={serviceHealthRef}
-            services={healthData.services}
-          />
-        </div>
-      </div>
-
-      <div className='health-footer' />
     </div>
   );
 }

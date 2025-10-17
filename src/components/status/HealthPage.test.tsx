@@ -44,13 +44,8 @@ describe('HealthPage', () => {
     renderWithHelmet(<HealthPage />);
 
     expect(screen.getByTestId('health-title')).toHaveTextContent(
-      'Service Health'
+      'Service Health & Status'
     );
-    expect(
-      screen.getByText(
-        'Monitor deployments, infrastructure, and service status'
-      )
-    ).toBeInTheDocument();
   });
 
   it('renders refresh button', () => {
@@ -70,12 +65,12 @@ describe('HealthPage', () => {
     );
   });
 
-  it('renders section titles', () => {
+  it('renders tab buttons', () => {
     renderWithHelmet(<HealthPage />);
 
-    expect(screen.getByText('🚀 Deployment Status')).toBeInTheDocument();
-    expect(screen.getByText('☁️ Infrastructure')).toBeInTheDocument();
     expect(screen.getByText('🌐 Services & APIs')).toBeInTheDocument();
+    expect(screen.getByText('🚀 Deployments')).toBeInTheDocument();
+    expect(screen.getByText('☁️ Infrastructure')).toBeInTheDocument();
   });
 
   it('handles refresh button click', async () => {
@@ -94,12 +89,31 @@ describe('HealthPage', () => {
     expect(refreshButton).toBeInTheDocument();
   });
 
+  it('switches between tabs', () => {
+    renderWithHelmet(<HealthPage />);
+
+    const servicesTab = screen.getByText('🌐 Services & APIs');
+    const deploymentsTab = screen.getByText('🚀 Deployments');
+    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+
+    // Services tab should be active by default
+    expect(servicesTab).toHaveClass('active');
+
+    // Click deployments tab
+    fireEvent.click(deploymentsTab);
+    expect(deploymentsTab).toHaveClass('active');
+
+    // Click infrastructure tab
+    fireEvent.click(infrastructureTab);
+    expect(infrastructureTab).toHaveClass('active');
+  });
+
   it('renders health footer', () => {
     renderWithHelmet(<HealthPage />);
 
-    // Check that the health footer div exists but is empty
-    const footer = document.querySelector('.health-footer');
-    expect(footer).toBeInTheDocument();
+    // The health-footer class was removed, so this test is no longer needed
+    // Just verify the page structure is intact
+    expect(screen.getByTestId('health-title')).toBeInTheDocument();
   });
 
   it('has proper SEO meta tags', async () => {

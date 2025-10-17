@@ -89,6 +89,11 @@
   padding: 20px;
 }
 
+/* Droplets Tab Styles */
+.droplets-tab {
+  padding: 20px;
+}
+
 .app-info {
   margin-top: 20px;
 }
@@ -99,18 +104,19 @@
   align-items: flex-start;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 2px solid rgba(248, 152, 89, 0.3);
 }
 
 .app-title-section h4 {
   margin: 0 0 5px 0;
-  color: #f89859;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-2xl);
+  font-weight: bold;
 }
 
 .app-description {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   font-size: var(--font-sm);
   font-style: italic;
 }
@@ -124,51 +130,69 @@
 
 .deployment-phase {
   font-size: var(--font-xs);
-  color: #6c757d;
-  background: #f8f9fa;
-  padding: 2px 8px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
   border-radius: 4px;
+  border: 1px solid rgba(248, 152, 89, 0.3);
 }
 
 .app-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .detail-item {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #007bff;
-  min-height: 60px;
+  align-items: center;
+  padding: 12px 16px;
+  background: transparent;
+  border-radius: 0;
+  border-left: none;
+  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  min-height: auto;
+  transition: background 0.2s ease;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item:hover {
+  background: rgba(248, 152, 89, 0.1);
 }
 
 .detail-item .label {
   font-weight: 600;
-  color: #495057;
+  color: rgba(255, 255, 255, 0.7);
   flex-shrink: 0;
-  min-width: 120px;
+  min-width: 160px;
+  font-size: 0.9rem;
 }
 
 .detail-item .value {
   font-weight: 500;
-  color: #007bff;
+  color: var(--accent-color, #f89859);
   text-align: right;
-  word-break: break-all;
+  word-break: break-word;
   flex: 1;
   margin-left: 10px;
+  font-size: 0.9rem;
 }
 
 .detail-item .value a {
-  color: #007bff;
+  color: var(--accent-color, #f89859);
   text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
 .detail-item .value a:hover {
+  opacity: 0.8;
   text-decoration: underline;
 }
 
@@ -177,8 +201,10 @@
 .databases-tab h3,
 .account-tab h3 {
   margin-bottom: 1.5rem;
-  color: #f89859;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-2xl);
+  text-align: center;
+  font-weight: bold;
 }
 
 .droplets-list,
@@ -186,24 +212,26 @@
 .databases-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .droplet-item,
 .loadbalancer-item,
 .database-item {
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(248, 152, 89, 0.3);
   border-radius: 12px;
-  padding: 1.5rem;
-  background: #f8fafc;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .droplet-item:hover,
 .loadbalancer-item:hover,
 .database-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
   transform: translateY(-2px);
+  border-color: rgba(248, 152, 89, 0.5);
 }
 
 .droplet-header,
@@ -212,7 +240,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  padding: 1rem 1.5rem;
+  background: rgba(248, 152, 89, 0.1);
+  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
   flex-wrap: wrap;
   gap: 0.5rem;
 }
@@ -221,7 +252,7 @@
 .lb-header h4,
 .db-header h4 {
   margin: 0;
-  color: #1a202c;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-lg);
   font-weight: 700;
 }
@@ -276,9 +307,9 @@
 .droplet-info,
 .lb-info,
 .db-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   font-size: var(--font-sm);
 }
 
@@ -288,7 +319,7 @@
 .db-details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0;
 }
 
 .droplet-specs span,
@@ -297,72 +328,97 @@
 .db-details span {
   display: flex;
   justify-content: space-between;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid #f1f5f9;
-  color: #1a202c;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  transition: background 0.2s ease;
+}
+
+.droplet-specs span:last-child,
+.droplet-details span:last-child,
+.lb-details span:last-child,
+.db-details span:last-child {
+  border-bottom: none;
+}
+
+.droplet-specs span:hover,
+.droplet-details span:hover,
+.lb-details span:hover,
+.db-details span:hover {
+  background: rgba(248, 152, 89, 0.1);
 }
 
 .droplet-specs span strong,
 .droplet-details span strong,
 .lb-details span strong,
 .db-details span strong {
-  color: #2d3748;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 600;
+  min-width: 120px;
 }
 
 .droplet-networks,
 .lb-rules {
-  grid-column: 1 / -1;
-  margin-top: 0.5rem;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(248, 152, 89, 0.3);
+  background: rgba(248, 152, 89, 0.05);
 }
 
 .droplet-networks strong,
 .lb-rules strong {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #4a5568;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
 }
 
 .ip-address {
   display: inline-block;
-  background: #edf2f7;
-  color: #4a5568;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color, #f89859);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
   font-size: var(--font-xs);
   margin-right: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(248, 152, 89, 0.3);
+  font-weight: 500;
 }
 
 .rule {
-  background: #edf2f7;
-  color: #4a5568;
-  padding: 0.5rem;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem;
+  border-radius: 6px;
   font-size: var(--font-xs);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(248, 152, 89, 0.2);
 }
 
 .droplet-tags {
-  grid-column: 1 / -1;
-  margin-top: 0.5rem;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(248, 152, 89, 0.3);
+  background: rgba(248, 152, 89, 0.05);
 }
 
 .droplet-tags strong {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #4a5568;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
 }
 
 .tag {
   display: inline-block;
-  background: #667eea;
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  background: var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
   font-size: var(--font-xs);
   margin-right: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .db-connection {

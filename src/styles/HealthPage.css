@@ -1,66 +1,51 @@
 .health-page {
   min-height: 100vh;
-  background: #282c34;
-  padding: 2rem;
-  color: #ffffff;
+  padding: 2rem 1rem;
+  background-color: var(--primary-bg, #282c34);
+  color: var(--primary-text, #ffffff);
 }
 
-/* Typography Scale - Standardized font sizes */
-.health-page {
-  --font-xs: 0.75rem; /* 12px - Small labels, timestamps */
-  --font-sm: 0.875rem; /* 14px - Body text, descriptions */
-  --font-base: 1rem; /* 16px - Default text */
-  --font-lg: 1.125rem; /* 18px - Large body text */
-  --font-xl: 1.25rem; /* 20px - Section subtitles */
-  --font-2xl: 1.5rem; /* 24px - Section titles */
-  --font-3xl: 2rem; /* 32px - Page subtitle */
-  --font-4xl: 3rem; /* 48px - Main page title */
-}
-
-.health-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  color: white;
+.health-content {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .health-title {
-  font-size: var(--font-4xl);
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.health-subtitle {
-  font-size: var(--font-xl);
+  font-size: 3rem;
+  text-align: center;
   margin-bottom: 2rem;
-  opacity: 0.9;
+  color: var(--accent-color, #f89859);
+  text-shadow: 0 0 20px rgba(248, 152, 89, 0.3);
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .health-controls {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 1rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
 .refresh-button {
-  background: #f89859;
-  border: 2px solid #f89859;
-  color: #282c34;
+  background: var(--accent-color, #f89859);
+  border: 2px solid var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
   padding: 0.75rem 1.5rem;
-  border-radius: 25px;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 .refresh-button:hover:not(:disabled) {
   background: #e6894a;
   border-color: #e6894a;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
 }
 
 .refresh-button:disabled {
@@ -84,102 +69,131 @@
 .last-updated {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
+  border-radius: 8px;
 }
 
-.health-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-.health-section:nth-child(1),
-.health-section:nth-child(2) {
-  grid-row: 1;
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--accent-color, #f89859);
+  background: rgba(248, 152, 89, 0.05);
+  color: var(--accent-color, #f89859);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.health-section:nth-child(3) {
-  grid-row: 2;
-  grid-column: 1 / -1;
+.tab-button:hover:not(:disabled) {
+  background: rgba(248, 152, 89, 0.15);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
+  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.4);
+}
+
+.tab-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tab Content */
+.tab-content {
+  margin-top: 2rem;
 }
 
 .health-section {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(248, 152, 89, 0.3);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.health-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(248, 152, 89, 0.2);
 }
 
 .section-title {
-  font-size: var(--font-2xl);
-  font-weight: bold;
+  font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  color: #f89859;
-  border-bottom: 3px solid #f89859;
-  padding-bottom: 0.5rem;
-}
-
-.health-footer {
+  color: var(--accent-color, #f89859);
   text-align: center;
-  margin-top: 3rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.health-note {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .health-page {
-    padding: 1rem;
-  }
-
   .health-title {
     font-size: 2rem;
-  }
-
-  .health-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 1.5rem;
-  }
-
-  .health-section:nth-child(1),
-  .health-section:nth-child(2),
-  .health-section:nth-child(3) {
-    grid-row: auto;
-    grid-column: 1;
-  }
-
-  .health-section {
-    padding: 1.5rem;
   }
 
   .health-controls {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .tab-navigation {
+    gap: 0.4rem;
+  }
+
+  .tab-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .health-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .health-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .health-title {
+    font-size: 1.5rem;
+  }
+
+  .tab-navigation {
+    gap: 0.35rem;
+  }
+
+  .tab-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .health-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .health-title {
+    font-size: 1.3rem;
+  }
+
+  .tab-navigation {
+    gap: 0.3rem;
+  }
+
+  .tab-button {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
   }
 }
