@@ -61,14 +61,14 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'MLB Stats API',
         url: 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104',
-        description: 'Official MLB statistics and standings data',
+        description: '',
         status: services.mlbApi,
         lastChecked: new Date(),
       },
       {
         name: 'Spotify API',
         url: 'https://api.spotify.com/v1/',
-        description: 'Spotify Web API for music data',
+        description: '',
         status: services.spotifyApi,
         lastChecked: new Date(),
       },

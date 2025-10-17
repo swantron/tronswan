@@ -119,19 +119,21 @@
 
 .actions-tab h3 {
   margin: 0 0 16px 0;
-  color: #f89859;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-2xl);
+  text-align: center;
+  font-weight: bold;
 }
 
 .actions-header {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 2px solid rgba(248, 152, 89, 0.3);
 }
 
 .actions-header p {
   margin: 0;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.8);
   font-size: var(--font-sm);
 }
 
@@ -139,83 +141,119 @@
 .actions-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
 .action-item {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 16px;
-  background: #f8f9fa;
+  border: 1px solid rgba(248, 152, 89, 0.3);
+  border-radius: 12px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.action-item:hover {
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  transform: translateY(-2px);
+  border-color: rgba(248, 152, 89, 0.5);
 }
 
 .action-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  padding: 1rem 1.5rem;
+  background: rgba(248, 152, 89, 0.1);
+  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
 }
 
 .action-header h4 {
   margin: 0;
-  color: #495057;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-lg);
+  font-weight: 700;
 }
 
 .action-header .status {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 6px;
   font-size: var(--font-xs);
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .status-success {
-  background: #d4edda;
-  color: #155724;
+  background: #c6f6d5;
+  color: #22543d;
+  border: 1px solid #9ae6b4;
 }
 
 .status-failure {
-  background: #f8d7da;
-  color: #721c24;
+  background: #fed7d7;
+  color: #742a2a;
+  border: 1px solid #feb2b2;
 }
 
 .status-pending {
-  background: #fff3cd;
-  color: #856404;
+  background: #fef5e7;
+  color: #744210;
+  border: 1px solid #fbd38d;
 }
 
 .status-cancelled {
-  background: #e2e3e5;
-  color: #383d41;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: 1px solid #cbd5e0;
 }
 
 .status-unknown {
-  background: #f8f9fa;
-  color: #6c757d;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .action-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   font-size: var(--font-sm);
 }
 
 .action-details p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 0;
-  color: #495057;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  transition: background 0.2s ease;
+}
+
+.action-details p:last-child {
+  border-bottom: none;
+}
+
+.action-details p:hover {
+  background: rgba(248, 152, 89, 0.1);
 }
 
 .action-details strong {
-  color: #343a40;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  min-width: 120px;
 }
 
 .action-details a {
-  color: #007bff;
+  color: var(--accent-color, #f89859);
   text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
 .action-details a:hover {
+  opacity: 0.8;
   text-decoration: underline;
 }
 
@@ -226,14 +264,16 @@
 
 .repos-tab h3 {
   margin: 0 0 16px 0;
-  color: #f89859;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-2xl);
+  text-align: center;
+  font-weight: bold;
 }
 
 .repos-header {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 2px solid rgba(248, 152, 89, 0.3);
 }
 
 .repos-header p {
@@ -246,69 +286,102 @@
 .repositories-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
 .repository-item {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 16px;
-  background: #f8f9fa;
+  border: 1px solid rgba(248, 152, 89, 0.3);
+  border-radius: 12px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.repository-item:hover {
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  transform: translateY(-2px);
+  border-color: rgba(248, 152, 89, 0.5);
 }
 
 .repo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  padding: 1rem 1.5rem;
+  background: rgba(248, 152, 89, 0.1);
+  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
 }
 
 .repo-header h4 {
   margin: 0;
-  color: #495057;
+  color: var(--accent-color, #f89859);
   font-size: var(--font-lg);
+  font-weight: 700;
 }
 
 .repo-header .status {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 6px;
   font-size: var(--font-xs);
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .repo-header .status.private {
-  background: #f8d7da;
-  color: #721c24;
+  background: #fed7d7;
+  color: #742a2a;
+  border: 1px solid #feb2b2;
 }
 
 .repo-header .status.public {
-  background: #d4edda;
-  color: #155724;
+  background: #c6f6d5;
+  color: #22543d;
+  border: 1px solid #9ae6b4;
 }
 
 .repo-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   font-size: var(--font-sm);
 }
 
 .repo-details p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 0;
-  color: #495057;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  transition: background 0.2s ease;
+}
+
+.repo-details p:last-child {
+  border-bottom: none;
+}
+
+.repo-details p:hover {
+  background: rgba(248, 152, 89, 0.1);
 }
 
 .repo-details strong {
-  color: #343a40;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  min-width: 120px;
 }
 
 .repo-details a {
-  color: #007bff;
+  color: var(--accent-color, #f89859);
   text-decoration: none;
-  word-break: break-all;
+  word-break: break-word;
+  transition: opacity 0.2s ease;
 }
 
 .repo-details a:hover {
+  opacity: 0.8;
   text-decoration: underline;
 }
 
