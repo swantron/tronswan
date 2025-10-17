@@ -15,6 +15,8 @@ interface ServiceHealthProps {
     tronswan: 'healthy' | 'degraded' | 'down';
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
+    mlbApi: 'healthy' | 'degraded' | 'down';
+    spotifyApi: 'healthy' | 'degraded' | 'down';
   };
 }
 
@@ -56,6 +58,20 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         status: services.swantron,
         lastChecked: new Date(),
       },
+      {
+        name: 'MLB Stats API',
+        url: 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104',
+        description: 'Official MLB statistics and standings data',
+        status: services.mlbApi,
+        lastChecked: new Date(),
+      },
+      {
+        name: 'Spotify API',
+        url: 'https://api.spotify.com/v1/',
+        description: 'Spotify Web API for music data',
+        status: services.spotifyApi,
+        lastChecked: new Date(),
+      },
     ]);
 
     const serviceDataRef = useRef(serviceData);
@@ -70,27 +86,72 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
 
       try {
         const startTime = Date.now();
-        await fetch(service.url, {
-          method: 'HEAD',
-          mode: 'no-cors',
-          cache: 'no-cache',
-        });
-        const responseTime = Date.now() - startTime;
 
-        logger.info('Service health check successful', {
-          serviceName: service.name,
-          url: service.url,
-          responseTime: `${responseTime}ms`,
-          status: 'healthy',
-          timestamp: new Date().toISOString(),
-        });
+        // For API endpoints, use GET to actually check the API response
+        if (service.name.includes('API')) {
+          const response = await fetch(service.url, {
+            method: 'GET',
+            cache: 'no-cache',
+          });
 
-        return {
-          ...service,
-          status: 'healthy' as const,
-          responseTime,
-          lastChecked: new Date(),
-        };
+          const responseTime = Date.now() - startTime;
+
+          // Check if response is OK (200-299)
+          if (response.ok) {
+            logger.info('Service health check successful', {
+              serviceName: service.name,
+              url: service.url,
+              responseTime: `${responseTime}ms`,
+              status: 'healthy',
+              httpStatus: response.status,
+              timestamp: new Date().toISOString(),
+            });
+
+            return {
+              ...service,
+              status: 'healthy' as const,
+              responseTime,
+              lastChecked: new Date(),
+            };
+          } else {
+            logger.warn('Service health check failed - bad response', {
+              serviceName: service.name,
+              url: service.url,
+              httpStatus: response.status,
+              status: 'down',
+              timestamp: new Date().toISOString(),
+            });
+
+            return {
+              ...service,
+              status: 'down' as const,
+              lastChecked: new Date(),
+            };
+          }
+        } else {
+          // For regular websites, use HEAD request
+          await fetch(service.url, {
+            method: 'HEAD',
+            mode: 'no-cors',
+            cache: 'no-cache',
+          });
+          const responseTime = Date.now() - startTime;
+
+          logger.info('Service health check successful', {
+            serviceName: service.name,
+            url: service.url,
+            responseTime: `${responseTime}ms`,
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+          });
+
+          return {
+            ...service,
+            status: 'healthy' as const,
+            responseTime,
+            lastChecked: new Date(),
+          };
+        }
       } catch (error) {
         logger.warn('Service health check failed', {
           serviceName: service.name,

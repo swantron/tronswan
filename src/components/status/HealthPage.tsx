@@ -31,6 +31,8 @@ interface HealthData {
     tronswan: 'healthy' | 'degraded' | 'down';
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
+    mlbApi: 'healthy' | 'degraded' | 'down';
+    spotifyApi: 'healthy' | 'degraded' | 'down';
   };
 }
 
@@ -55,6 +57,8 @@ function HealthPage() {
       tronswan: 'healthy',
       chomptron: 'healthy',
       swantron: 'healthy',
+      mlbApi: 'healthy',
+      spotifyApi: 'healthy',
     },
   });
 
@@ -189,7 +193,7 @@ function HealthPage() {
         </div>
 
         <div className='health-section'>
-          <h2 className='section-title'>🌐 Service Health</h2>
+          <h2 className='section-title'>🌐 Services & APIs</h2>
           <ServiceHealth
             ref={serviceHealthRef}
             services={healthData.services}

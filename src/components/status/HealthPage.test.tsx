@@ -75,7 +75,7 @@ describe('HealthPage', () => {
 
     expect(screen.getByText('🚀 Deployment Status')).toBeInTheDocument();
     expect(screen.getByText('☁️ Infrastructure')).toBeInTheDocument();
-    expect(screen.getByText('🌐 Service Health')).toBeInTheDocument();
+    expect(screen.getByText('🌐 Services & APIs')).toBeInTheDocument();
   });
 
   it('handles refresh button click', async () => {
