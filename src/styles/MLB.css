@@ -1,0 +1,278 @@
+.mlb-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: var(--primary-bg, #282c34);
+  color: var(--primary-text, #ffffff);
+}
+
+.mlb-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mlb-title {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--accent-color, #f89859);
+  text-shadow: 0 0 20px rgba(248, 152, 89, 0.3);
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.league-filter {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--accent-color, #f89859);
+  background: rgba(248, 152, 89, 0.1);
+  color: var(--accent-color, #f89859);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover:not(:disabled) {
+  background: rgba(248, 152, 89, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+}
+
+.filter-button.active {
+  background: var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
+  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.4);
+}
+
+.filter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.divisions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.division-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.division-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color, #f89859);
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.standings-table-container {
+  overflow-x: auto;
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.standings-table thead {
+  background: rgba(248, 152, 89, 0.15);
+}
+
+.standings-table th {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent-color, #f89859);
+  border-bottom: 2px solid var(--accent-color, #f89859);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+}
+
+.standings-table th.text-left {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.standings-table td {
+  padding: 0.85rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.standings-table td.text-left {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.standings-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.standings-table tbody tr:hover {
+  background: rgba(248, 152, 89, 0.08);
+}
+
+.standings-table tbody tr.clinched {
+  background: rgba(0, 255, 100, 0.05);
+}
+
+.team-name {
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clinch-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #00ff64;
+  color: #1a1a2e;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.win-streak {
+  color: #00ff64;
+  font-weight: 600;
+}
+
+.loss-streak {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.positive-diff {
+  color: #00ff64;
+  font-weight: 600;
+}
+
+.negative-diff {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.loading-spinner {
+  margin: 4rem auto;
+  border: 4px solid rgba(248, 152, 89, 0.1);
+  border-top: 4px solid var(--accent-color, #f89859);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: rgba(255, 107, 107, 0.15);
+  border: 2px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  text-align: center;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.mlb-info {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  line-height: 1.8;
+}
+
+.mlb-info p {
+  margin: 0.5rem 0;
+  color: #b0b0b0;
+}
+
+.mlb-info strong {
+  color: var(--accent-color, #f89859);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mlb-title {
+    font-size: 2rem;
+  }
+
+  .division-title {
+    font-size: 1.4rem;
+  }
+
+  .standings-table {
+    font-size: 0.8rem;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 0.6rem 0.4rem;
+  }
+
+  .filter-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .division-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mlb-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .mlb-title {
+    font-size: 1.5rem;
+  }
+
+  .standings-table {
+    font-size: 0.7rem;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .team-name {
+    font-size: 0.75rem;
+  }
+}

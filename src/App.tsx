@@ -10,6 +10,7 @@ import SwantronList from './components/swantron/SwantronList';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import FizzBuzz from './components/ui/FizzBuzz';
 import Hello from './components/ui/Hello';
+import MLB from './components/ui/MLB';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
 import Weather from './components/ui/Weather';
@@ -254,6 +255,18 @@ function App() {
               >
                 music
               </Link>
+              <Link
+                to='/mlb'
+                className='nav-link'
+                onClick={() =>
+                  logger.info('Navigation clicked - MLB', {
+                    target: '/mlb',
+                    timestamp: new Date().toISOString(),
+                  })
+                }
+              >
+                mlb
+              </Link>
             </nav>
 
             <ErrorBoundary>
@@ -292,6 +305,7 @@ function App() {
                 <Route path='/shorts' element={<Shorts />} />
                 <Route path='/music' element={<Music />} />
                 <Route path='/music/callback' element={<Music />} />
+                <Route path='/mlb' element={<MLB />} />
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
