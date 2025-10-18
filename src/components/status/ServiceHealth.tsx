@@ -41,42 +41,42 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'React portfolio site',
         url: 'https://tronswan.com',
-        description: '',
+        description: 'this site',
         status: services.tronswan,
         lastChecked: new Date(),
       },
       {
         name: 'Recipe sharing platform',
         url: 'https://chomptron.com',
-        description: '',
+        description: 'wp blog on DO',
         status: services.chomptron,
         lastChecked: new Date(),
       },
       {
         name: 'The OG blog',
         url: 'https://swantron.com',
-        description: '',
+        description: 'wp blog on Siteground',
         status: services.swantron,
         lastChecked: new Date(),
       },
       {
         name: 'Personal development site',
         url: 'https://jswan.dev',
-        description: 'Active development site',
+        description: 'py placeholder on GAE',
         status: services.jswan,
         lastChecked: new Date(),
       },
       {
         name: 'MLB Stats API',
         url: 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104',
-        description: '',
+        description: 'baseball data',
         status: services.mlbApi,
         lastChecked: new Date(),
       },
       {
         name: 'Spotify API',
         url: 'https://accounts.spotify.com/api/token',
-        description: 'Authentication endpoint (tests API availability)',
+        description: 'spotify integration',
         status: services.spotifyApi,
         lastChecked: new Date(),
       },
@@ -104,9 +104,9 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
 
           const responseTime = Date.now() - startTime;
 
-          // For Spotify API, a 400 response means the API is up but needs auth (which is expected)
+          // For Spotify API, a 400 or 405 response means the API is up but needs proper method/auth (which is expected)
           // For other APIs, check if response is OK (200-299)
-          const isHealthy = response.ok || (service.name === 'Spotify API' && response.status === 400);
+          const isHealthy = response.ok || (service.name === 'Spotify API' && (response.status === 400 || response.status === 405));
 
           if (isHealthy) {
             logger.info('Service health check successful', {
