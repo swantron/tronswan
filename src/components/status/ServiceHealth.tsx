@@ -15,6 +15,7 @@ interface ServiceHealthProps {
     tronswan: 'healthy' | 'degraded' | 'down';
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
+    jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
   };
@@ -59,6 +60,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         lastChecked: new Date(),
       },
       {
+        name: 'Personal development site',
+        url: 'https://jswan.dev',
+        description: 'Active development site',
+        status: services.jswan,
+        lastChecked: new Date(),
+      },
+      {
         name: 'MLB Stats API',
         url: 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104',
         description: '',
@@ -67,8 +75,8 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
       {
         name: 'Spotify API',
-        url: 'https://api.spotify.com/v1/',
-        description: '',
+        url: 'https://api.spotify.com/v1/search?q=test&type=track&limit=1',
+        description: 'Public search endpoint (no auth required)',
         status: services.spotifyApi,
         lastChecked: new Date(),
       },
