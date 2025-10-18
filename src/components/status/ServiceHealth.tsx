@@ -75,8 +75,8 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
       {
         name: 'Spotify API',
-        url: 'https://api.spotify.com/v1/search?q=test&type=track&limit=1',
-        description: 'Public search endpoint (no auth required)',
+        url: 'https://accounts.spotify.com/api/token',
+        description: 'Authentication endpoint (tests API availability)',
         status: services.spotifyApi,
         lastChecked: new Date(),
       },
@@ -104,8 +104,11 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
 
           const responseTime = Date.now() - startTime;
 
-          // Check if response is OK (200-299)
-          if (response.ok) {
+          // For Spotify API, a 400 response means the API is up but needs auth (which is expected)
+          // For other APIs, check if response is OK (200-299)
+          const isHealthy = response.ok || (service.name === 'Spotify API' && response.status === 400);
+
+          if (isHealthy) {
             logger.info('Service health check successful', {
               serviceName: service.name,
               url: service.url,
