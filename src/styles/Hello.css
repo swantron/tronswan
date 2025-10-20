@@ -102,6 +102,18 @@
   box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
 }
 
+.hello-link.chomptron-app {
+  background-color: #ff6b35;
+  color: white;
+  border-color: #ff6b35;
+}
+
+.hello-link.chomptron-app:hover {
+  background-color: #e55a2b;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
 .hello-link.fizzbuzz {
   background-color: #9c27b0;
   color: white;
