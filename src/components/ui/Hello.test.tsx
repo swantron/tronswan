@@ -95,6 +95,25 @@ describe('Hello Component', () => {
     );
   });
 
+  test('renders chomptron app link', () => {
+    render(<Hello />);
+    const chomptronAppLink = screen.getByText('✨ chomptron app');
+    expect(chomptronAppLink).toBeInTheDocument();
+    expect(chomptronAppLink.closest('a')).toHaveAttribute(
+      'href',
+      'https://chomptron-kjxzelxv6q-uc.a.run.app/'
+    );
+    expect(chomptronAppLink.closest('a')).toHaveAttribute('target', '_blank');
+    expect(chomptronAppLink.closest('a')).toHaveAttribute(
+      'rel',
+      'noopener noreferrer'
+    );
+    expect(chomptronAppLink.closest('a')).toHaveAttribute(
+      'aria-label',
+      'Chomptron AI Recipe Generator'
+    );
+  });
+
   test('renders fizzbuzz link', () => {
     render(<Hello />);
     const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron');
@@ -125,7 +144,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(5);
+    expect(allLinks).toHaveLength(6);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
@@ -150,11 +169,13 @@ describe('Hello Component', () => {
     const linkedinLink = screen.getByText('💼 LinkedIn Profile').closest('a');
     const personalLink = screen.getByText('🦢 swan tron dot com').closest('a');
     const recipeLink = screen.getByText('🍳 chomp tron dot com').closest('a');
+    const chomptronAppLink = screen.getByText('✨ chomptron app').closest('a');
     const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron').closest('a');
 
     expect(linkedinLink).toHaveClass('hello-link', 'linkedin');
     expect(personalLink).toHaveClass('hello-link', 'personal');
     expect(recipeLink).toHaveClass('hello-link', 'recipes');
+    expect(chomptronAppLink).toHaveClass('hello-link', 'chomptron-app');
     expect(fizzbuzzLink).toHaveClass('hello-link', 'fizzbuzz');
   });
 
@@ -190,5 +211,6 @@ describe('Hello Component', () => {
     expect(screen.getByText(/💼 LinkedIn Profile/)).toBeInTheDocument();
     expect(screen.getByText(/🦢 swan tron dot com/)).toBeInTheDocument();
     expect(screen.getByText(/🍳 chomp tron dot com/)).toBeInTheDocument();
+    expect(screen.getByText(/✨ chomptron app/)).toBeInTheDocument();
   });
 });
