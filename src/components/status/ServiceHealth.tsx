@@ -8,12 +8,14 @@ import React, {
 } from 'react';
 
 import { logger } from '../../utils/logger';
+import { runtimeConfig } from '../../utils/runtimeConfig';
 import '../../styles/ServiceHealth.css';
 
 interface ServiceHealthProps {
   services: {
     tronswan: 'healthy' | 'degraded' | 'down';
     chomptron: 'healthy' | 'degraded' | 'down';
+    chomptronApp: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
@@ -53,6 +55,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         lastChecked: new Date(),
       },
       {
+        name: 'Chomptron App',
+        url: 'https://chomptron-kjxzelxv6q-uc.a.run.app/',
+        description: 'recipe generator on GCP',
+        status: services.chomptronApp,
+        lastChecked: new Date(),
+      },
+      {
         name: 'The OG blog',
         url: 'https://swantron.com',
         description: 'wp blog on Siteground',
@@ -75,7 +84,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
       {
         name: 'Spotify API',
-        url: 'https://accounts.spotify.com/api/token',
+        url: 'https://api.spotify.com/v1/search?q=test&type=track&limit=1',
         description: 'spotify integration',
         status: services.spotifyApi,
         lastChecked: new Date(),
@@ -95,8 +104,77 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       try {
         const startTime = Date.now();
 
-        // For API endpoints, use GET to actually check the API response
-        if (service.name.includes('API')) {
+        // Special handling for Spotify API - get access token first
+        if (service.name === 'Spotify API') {
+          try {
+            // Get access token using client credentials flow
+            const clientId = runtimeConfig.get('VITE_SPOTIFY_CLIENT_ID');
+            const clientSecret = runtimeConfig.get('VITE_SPOTIFY_CLIENT_SECRET');
+            
+            const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+              },
+              body: 'grant_type=client_credentials',
+            });
+
+            if (!tokenResponse.ok) {
+              throw new Error(`Token request failed: ${tokenResponse.status}`);
+            }
+
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData.access_token;
+
+            // Now test the actual API endpoint with the token
+            const apiResponse = await fetch(service.url, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+              },
+              cache: 'no-cache',
+            });
+
+            const responseTime = Date.now() - startTime;
+
+            if (apiResponse.ok) {
+              logger.info('Spotify API health check successful', {
+                serviceName: service.name,
+                url: service.url,
+                responseTime: `${responseTime}ms`,
+                status: 'healthy',
+                httpStatus: apiResponse.status,
+                timestamp: new Date().toISOString(),
+              });
+
+              return {
+                ...service,
+                status: 'healthy' as const,
+                responseTime,
+                lastChecked: new Date(),
+              };
+            } else {
+              throw new Error(`API request failed: ${apiResponse.status}`);
+            }
+          } catch (error) {
+            logger.warn('Spotify API health check failed', {
+              serviceName: service.name,
+              url: service.url,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              status: 'down',
+              timestamp: new Date().toISOString(),
+            });
+
+            return {
+              ...service,
+              status: 'down' as const,
+              lastChecked: new Date(),
+            };
+          }
+        }
+        // For other API endpoints, use GET to actually check the API response
+        else if (service.name.includes('API')) {
           const response = await fetch(service.url, {
             method: 'GET',
             cache: 'no-cache',
@@ -104,11 +182,8 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
 
           const responseTime = Date.now() - startTime;
 
-          // For Spotify API, a 400 or 405 response means the API is up but needs proper method/auth (which is expected)
           // For other APIs, check if response is OK (200-299)
-          const isHealthy = response.ok || (service.name === 'Spotify API' && (response.status === 400 || response.status === 405));
-
-          if (isHealthy) {
+          if (response.ok) {
             logger.info('Service health check successful', {
               serviceName: service.name,
               url: service.url,
