@@ -190,46 +190,6 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 
 The project includes utility scripts for development and testing. All scripts are defined in `package.json` and can be run with `yarn <script-name>`.
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Troubleshooting
-
-### Common Issues
-
-**Build fails with Node.js version error**
-- Ensure you're using Node.js v20 or higher
-- Check with `node --version`
-
-**Weather data not loading**
-- Verify your OpenWeatherMap API key is set in `.env`
-- Check that `VITE_WEATHER_API_KEY` is correctly configured
-- See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup
-
-**Recipe app not loading**
-- Check that chomptron.com is accessible
-- The AI recipe app is hosted on GCP with Cloud Build and Gemini
-
-**Health page not loading**
-- Ensure GitHub and DigitalOcean tokens are configured
-- Check that API tokens have the correct permissions
-- See [Health Page Guide](docs/HEALTH_PAGE_README.md) for troubleshooting
-
-**Tests failing**
-- Run `yarn install` to ensure all dependencies are installed
-- Check that all environment variables are set
-- Run `yarn test:coverage` to see detailed test results
-
-**Deployment issues**
-- Check GitHub Actions logs for detailed error information
-- Verify DigitalOcean App Platform configuration
-- See [CI/CD Setup](docs/CI_SETUP.md) for deployment troubleshooting
-
 ## License
 
 This project is licensed under the MIT License.
