@@ -44,7 +44,7 @@ describe('App Component', () => {
     expect(
       screen.getByRole('link', { name: 'weathertron' })
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'chompton' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'shorts' })).toBeInTheDocument();

@@ -19,7 +19,7 @@ building / deploying / learning
 ## Features
 
 - 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
-- 🍳 **AI Recipe App** - chompton.com - AI-powered recipe discovery using Gemini on GCP  
+- 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP  
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
 - 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
@@ -212,7 +212,7 @@ The project includes utility scripts for development and testing. All scripts ar
 - See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup
 
 **Recipe app not loading**
-- Check that chompton.com is accessible
+- Check that chomptron.com is accessible
 - The AI recipe app is hosted on GCP with Cloud Build and Gemini
 
 **Health page not loading**

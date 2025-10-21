@@ -37,7 +37,7 @@ export class BasePage {
   get navLinks() {
     return {
       home: this.page.locator('a.nav-link').filter({ hasText: 'Home' }),
-      recipes: this.page.locator('a.nav-link').filter({ hasText: 'chomptron' }),
+      chomptron: this.page.locator('a.nav-link').filter({ hasText: 'chomptron' }),
       swantron: this.page.locator('a.nav-link').filter({ hasText: 'swantron' }),
       music: this.page.locator('a.nav-link').filter({ hasText: 'music' }),
       mlb: this.page.locator('a.nav-link').filter({ hasText: 'mlb' }),

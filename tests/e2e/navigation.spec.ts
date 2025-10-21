@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../page-objects/HomePage';
 import { WeatherPage } from '../page-objects/WeatherPage';
-import { RecipePage } from '../page-objects/RecipePage';
 import { SwantronPage } from '../page-objects/SwantronPage';
 import { testData } from '../fixtures/test-data';
 
@@ -16,7 +15,6 @@ test.describe('Navigation E2E Tests', () => {
     // Test navigation to each page
     const pages = [
       { name: 'weather', pageClass: WeatherPage, expectedUrl: testData.urls.weather },
-      { name: 'recipes', pageClass: RecipePage, expectedUrl: testData.urls.recipes },
       { name: 'swantron', pageClass: SwantronPage, expectedUrl: testData.urls.swantron },
     ];
     
@@ -32,8 +30,6 @@ test.describe('Navigation E2E Tests', () => {
       const pageInstance = new pageClass(page);
       if (name === 'weather') {
         await expect(pageInstance.temperatureDisplay).toBeVisible();
-      } else if (name === 'recipes') {
-        await expect(pageInstance.recipeList).toBeVisible();
       } else if (name === 'swantron') {
         await expect(pageInstance.swantronList).toBeVisible();
       }

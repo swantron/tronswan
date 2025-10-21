@@ -14,7 +14,7 @@ import '../../styles/ServiceHealth.css';
 interface ServiceHealthProps {
   services: {
     tronswan: 'healthy' | 'degraded' | 'down';
-    chompton: 'healthy' | 'degraded' | 'down';
+    chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
@@ -48,9 +48,9 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
       {
         name: 'AI Recipe App',
-        url: 'https://chompton.com',
+        url: 'https://chomptron.com',
         description: 'AI-powered recipes with Gemini on GCP',
-        status: services.chompton,
+        status: services.chomptron,
         lastChecked: new Date(),
       },
       {

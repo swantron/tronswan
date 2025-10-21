@@ -78,11 +78,11 @@ describe('Hello Component', () => {
 
   test('renders recipe website link', () => {
     render(<Hello />);
-    const recipeLink = screen.getByText('🍳 chomp ton dot com');
+    const recipeLink = screen.getByText('🍳 chomp tron dot com');
     expect(recipeLink).toBeInTheDocument();
     expect(recipeLink.closest('a')).toHaveAttribute(
       'href',
-      'https://chompton.com'
+      'https://chomptron.com'
     );
     expect(recipeLink.closest('a')).toHaveAttribute('target', '_blank');
     expect(recipeLink.closest('a')).toHaveAttribute(
@@ -149,7 +149,7 @@ describe('Hello Component', () => {
 
     const linkedinLink = screen.getByText('💼 LinkedIn Profile').closest('a');
     const personalLink = screen.getByText('🦢 swan tron dot com').closest('a');
-    const recipeLink = screen.getByText('🍳 chomp ton dot com').closest('a');
+    const recipeLink = screen.getByText('🍳 chomp tron dot com').closest('a');
     const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron').closest('a');
 
     expect(linkedinLink).toHaveClass('hello-link', 'linkedin');
@@ -189,6 +189,6 @@ describe('Hello Component', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/💼 LinkedIn Profile/)).toBeInTheDocument();
     expect(screen.getByText(/🦢 swan tron dot com/)).toBeInTheDocument();
-    expect(screen.getByText(/🍳 chomp ton dot com/)).toBeInTheDocument();
+    expect(screen.getByText(/🍳 chomp tron dot com/)).toBeInTheDocument();
   });
 });

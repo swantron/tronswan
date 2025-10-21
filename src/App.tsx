@@ -218,18 +218,18 @@ function App() {
                 weathertron
               </Link>
               <a
-                href='https://chompton.com'
+                href='https://chomptron.com'
                 className='nav-link'
                 target='_blank'
                 rel='noopener noreferrer'
                 onClick={() =>
-                  logger.info('Navigation clicked - Chompton (external)', {
-                    target: 'https://chompton.com',
+                  logger.info('Navigation clicked - Chomptron (external)', {
+                    target: 'https://chomptron.com',
                     timestamp: new Date().toISOString(),
                   })
                 }
               >
-                chompton
+                chomptron
               </a>
               <Link
                 to='/health'

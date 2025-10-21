@@ -29,7 +29,7 @@ interface HealthData {
   };
   services: {
     tronswan: 'healthy' | 'degraded' | 'down';
-    chompton: 'healthy' | 'degraded' | 'down';
+    chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
@@ -56,7 +56,7 @@ function HealthPage() {
     },
     services: {
       tronswan: 'healthy',
-      chompton: 'healthy',
+      chomptron: 'healthy',
       swantron: 'healthy',
       jswan: 'healthy',
       mlbApi: 'healthy',

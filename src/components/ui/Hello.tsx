@@ -50,12 +50,12 @@ function Hello() {
 
           <a
             className='hello-link recipes'
-            href='https://chompton.com'
+            href='https://chomptron.com'
             target='_blank'
             rel='noopener noreferrer'
             aria-label='AI-powered recipe app with Gemini'
           >
-            🍳 chomp ton dot com
+            🍳 chomp tron dot com
           </a>
 
           <a

@@ -4,7 +4,6 @@ export const testData = {
     local: 'http://localhost:5173',
     home: '/',
     weather: '/weather',
-    recipes: '/recipes',
     swantron: '/swantron',
     hacking: '/hacking',
     hello: '/hello',
@@ -32,7 +31,7 @@ export const testData = {
         { text: 'tronswan', href: '/' },
         { text: 'swantron', href: '/swantron' },
         { text: 'weathertron', href: '/weather' },
-        { text: 'chomptron', href: '/recipes' },
+        { text: 'chomptron', href: 'https://chomptron.com' },
         { text: 'hello', href: '/hello' },
         { text: 'health', href: '/health' },
       ],
@@ -72,21 +71,6 @@ export const mockApiResponses = {
     condition: 'sunny',
     location: 'San Francisco',
   },
-  
-  recipes: [
-    {
-      id: 1,
-      title: 'Test Recipe 1',
-      description: 'A delicious test recipe',
-      ingredients: ['ingredient1', 'ingredient2'],
-    },
-    {
-      id: 2,
-      title: 'Test Recipe 2',
-      description: 'Another test recipe',
-      ingredients: ['ingredient3', 'ingredient4'],
-    },
-  ],
   
   swantron: [
     {
