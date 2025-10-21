@@ -14,8 +14,7 @@ import '../../styles/ServiceHealth.css';
 interface ServiceHealthProps {
   services: {
     tronswan: 'healthy' | 'degraded' | 'down';
-    chomptron: 'healthy' | 'degraded' | 'down';
-    chomptronApp: 'healthy' | 'degraded' | 'down';
+    chompton: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
@@ -48,17 +47,10 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         lastChecked: new Date(),
       },
       {
-        name: 'Recipe sharing platform',
-        url: 'https://chomptron.com',
-        description: 'wp blog on DO',
-        status: services.chomptron,
-        lastChecked: new Date(),
-      },
-      {
-        name: 'Chomptron App',
-        url: 'https://chomptron-kjxzelxv6q-uc.a.run.app/',
-        description: 'recipe generator on GCP',
-        status: services.chomptronApp,
+        name: 'AI Recipe App',
+        url: 'https://chompton.com',
+        description: 'AI-powered recipes with Gemini on GCP',
+        status: services.chompton,
         lastChecked: new Date(),
       },
       {
@@ -109,16 +101,21 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
           try {
             // Get access token using client credentials flow
             const clientId = runtimeConfig.get('VITE_SPOTIFY_CLIENT_ID');
-            const clientSecret = runtimeConfig.get('VITE_SPOTIFY_CLIENT_SECRET');
-            
-            const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-              },
-              body: 'grant_type=client_credentials',
-            });
+            const clientSecret = runtimeConfig.get(
+              'VITE_SPOTIFY_CLIENT_SECRET'
+            );
+
+            const tokenResponse = await fetch(
+              'https://accounts.spotify.com/api/token',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+                },
+                body: 'grant_type=client_credentials',
+              }
+            );
 
             if (!tokenResponse.ok) {
               throw new Error(`Token request failed: ${tokenResponse.status}`);
@@ -131,7 +128,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
             const apiResponse = await fetch(service.url, {
               method: 'GET',
               headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
               },
               cache: 'no-cache',
             });

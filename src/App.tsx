@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Music from './components/music/Music';
-import RecipeDetail from './components/recipe/RecipeDetail';
-import RecipeList from './components/recipe/RecipeList';
 import HealthPage from './components/status/HealthPage';
 import SwantronDetail from './components/swantron/SwantronDetail';
 import SwantronList from './components/swantron/SwantronList';
@@ -219,18 +217,20 @@ function App() {
               >
                 weathertron
               </Link>
-              <Link
-                to='/recipes'
+              <a
+                href='https://chompton.com'
                 className='nav-link'
+                target='_blank'
+                rel='noopener noreferrer'
                 onClick={() =>
-                  logger.info('Navigation clicked - Recipes', {
-                    target: '/recipes',
+                  logger.info('Navigation clicked - Chompton (external)', {
+                    target: 'https://chompton.com',
                     timestamp: new Date().toISOString(),
                   })
                 }
               >
-                chomptron
-              </Link>
+                chompton
+              </a>
               <Link
                 to='/health'
                 className='nav-link'
@@ -280,8 +280,6 @@ function App() {
                     </>
                   }
                 />
-                <Route path='/recipes' element={<RecipeList />} />
-                <Route path='/recipes/:id' element={<RecipeDetail />} />
                 <Route path='/swantron' element={<SwantronList />} />
                 <Route path='/swantron/:id' element={<SwantronDetail />} />
                 <Route path='/weather' element={<Weather />} />

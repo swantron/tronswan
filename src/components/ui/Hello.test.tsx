@@ -78,11 +78,11 @@ describe('Hello Component', () => {
 
   test('renders recipe website link', () => {
     render(<Hello />);
-    const recipeLink = screen.getByText('🍳 chomp tron dot com');
+    const recipeLink = screen.getByText('🍳 chomp ton dot com');
     expect(recipeLink).toBeInTheDocument();
     expect(recipeLink.closest('a')).toHaveAttribute(
       'href',
-      'https://chomptron.com'
+      'https://chompton.com'
     );
     expect(recipeLink.closest('a')).toHaveAttribute('target', '_blank');
     expect(recipeLink.closest('a')).toHaveAttribute(
@@ -91,26 +91,7 @@ describe('Hello Component', () => {
     );
     expect(recipeLink.closest('a')).toHaveAttribute(
       'aria-label',
-      "Joseph's recipe website"
-    );
-  });
-
-  test('renders chomptron app link', () => {
-    render(<Hello />);
-    const chomptronAppLink = screen.getByText('✨ chomptron app');
-    expect(chomptronAppLink).toBeInTheDocument();
-    expect(chomptronAppLink.closest('a')).toHaveAttribute(
-      'href',
-      'https://chomptron-kjxzelxv6q-uc.a.run.app/'
-    );
-    expect(chomptronAppLink.closest('a')).toHaveAttribute('target', '_blank');
-    expect(chomptronAppLink.closest('a')).toHaveAttribute(
-      'rel',
-      'noopener noreferrer'
-    );
-    expect(chomptronAppLink.closest('a')).toHaveAttribute(
-      'aria-label',
-      'Chomptron AI Recipe Generator'
+      'AI-powered recipe app with Gemini'
     );
   });
 
@@ -144,7 +125,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(6);
+    expect(allLinks).toHaveLength(5);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
@@ -168,14 +149,12 @@ describe('Hello Component', () => {
 
     const linkedinLink = screen.getByText('💼 LinkedIn Profile').closest('a');
     const personalLink = screen.getByText('🦢 swan tron dot com').closest('a');
-    const recipeLink = screen.getByText('🍳 chomp tron dot com').closest('a');
-    const chomptronAppLink = screen.getByText('✨ chomptron app').closest('a');
+    const recipeLink = screen.getByText('🍳 chomp ton dot com').closest('a');
     const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron').closest('a');
 
     expect(linkedinLink).toHaveClass('hello-link', 'linkedin');
     expect(personalLink).toHaveClass('hello-link', 'personal');
     expect(recipeLink).toHaveClass('hello-link', 'recipes');
-    expect(chomptronAppLink).toHaveClass('hello-link', 'chomptron-app');
     expect(fizzbuzzLink).toHaveClass('hello-link', 'fizzbuzz');
   });
 
@@ -210,7 +189,6 @@ describe('Hello Component', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/💼 LinkedIn Profile/)).toBeInTheDocument();
     expect(screen.getByText(/🦢 swan tron dot com/)).toBeInTheDocument();
-    expect(screen.getByText(/🍳 chomp tron dot com/)).toBeInTheDocument();
-    expect(screen.getByText(/✨ chomptron app/)).toBeInTheDocument();
+    expect(screen.getByText(/🍳 chomp ton dot com/)).toBeInTheDocument();
   });
 });

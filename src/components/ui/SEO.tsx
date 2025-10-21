@@ -5,8 +5,8 @@ import { runtimeConfig } from '../../utils/runtimeConfig';
 
 const SEO = ({
   title = 'tronswan - Software Development Portfolio & Projects',
-  description = "Explore tronswan's portfolio featuring real-time weather updates, MLB statistics, Spotify music integration, service health monitoring, and links to chomptron recipes and swantron blog. Built by Joseph Swanson.",
-  keywords = 'Joseph Swanson, software development, portfolio, weather app, MLB stats, Spotify integration, health monitoring, DevOps, chomptron, swantron, React, TypeScript',
+  description = "Explore tronswan's portfolio featuring real-time weather updates, MLB statistics, Spotify music integration, service health monitoring, and links to chompton AI recipe app (GCP/Gemini) and swantron blog. Built by Joseph Swanson.",
+  keywords = 'Joseph Swanson, software development, portfolio, weather app, MLB stats, Spotify integration, health monitoring, DevOps, chompton, AI recipes, Gemini, GCP, Cloud Build, swantron, React, TypeScript',
   image = '/robotard_512x512.png',
   url = 'https://tronswan.com',
   type = 'website',

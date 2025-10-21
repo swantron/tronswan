@@ -19,7 +19,7 @@ building / deploying / learning
 ## Features
 
 - 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
-- 🍳 **Recipe Collection** - Displays recipes from chomptron.com  
+- 🍳 **AI Recipe App** - chompton.com - AI-powered recipe discovery using Gemini on GCP  
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
 - 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
@@ -211,9 +211,9 @@ The project includes utility scripts for development and testing. All scripts ar
 - Check that `VITE_WEATHER_API_KEY` is correctly configured
 - See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup
 
-**Blog posts not loading**
-- Check network connectivity to swantron.com and chomptron.com
-- Verify the WordPress APIs are accessible
+**Recipe app not loading**
+- Check that chompton.com is accessible
+- The AI recipe app is hosted on GCP with Cloud Build and Gemini
 
 **Health page not loading**
 - Ensure GitHub and DigitalOcean tokens are configured
