@@ -104,6 +104,37 @@
   border-bottom: 2px solid #f89859;
 }
 
+/* Repository Tabs */
+.repo-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid rgba(248, 152, 89, 0.2);
+}
+
+.repo-tab {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+}
+
+.repo-tab:hover {
+  color: #f89859;
+  background: rgba(248, 152, 89, 0.1);
+}
+
+.repo-tab.active {
+  color: #f89859;
+  border-bottom-color: #f89859;
+  font-weight: 600;
+}
+
 /* Content */
 .github-content {
   padding: 0;
