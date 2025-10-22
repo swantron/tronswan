@@ -65,15 +65,18 @@ yarn dev
 ## Troubleshooting
 
 ### API Key Issues
+
 - Make sure the API key is correctly set in `.env.local`
 - Ensure the Google Docs API is enabled in your Google Cloud project
 - Check that the API key has the correct permissions
 
 ### Document Access Issues
+
 - Verify the Google Doc is set to "Anyone with the link can view"
 - Check that the document ID is correct in the service
 
 ### Fallback Content
+
 - If the API fails, the site will show a template with instructions
 - This ensures the resume page always works, even without API access
 

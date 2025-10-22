@@ -2,9 +2,9 @@ name: React App CI/CD with Coverage and Playwright
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build-test-coverage:
@@ -15,46 +15,46 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          
+
       - name: Install Yarn
         run: npm install -g yarn
-        
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        
+
       - name: Build application
         run: yarn build
-        
+
       - name: Run tests with coverage
         run: yarn test:coverage
-        
+
       - name: Extract coverage percentage
         id: coverage
         run: |
           COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
           echo "Coverage: $COVERAGE%"
-          
+
       - name: Comment PR with coverage
         if: github.event_name == 'pull_request'
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./coverage/lcov.info
-          
+
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: coverage/
           retention-days: 30
-          
+
       - name: Coverage Summary
         run: |
           echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
@@ -107,22 +107,22 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'yarn'
-          
+
       - name: Install Yarn
         run: npm install -g yarn
-        
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        
+
       - name: Install Playwright Browsers
         run: yarn playwright install
-        
+
       - name: Run Playwright Tests
         run: |
           echo 'Running full Playwright test suite against deployed site...'

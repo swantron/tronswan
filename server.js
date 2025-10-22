@@ -16,7 +16,7 @@ const logger = {
   },
   error: (message, context = {}) => {
     console.error(`[${new Date().toISOString()}] [ERROR] ${message}`, context);
-  }
+  },
 };
 
 const app = express();
@@ -31,11 +31,13 @@ app.use((req, res, next) => {
     /\.(env|config|ini)$/i,
     /admin|wp-|xmlrpc|phpmyadmin/i,
     /\.\./,
-    /\/etc\/|\/proc\/|\/sys\//i
+    /\/etc\/|\/proc\/|\/sys\//i,
   ];
 
-  const isSuspicious = suspiciousPatterns.some(pattern => pattern.test(req.path));
-  
+  const isSuspicious = suspiciousPatterns.some(pattern =>
+    pattern.test(req.path)
+  );
+
   if (isSuspicious) {
     logger.warn('Suspicious request detected', {
       ip: req.ip || req.connection.remoteAddress,
@@ -43,7 +45,7 @@ app.use((req, res, next) => {
       path: req.path,
       method: req.method,
       referer: req.get('Referer'),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -53,7 +55,7 @@ app.use((req, res, next) => {
 // Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
-  
+
   // Log the request
   logger.info('Incoming request', {
     method: req.method,
@@ -61,21 +63,21 @@ app.use((req, res, next) => {
     ip: req.ip || req.connection.remoteAddress,
     userAgent: req.get('User-Agent'),
     referer: req.get('Referer'),
-    query: req.query
+    query: req.query,
   });
 
   // Override res.end to log response
   const originalEnd = res.end;
-  res.end = function(chunk, encoding) {
+  res.end = function (chunk, encoding) {
     const duration = Date.now() - start;
-    
+
     logger.info('Request completed', {
       method: req.method,
       path: req.path,
       statusCode: res.statusCode,
       duration: `${duration}ms`,
       ip: req.ip || req.connection.remoteAddress,
-      contentLength: res.get('Content-Length') || 0
+      contentLength: res.get('Content-Length') || 0,
     });
 
     originalEnd.call(this, chunk, encoding);
@@ -99,7 +101,7 @@ app.use((err, req, res, next) => {
     stack: err.stack,
     path: req.path,
     method: req.method,
-    ip: req.ip || req.connection.remoteAddress
+    ip: req.ip || req.connection.remoteAddress,
   });
 
   res.status(500).send('Internal Server Error');
@@ -116,25 +118,27 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-app.listen(PORT, () => {
-  logger.info('Server started', {
-    port: PORT,
-    nodeEnv: process.env.NODE_ENV,
-    timestamp: new Date().toISOString(),
-    platform: 'Digital Ocean App Platform',
-    buildpack: 'Node.js'
+app
+  .listen(PORT, () => {
+    logger.info('Server started', {
+      port: PORT,
+      nodeEnv: process.env.NODE_ENV,
+      timestamp: new Date().toISOString(),
+      platform: 'Digital Ocean App Platform',
+      buildpack: 'Node.js',
+    });
+
+    // Log that we're ready to serve requests
+    logger.info('Application ready to serve requests', {
+      staticFilesPath: path.join(__dirname, 'build'),
+      spaFallback: true,
+    });
+  })
+  .on('error', err => {
+    logger.error('Server failed to start', {
+      error: err.message,
+      port: PORT,
+      code: err.code,
+    });
+    process.exit(1);
   });
-  
-  // Log that we're ready to serve requests
-  logger.info('Application ready to serve requests', {
-    staticFilesPath: path.join(__dirname, 'build'),
-    spaFallback: true
-  });
-}).on('error', (err) => {
-  logger.error('Server failed to start', {
-    error: err.message,
-    port: PORT,
-    code: err.code
-  });
-  process.exit(1);
-});

@@ -5,18 +5,21 @@ This page provides real-time monitoring of service health, deployment status, an
 ## Features
 
 ### 🚀 Deployment Status
+
 - **GitLab CI Integration**: View recent pipelines, jobs, and deployment status
 - **Project Selection**: Switch between different GitLab projects
 - **Pipeline Details**: See commit information, author, duration, and job status
 - **Real-time Updates**: Automatic refresh every 30 seconds
 
 ### ☁️ Infrastructure Monitoring
+
 - **DigitalOcean Droplets**: Monitor server status, specs, and performance
 - **Load Balancers**: Check load balancer health and configuration
 - **Databases**: View database status and connection details
 - **Account Limits**: Track resource usage against account limits
 
 ### 🌐 Service Health
+
 - **Multi-service Monitoring**: Track health of tronswan, chomptron, and swantron
 - **Response Time Monitoring**: Measure and display service response times
 - **Uptime Tracking**: Monitor service availability
@@ -44,11 +47,13 @@ REACT_APP_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
 ### API Token Setup
 
 #### GitLab CI Token
+
 1. Go to [GitLab Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens)
 2. Create a new token with `api` scope
 3. Copy the token and add it to your `.env` file
 
 #### DigitalOcean Token
+
 1. Go to [DigitalOcean API Tokens](https://cloud.digitalocean.com/account/api/tokens)
 2. Generate a new token with `read` scope
 3. Copy the token and add it to your `.env` file
@@ -64,20 +69,24 @@ REACT_APP_DIGITALOCEAN_TOKEN=your_digitalocean_token_here
 ## Components
 
 ### HealthPage
+
 Main component that orchestrates all health monitoring features.
 
 ### GitLabStatus
+
 - Displays GitLab CI pipeline information
 - Shows project selection dropdown
 - Renders pipeline details and job status
 - Handles real-time data fetching
 
 ### DigitalOceanStatus
+
 - Tabs for different resource types (Droplets, Load Balancers, Databases, Account)
 - Displays resource specifications and status
 - Shows account limits and usage
 
 ### ServiceHealth
+
 - Monitors external service availability
 - Performs health checks with response time measurement
 - Displays service status summary
@@ -85,6 +94,7 @@ Main component that orchestrates all health monitoring features.
 ## Styling
 
 The health page uses a modern, responsive design with:
+
 - Gradient background with glassmorphism effects
 - Card-based layout for different sections
 - Status indicators with color coding

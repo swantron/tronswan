@@ -19,6 +19,7 @@ interface ServiceHealthProps {
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
+    weatherApi: 'healthy' | 'degraded' | 'down';
   };
 }
 
@@ -79,6 +80,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         url: 'https://api.spotify.com/v1/search?q=test&type=track&limit=1',
         description: 'spotify integration',
         status: services.spotifyApi,
+        lastChecked: new Date(),
+      },
+      {
+        name: 'OpenWeatherMap API',
+        url: 'https://api.openweathermap.org/data/2.5/weather?q=Seattle&units=imperial',
+        description: 'weather data',
+        status: services.weatherApi,
         lastChecked: new Date(),
       },
     ]);
@@ -158,6 +166,52 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
             logger.warn('Spotify API health check failed', {
               serviceName: service.name,
               url: service.url,
+              error: error instanceof Error ? error.message : 'Unknown error',
+              status: 'down',
+              timestamp: new Date().toISOString(),
+            });
+
+            return {
+              ...service,
+              status: 'down' as const,
+              lastChecked: new Date(),
+            };
+          }
+        }
+        // Special handling for OpenWeatherMap API - requires API key
+        else if (service.name === 'OpenWeatherMap API') {
+          try {
+            const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+            const urlWithKey = `${service.url}&appid=${apiKey}`;
+
+            const response = await fetch(urlWithKey, {
+              method: 'GET',
+              cache: 'no-cache',
+            });
+
+            const responseTime = Date.now() - startTime;
+
+            if (response.ok) {
+              logger.info('OpenWeatherMap API health check successful', {
+                serviceName: service.name,
+                responseTime: `${responseTime}ms`,
+                status: 'healthy',
+                httpStatus: response.status,
+                timestamp: new Date().toISOString(),
+              });
+
+              return {
+                ...service,
+                status: 'healthy' as const,
+                responseTime,
+                lastChecked: new Date(),
+              };
+            } else {
+              throw new Error(`API request failed: ${response.status}`);
+            }
+          } catch (error) {
+            logger.warn('OpenWeatherMap API health check failed', {
+              serviceName: service.name,
               error: error instanceof Error ? error.message : 'Unknown error',
               status: 'down',
               timestamp: new Date().toISOString(),

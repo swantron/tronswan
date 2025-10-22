@@ -20,7 +20,9 @@ interface GitHubStatusProps {
 
 const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   const [activeTab, setActiveTab] = useState<'actions' | 'repos'>('actions');
-  const [activeRepo, setActiveRepo] = useState<'tronswan' | 'chomptron'>('tronswan');
+  const [activeRepo, setActiveRepo] = useState<'tronswan' | 'chomptron'>(
+    'tronswan'
+  );
 
   useEffect(() => {
     loadGitHubData();
@@ -30,11 +32,12 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const [repositories, tronswanActions, chomptronActions] = await Promise.all([
-        githubService.getAllRepositories(),
-        githubService.getWorkflowRuns('tronswan'),
-        githubService.getWorkflowRuns('chomptron'),
-      ]);
+      const [repositories, tronswanActions, chomptronActions] =
+        await Promise.all([
+          githubService.getAllRepositories(),
+          githubService.getWorkflowRuns('tronswan'),
+          githubService.getWorkflowRuns('chomptron'),
+        ]);
 
       logger.info('GitHub workflow runs loaded', {
         tronswanCount: tronswanActions.workflow_runs?.length || 0,
@@ -146,7 +149,10 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
           className={`tab ${activeTab === 'actions' ? 'active' : ''}`}
           onClick={() => setActiveTab('actions')}
         >
-          Actions ({(data.tronswanActions?.length || 0) + (data.chomptronActions?.length || 0)})
+          Actions (
+          {(data.tronswanActions?.length || 0) +
+            (data.chomptronActions?.length || 0)}
+          )
         </button>
         <button
           className={`tab ${activeTab === 'repos' ? 'active' : ''}`}
@@ -160,7 +166,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         {activeTab === 'actions' && (
           <div className='actions-tab'>
             <h3>GitHub Actions & Deployments</h3>
-            
+
             {/* Repository Selector */}
             <div className='repo-tabs'>
               <button
@@ -176,7 +182,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                 Chomptron
               </button>
             </div>
-            
+
             {/* Tronswan Actions */}
             {activeRepo === 'tronswan' && (
               <div className='actions-section'>
@@ -197,7 +203,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                         </div>
                         <div className='action-details'>
                           <p>
-                            <strong>Branch:</strong> {action.head_branch || 'N/A'}
+                            <strong>Branch:</strong>{' '}
+                            {action.head_branch || 'N/A'}
                           </p>
                           <p>
                             <strong>Commit:</strong>{' '}
@@ -263,7 +270,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                         </div>
                         <div className='action-details'>
                           <p>
-                            <strong>Branch:</strong> {action.head_branch || 'N/A'}
+                            <strong>Branch:</strong>{' '}
+                            {action.head_branch || 'N/A'}
                           </p>
                           <p>
                             <strong>Commit:</strong>{' '}

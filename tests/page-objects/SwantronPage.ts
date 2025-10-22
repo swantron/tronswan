@@ -43,7 +43,7 @@ export class SwantronPage extends BasePage {
   }
 
   async getSwantronTitle(): Promise<string> {
-    return await this.swantronTitle.textContent() || '';
+    return (await this.swantronTitle.textContent()) || '';
   }
 
   // Validation methods
@@ -56,6 +56,6 @@ export class SwantronPage extends BasePage {
   }
 
   async hasSwantronCards(): Promise<boolean> {
-    return await this.swantronCards.count() > 0;
+    return (await this.swantronCards.count()) > 0;
   }
 }

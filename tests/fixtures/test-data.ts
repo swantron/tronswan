@@ -12,20 +12,21 @@ export const testData = {
     gangnam2: '/gangnam2',
     fizzBuzz: '/trontronbuzztron',
   },
-  
+
   expectedContent: {
     home: {
       title: 'tronswan',
       swantronLinkText: 'tron swan dot com',
       swantronLinkHref: '#',
     },
-    
+
     weather: {
-      temperaturePattern: /🌡️ (-3[0-9]|-[1-9]|[0-9]|[1-9][0-9]|1[01][0-9]|120)°F/,
+      temperaturePattern:
+        /🌡️ (-3[0-9]|-[1-9]|[0-9]|[1-9][0-9]|1[01][0-9]|120)°F/,
       minTemperature: -30,
       maxTemperature: 120,
     },
-    
+
     navigation: {
       links: [
         { text: 'tronswan', href: '/' },
@@ -37,19 +38,19 @@ export const testData = {
       ],
     },
   },
-  
+
   performance: {
     maxLoadTime: 5000, // 5 seconds
     maxDomContentLoaded: 3000, // 3 seconds
     maxFirstPaint: 2000, // 2 seconds
   },
-  
+
   accessibility: {
     requiredAltTexts: ['logo'],
     requiredAriaLabels: [],
     requiredRoles: ['main', 'navigation'],
   },
-  
+
   responsive: {
     breakpoints: {
       mobile: { width: 375, height: 667 },
@@ -57,7 +58,7 @@ export const testData = {
       desktop: { width: 1920, height: 1080 },
     },
   },
-  
+
   errorMessages: {
     networkError: 'Network error occurred',
     loadError: 'Page failed to load',
@@ -71,7 +72,7 @@ export const mockApiResponses = {
     condition: 'sunny',
     location: 'San Francisco',
   },
-  
+
   swantron: [
     {
       id: 1,

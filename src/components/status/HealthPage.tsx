@@ -35,6 +35,7 @@ interface HealthData {
     jswan: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
+    weatherApi: 'healthy' | 'degraded' | 'down';
   };
 }
 
@@ -63,6 +64,7 @@ function HealthPage() {
       jswan: 'healthy',
       mlbApi: 'healthy',
       spotifyApi: 'healthy',
+      weatherApi: 'healthy',
     },
   });
 

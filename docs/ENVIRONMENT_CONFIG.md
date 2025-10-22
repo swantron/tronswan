@@ -38,11 +38,13 @@ VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key_here
 For deployed environments, set these as environment variables in your DigitalOcean App Platform:
 
 ### Required Variables:
+
 - `VITE_WEATHER_API_KEY` - OpenWeatherMap API key
 - `VITE_GITHUB_TOKEN` - GitHub token (optional, for health page)
 - `VITE_DIGITALOCEAN_TOKEN` - DigitalOcean API token (optional, for health page)
 
 ### Optional Variables:
+
 - `VITE_WEATHER_CITY` - Weather city (default: Bozeman)
 - `VITE_WEATHER_UNITS` - Weather units (default: imperial)
 - `VITE_SITE_URL` - Site URL (default: https://tronswan.com)
@@ -58,6 +60,7 @@ The application uses a simple configuration system that:
 ### How It Works
 
 The `runtimeConfig` utility automatically:
+
 - Initializes configuration on first use
 - Loads environment variables from Vite's `import.meta.env`
 - Provides type-safe access to configuration values
@@ -85,13 +88,16 @@ if (runtimeConfig.has('VITE_GITHUB_TOKEN')) {
 ## API Token Setup
 
 ### OpenWeatherMap API Key
+
 1. Go to [OpenWeatherMap API Keys](https://openweathermap.org/api_keys)
 2. Sign up for a free account
 3. Generate an API key
 4. Add it as `VITE_WEATHER_API_KEY`
 
 ### GitHub Token (Optional)
+
 **Classic Personal Access Token**
+
 1. Go to [GitHub Personal Access Tokens](https://github.com/settings/tokens)
 2. Click **"Generate new token"** → **"Generate new token (classic)"**
 3. Fill in:
@@ -105,6 +111,7 @@ if (runtimeConfig.has('VITE_GITHUB_TOKEN')) {
 5. Copy the token and add it as `VITE_GITHUB_TOKEN`
 
 ### DigitalOcean Token (Optional)
+
 1. Go to [DigitalOcean API Tokens](https://cloud.digitalocean.com/account/api/tokens)
 2. Generate a new token with `read` scope
 3. Add it as `VITE_DIGITALOCEAN_TOKEN`
@@ -112,6 +119,7 @@ if (runtimeConfig.has('VITE_GITHUB_TOKEN')) {
 ## Migration from React App
 
 If migrating from Create React App, update these variable names:
+
 - `REACT_APP_API_KEY` → `VITE_WEATHER_API_KEY`
 - `REACT_APP_CITY` → `VITE_WEATHER_CITY`
 - `REACT_APP_UNITS` → `VITE_WEATHER_UNITS`
@@ -123,12 +131,14 @@ If migrating from Create React App, update these variable names:
 ## Troubleshooting
 
 ### Local Development Issues
+
 - Ensure `.env` file is in the project root
 - Restart the development server after changing `.env` file
 - Check that variable names start with `VITE_`
 - Weather variables should use `VITE_WEATHER_` prefix
 
 ### Deployed Environment Issues
+
 - Verify environment variables are set in DigitalOcean App Platform
 - Check that variables are prefixed with `VITE_`
 - Ensure variables are properly configured in your DigitalOcean app settings

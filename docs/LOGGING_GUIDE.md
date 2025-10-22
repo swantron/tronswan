@@ -40,6 +40,7 @@ await logger.measureAsync('api-call', async () => {
 The logger automatically configures itself based on the `NODE_ENV` environment variable:
 
 ### Development (`NODE_ENV=development`)
+
 - **Log Level**: DEBUG (shows all messages)
 - **Console Logging**: Enabled
 - **Stack Traces**: Enabled
@@ -48,6 +49,7 @@ The logger automatically configures itself based on the `NODE_ENV` environment v
 - **Retention**: 7 days
 
 ### Production (`NODE_ENV=production`)
+
 - **Log Level**: ERROR (only errors and warnings)
 - **Console Logging**: Disabled
 - **Stack Traces**: Disabled
@@ -56,6 +58,7 @@ The logger automatically configures itself based on the `NODE_ENV` environment v
 - **Retention**: 30 days
 
 ### Test (`NODE_ENV=test`)
+
 - **Log Level**: ERROR
 - **Console Logging**: Disabled
 - **Stack Traces**: Disabled
@@ -68,6 +71,7 @@ The logger automatically configures itself based on the `NODE_ENV` environment v
 ### Basic Logging Methods
 
 #### `logger.debug(message: string, context?: LogContext)`
+
 Logs debug information. Only shown in development.
 
 ```typescript
@@ -75,13 +79,18 @@ logger.debug('Processing user data', { userId: 123, step: 'validation' });
 ```
 
 #### `logger.info(message: string, context?: LogContext)`
+
 Logs informational messages.
 
 ```typescript
-logger.info('User logged in successfully', { userId: 123, timestamp: Date.now() });
+logger.info('User logged in successfully', {
+  userId: 123,
+  timestamp: Date.now(),
+});
 ```
 
 #### `logger.warn(message: string, context?: LogContext)`
+
 Logs warning messages.
 
 ```typescript
@@ -89,6 +98,7 @@ logger.warn('API rate limit approaching', { current: 90, limit: 100 });
 ```
 
 #### `logger.error(message: string, context?: LogContext)`
+
 Logs error messages.
 
 ```typescript
@@ -98,6 +108,7 @@ logger.error('Database connection failed', { error: dbError, retryCount: 3 });
 ### Specialized Methods
 
 #### `logger.apiError(service: string, operation: string, error: Error, additionalContext?: LogContext)`
+
 Logs API errors with structured context.
 
 ```typescript
@@ -109,17 +120,19 @@ try {
 ```
 
 #### `logger.configWarn(key: string, message: string, context?: LogContext)`
+
 Logs configuration warnings.
 
 ```typescript
-logger.configWarn('API_KEY', 'Missing required configuration', { 
-  environment: 'production' 
+logger.configWarn('API_KEY', 'Missing required configuration', {
+  environment: 'production',
 });
 ```
 
 ### Performance Measurement
 
 #### `logger.startTimer(label: string)`
+
 Starts a performance timer.
 
 ```typescript
@@ -127,6 +140,7 @@ logger.startTimer('database-query');
 ```
 
 #### `logger.endTimer(label: string, context?: LogContext)`
+
 Ends a performance timer and logs the duration.
 
 ```typescript
@@ -134,21 +148,31 @@ logger.endTimer('database-query', { queryType: 'SELECT', recordCount: 100 });
 ```
 
 #### `logger.measureAsync<T>(label: string, fn: () => Promise<T>, context?: LogContext): Promise<T>`
+
 Measures the execution time of an async function.
 
 ```typescript
-const result = await logger.measureAsync('api-call', async () => {
-  return await fetch('/api/users');
-}, { endpoint: '/api/users' });
+const result = await logger.measureAsync(
+  'api-call',
+  async () => {
+    return await fetch('/api/users');
+  },
+  { endpoint: '/api/users' }
+);
 ```
 
 #### `logger.measureSync<T>(label: string, fn: () => T, context?: LogContext): T`
+
 Measures the execution time of a synchronous function.
 
 ```typescript
-const result = logger.measureSync('data-processing', () => {
-  return processUserData(rawData);
-}, { recordCount: rawData.length });
+const result = logger.measureSync(
+  'data-processing',
+  () => {
+    return processUserData(rawData);
+  },
+  { recordCount: rawData.length }
+);
 ```
 
 ## Context Types
@@ -156,21 +180,25 @@ const result = logger.measureSync('data-processing', () => {
 The `LogContext` type supports various data types:
 
 ```typescript
-type LogContext = 
-  | Record<string, any>  // Objects
-  | Error               // Error instances
-  | string              // Strings
-  | number              // Numbers
-  | boolean             // Booleans
-  | null                // Null
-  | undefined;          // Undefined
+type LogContext =
+  | Record<string, any> // Objects
+  | Error // Error instances
+  | string // Strings
+  | number // Numbers
+  | boolean // Booleans
+  | null // Null
+  | undefined; // Undefined
 ```
 
 ### Context Examples
 
 ```typescript
 // Object context
-logger.info('User action', { userId: 123, action: 'login', timestamp: Date.now() });
+logger.info('User action', {
+  userId: 123,
+  action: 'login',
+  timestamp: Date.now(),
+});
 
 // Error context
 logger.error('Operation failed', new Error('Database connection timeout'));
@@ -179,10 +207,10 @@ logger.error('Operation failed', new Error('Database connection timeout'));
 logger.debug('Processing step', 'validation');
 
 // Mixed context
-logger.warn('Rate limit warning', { 
-  current: 90, 
-  limit: 100, 
-  resetTime: '2023-12-01T00:00:00Z' 
+logger.warn('Rate limit warning', {
+  current: 90,
+  limit: 100,
+  resetTime: '2023-12-01T00:00:00Z',
 });
 ```
 
@@ -210,7 +238,7 @@ logger.error('Failed to save user profile', {
   userId: user.id,
   error: error.message,
   retryCount: 3,
-  timestamp: Date.now()
+  timestamp: Date.now(),
 });
 
 // ❌ Avoid
@@ -221,9 +249,13 @@ logger.error('Save failed', error);
 
 ```typescript
 // ✅ Good
-const userData = await logger.measureAsync('fetch-user-data', async () => {
-  return await userService.getUser(userId);
-}, { userId });
+const userData = await logger.measureAsync(
+  'fetch-user-data',
+  async () => {
+    return await userService.getUser(userId);
+  },
+  { userId }
+);
 
 // ❌ Avoid
 const userData = await userService.getUser(userId);
@@ -237,8 +269,8 @@ logger.info('User data fetched', { userId }); // No timing information
 try {
   await riskyOperation();
 } catch (error) {
-  logger.apiError('RiskyService', 'riskyOperation', error, { 
-    context: 'user-profile-update' 
+  logger.apiError('RiskyService', 'riskyOperation', error, {
+    context: 'user-profile-update',
   });
   throw error; // Re-throw if needed
 }
@@ -260,7 +292,7 @@ logger.apiError('PaymentService', 'processPayment', error, {
   userId: user.id,
   amount: payment.amount,
   currency: payment.currency,
-  paymentMethod: payment.method
+  paymentMethod: payment.method,
 });
 
 // ❌ Avoid
@@ -270,6 +302,7 @@ logger.error('Payment failed', error);
 ## Environment-Specific Behavior
 
 ### Development
+
 - All log levels are shown
 - Stack traces are included for errors
 - Performance measurements are logged
@@ -277,6 +310,7 @@ logger.error('Payment failed', error);
 - Context depth is limited to 5 levels
 
 ### Production
+
 - Only ERROR and WARN levels are shown
 - Stack traces are disabled for performance
 - Performance measurements are disabled
@@ -284,6 +318,7 @@ logger.error('Payment failed', error);
 - Context depth is limited to 3 levels
 
 ### Test
+
 - Only ERROR level is shown
 - All logging features are disabled
 - Console output is disabled
@@ -292,6 +327,7 @@ logger.error('Payment failed', error);
 ## Migration from Console
 
 ### Before (Console)
+
 ```typescript
 console.log('User logged in:', user);
 console.error('API error:', error);
@@ -299,6 +335,7 @@ console.warn('Rate limit:', { current: 90, limit: 100 });
 ```
 
 ### After (Logger)
+
 ```typescript
 logger.info('User logged in', { userId: user.id, email: user.email });
 logger.apiError('AuthService', 'login', error, { userId: user.id });
@@ -314,6 +351,7 @@ yarn test src/utils/logger.test.ts
 ```
 
 The tests cover:
+
 - Basic logging functionality
 - Context handling and formatting
 - Performance measurement
@@ -351,7 +389,7 @@ import { logger } from '../utils/logger';
 logger.debug('Logger configuration', {
   level: logger.config.level,
   enableConsole: logger.config.enableConsole,
-  enableProductionLogging: logger.config.enableProductionLogging
+  enableProductionLogging: logger.config.enableProductionLogging,
 });
 ```
 

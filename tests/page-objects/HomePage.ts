@@ -25,7 +25,7 @@ export class HomePage extends BasePage {
   }
 
   async getSwantronLinkText(): Promise<string> {
-    return await this.swantronLink.textContent() || '';
+    return (await this.swantronLink.textContent()) || '';
   }
 
   // Validation methods

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -20,7 +20,7 @@ export default defineConfig({
       '**/tests/**', // Exclude Playwright tests directory
       '**/.{idea,git,cache,output,temp}/**',
       '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
-      '**/tronswan.test.js' // Exclude Playwright test file
+      '**/tronswan.test.js', // Exclude Playwright test file
     ],
     coverage: {
       provider: 'v8',
@@ -31,16 +31,16 @@ export default defineConfig({
         '!src/index.tsx',
         '!src/reportWebVitals.ts',
         '!src/setupTests.ts',
-        '!src/types/**' // Exclude type definitions
+        '!src/types/**', // Exclude type definitions
       ],
       thresholds: {
         global: {
           statements: 70,
           branches: 60,
           functions: 60,
-          lines: 70
-        }
-      }
-    }
-  }
-})
+          lines: 70,
+        },
+      },
+    },
+  },
+});

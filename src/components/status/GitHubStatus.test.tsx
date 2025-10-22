@@ -196,8 +196,9 @@ describe('GitHubStatus Component', () => {
     it('renders no actions message when no actions', () => {
       render(<GitHubStatus {...defaultProps} />);
 
+      // With tabs, only one repository is shown at a time (tronswan by default)
       const noDataMessages = screen.getAllByText('No workflow runs found');
-      expect(noDataMessages).toHaveLength(2); // One for tronswan, one for chomptron
+      expect(noDataMessages).toHaveLength(1);
     });
 
     it('renders actions list when actions are available', () => {

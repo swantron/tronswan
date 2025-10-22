@@ -19,7 +19,7 @@ building / deploying / learning
 ## Features
 
 - 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
-- 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP  
+- 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
 - 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
@@ -50,23 +50,26 @@ building / deploying / learning
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/swantron/tronswan.git
    cd tronswan
    ```
 
 2. Install dependencies:
+
    ```bash
    yarn install
    ```
 
 3. Create a `.env` file in the root directory. See [Environment Configuration](docs/ENVIRONMENT_CONFIG.md) for detailed setup:
+
    ```bash
    # Basic weather configuration
    VITE_WEATHER_API_KEY=your_openweathermap_api_key
    VITE_WEATHER_CITY=Bozeman
    VITE_WEATHER_UNITS=imperial
-   
+
    # Optional: Health monitoring features
    VITE_GITHUB_TOKEN=your_github_token
    VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token
@@ -143,6 +146,7 @@ This project maintains high test coverage with comprehensive unit tests for all 
 - **Coverage Badge**: Shows current test coverage percentage
 
 To run tests locally:
+
 ```bash
 # Run all tests in watch mode
 yarn test
@@ -157,7 +161,6 @@ yarn test:coverage
 yarn test:ui
 ```
 
-
 ## Deployment
 
 The application is deployed to DigitalOcean using their App Platform. The deployment is automated through GitHub Actions with comprehensive testing and verification.
@@ -165,6 +168,7 @@ The application is deployed to DigitalOcean using their App Platform. The deploy
 ### Automated CI/CD Pipeline
 
 The project includes a complete CI/CD pipeline that:
+
 - Runs unit tests with coverage reporting
 - Builds and verifies the application
 - Deploys to DigitalOcean App Platform
@@ -178,11 +182,13 @@ See [CI/CD Setup](docs/CI_SETUP.md) for detailed information about the automated
 For detailed environment variable setup, see [Environment Configuration](docs/ENVIRONMENT_CONFIG.md).
 
 **Required for basic functionality:**
+
 - `VITE_WEATHER_API_KEY`: OpenWeatherMap API key
 - `VITE_WEATHER_CITY`: Default city for weather data
 - `VITE_WEATHER_UNITS`: Units for weather data (imperial/metric)
 
 **Optional for health monitoring:**
+
 - `VITE_GITHUB_TOKEN`: GitHub API token for health page
 - `VITE_DIGITALOCEAN_TOKEN`: DigitalOcean API token for infrastructure monitoring
 
