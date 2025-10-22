@@ -7,7 +7,8 @@ import '../../styles/GitHubStatus.css';
 interface GitHubData {
   user: any;
   repositories: any[];
-  actions: any[];
+  tronswanActions: any[];
+  chomptronActions: any[];
   loading: boolean;
   error: string | null;
 }
@@ -28,16 +29,18 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const [repositories, actions] = await Promise.all([
+      const [repositories, tronswanActions, chomptronActions] = await Promise.all([
         githubService.getAllRepositories(),
         githubService.getWorkflowRuns('tronswan'),
+        githubService.getWorkflowRuns('chomptron'),
       ]);
 
       onDataChange({
         ...data,
         user: null, // Don't load user profile
         repositories,
-        actions: actions.workflow_runs || [],
+        tronswanActions: tronswanActions.workflow_runs || [],
+        chomptronActions: chomptronActions.workflow_runs || [],
         loading: false,
         error: null,
       });
@@ -137,7 +140,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
           className={`tab ${activeTab === 'actions' ? 'active' : ''}`}
           onClick={() => setActiveTab('actions')}
         >
-          Actions ({data.actions?.length || 0})
+          Actions ({(data.tronswanActions?.length || 0) + (data.chomptronActions?.length || 0)})
         </button>
         <button
           className={`tab ${activeTab === 'repos' ? 'active' : ''}`}
@@ -151,69 +154,140 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         {activeTab === 'actions' && (
           <div className='actions-tab'>
             <h3>GitHub Actions</h3>
-            <div className='actions-header'>
-              <p>Recent workflow runs for tronswan repository</p>
-            </div>
-            {(data.actions?.length || 0) === 0 ? (
-              <p className='no-data'>No workflow runs found</p>
-            ) : (
-              <div className='actions-list'>
-                {(data.actions || []).map((action: any) => (
-                  <div key={action.id} className='action-item'>
-                    <div className='action-header'>
-                      <h4>{action.name}</h4>
-                      <span
-                        className={`status ${getStatusClass(action.status, action.conclusion)}`}
-                      >
-                        {getStatusIcon(action.status, action.conclusion)}
-                        {getStatusText(action.status, action.conclusion)}
-                      </span>
-                    </div>
-                    <div className='action-details'>
-                      <p>
-                        <strong>Branch:</strong> {action.head_branch || 'N/A'}
-                      </p>
-                      <p>
-                        <strong>Commit:</strong>{' '}
-                        {action.head_sha
-                          ? action.head_sha.substring(0, 7)
-                          : 'N/A'}
-                      </p>
-                      <p>
-                        <strong>Triggered by:</strong>{' '}
-                        {action.triggering_actor?.login ||
-                          action.actor?.login ||
-                          'Unknown'}
-                      </p>
-                      <p>
-                        <strong>Created:</strong>{' '}
-                        {action.created_at
-                          ? formatDate(action.created_at)
-                          : 'N/A'}
-                      </p>
-                      <p>
-                        <strong>Updated:</strong>{' '}
-                        {action.updated_at
-                          ? formatDate(action.updated_at)
-                          : 'N/A'}
-                      </p>
-                      {action.html_url && (
-                        <p>
-                          <strong>URL:</strong>{' '}
-                          <a
-                            href={action.html_url}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                          >
-                            View Details
-                          </a>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            
+            {/* Tronswan Actions */}
+            <div className='actions-section'>
+              <div className='actions-header'>
+                <h4>Recent workflow runs for tronswan repository</h4>
               </div>
-            )}
+              {(data.tronswanActions?.length || 0) === 0 ? (
+                <p className='no-data'>No workflow runs found</p>
+              ) : (
+                <div className='actions-list'>
+                  {(data.tronswanActions || []).map((action: any) => (
+                    <div key={action.id} className='action-item'>
+                      <div className='action-header'>
+                        <h4>{action.name}</h4>
+                        <span
+                          className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                        >
+                          {getStatusIcon(action.status, action.conclusion)}
+                          {getStatusText(action.status, action.conclusion)}
+                        </span>
+                      </div>
+                      <div className='action-details'>
+                        <p>
+                          <strong>Branch:</strong> {action.head_branch || 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Commit:</strong>{' '}
+                          {action.head_sha
+                            ? action.head_sha.substring(0, 7)
+                            : 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Triggered by:</strong>{' '}
+                          {action.triggering_actor?.login ||
+                            action.actor?.login ||
+                            'Unknown'}
+                        </p>
+                        <p>
+                          <strong>Created:</strong>{' '}
+                          {action.created_at
+                            ? formatDate(action.created_at)
+                            : 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Updated:</strong>{' '}
+                          {action.updated_at
+                            ? formatDate(action.updated_at)
+                            : 'N/A'}
+                        </p>
+                        {action.html_url && (
+                          <p>
+                            <strong>URL:</strong>{' '}
+                            <a
+                              href={action.html_url}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              View Details
+                            </a>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Chomptron Actions */}
+            <div className='actions-section'>
+              <div className='actions-header'>
+                <h4>Recent workflow runs for chomptron repository</h4>
+              </div>
+              {(data.chomptronActions?.length || 0) === 0 ? (
+                <p className='no-data'>No workflow runs found</p>
+              ) : (
+                <div className='actions-list'>
+                  {(data.chomptronActions || []).map((action: any) => (
+                    <div key={action.id} className='action-item'>
+                      <div className='action-header'>
+                        <h4>{action.name}</h4>
+                        <span
+                          className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                        >
+                          {getStatusIcon(action.status, action.conclusion)}
+                          {getStatusText(action.status, action.conclusion)}
+                        </span>
+                      </div>
+                      <div className='action-details'>
+                        <p>
+                          <strong>Branch:</strong> {action.head_branch || 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Commit:</strong>{' '}
+                          {action.head_sha
+                            ? action.head_sha.substring(0, 7)
+                            : 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Triggered by:</strong>{' '}
+                          {action.triggering_actor?.login ||
+                            action.actor?.login ||
+                            'Unknown'}
+                        </p>
+                        <p>
+                          <strong>Created:</strong>{' '}
+                          {action.created_at
+                            ? formatDate(action.created_at)
+                            : 'N/A'}
+                        </p>
+                        <p>
+                          <strong>Updated:</strong>{' '}
+                          {action.updated_at
+                            ? formatDate(action.updated_at)
+                            : 'N/A'}
+                        </p>
+                        {action.html_url && (
+                          <p>
+                            <strong>URL:</strong>{' '}
+                            <a
+                              href={action.html_url}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              View Details
+                            </a>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
 

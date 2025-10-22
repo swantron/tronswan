@@ -54,7 +54,8 @@ describe('GitHubStatus Component', () => {
     data: {
       user: null,
       repositories: [],
-      actions: [],
+      tronswanActions: [],
+      chomptronActions: [],
       loading: false,
       error: null,
     },
@@ -78,6 +79,7 @@ describe('GitHubStatus Component', () => {
       await waitFor(() => {
         expect(githubService.getAllRepositories).toHaveBeenCalled();
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('tronswan');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('chomptron');
       });
     });
 
@@ -160,7 +162,7 @@ describe('GitHubStatus Component', () => {
           data={{
             ...defaultProps.data,
             repositories: mockRepositoryData,
-            actions: mockWorkflowRuns.workflow_runs,
+            tronswanActions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -194,7 +196,8 @@ describe('GitHubStatus Component', () => {
     it('renders no actions message when no actions', () => {
       render(<GitHubStatus {...defaultProps} />);
 
-      expect(screen.getByText('No workflow runs found')).toBeInTheDocument();
+      const noDataMessages = screen.getAllByText('No workflow runs found');
+      expect(noDataMessages).toHaveLength(2); // One for tronswan, one for chomptron
     });
 
     it('renders actions list when actions are available', () => {
@@ -203,7 +206,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs,
+            tronswanActions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -217,7 +220,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs,
+            tronswanActions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -232,7 +235,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs,
+            tronswanActions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );
@@ -248,7 +251,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            actions: mockWorkflowRuns.workflow_runs,
+            tronswanActions: mockWorkflowRuns.workflow_runs,
           }}
         />
       );

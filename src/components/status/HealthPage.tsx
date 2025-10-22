@@ -15,7 +15,8 @@ interface HealthData {
   github: {
     user: any;
     repositories: any[];
-    actions: any[];
+    tronswanActions: any[];
+    chomptronActions: any[];
     loading: boolean;
     error: string | null;
   };
@@ -42,7 +43,8 @@ function HealthPage() {
     github: {
       user: null,
       repositories: [],
-      actions: [],
+      tronswanActions: [],
+      chomptronActions: [],
       loading: true,
       error: null,
     },
