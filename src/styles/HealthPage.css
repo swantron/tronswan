@@ -135,6 +135,47 @@
   letter-spacing: 1px;
 }
 
+/* Google Resources Section */
+.google-resources-section {
+  margin-top: 2rem;
+}
+
+.google-resources-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color, #f89859);
+  font-weight: bold;
+}
+
+.google-resources-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.resource-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  border-radius: 8px;
+  color: var(--primary-text, #ffffff);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resource-link:hover {
+  background: rgba(248, 152, 89, 0.15);
+  border-color: var(--accent-color, #f89859);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .health-title {

@@ -252,6 +252,37 @@ function HealthPage() {
             </div>
           )}
         </div>
+
+        {/* Google Cloud Resources */}
+        <div className='health-section google-resources-section'>
+          <h2>🔗 Google Cloud Resources</h2>
+          <div className='google-resources-links'>
+            <a
+              href='https://aistudio.google.com/app/projects'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='resource-link'
+            >
+              📊 AI Studio Projects
+            </a>
+            <a
+              href='https://console.cloud.google.com/cloud-build/builds?project=chomptron'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='resource-link'
+            >
+              🔨 Cloud Build
+            </a>
+            <a
+              href='https://console.cloud.google.com/run/detail/us-central1/chomptron/observability/metrics?project=chomptron'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='resource-link'
+            >
+              📈 Cloud Run Metrics
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
