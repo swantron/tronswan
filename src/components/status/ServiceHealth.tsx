@@ -63,8 +63,8 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       },
       {
         name: 'Personal development site',
-        url: 'https://jswan.dev',
-        description: 'py placeholder on GAE',
+        url: 'https://jswan.dev/xrpc/_health',
+        description: 'Bluesky PDS on DO droplet',
         status: services.jswan,
         lastChecked: new Date(),
       },
@@ -224,8 +224,8 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
             };
           }
         }
-        // For other API endpoints, use GET to actually check the API response
-        else if (service.name.includes('API')) {
+        // For other API endpoints and Bluesky PDS, use GET to actually check the API response
+        else if (service.name.includes('API') || service.url.includes('/xrpc/_health')) {
           const response = await fetch(service.url, {
             method: 'GET',
             cache: 'no-cache',
