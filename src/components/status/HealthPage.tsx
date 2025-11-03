@@ -17,6 +17,8 @@ interface HealthData {
     repositories: any[];
     tronswanActions: any[];
     chomptronActions: any[];
+    secureBaseImagesActions: any[];
+    readmeLintActions: any[];
     loading: boolean;
     error: string | null;
   };
@@ -46,6 +48,8 @@ function HealthPage() {
       repositories: [],
       tronswanActions: [],
       chomptronActions: [],
+      secureBaseImagesActions: [],
+      readmeLintActions: [],
       loading: true,
       error: null,
     },

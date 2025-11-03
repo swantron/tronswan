@@ -9,6 +9,8 @@ interface GitHubData {
   repositories: any[];
   tronswanActions: any[];
   chomptronActions: any[];
+  secureBaseImagesActions: any[];
+  readmeLintActions: any[];
   loading: boolean;
   error: string | null;
 }
@@ -20,7 +22,7 @@ interface GitHubStatusProps {
 
 const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   const [activeTab, setActiveTab] = useState<'actions' | 'repos'>('actions');
-  const [activeRepo, setActiveRepo] = useState<'tronswan' | 'chomptron'>(
+  const [activeRepo, setActiveRepo] = useState<'tronswan' | 'chomptron' | 'secure-base-images' | 'readme-lint'>(
     'tronswan'
   );
 
@@ -32,16 +34,20 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const [repositories, tronswanActions, chomptronActions] =
+      const [repositories, tronswanActions, chomptronActions, secureBaseImagesActions, readmeLintActions] =
         await Promise.all([
           githubService.getAllRepositories(),
           githubService.getWorkflowRuns('tronswan'),
           githubService.getWorkflowRuns('chomptron'),
+          githubService.getWorkflowRuns('secure-base-images'),
+          githubService.getWorkflowRuns('readme-lint'),
         ]);
 
       logger.info('GitHub workflow runs loaded', {
         tronswanCount: tronswanActions.workflow_runs?.length || 0,
         chomptronCount: chomptronActions.workflow_runs?.length || 0,
+        secureBaseImagesCount: secureBaseImagesActions.workflow_runs?.length || 0,
+        readmeLintCount: readmeLintActions.workflow_runs?.length || 0,
       });
 
       onDataChange({
@@ -50,6 +56,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         repositories,
         tronswanActions: tronswanActions.workflow_runs || [],
         chomptronActions: chomptronActions.workflow_runs || [],
+        secureBaseImagesActions: secureBaseImagesActions.workflow_runs || [],
+        readmeLintActions: readmeLintActions.workflow_runs || [],
         loading: false,
         error: null,
       });
@@ -151,7 +159,9 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
         >
           Actions (
           {(data.tronswanActions?.length || 0) +
-            (data.chomptronActions?.length || 0)}
+            (data.chomptronActions?.length || 0) +
+            (data.secureBaseImagesActions?.length || 0) +
+            (data.readmeLintActions?.length || 0)}
           )
         </button>
         <button
@@ -180,6 +190,18 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                 onClick={() => setActiveRepo('chomptron')}
               >
                 Chomptron
+              </button>
+              <button
+                className={`repo-tab ${activeRepo === 'secure-base-images' ? 'active' : ''}`}
+                onClick={() => setActiveRepo('secure-base-images')}
+              >
+                Secure Base Images
+              </button>
+              <button
+                className={`repo-tab ${activeRepo === 'readme-lint' ? 'active' : ''}`}
+                onClick={() => setActiveRepo('readme-lint')}
+              >
+                README Lint
               </button>
             </div>
 
@@ -258,6 +280,140 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                 ) : (
                   <div className='actions-list'>
                     {(data.chomptronActions || []).map((action: any) => (
+                      <div key={action.id} className='action-item'>
+                        <div className='action-header'>
+                          <h4>{action.name}</h4>
+                          <span
+                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                          >
+                            {getStatusIcon(action.status, action.conclusion)}
+                            {getStatusText(action.status, action.conclusion)}
+                          </span>
+                        </div>
+                        <div className='action-details'>
+                          <p>
+                            <strong>Branch:</strong>{' '}
+                            {action.head_branch || 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Commit:</strong>{' '}
+                            {action.head_sha
+                              ? action.head_sha.substring(0, 7)
+                              : 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Triggered by:</strong>{' '}
+                            {action.triggering_actor?.login ||
+                              action.actor?.login ||
+                              'Unknown'}
+                          </p>
+                          <p>
+                            <strong>Created:</strong>{' '}
+                            {action.created_at
+                              ? formatDate(action.created_at)
+                              : 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Updated:</strong>{' '}
+                            {action.updated_at
+                              ? formatDate(action.updated_at)
+                              : 'N/A'}
+                          </p>
+                          {action.html_url && (
+                            <p>
+                              <strong>URL:</strong>{' '}
+                              <a
+                                href={action.html_url}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                View Details
+                              </a>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Secure Base Images Actions */}
+            {activeRepo === 'secure-base-images' && (
+              <div className='actions-section'>
+                {(data.secureBaseImagesActions?.length || 0) === 0 ? (
+                  <p className='no-data'>No workflow runs found</p>
+                ) : (
+                  <div className='actions-list'>
+                    {(data.secureBaseImagesActions || []).map((action: any) => (
+                      <div key={action.id} className='action-item'>
+                        <div className='action-header'>
+                          <h4>{action.name}</h4>
+                          <span
+                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                          >
+                            {getStatusIcon(action.status, action.conclusion)}
+                            {getStatusText(action.status, action.conclusion)}
+                          </span>
+                        </div>
+                        <div className='action-details'>
+                          <p>
+                            <strong>Branch:</strong>{' '}
+                            {action.head_branch || 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Commit:</strong>{' '}
+                            {action.head_sha
+                              ? action.head_sha.substring(0, 7)
+                              : 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Triggered by:</strong>{' '}
+                            {action.triggering_actor?.login ||
+                              action.actor?.login ||
+                              'Unknown'}
+                          </p>
+                          <p>
+                            <strong>Created:</strong>{' '}
+                            {action.created_at
+                              ? formatDate(action.created_at)
+                              : 'N/A'}
+                          </p>
+                          <p>
+                            <strong>Updated:</strong>{' '}
+                            {action.updated_at
+                              ? formatDate(action.updated_at)
+                              : 'N/A'}
+                          </p>
+                          {action.html_url && (
+                            <p>
+                              <strong>URL:</strong>{' '}
+                              <a
+                                href={action.html_url}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                View Details
+                              </a>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* README Lint Actions */}
+            {activeRepo === 'readme-lint' && (
+              <div className='actions-section'>
+                {(data.readmeLintActions?.length || 0) === 0 ? (
+                  <p className='no-data'>No workflow runs found</p>
+                ) : (
+                  <div className='actions-list'>
+                    {(data.readmeLintActions || []).map((action: any) => (
                       <div key={action.id} className='action-item'>
                         <div className='action-header'>
                           <h4>{action.name}</h4>
