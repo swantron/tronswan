@@ -22,9 +22,9 @@ interface GitHubStatusProps {
 
 const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   const [activeTab, setActiveTab] = useState<'actions' | 'repos'>('actions');
-  const [activeRepo, setActiveRepo] = useState<'tronswan' | 'chomptron' | 'secure-base-images' | 'readme-lint'>(
-    'tronswan'
-  );
+  const [activeRepo, setActiveRepo] = useState<
+    'tronswan' | 'chomptron' | 'secure-base-images' | 'readme-lint'
+  >('tronswan');
 
   useEffect(() => {
     loadGitHubData();
@@ -34,19 +34,25 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     try {
       onDataChange({ ...data, loading: true, error: null });
 
-      const [repositories, tronswanActions, chomptronActions, secureBaseImagesActions, readmeLintActions] =
-        await Promise.all([
-          githubService.getAllRepositories(),
-          githubService.getWorkflowRuns('tronswan'),
-          githubService.getWorkflowRuns('chomptron'),
-          githubService.getWorkflowRuns('secure-base-images'),
-          githubService.getWorkflowRuns('readme-lint'),
-        ]);
+      const [
+        repositories,
+        tronswanActions,
+        chomptronActions,
+        secureBaseImagesActions,
+        readmeLintActions,
+      ] = await Promise.all([
+        githubService.getAllRepositories(),
+        githubService.getWorkflowRuns('tronswan'),
+        githubService.getWorkflowRuns('chomptron'),
+        githubService.getWorkflowRuns('secure-base-images'),
+        githubService.getWorkflowRuns('readme-lint'),
+      ]);
 
       logger.info('GitHub workflow runs loaded', {
         tronswanCount: tronswanActions.workflow_runs?.length || 0,
         chomptronCount: chomptronActions.workflow_runs?.length || 0,
-        secureBaseImagesCount: secureBaseImagesActions.workflow_runs?.length || 0,
+        secureBaseImagesCount:
+          secureBaseImagesActions.workflow_runs?.length || 0,
         readmeLintCount: readmeLintActions.workflow_runs?.length || 0,
       });
 

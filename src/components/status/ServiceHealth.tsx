@@ -225,7 +225,10 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
           }
         }
         // For other API endpoints and Bluesky PDS, use GET to actually check the API response
-        else if (service.name.includes('API') || service.url.includes('/xrpc/_health')) {
+        else if (
+          service.name.includes('API') ||
+          service.url.includes('/xrpc/_health')
+        ) {
           const response = await fetch(service.url, {
             method: 'GET',
             cache: 'no-cache',
