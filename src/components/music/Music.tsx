@@ -425,7 +425,7 @@ const Music: React.FC = () => {
         logger.info('Initializing Spotify player for track playback');
 
         // Show loading message
-        const loadingAlert = alert(
+        alert(
           '🎵 Setting up music player...\n\nThis may take a few seconds. Please wait.'
         );
 
@@ -633,7 +633,7 @@ const Music: React.FC = () => {
         />
         <div className='music-auth'>
           <h1>🎵 Non-janky Spotify</h1>
-          <p className='auth-tagline'>it's Spotify, but less janky</p>
+          <p className='auth-tagline'>it&apos;s Spotify, but less janky</p>
 
           <p>
             Connect your Spotify account to access your top tracks, playlists,
@@ -683,7 +683,7 @@ const Music: React.FC = () => {
           )}
           <div>
             <h1>🎵 Spotify Interface</h1>
-            <p className='user-subtitle'>it's Spotify, but less janky</p>
+            <p className='user-subtitle'>it&apos;s Spotify, but less janky</p>
           </div>
         </div>
 
@@ -734,8 +734,20 @@ const Music: React.FC = () => {
           <div
             className='help-modal-overlay'
             onClick={() => setShowHelpModal(false)}
+            onKeyDown={e => {
+              if (e.key === 'Escape') setShowHelpModal(false);
+            }}
+            role='button'
+            tabIndex={0}
+            aria-label='Close help modal'
           >
-            <div className='help-modal' onClick={e => e.stopPropagation()}>
+            <div
+              className='help-modal'
+              onClick={e => e.stopPropagation()}
+              onKeyDown={e => e.stopPropagation()}
+              role='dialog'
+              tabIndex={-1}
+            >
               <div className='help-modal-header'>
                 <h3>🎵 How this enhanced music player works</h3>
                 <button
@@ -772,9 +784,9 @@ const Music: React.FC = () => {
                 <div className='help-section'>
                   <h4>How to Play Music (Premium Users)</h4>
                   <ol>
-                    <li>Click any "▶ Play" button below</li>
+                    <li>Click any &ldquo;▶ Play&rdquo; button below</li>
                     <li>
-                      You'll be prompted with a Spotify login page (if not
+                      You&apos;ll be prompted with a Spotify login page (if not
                       already logged in)
                     </li>
                     <li>

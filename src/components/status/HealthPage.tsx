@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import digitalOceanService from '../../services/digitalOceanService';
+import type {
+  GitHubRepository,
+  GitHubWorkflowRun,
+  GitHubUser,
+} from '../../services/githubService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
@@ -13,20 +18,20 @@ import '../../styles/HealthPage.css';
 
 interface HealthData {
   github: {
-    user: any;
-    repositories: any[];
-    tronswanActions: any[];
-    chomptronActions: any[];
-    secureBaseImagesActions: any[];
-    readmeLintActions: any[];
+    user: GitHubUser | null;
+    repositories: GitHubRepository[];
+    tronswanActions: GitHubWorkflowRun[];
+    chomptronActions: GitHubWorkflowRun[];
+    secureBaseImagesActions: GitHubWorkflowRun[];
+    readmeLintActions: GitHubWorkflowRun[];
     loading: boolean;
     error: string | null;
   };
   digitalocean: {
-    app: any;
-    droplets: any[];
-    loadBalancers: any[];
-    databases: any[];
+    app: unknown;
+    droplets: unknown[];
+    loadBalancers: unknown[];
+    databases: unknown[];
     loading: boolean;
     error: string | null;
   };

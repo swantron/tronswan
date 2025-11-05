@@ -4,19 +4,22 @@ import {
   DigitalOceanDroplet,
   DigitalOceanLoadBalancer,
   DigitalOceanDatabase,
+  type DigitalOceanApp,
 } from '../../services/digitalOceanService';
 import '../../styles/DigitalOceanStatus.css';
 
+interface DigitalOceanData {
+  app: DigitalOceanApp | unknown;
+  droplets: DigitalOceanDroplet[] | unknown[];
+  loadBalancers: DigitalOceanLoadBalancer[] | unknown[];
+  databases: DigitalOceanDatabase[] | unknown[];
+  loading: boolean;
+  error: string | null;
+}
+
 interface DigitalOceanStatusProps {
-  data: {
-    app: any;
-    droplets: DigitalOceanDroplet[];
-    loadBalancers: DigitalOceanLoadBalancer[];
-    databases: DigitalOceanDatabase[];
-    loading: boolean;
-    error: string | null;
-  };
-  onDataChange: (data: any) => void;
+  data: DigitalOceanData;
+  onDataChange: (data: DigitalOceanData) => void;
 }
 
 function DigitalOceanStatus({
@@ -24,6 +27,9 @@ function DigitalOceanStatus({
   onDataChange: _onDataChange,
 }: DigitalOceanStatusProps) {
   const [activeTab, setActiveTab] = useState<'app' | 'droplets'>('app');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const app = data.app as any;
+  const droplets = data.droplets as DigitalOceanDroplet[];
 
   // Data fetching is now handled by the parent HealthPage component
 
@@ -129,38 +135,34 @@ function DigitalOceanStatus({
           className={`tab ${activeTab === 'droplets' ? 'active' : ''}`}
           onClick={() => setActiveTab('droplets')}
         >
-          Droplets ({data.droplets?.length || 0})
+          Droplets ({droplets?.length || 0})
         </button>
       </div>
 
       <div className='do-content'>
         {activeTab === 'app' && (
           <div className='app-tab'>
-            {data.app ? (
+            {app ? (
               <div className='app-info'>
                 <div className='app-header'>
                   <div className='app-title-section'>
-                    <h4>{data.app.spec?.name || 'tronswan-react-app'}</h4>
+                    <h4>{app.spec?.name || 'tronswan-react-app'}</h4>
                     <p className='app-description'>
                       DigitalOcean App Platform Application
                     </p>
                   </div>
                   <div className='status-section'>
                     <span
-                      className={`status ${getStatusClass(data.app.last_deployment_active_at ? 'active' : 'inactive')}`}
+                      className={`status ${getStatusClass(app.last_deployment_active_at ? 'active' : 'inactive')}`}
                     >
                       {getStatusIcon(
-                        data.app.last_deployment_active_at
-                          ? 'active'
-                          : 'inactive'
+                        app.last_deployment_active_at ? 'active' : 'inactive'
                       )}
-                      {data.app.last_deployment_active_at
-                        ? 'ACTIVE'
-                        : 'INACTIVE'}
+                      {app.last_deployment_active_at ? 'ACTIVE' : 'INACTIVE'}
                     </span>
-                    {data.app.active_deployment?.phase && (
+                    {app.active_deployment?.phase && (
                       <span className='deployment-phase'>
-                        Phase: {data.app.active_deployment.phase}
+                        Phase: {app.active_deployment.phase}
                       </span>
                     )}
                   </div>
@@ -168,42 +170,42 @@ function DigitalOceanStatus({
                 <div className='app-details'>
                   <div className='detail-item'>
                     <span className='label'>App ID:</span>
-                    <span className='value'>{data.app.id}</span>
+                    <span className='value'>{app.id}</span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Region:</span>
                     <span className='value'>
-                      {data.app.region?.label || data.app.region?.slug || 'N/A'}
+                      {app.region?.label || app.region?.slug || 'N/A'}
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Tier:</span>
                     <span className='value'>
-                      {data.app.tier_slug?.toUpperCase() || 'N/A'}
+                      {app.tier_slug?.toUpperCase() || 'N/A'}
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Created:</span>
                     <span className='value'>
-                      {data.app.created_at
-                        ? new Date(data.app.created_at).toLocaleDateString()
+                      {app.created_at
+                        ? new Date(app.created_at).toLocaleDateString()
                         : 'N/A'}
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Last Updated:</span>
                     <span className='value'>
-                      {data.app.updated_at
-                        ? new Date(data.app.updated_at).toLocaleDateString()
+                      {app.updated_at
+                        ? new Date(app.updated_at).toLocaleDateString()
                         : 'N/A'}
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Last Deployed:</span>
                     <span className='value'>
-                      {data.app.last_deployment_active_at
+                      {app.last_deployment_active_at
                         ? new Date(
-                            data.app.last_deployment_active_at
+                            app.last_deployment_active_at
                           ).toLocaleDateString()
                         : 'N/A'}
                     </span>
@@ -212,11 +214,11 @@ function DigitalOceanStatus({
                     <span className='label'>Live URL:</span>
                     <span className='value'>
                       <a
-                        href={data.app.live_url}
+                        href={app.live_url}
                         target='_blank'
                         rel='noopener noreferrer'
                       >
-                        {data.app.live_url || 'N/A'}
+                        {app.live_url || 'N/A'}
                       </a>
                     </span>
                   </div>
@@ -224,30 +226,28 @@ function DigitalOceanStatus({
                     <span className='label'>Default Ingress:</span>
                     <span className='value'>
                       <a
-                        href={data.app.default_ingress}
+                        href={app.default_ingress}
                         target='_blank'
                         rel='noopener noreferrer'
                       >
-                        {data.app.default_ingress || 'N/A'}
+                        {app.default_ingress || 'N/A'}
                       </a>
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Live Domain:</span>
-                    <span className='value'>
-                      {data.app.live_domain || 'N/A'}
-                    </span>
+                    <span className='value'>{app.live_domain || 'N/A'}</span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Active Deployment ID:</span>
                     <span className='value'>
-                      {data.app.active_deployment?.id || 'N/A'}
+                      {app.active_deployment?.id || 'N/A'}
                     </span>
                   </div>
                   <div className='detail-item'>
                     <span className='label'>Deployment Phase:</span>
                     <span className='value'>
-                      {data.app.active_deployment?.phase || 'N/A'}
+                      {app.active_deployment?.phase || 'N/A'}
                     </span>
                   </div>
                 </div>
@@ -261,11 +261,11 @@ function DigitalOceanStatus({
         {activeTab === 'droplets' && (
           <div className='droplets-tab'>
             <h3>Droplets</h3>
-            {(data.droplets?.length || 0) === 0 ? (
+            {(droplets?.length || 0) === 0 ? (
               <p className='no-data'>No droplets found</p>
             ) : (
               <div className='droplets-list'>
-                {(data.droplets || []).map(droplet => (
+                {(droplets || []).map(droplet => (
                   <div key={droplet.id} className='droplet-item'>
                     <div className='droplet-header'>
                       <h4>{droplet.name}</h4>

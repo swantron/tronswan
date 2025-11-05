@@ -495,7 +495,9 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('location-display')).toHaveTextContent('London');
+      expect(screen.getByTestId('location-display')).toHaveTextContent(
+        'London'
+      );
     });
   });
 
@@ -536,7 +538,9 @@ describe('Weather Component', () => {
     renderWeather();
 
     await waitFor(() => {
-      expect(screen.getByTestId('weather-description-display')).toHaveTextContent('clear sky');
+      expect(
+        screen.getByTestId('weather-description-display')
+      ).toHaveTextContent('clear sky');
       expect(screen.getByTestId('temp-range-display')).toBeInTheDocument();
       expect(screen.getByTestId('clouds-display')).toHaveTextContent('10%');
       expect(screen.getByTestId('wind-display')).toBeInTheDocument();
@@ -602,20 +606,41 @@ describe('Weather Component', () => {
             list: [
               {
                 dt: Date.now() / 1000,
-                main: { temp: 72, feels_like: 70, humidity: 45, pressure: 1013 },
-                weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
+                main: {
+                  temp: 72,
+                  feels_like: 70,
+                  humidity: 45,
+                  pressure: 1013,
+                },
+                weather: [
+                  { main: 'Clear', description: 'clear sky', icon: '01d' },
+                ],
                 dt_txt: '2024-01-01 12:00:00',
               },
               {
                 dt: Date.now() / 1000 + 86400,
-                main: { temp: 75, feels_like: 73, humidity: 50, pressure: 1015 },
-                weather: [{ main: 'Clouds', description: 'few clouds', icon: '02d' }],
+                main: {
+                  temp: 75,
+                  feels_like: 73,
+                  humidity: 50,
+                  pressure: 1015,
+                },
+                weather: [
+                  { main: 'Clouds', description: 'few clouds', icon: '02d' },
+                ],
                 dt_txt: '2024-01-02 12:00:00',
               },
               {
                 dt: Date.now() / 1000 + 172800,
-                main: { temp: 68, feels_like: 66, humidity: 55, pressure: 1012 },
-                weather: [{ main: 'Rain', description: 'light rain', icon: '10d' }],
+                main: {
+                  temp: 68,
+                  feels_like: 66,
+                  humidity: 55,
+                  pressure: 1012,
+                },
+                weather: [
+                  { main: 'Rain', description: 'light rain', icon: '10d' },
+                ],
                 dt_txt: '2024-01-03 12:00:00',
               },
             ],

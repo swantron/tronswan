@@ -9,6 +9,28 @@ interface MusicPlayerProps {
   onClose: () => void;
 }
 
+interface SpotifyArtist {
+  name: string;
+  id?: string;
+}
+
+interface SpotifyTrack {
+  name: string;
+  artists: SpotifyArtist[];
+  album?: {
+    name?: string;
+    images: Array<{ url: string }>;
+  };
+  uri?: string;
+  id?: string;
+}
+
+interface SpotifyQueue {
+  current_track: SpotifyTrack;
+  next_tracks: SpotifyTrack[];
+  previous_tracks: SpotifyTrack[];
+}
+
 interface PlaybackState {
   isPlaying: boolean;
   currentTrack: {
@@ -20,11 +42,7 @@ interface PlaybackState {
     position: number;
   } | null;
   volume: number;
-  queue?: {
-    current_track: any;
-    next_tracks: any[];
-    previous_tracks: any[];
-  };
+  queue?: SpotifyQueue;
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
@@ -260,6 +278,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                 <div
                   className='progress-bar'
                   onClick={handleProgressClick}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleProgressClick(
+                        e as unknown as React.MouseEvent<HTMLDivElement>
+                      );
+                    }
+                  }}
+                  role='slider'
+                  tabIndex={0}
+                  aria-label='Seek progress bar'
+                  aria-valuemin={0}
+                  aria-valuemax={playbackState.currentTrack?.duration || 100}
+                  aria-valuenow={playbackState.currentTrack?.position || 0}
                   style={{ cursor: 'pointer' }}
                 >
                   <div
@@ -321,8 +352,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                       .map((track, index) => (
                         <div key={track.id || index} className='next-track'>
                           <img
-                            src={track.album.images[0]?.url}
-                            alt={track.album.name}
+                            src={track.album?.images[0]?.url}
+                            alt={track.album?.name || track.name}
                             className='next-track-image'
                           />
                           <div className='next-track-info'>
@@ -330,7 +361,9 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                               {track.name}
                             </span>
                             <span className='next-track-artist'>
-                              {track.artists.map((a: any) => a.name).join(', ')}
+                              {track.artists
+                                .map((a: SpotifyArtist) => a.name)
+                                .join(', ')}
                             </span>
                           </div>
                         </div>

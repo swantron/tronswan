@@ -148,9 +148,7 @@ describe('MLB Component', () => {
   test('renders MLB page title', async () => {
     renderMLB();
 
-    expect(screen.getByTestId('mlb-title')).toHaveTextContent(
-      'MLB Standings'
-    );
+    expect(screen.getByTestId('mlb-title')).toHaveTextContent('MLB Standings');
   });
 
   test('renders loading state initially', () => {
@@ -434,12 +432,12 @@ describe('MLB Component', () => {
     await waitFor(() => {
       // Just verify that run differential data is present in the table
       const tableCells = screen.getAllByRole('cell');
-      const hasDifferential = tableCells.some(cell => 
-        cell.textContent && (
-          cell.textContent.includes('+130') || 
-          cell.textContent.includes('+30') || 
-          cell.textContent.includes('+300')
-        )
+      const hasDifferential = tableCells.some(
+        cell =>
+          cell.textContent &&
+          (cell.textContent.includes('+130') ||
+            cell.textContent.includes('+30') ||
+            cell.textContent.includes('+300'))
       );
       expect(hasDifferential).toBe(true);
     });

@@ -327,14 +327,14 @@ export class SpotifyPlaybackService {
 
       // Playback Status Update event - wrap in try/catch
       try {
-        this.player.addListener('playback_status_update', state => {});
+        this.player.addListener('playback_status_update', _state => {});
       } catch (error) {
         logger.warn('Failed to add playback_status_update listener', { error });
       }
 
       // Player State Changed event - wrap in try/catch
       try {
-        this.player.addListener('player_state_changed', state => {});
+        this.player.addListener('player_state_changed', _state => {});
       } catch (error) {
         logger.warn('Failed to add player_state_changed listener', { error });
       }

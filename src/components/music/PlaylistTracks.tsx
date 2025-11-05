@@ -73,6 +73,8 @@ const PlaylistTracks: React.FC<PlaylistTracksProps> = ({
 
   useEffect(() => {
     loadTracks(true);
+    // loadTracks is intentionally not in deps to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playlist.id]); // Only depend on playlist.id
 
   const handleLoadMore = () => {

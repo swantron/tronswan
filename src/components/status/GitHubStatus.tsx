@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-import githubService from '../../services/githubService';
+import githubService, {
+  type GitHubRepository,
+  type GitHubWorkflowRun,
+  type GitHubUser,
+} from '../../services/githubService';
 import { logger } from '../../utils/logger';
+
 import '../../styles/GitHubStatus.css';
 
 interface GitHubData {
-  user: any;
-  repositories: any[];
-  tronswanActions: any[];
-  chomptronActions: any[];
-  secureBaseImagesActions: any[];
-  readmeLintActions: any[];
+  user: GitHubUser | null;
+  repositories: GitHubRepository[];
+  tronswanActions: GitHubWorkflowRun[];
+  chomptronActions: GitHubWorkflowRun[];
+  secureBaseImagesActions: GitHubWorkflowRun[];
+  readmeLintActions: GitHubWorkflowRun[];
   loading: boolean;
   error: string | null;
 }
@@ -28,6 +33,8 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
 
   useEffect(() => {
     loadGitHubData();
+    // loadGitHubData is defined in the component and shouldn't be in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadGitHubData = async () => {
@@ -218,61 +225,63 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                   <p className='no-data'>No workflow runs found</p>
                 ) : (
                   <div className='actions-list'>
-                    {(data.tronswanActions || []).map((action: any) => (
-                      <div key={action.id} className='action-item'>
-                        <div className='action-header'>
-                          <h4>{action.name}</h4>
-                          <span
-                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
-                          >
-                            {getStatusIcon(action.status, action.conclusion)}
-                            {getStatusText(action.status, action.conclusion)}
-                          </span>
-                        </div>
-                        <div className='action-details'>
-                          <p>
-                            <strong>Branch:</strong>{' '}
-                            {action.head_branch || 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Commit:</strong>{' '}
-                            {action.head_sha
-                              ? action.head_sha.substring(0, 7)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Triggered by:</strong>{' '}
-                            {action.triggering_actor?.login ||
-                              action.actor?.login ||
-                              'Unknown'}
-                          </p>
-                          <p>
-                            <strong>Created:</strong>{' '}
-                            {action.created_at
-                              ? formatDate(action.created_at)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Updated:</strong>{' '}
-                            {action.updated_at
-                              ? formatDate(action.updated_at)
-                              : 'N/A'}
-                          </p>
-                          {action.html_url && (
+                    {(data.tronswanActions || []).map(
+                      (action: GitHubWorkflowRun) => (
+                        <div key={action.id} className='action-item'>
+                          <div className='action-header'>
+                            <h4>{action.name}</h4>
+                            <span
+                              className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                            >
+                              {getStatusIcon(action.status, action.conclusion)}
+                              {getStatusText(action.status, action.conclusion)}
+                            </span>
+                          </div>
+                          <div className='action-details'>
                             <p>
-                              <strong>URL:</strong>{' '}
-                              <a
-                                href={action.html_url}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                View Details
-                              </a>
+                              <strong>Branch:</strong>{' '}
+                              {action.head_branch || 'N/A'}
                             </p>
-                          )}
+                            <p>
+                              <strong>Commit:</strong>{' '}
+                              {action.head_sha
+                                ? action.head_sha.substring(0, 7)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Triggered by:</strong>{' '}
+                              {action.triggering_actor?.login ||
+                                action.actor?.login ||
+                                'Unknown'}
+                            </p>
+                            <p>
+                              <strong>Created:</strong>{' '}
+                              {action.created_at
+                                ? formatDate(action.created_at)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Updated:</strong>{' '}
+                              {action.updated_at
+                                ? formatDate(action.updated_at)
+                                : 'N/A'}
+                            </p>
+                            {action.html_url && (
+                              <p>
+                                <strong>URL:</strong>{' '}
+                                <a
+                                  href={action.html_url}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  View Details
+                                </a>
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -285,61 +294,63 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                   <p className='no-data'>No workflow runs found</p>
                 ) : (
                   <div className='actions-list'>
-                    {(data.chomptronActions || []).map((action: any) => (
-                      <div key={action.id} className='action-item'>
-                        <div className='action-header'>
-                          <h4>{action.name}</h4>
-                          <span
-                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
-                          >
-                            {getStatusIcon(action.status, action.conclusion)}
-                            {getStatusText(action.status, action.conclusion)}
-                          </span>
-                        </div>
-                        <div className='action-details'>
-                          <p>
-                            <strong>Branch:</strong>{' '}
-                            {action.head_branch || 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Commit:</strong>{' '}
-                            {action.head_sha
-                              ? action.head_sha.substring(0, 7)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Triggered by:</strong>{' '}
-                            {action.triggering_actor?.login ||
-                              action.actor?.login ||
-                              'Unknown'}
-                          </p>
-                          <p>
-                            <strong>Created:</strong>{' '}
-                            {action.created_at
-                              ? formatDate(action.created_at)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Updated:</strong>{' '}
-                            {action.updated_at
-                              ? formatDate(action.updated_at)
-                              : 'N/A'}
-                          </p>
-                          {action.html_url && (
+                    {(data.chomptronActions || []).map(
+                      (action: GitHubWorkflowRun) => (
+                        <div key={action.id} className='action-item'>
+                          <div className='action-header'>
+                            <h4>{action.name}</h4>
+                            <span
+                              className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                            >
+                              {getStatusIcon(action.status, action.conclusion)}
+                              {getStatusText(action.status, action.conclusion)}
+                            </span>
+                          </div>
+                          <div className='action-details'>
                             <p>
-                              <strong>URL:</strong>{' '}
-                              <a
-                                href={action.html_url}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                View Details
-                              </a>
+                              <strong>Branch:</strong>{' '}
+                              {action.head_branch || 'N/A'}
                             </p>
-                          )}
+                            <p>
+                              <strong>Commit:</strong>{' '}
+                              {action.head_sha
+                                ? action.head_sha.substring(0, 7)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Triggered by:</strong>{' '}
+                              {action.triggering_actor?.login ||
+                                action.actor?.login ||
+                                'Unknown'}
+                            </p>
+                            <p>
+                              <strong>Created:</strong>{' '}
+                              {action.created_at
+                                ? formatDate(action.created_at)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Updated:</strong>{' '}
+                              {action.updated_at
+                                ? formatDate(action.updated_at)
+                                : 'N/A'}
+                            </p>
+                            {action.html_url && (
+                              <p>
+                                <strong>URL:</strong>{' '}
+                                <a
+                                  href={action.html_url}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  View Details
+                                </a>
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -352,61 +363,63 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                   <p className='no-data'>No workflow runs found</p>
                 ) : (
                   <div className='actions-list'>
-                    {(data.secureBaseImagesActions || []).map((action: any) => (
-                      <div key={action.id} className='action-item'>
-                        <div className='action-header'>
-                          <h4>{action.name}</h4>
-                          <span
-                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
-                          >
-                            {getStatusIcon(action.status, action.conclusion)}
-                            {getStatusText(action.status, action.conclusion)}
-                          </span>
-                        </div>
-                        <div className='action-details'>
-                          <p>
-                            <strong>Branch:</strong>{' '}
-                            {action.head_branch || 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Commit:</strong>{' '}
-                            {action.head_sha
-                              ? action.head_sha.substring(0, 7)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Triggered by:</strong>{' '}
-                            {action.triggering_actor?.login ||
-                              action.actor?.login ||
-                              'Unknown'}
-                          </p>
-                          <p>
-                            <strong>Created:</strong>{' '}
-                            {action.created_at
-                              ? formatDate(action.created_at)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Updated:</strong>{' '}
-                            {action.updated_at
-                              ? formatDate(action.updated_at)
-                              : 'N/A'}
-                          </p>
-                          {action.html_url && (
+                    {(data.secureBaseImagesActions || []).map(
+                      (action: GitHubWorkflowRun) => (
+                        <div key={action.id} className='action-item'>
+                          <div className='action-header'>
+                            <h4>{action.name}</h4>
+                            <span
+                              className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                            >
+                              {getStatusIcon(action.status, action.conclusion)}
+                              {getStatusText(action.status, action.conclusion)}
+                            </span>
+                          </div>
+                          <div className='action-details'>
                             <p>
-                              <strong>URL:</strong>{' '}
-                              <a
-                                href={action.html_url}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                View Details
-                              </a>
+                              <strong>Branch:</strong>{' '}
+                              {action.head_branch || 'N/A'}
                             </p>
-                          )}
+                            <p>
+                              <strong>Commit:</strong>{' '}
+                              {action.head_sha
+                                ? action.head_sha.substring(0, 7)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Triggered by:</strong>{' '}
+                              {action.triggering_actor?.login ||
+                                action.actor?.login ||
+                                'Unknown'}
+                            </p>
+                            <p>
+                              <strong>Created:</strong>{' '}
+                              {action.created_at
+                                ? formatDate(action.created_at)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Updated:</strong>{' '}
+                              {action.updated_at
+                                ? formatDate(action.updated_at)
+                                : 'N/A'}
+                            </p>
+                            {action.html_url && (
+                              <p>
+                                <strong>URL:</strong>{' '}
+                                <a
+                                  href={action.html_url}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  View Details
+                                </a>
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -419,61 +432,63 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                   <p className='no-data'>No workflow runs found</p>
                 ) : (
                   <div className='actions-list'>
-                    {(data.readmeLintActions || []).map((action: any) => (
-                      <div key={action.id} className='action-item'>
-                        <div className='action-header'>
-                          <h4>{action.name}</h4>
-                          <span
-                            className={`status ${getStatusClass(action.status, action.conclusion)}`}
-                          >
-                            {getStatusIcon(action.status, action.conclusion)}
-                            {getStatusText(action.status, action.conclusion)}
-                          </span>
-                        </div>
-                        <div className='action-details'>
-                          <p>
-                            <strong>Branch:</strong>{' '}
-                            {action.head_branch || 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Commit:</strong>{' '}
-                            {action.head_sha
-                              ? action.head_sha.substring(0, 7)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Triggered by:</strong>{' '}
-                            {action.triggering_actor?.login ||
-                              action.actor?.login ||
-                              'Unknown'}
-                          </p>
-                          <p>
-                            <strong>Created:</strong>{' '}
-                            {action.created_at
-                              ? formatDate(action.created_at)
-                              : 'N/A'}
-                          </p>
-                          <p>
-                            <strong>Updated:</strong>{' '}
-                            {action.updated_at
-                              ? formatDate(action.updated_at)
-                              : 'N/A'}
-                          </p>
-                          {action.html_url && (
+                    {(data.readmeLintActions || []).map(
+                      (action: GitHubWorkflowRun) => (
+                        <div key={action.id} className='action-item'>
+                          <div className='action-header'>
+                            <h4>{action.name}</h4>
+                            <span
+                              className={`status ${getStatusClass(action.status, action.conclusion)}`}
+                            >
+                              {getStatusIcon(action.status, action.conclusion)}
+                              {getStatusText(action.status, action.conclusion)}
+                            </span>
+                          </div>
+                          <div className='action-details'>
                             <p>
-                              <strong>URL:</strong>{' '}
-                              <a
-                                href={action.html_url}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                View Details
-                              </a>
+                              <strong>Branch:</strong>{' '}
+                              {action.head_branch || 'N/A'}
                             </p>
-                          )}
+                            <p>
+                              <strong>Commit:</strong>{' '}
+                              {action.head_sha
+                                ? action.head_sha.substring(0, 7)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Triggered by:</strong>{' '}
+                              {action.triggering_actor?.login ||
+                                action.actor?.login ||
+                                'Unknown'}
+                            </p>
+                            <p>
+                              <strong>Created:</strong>{' '}
+                              {action.created_at
+                                ? formatDate(action.created_at)
+                                : 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Updated:</strong>{' '}
+                              {action.updated_at
+                                ? formatDate(action.updated_at)
+                                : 'N/A'}
+                            </p>
+                            {action.html_url && (
+                              <p>
+                                <strong>URL:</strong>{' '}
+                                <a
+                                  href={action.html_url}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  View Details
+                                </a>
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -491,7 +506,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
               <p className='no-data'>No repositories found</p>
             ) : (
               <div className='repositories-list'>
-                {(data.repositories || []).map((repo: any) => (
+                {(data.repositories || []).map((repo: GitHubRepository) => (
                   <div key={repo.id} className='repository-item'>
                     <div className='repo-header'>
                       <h4>{repo.name}</h4>

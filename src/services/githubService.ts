@@ -56,6 +56,12 @@ interface GitHubWorkflowRun {
   cancel_url: string;
   rerun_url: string;
   workflow_url: string;
+  triggering_actor?: {
+    login: string;
+  };
+  actor?: {
+    login: string;
+  };
   head_commit: {
     id: string;
     tree_id: string;
@@ -595,5 +601,7 @@ class GitHubService {
     ) as Promise<GitHubPullRequest[]>;
   }
 }
+
+export type { GitHubRepository, GitHubWorkflowRun, GitHubUser, GitHubWorkflow };
 
 export default new GitHubService();
