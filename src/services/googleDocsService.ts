@@ -8,19 +8,20 @@ import { logger } from '../utils/logger';
 export class GoogleDocsService {
   private static readonly DOCUMENT_ID =
     '1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M';
-  private static readonly API_KEY = import.meta.env.VITE_GOOGLE_DOCS_API_KEY;
 
   static async getResumeContent(): Promise<string> {
     try {
-      logger.debug('Google Docs API Key status', { hasKey: !!this.API_KEY });
-      if (!this.API_KEY) {
+      // Read API key inside method to allow tests to stub environment variables
+      const apiKey = import.meta.env.VITE_GOOGLE_DOCS_API_KEY;
+      logger.debug('Google Docs API Key status', { hasKey: !!apiKey });
+      if (!apiKey) {
         logger.warn('Google Docs API key not found. Using fallback content.');
         return this.getFallbackContent();
       }
 
       // Use the Drive API export endpoint instead of the Docs API
       const response = await fetch(
-        `https://www.googleapis.com/drive/v3/files/${this.DOCUMENT_ID}/export?mimeType=text/plain&key=${this.API_KEY}`
+        `https://www.googleapis.com/drive/v3/files/${this.DOCUMENT_ID}/export?mimeType=text/plain&key=${apiKey}`
       );
 
       if (!response.ok) {
