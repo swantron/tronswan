@@ -363,6 +363,311 @@ describe('Weather Component', () => {
     expect(kelvinButton).toHaveClass('unit-button');
   });
 
-  // Forecast functionality tests - removed due to complexity in test environment
-  // The forecast feature works correctly in the actual application
+  test('switches to forecast view', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const forecastButton = screen.getByText('Forecast');
+    await act(async () => {
+      fireEvent.click(forecastButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('5-Day Forecast')).toBeInTheDocument();
+    });
+  });
+
+  test('switches back to current view', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    // Switch to forecast
+    const forecastButton = screen.getByText('Forecast');
+    await act(async () => {
+      fireEvent.click(forecastButton);
+    });
+
+    // Switch back to current
+    const currentButton = screen.getByText('Current');
+    await act(async () => {
+      fireEvent.click(currentButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-display')).toBeInTheDocument();
+    });
+  });
+
+  test('handles API error gracefully', async () => {
+    (global.fetch as any).mockRejectedValue(new Error('API Error'));
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/error/i)).toBeInTheDocument();
+  });
+
+  test('handles 404 city not found', async () => {
+    (global.fetch as any).mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/not found/i)).toBeInTheDocument();
+  });
+
+  test('performs search when button is clicked', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('city-input');
+    const searchButton = screen.getByTestId('search-button');
+
+    (global.fetch as any).mockClear();
+    (global.fetch as any).mockImplementation(url => {
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: {
+              temp: 60,
+              feels_like: 58,
+              pressure: 1015,
+              humidity: 50,
+              temp_min: 55,
+              temp_max: 65,
+            },
+            weather: [{ description: 'cloudy' }],
+            wind: { speed: 10, deg: 180 },
+            visibility: 16093,
+            clouds: { all: 75 },
+            sys: { sunrise: 1609459200, sunset: 1609495200, country: 'GB' },
+            name: 'London',
+          }),
+        });
+      } else if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [],
+            city: { name: 'London' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    await act(async () => {
+      fireEvent.change(cityInput, { target: { value: 'London' } });
+    });
+
+    await act(async () => {
+      fireEvent.click(searchButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-display')).toHaveTextContent('London');
+    });
+  });
+
+  test('displays all weather details when available', async () => {
+    (global.fetch as any).mockImplementation(url => {
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: {
+              temp: 72,
+              feels_like: 70,
+              pressure: 1013,
+              humidity: 45,
+              temp_min: 68,
+              temp_max: 76,
+            },
+            weather: [{ description: 'clear sky' }],
+            wind: { speed: 10, deg: 180 },
+            visibility: 16093,
+            clouds: { all: 10 },
+            sys: { sunrise: 1609459200, sunset: 1609495200, country: 'US' },
+            name: 'Bozeman',
+          }),
+        });
+      } else if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [],
+            city: { name: 'Bozeman' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-description-display')).toHaveTextContent('clear sky');
+      expect(screen.getByTestId('temp-range-display')).toBeInTheDocument();
+      expect(screen.getByTestId('clouds-display')).toHaveTextContent('10%');
+      expect(screen.getByTestId('wind-display')).toBeInTheDocument();
+      expect(screen.getByTestId('visibility-display')).toBeInTheDocument();
+      expect(screen.getByTestId('sunrise-display')).toBeInTheDocument();
+      expect(screen.getByTestId('sunset-display')).toBeInTheDocument();
+    });
+  });
+
+  test('switches to Celsius temperature unit', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const celsiusButton = screen.getByText('°C');
+    await act(async () => {
+      fireEvent.click(celsiusButton);
+    });
+
+    await waitFor(() => {
+      expect(celsiusButton).toHaveClass('active');
+    });
+  });
+
+  test('switches to Kelvin temperature unit', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const kelvinButton = screen.getByText('K');
+    await act(async () => {
+      fireEvent.click(kelvinButton);
+    });
+
+    await waitFor(() => {
+      expect(kelvinButton).toHaveClass('active');
+    });
+  });
+
+  test('renders forecast with multiple days', async () => {
+    (global.fetch as any).mockImplementation(url => {
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: { temp: 72, feels_like: 70, pressure: 1013, humidity: 45 },
+            name: 'Bozeman',
+            sys: { country: 'US' },
+          }),
+        });
+      } else if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [
+              {
+                dt: Date.now() / 1000,
+                main: { temp: 72, feels_like: 70, humidity: 45, pressure: 1013 },
+                weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
+                dt_txt: '2024-01-01 12:00:00',
+              },
+              {
+                dt: Date.now() / 1000 + 86400,
+                main: { temp: 75, feels_like: 73, humidity: 50, pressure: 1015 },
+                weather: [{ main: 'Clouds', description: 'few clouds', icon: '02d' }],
+                dt_txt: '2024-01-02 12:00:00',
+              },
+              {
+                dt: Date.now() / 1000 + 172800,
+                main: { temp: 68, feels_like: 66, humidity: 55, pressure: 1012 },
+                weather: [{ main: 'Rain', description: 'light rain', icon: '10d' }],
+                dt_txt: '2024-01-03 12:00:00',
+              },
+            ],
+            city: { name: 'Bozeman' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const forecastButton = screen.getByText('Forecast');
+    await act(async () => {
+      fireEvent.click(forecastButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('5-Day Forecast')).toBeInTheDocument();
+    });
+  });
+
+  test('clears city input after successful search', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('city-input') as HTMLInputElement;
+    const searchButton = screen.getByTestId('search-button');
+
+    await act(async () => {
+      fireEvent.change(cityInput, { target: { value: 'Paris' } });
+    });
+
+    expect(cityInput.value).toBe('Paris');
+
+    await act(async () => {
+      fireEvent.click(searchButton);
+    });
+
+    await waitFor(() => {
+      expect(cityInput.value).toBe('');
+    });
+  });
 });
