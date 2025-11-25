@@ -21,6 +21,7 @@ interface WeatherData {
   sunset: number | null;
   weatherDescription: string | null;
   city: string | null;
+  state: string | null;
   country: string | null;
 }
 
@@ -304,6 +305,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         <div className='weather-item weather-location'>
           <p data-testid='location-display'>
             📍 {weather.city}
+            {weather.state ? `, ${weather.state}` : ''}
             {weather.country ? `, ${weather.country}` : ''}
           </p>
         </div>
@@ -328,6 +330,7 @@ function Weather() {
     sunset: null,
     weatherDescription: null,
     city: null,
+    state: null,
     country: null,
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -481,8 +484,25 @@ function Weather() {
 
       const data = await response.json();
 
+      // Fetch state information using geocoding API
+      let stateName: string | null = null;
+      try {
+        const geoUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${data.coord.lat}&lon=${data.coord.lon}&limit=1&appid=${apiKey}`;
+        const geoResponse = await fetch(geoUrl);
+        if (geoResponse.ok) {
+          const geoData = await geoResponse.json();
+          if (geoData && geoData.length > 0 && geoData[0].state) {
+            stateName = geoData[0].state;
+          }
+        }
+      } catch (geoError) {
+        logger.warn('Could not fetch state information', { error: geoError });
+        // Continue without state - not critical
+      }
+
       logger.info('Weather data fetched successfully', {
         city: data.name,
+        state: stateName,
         country: data.sys.country,
         temperature: data.main.temp,
         description: data.weather?.[0]?.description,
@@ -505,6 +525,7 @@ function Weather() {
         sunset: data.sys.sunset,
         weatherDescription: data.weather?.[0]?.description,
         city: data.name,
+        state: stateName,
         country: data.sys.country,
       });
       setCurrentCity(data.name);
