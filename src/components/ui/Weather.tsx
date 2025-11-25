@@ -388,9 +388,34 @@ function Weather() {
       return trimmed;
     }
 
-    // Check if it's a city/state format (e.g., "Bozeman, MT")
-    // OpenWeatherMap handles this format natively, so we can return as-is
-    // The API is smart enough to handle "City, State" format
+    // Check if it's a city/state format (e.g., "Bozeman, MT" or "missoula, mt")
+    // OpenWeatherMap expects "city,state,country" format for US cities
+    const cityStatePattern = /^(.+?),\s*([a-z]{2})$/i;
+    const match = trimmed.match(cityStatePattern);
+    if (match) {
+      const city = match[1].trim();
+      const stateCode = match[2].toUpperCase();
+      
+      // List of US state codes
+      const usStateCodes = [
+        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+        'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+        'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+        'DC' // District of Columbia
+      ];
+      
+      // If it's a US state code, format as "city,state,us"
+      if (usStateCodes.includes(stateCode)) {
+        return `${city},${stateCode},us`;
+      }
+      
+      // Otherwise, assume it's a country code and return as-is
+      return trimmed;
+    }
+
+    // Check if it already has multiple commas (city,state,country format)
     if (/,/.test(trimmed)) {
       return trimmed;
     }

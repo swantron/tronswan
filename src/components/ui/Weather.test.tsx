@@ -771,13 +771,16 @@ describe('Weather Component', () => {
 
     (global.fetch as any).mockClear();
     (global.fetch as any).mockImplementation(url => {
-      // Check that city/state combo is passed correctly
-      // URL encoding might have %20 for space, or the space might be encoded differently
+      // Check that city/state combo is normalized to "city,state,us" format
+      // URL encoding might have %2C for comma, %20 for space
       const isWeatherCall = url.includes('/weather?');
       const isForecastCall = url.includes('/forecast?');
-      const hasBozemanMT = url.includes('Bozeman') && (url.includes('MT') || url.includes('%20MT') || url.includes('+MT'));
+      // Should be normalized to "Bozeman,MT,us" format
+      const hasBozemanMTUS = (url.includes('Bozeman') && url.includes('MT') && url.includes('us')) ||
+                              (url.includes('Bozeman%2CMT%2Cus')) ||
+                              (url.includes('Bozeman,MT,us'));
       
-      if (isWeatherCall && hasBozemanMT) {
+      if (isWeatherCall && hasBozemanMTUS) {
         return Promise.resolve({
           ok: true,
           json: async () => ({
@@ -792,7 +795,7 @@ describe('Weather Component', () => {
             name: 'Bozeman',
           }),
         });
-      } else if (isForecastCall && hasBozemanMT) {
+      } else if (isForecastCall && hasBozemanMTUS) {
         return Promise.resolve({
           ok: true,
           json: async () => ({
