@@ -1,0 +1,42 @@
+[
+  {
+    "id": "gcp-compute-001",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "What is Cloud Run?",
+    "back": "Cloud Run is a fully managed serverless platform that automatically scales your containers. It allows you to run stateless containers that are invocable via HTTP requests. Cloud Run automatically scales from zero to the number of instances needed based on traffic, and you only pay for what you use.",
+    "tags": ["serverless", "containers", "compute", "scaling"]
+  },
+  {
+    "id": "gcp-compute-002",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "What is the difference between Cloud Run and Cloud Functions?",
+    "back": "Cloud Run runs containerized applications and supports any language/framework. Cloud Functions is a serverless FaaS (Function as a Service) that runs event-driven functions. Cloud Run is better for containerized apps and HTTP services, while Cloud Functions is better for lightweight event-driven tasks.",
+    "tags": ["serverless", "compute", "comparison"]
+  },
+  {
+    "id": "gcp-compute-003",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "What is Google Kubernetes Engine (GKE)?",
+    "back": "GKE is a managed Kubernetes service that allows you to deploy, manage, and scale containerized applications using Google infrastructure. It provides automatic upgrades, node auto-scaling, and integrated monitoring and logging.",
+    "tags": ["kubernetes", "containers", "orchestration", "compute"]
+  },
+  {
+    "id": "gcp-compute-004",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "What are the main differences between Compute Engine and App Engine?",
+    "back": "Compute Engine provides VMs with full control over the infrastructure (IaaS). App Engine is a Platform as a Service (PaaS) that abstracts away infrastructure management. Compute Engine offers more flexibility but requires more management, while App Engine is easier to deploy but less flexible.",
+    "tags": ["compute", "comparison", "iaas", "paas"]
+  },
+  {
+    "id": "gcp-compute-005",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "What is Cloud Functions and when should you use it?",
+    "back": "Cloud Functions is a serverless execution environment for building and connecting cloud services. Use it for event-driven functions, lightweight microservices, API endpoints, and real-time data processing. It automatically scales and you only pay for execution time.",
+    "tags": ["serverless", "functions", "event-driven", "compute"]
+  }
+]

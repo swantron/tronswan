@@ -73,6 +73,14 @@ function Hello() {
           >
             📄 Resume
           </a>
+
+          <a
+            className='hello-link study-guide'
+            href='/study-guide'
+            aria-label='Study Guide for GCP and Coding'
+          >
+            📚 Study Guide
+          </a>
         </div>
 
         <div className='hello-info'>

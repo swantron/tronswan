@@ -1,0 +1,26 @@
+[
+  {
+    "id": "gcp-networking-001",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "What is a VPC (Virtual Private Cloud)?",
+    "back": "A VPC is a virtual network that provides isolated, private networking for your GCP resources. It allows you to define IP address ranges, create subnets, configure routes, and set up firewall rules. VPCs provide network isolation and security boundaries.",
+    "tags": ["networking", "vpc", "security", "isolation"]
+  },
+  {
+    "id": "gcp-networking-002",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "What are the different types of load balancers in GCP?",
+    "back": "Global HTTP(S) Load Balancer (Layer 7), Global SSL Proxy Load Balancer (Layer 4 SSL), Global TCP Proxy Load Balancer (Layer 4 TCP), Regional Network Load Balancer (Layer 4), and Regional Internal Load Balancer. Choose based on your needs: HTTP/HTTPS traffic, TCP/UDP, internal vs external, and regional vs global.",
+    "tags": ["load-balancing", "networking", "scalability"]
+  },
+  {
+    "id": "gcp-networking-003",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "What is Cloud CDN and when should you use it?",
+    "back": "Cloud CDN (Content Delivery Network) caches content at edge locations worldwide to reduce latency and bandwidth costs. Use it for static content delivery, API responses, and to improve performance for global users. It integrates with HTTP(S) Load Balancers.",
+    "tags": ["cdn", "performance", "caching", "networking"]
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "coding-dp-001",
+    "category": "Coding",
+    "subcategory": "Dynamic Programming",
+    "front": "Climbing Stairs",
+    "back": "You can climb 1 or 2 steps at a time. How many ways to reach the top? DP solution: dp[i] = dp[i-1] + dp[i-2]. This is essentially Fibonacci. Time: O(n), Space: O(1) with optimized approach.",
+    "tags": ["dp", "fibonacci", "leetcode-easy"]
+  },
+  {
+    "id": "coding-dp-002",
+    "category": "Coding",
+    "subcategory": "Dynamic Programming",
+    "front": "House Robber",
+    "back": "Rob houses arranged in a line, can't rob two adjacent houses. Maximize profit. DP: dp[i] = max(dp[i-1], dp[i-2] + nums[i]). Either skip current house or rob it. Time: O(n), Space: O(1) optimized.",
+    "tags": ["dp", "leetcode-medium"]
+  },
+  {
+    "id": "coding-dp-003",
+    "category": "Coding",
+    "subcategory": "Dynamic Programming",
+    "front": "Longest Common Subsequence",
+    "back": "Find length of longest common subsequence between two strings. DP: dp[i][j] = dp[i-1][j-1] + 1 if chars match, else max(dp[i-1][j], dp[i][j-1]). Time: O(m*n), Space: O(m*n) or O(min(m,n)) optimized.",
+    "tags": ["dp", "strings", "leetcode-medium"]
+  }
+]

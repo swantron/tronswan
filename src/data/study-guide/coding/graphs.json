@@ -1,0 +1,26 @@
+[
+  {
+    "id": "coding-graphs-001",
+    "category": "Coding",
+    "subcategory": "Graphs",
+    "front": "Number of Islands (DFS)",
+    "back": "Given a 2D grid of '1's and '0's, count the number of islands. Use DFS: iterate through grid, when finding '1', mark all connected '1's as visited. Time: O(m*n), Space: O(m*n) for recursion stack.",
+    "tags": ["graphs", "dfs", "leetcode-medium"]
+  },
+  {
+    "id": "coding-graphs-002",
+    "category": "Coding",
+    "subcategory": "Graphs",
+    "front": "Clone Graph",
+    "back": "Deep clone an undirected graph. Use DFS with a hash map to track cloned nodes. For each node, create a clone, add to map, then recursively clone all neighbors. Time: O(V+E), Space: O(V) for hash map.",
+    "tags": ["graphs", "dfs", "hash-map", "leetcode-medium"]
+  },
+  {
+    "id": "coding-graphs-003",
+    "category": "Coding",
+    "subcategory": "Graphs",
+    "front": "Course Schedule (Topological Sort)",
+    "back": "Determine if you can finish all courses given prerequisites. Use topological sort with DFS: detect cycles. If cycle exists, return false. Time: O(V+E), Space: O(V+E) for adjacency list.",
+    "tags": ["graphs", "topological-sort", "dfs", "leetcode-medium"]
+  }
+]

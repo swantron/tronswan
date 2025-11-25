@@ -1,0 +1,34 @@
+[
+  {
+    "id": "gcp-storage-001",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "What are the different Cloud Storage classes?",
+    "back": "Standard (frequent access), Nearline (monthly access), Coldline (quarterly access), and Archive (yearly access). Each class has different pricing and availability SLAs. Standard is for frequently accessed data, while Archive is the cheapest for long-term storage.",
+    "tags": ["storage", "cost-optimization", "data-classes"]
+  },
+  {
+    "id": "gcp-storage-002",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "What is Cloud SQL and when should you use it?",
+    "back": "Cloud SQL is a fully managed relational database service for MySQL, PostgreSQL, and SQL Server. Use it for traditional relational database workloads, applications requiring ACID transactions, and when you need automated backups, replication, and failover.",
+    "tags": ["database", "sql", "managed-service", "storage"]
+  },
+  {
+    "id": "gcp-storage-003",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "What is Cloud Spanner and when should you use it?",
+    "back": "Cloud Spanner is a globally distributed, horizontally scalable relational database that provides ACID transactions and SQL semantics. Use it for applications requiring global scale, strong consistency, and high availability across regions.",
+    "tags": ["database", "global", "scalability", "consistency", "storage"]
+  },
+  {
+    "id": "gcp-storage-004",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "What is BigQuery and its primary use case?",
+    "back": "BigQuery is a fully managed, serverless data warehouse designed for large-scale analytics. It's optimized for OLAP (Online Analytical Processing) workloads, can handle petabytes of data, and uses SQL-like queries. Perfect for data analytics, business intelligence, and machine learning workloads.",
+    "tags": ["data-warehouse", "analytics", "big-data", "storage"]
+  }
+]

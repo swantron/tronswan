@@ -1,0 +1,26 @@
+[
+  {
+    "id": "coding-arrays-001",
+    "category": "Coding",
+    "subcategory": "Arrays",
+    "front": "Two Sum Problem",
+    "back": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. Solution: Use a hash map to store each number and its index. For each number, check if target - current number exists in the map. Time: O(n), Space: O(n).",
+    "tags": ["arrays", "hash-map", "two-pointers", "leetcode-easy"]
+  },
+  {
+    "id": "coding-arrays-002",
+    "category": "Coding",
+    "subcategory": "Arrays",
+    "front": "Best Time to Buy and Sell Stock",
+    "back": "Find the maximum profit from buying and selling a stock once. Track the minimum price seen so far and calculate max profit at each day. Solution: Iterate once, keep track of min price and max profit. Time: O(n), Space: O(1).",
+    "tags": ["arrays", "greedy", "leetcode-easy"]
+  },
+  {
+    "id": "coding-arrays-003",
+    "category": "Coding",
+    "subcategory": "Arrays",
+    "front": "Container With Most Water",
+    "back": "Given n vertical lines, find two lines that together with x-axis forms a container that holds the most water. Use two pointers: start from both ends, move the pointer with smaller height inward. Time: O(n), Space: O(1).",
+    "tags": ["arrays", "two-pointers", "leetcode-medium"]
+  }
+]
