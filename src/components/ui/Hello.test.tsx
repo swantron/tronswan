@@ -125,7 +125,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(5);
+    expect(allLinks).toHaveLength(6);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
