@@ -43,6 +43,12 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  position: relative;
+}
+
+.autocomplete-wrapper {
+  flex: 1;
+  position: relative;
 }
 
 .city-input {
@@ -71,6 +77,59 @@
 .city-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Autocomplete suggestions */
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--primary-bg);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  margin-top: 0.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+}
+
+.suggestion-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: rgba(248, 152, 89, 0.2);
+  color: var(--accent-color);
+}
+
+.suggestion-item:active {
+  background-color: rgba(248, 152, 89, 0.3);
+}
+
+.suggestions-loading {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 1rem;
+  background-color: var(--primary-bg);
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  border-radius: var(--border-radius);
+  margin-top: 0.25rem;
+  color: var(--primary-text);
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .search-button {
@@ -376,6 +435,14 @@
   .search-input-group {
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .autocomplete-wrapper {
+    width: 100%;
+  }
+
+  .suggestions-dropdown {
+    max-height: 200px;
   }
 
   .search-button {

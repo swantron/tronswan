@@ -339,6 +339,11 @@ function Weather() {
   const [temperatureUnit, setTemperatureUnit] = useState<
     'imperial' | 'metric' | 'kelvin'
   >('imperial');
+  const [suggestions, setSuggestions] = useState<
+    Array<{ name: string; state?: string; country: string; display: string }>
+  >([]);
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+  const [suggestionsLoading, setSuggestionsLoading] = useState<boolean>(false);
 
   const groupForecastByDay = (
     forecastList: ForecastItem[]
@@ -388,8 +393,15 @@ function Weather() {
       return trimmed;
     }
 
-    // Check if it's a city/state format (e.g., "Bozeman, MT" or "missoula, mt")
+    // Check if it's a city/state format (e.g., "Bozeman, MT" or "missoula, mt" or "missoula,mt")
     // OpenWeatherMap expects "city,state,country" format for US cities
+    // First check if it already has country code (city,state,country) - return as-is
+    const hasMultipleCommas = (trimmed.match(/,/g) || []).length >= 2;
+    if (hasMultipleCommas) {
+      return trimmed;
+    }
+
+    // Check for city,state format (single comma, 2-letter code at end)
     const cityStatePattern = /^(.+?),\s*([a-z]{2})$/i;
     const match = trimmed.match(cityStatePattern);
     if (match) {
@@ -412,11 +424,6 @@ function Weather() {
       }
       
       // Otherwise, assume it's a country code and return as-is
-      return trimmed;
-    }
-
-    // Check if it already has multiple commas (city,state,country format)
-    if (/,/.test(trimmed)) {
       return trimmed;
     }
 
@@ -625,8 +632,98 @@ function Weather() {
     }
   };
 
+  const fetchCitySuggestions = async (query: string) => {
+    if (!query.trim() || query.trim().length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    setSuggestionsLoading(true);
+    try {
+      await runtimeConfig.initialize();
+      const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+      // Use OpenWeatherMap Geocoding API for autocomplete
+      const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=5&appid=${apiKey}`;
+
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        const formattedSuggestions = data.map((item: any) => {
+          let display = item.name;
+          if (item.state) {
+            display += `, ${item.state}`;
+          }
+          if (item.country) {
+            display += `, ${item.country}`;
+          }
+          return {
+            name: item.name,
+            state: item.state,
+            country: item.country,
+            display: display,
+          };
+        });
+        setSuggestions(formattedSuggestions);
+        setShowSuggestions(formattedSuggestions.length > 0);
+      } else {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      logger.error('Error fetching city suggestions', { error, query });
+      setSuggestions([]);
+      setShowSuggestions(false);
+    } finally {
+      setSuggestionsLoading(false);
+    }
+  };
+
+  // Debounce function for autocomplete
+  const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  const debouncedFetchSuggestions = React.useMemo(
+    () => debounce(fetchCitySuggestions, 300),
+    []
+  );
+
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCityInput(e.target.value);
+    const value = e.target.value;
+    setCityInput(value);
+    debouncedFetchSuggestions(value);
+  };
+
+  const handleSuggestionClick = (suggestion: {
+    name: string;
+    state?: string;
+    country: string;
+    display: string;
+  }) => {
+    // Format the suggestion for search
+    let searchQuery = suggestion.name;
+    if (suggestion.state && suggestion.country === 'US') {
+      searchQuery = `${suggestion.name}, ${suggestion.state}`;
+    } else if (suggestion.country) {
+      searchQuery = `${suggestion.name}, ${suggestion.country}`;
+    }
+
+    setCityInput(searchQuery);
+    setShowSuggestions(false);
+    setSuggestions([]);
+
+    // Trigger search
+    fetchWeatherData(searchQuery);
+    fetchForecastData(searchQuery);
   };
 
   const handleTemperatureUnitChange = async (
@@ -664,15 +761,44 @@ function Weather() {
         <div className='weather-search'>
           <form onSubmit={handleCitySubmit} className='city-search-form'>
             <div className='search-input-group'>
-              <input
-                type='text'
-                value={cityInput}
-                onChange={handleCityChange}
-                placeholder='City, "City, State", or Zip Code (e.g., Bozeman, "Bozeman, MT", 59715)'
-                className='city-input'
-                data-testid='city-input'
-                disabled={loading}
-              />
+              <div className='autocomplete-wrapper'>
+                <input
+                  type='text'
+                  value={cityInput}
+                  onChange={handleCityChange}
+                  onFocus={() => {
+                    if (suggestions.length > 0) {
+                      setShowSuggestions(true);
+                    }
+                  }}
+                  onBlur={() => {
+                    // Delay hiding suggestions to allow click events
+                    setTimeout(() => setShowSuggestions(false), 200);
+                  }}
+                  placeholder='City, "City, State", or Zip Code (e.g., Bozeman, "Bozeman, MT", 59715)'
+                  className='city-input'
+                  data-testid='city-input'
+                  disabled={loading}
+                  autoComplete='off'
+                />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className='suggestions-dropdown' data-testid='suggestions-dropdown'>
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className='suggestion-item'
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        onMouseDown={(e) => e.preventDefault()} // Prevent blur on click
+                      >
+                        {suggestion.display}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {suggestionsLoading && (
+                  <div className='suggestions-loading'>Searching...</div>
+                )}
+              </div>
               <button
                 type='submit'
                 className='search-button'
