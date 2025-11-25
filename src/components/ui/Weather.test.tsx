@@ -156,7 +156,7 @@ describe('Weather Component', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        'Search for any city worldwide to get current conditions'
+        /Search by city name, city\/state combo, or zip code/
       )
     ).toBeInTheDocument();
   });
@@ -422,7 +422,7 @@ describe('Weather Component', () => {
     expect(screen.getByText(/error/i)).toBeInTheDocument();
   });
 
-  test('handles 404 city not found', async () => {
+  test('handles 404 location not found', async () => {
     (global.fetch as any).mockResolvedValue({
       ok: false,
       status: 404,
@@ -437,7 +437,10 @@ describe('Weather Component', () => {
       ).not.toBeInTheDocument();
     });
 
-    expect(screen.getByText(/not found/i)).toBeInTheDocument();
+    // Check for error message specifically (not the info text)
+    const errorMessage = screen.getByText(/location not found/i);
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage.textContent).toMatch(/Try: city name/);
   });
 
   test('performs search when button is clicked', async () => {
@@ -693,6 +696,184 @@ describe('Weather Component', () => {
 
     await waitFor(() => {
       expect(cityInput.value).toBe('');
+    });
+  });
+
+  test('handles zip code search', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('city-input');
+    const searchButton = screen.getByTestId('search-button');
+
+    (global.fetch as any).mockClear();
+    (global.fetch as any).mockImplementation(url => {
+      // Check that zip code is normalized with ",us" appended
+      // URL encoding might have %2C for comma
+      if (url.includes('/weather?') && (url.includes('59715,us') || url.includes('59715%2Cus'))) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: {
+              temp: 65,
+              feels_like: 63,
+              pressure: 1013,
+              humidity: 45,
+            },
+            weather: [{ description: 'clear sky' }],
+            sys: { country: 'US' },
+            name: 'Bozeman',
+          }),
+        });
+      } else if (url.includes('/forecast?') && (url.includes('59715,us') || url.includes('59715%2Cus'))) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [],
+            city: { name: 'Bozeman' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    await act(async () => {
+      fireEvent.change(cityInput, { target: { value: '59715' } });
+    });
+
+    await act(async () => {
+      fireEvent.click(searchButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-display')).toHaveTextContent(
+        'Bozeman'
+      );
+    });
+  });
+
+  test('handles city/state combo search', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('city-input');
+    const searchButton = screen.getByTestId('search-button');
+
+    (global.fetch as any).mockClear();
+    (global.fetch as any).mockImplementation(url => {
+      // Check that city/state combo is passed correctly
+      // URL encoding might have %20 for space, or the space might be encoded differently
+      const isWeatherCall = url.includes('/weather?');
+      const isForecastCall = url.includes('/forecast?');
+      const hasBozemanMT = url.includes('Bozeman') && (url.includes('MT') || url.includes('%20MT') || url.includes('+MT'));
+      
+      if (isWeatherCall && hasBozemanMT) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: {
+              temp: 70,
+              feels_like: 68,
+              pressure: 1013,
+              humidity: 45,
+            },
+            weather: [{ description: 'sunny' }],
+            sys: { country: 'US' },
+            name: 'Bozeman',
+          }),
+        });
+      } else if (isForecastCall && hasBozemanMT) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [],
+            city: { name: 'Bozeman' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    await act(async () => {
+      fireEvent.change(cityInput, { target: { value: 'Bozeman, MT' } });
+    });
+
+    await act(async () => {
+      fireEvent.click(searchButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-display')).toHaveTextContent(
+        'Bozeman'
+      );
+    });
+  });
+
+  test('handles zip code with country code', async () => {
+    renderWeather();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText('Loading weather data')
+      ).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('city-input');
+    const searchButton = screen.getByTestId('search-button');
+
+    (global.fetch as any).mockClear();
+    (global.fetch as any).mockImplementation(url => {
+      // Check that zip code with country code is passed as-is
+      // URL encoding might have %2C for comma
+      if (url.includes('/weather?') && (url.includes('10001,us') || url.includes('10001%2Cus'))) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            main: {
+              temp: 75,
+              feels_like: 73,
+              pressure: 1015,
+              humidity: 50,
+            },
+            weather: [{ description: 'partly cloudy' }],
+            sys: { country: 'US' },
+            name: 'New York',
+          }),
+        });
+      } else if (url.includes('/forecast?') && (url.includes('10001,us') || url.includes('10001%2Cus'))) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [],
+            city: { name: 'New York' },
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown API endpoint'));
+    });
+
+    await act(async () => {
+      fireEvent.change(cityInput, { target: { value: '10001,us' } });
+    });
+
+    await act(async () => {
+      fireEvent.click(searchButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-display')).toHaveTextContent(
+        'New York'
+      );
     });
   });
 });

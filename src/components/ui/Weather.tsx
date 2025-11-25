@@ -366,12 +366,47 @@ function Weather() {
     }));
   };
 
+  /**
+   * Normalizes search input to work with OpenWeatherMap API.
+   * Handles:
+   * - Zip codes (e.g., "10001" or "59715")
+   * - City/state combos (e.g., "Bozeman, MT" or "New York, NY")
+   * - City/country combos (e.g., "London, UK")
+   * - Plain city names (e.g., "Bozeman")
+   */
+  const normalizeSearchQuery = (input: string): string => {
+    const trimmed = input.trim();
+
+    // Check if it's a zip code (5 digits, optionally with country code)
+    const zipCodePattern = /^\d{5}(,\s*[a-z]{2})?$/i;
+    if (zipCodePattern.test(trimmed)) {
+      // If it's just a 5-digit zip code, assume US and append ",us"
+      if (/^\d{5}$/.test(trimmed)) {
+        return `${trimmed},us`;
+      }
+      // Otherwise, return as-is (already has country code)
+      return trimmed;
+    }
+
+    // Check if it's a city/state format (e.g., "Bozeman, MT")
+    // OpenWeatherMap handles this format natively, so we can return as-is
+    // The API is smart enough to handle "City, State" format
+    if (/,/.test(trimmed)) {
+      return trimmed;
+    }
+
+    // Plain city name - return as-is
+    return trimmed;
+  };
+
   const fetchWeatherData = async (city: string) => {
     setLoading(true);
     setErrorMessage('');
 
+    const normalizedQuery = normalizeSearchQuery(city);
     logger.info('Weather data fetch started', {
       city,
+      normalizedQuery,
       temperatureUnit,
       timestamp: new Date().toISOString(),
     });
@@ -383,7 +418,7 @@ function Weather() {
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
       // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
 
       const response = await logger.measureAsync(
         'weather-api-call',
@@ -395,12 +430,13 @@ function Weather() {
 
       if (!response.ok) {
         if (response.status === 404) {
-          logger.warn('City not found in weather API', {
+          logger.warn('Location not found in weather API', {
             city,
+            normalizedQuery: normalizeSearchQuery(city),
             status: response.status,
           });
           throw new Error(
-            'City not found. Please check the spelling and try again.'
+            'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
           );
         }
         logger.error('Weather API error', {
@@ -456,8 +492,10 @@ function Weather() {
     setLoading(true);
     setErrorMessage('');
 
+    const normalizedQuery = normalizeSearchQuery(city);
     logger.info('Forecast data fetch started', {
       city,
+      normalizedQuery,
       temperatureUnit,
       timestamp: new Date().toISOString(),
     });
@@ -468,7 +506,7 @@ function Weather() {
       const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
       // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
       const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
-      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=${apiUnit}`;
+      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
 
       const response = await logger.measureAsync(
         'forecast-api-call',
@@ -480,12 +518,13 @@ function Weather() {
 
       if (!response.ok) {
         if (response.status === 404) {
-          logger.warn('City not found in forecast API', {
+          logger.warn('Location not found in forecast API', {
             city,
+            normalizedQuery: normalizeSearchQuery(city),
             status: response.status,
           });
           throw new Error(
-            'City not found. Please check the spelling and try again.'
+            'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
           );
         }
         logger.error('Forecast API error', {
@@ -604,7 +643,7 @@ function Weather() {
                 type='text'
                 value={cityInput}
                 onChange={handleCityChange}
-                placeholder='Enter city name (e.g., Bozeman, London, Tokyo)'
+                placeholder='City, "City, State", or Zip Code (e.g., Bozeman, "Bozeman, MT", 59715)'
                 className='city-input'
                 data-testid='city-input'
                 disabled={loading}
@@ -701,7 +740,10 @@ function Weather() {
 
         <div className='weather-info'>
           <p>Real-time weather data from OpenWeatherMap API</p>
-          <p>Search for any city worldwide to get current conditions</p>
+          <p>
+            Search by city name, city/state combo, or zip code (e.g., "Bozeman,
+            MT" or "59715")
+          </p>
         </div>
       </div>
     </div>
