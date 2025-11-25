@@ -1,0 +1,18 @@
+[
+  {
+    "id": "gcp-monitoring-001",
+    "category": "GCP",
+    "subcategory": "Monitoring & Operations",
+    "front": "Mountkirk Games wants to design meaningful SLOs before their game becomes generally available. What should you do?",
+    "back": "Define one SLO as 99% HTTP requests return 2xx status code, and the other SLO as 99% requests return within 100ms. This clearly defines service level indicators and how to measure them. Availability percentages without measurement methods are unclear, and mean response time without an objective is insufficient.",
+    "tags": ["monitoring", "slo", "sre", "best-practices", "metrics"]
+  },
+  {
+    "id": "gcp-monitoring-002",
+    "category": "GCP",
+    "subcategory": "Monitoring & Operations",
+    "front": "You need to implement VPC Service Controls but also allow Cloud Shell usage by developers. Developers shouldn't have full access to managed services. What should you do?",
+    "back": "Create a service perimeter around only the projects that handle sensitive data, and do not grant developers access to it. This protects sensitive data with VPC Service Controls while allowing Cloud Shell for rapid iteration. Including all developers in access levels doesn't scale and gives too much access.",
+    "tags": ["monitoring", "vpc-service-controls", "security", "cloud-shell", "best-practices"]
+  }
+]

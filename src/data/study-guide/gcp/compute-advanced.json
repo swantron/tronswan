@@ -1,0 +1,26 @@
+[
+  {
+    "id": "gcp-compute-adv-001",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "Mountkirk Games wants to verify Google-recommended security best practices for their gaming platform. What should you ensure? (Choose two)",
+    "back": "Ensure you aren't running privileged containers, and ensure you are using native logging mechanisms. These are High Priority according to Google best practices. Tags should be readable and useful, securityContext may be required for some workloads, and GKE metering is a business process not a security/operations concern.",
+    "tags": ["compute", "gke", "security", "best-practices", "containers", "logging"]
+  },
+  {
+    "id": "gcp-compute-adv-002",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "Developers need to move dev infrastructure from on-premises VMs to Google Cloud. Resources have multiple start/stop events and require persistent state. You need cost visibility for finance. Which two steps should you take?",
+    "back": "Use persistent disks to store state and start/stop VMs as needed, and use BigQuery billing export with labels to relate cost to groups. Persistent disks aren't deleted when instances stop, and BigQuery billing export provides visibility. Auto-delete flag only works on deletion, labels organize instances not monitor metrics, and Local SSDs lose data when stopped.",
+    "tags": ["compute", "cost-optimization", "billing", "persistent-disks", "labels"]
+  },
+  {
+    "id": "gcp-compute-adv-003",
+    "category": "GCP",
+    "subcategory": "Compute",
+    "front": "Database team has MySQL on n1-standard-8 VM with 80GB SSD persistent disk. They can't restart until next maintenance. How to improve performance cost-effectively ASAP?",
+    "back": "Dynamically resize the SSD persistent disk to 500GB. Persistent disk performance is based on total capacity and vCPU count. Increasing capacity increases throughput and IOPS, improving MySQL performance. Memory increase requires restart, and migration to PostgreSQL or BigQuery isn't what they're asking for.",
+    "tags": ["compute", "persistent-disks", "performance", "mysql", "optimization"]
+  }
+]

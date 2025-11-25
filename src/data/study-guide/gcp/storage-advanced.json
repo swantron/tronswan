@@ -1,0 +1,18 @@
+[
+  {
+    "id": "gcp-storage-adv-001",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "Company wants to archive 100 TB of log data to cloud, test serverless analytics, and retain as long-term disaster recovery backup. Which two steps should they take?",
+    "back": "Load logs into BigQuery for serverless analytics, and upload log files into Cloud Storage (Coldline/Archive storage classes) for long-term backup. BigQuery supports analytics queries, Cloud Storage Coldline/Archive provides cost-effective long-term storage. Cloud SQL doesn't support 100TB, Cloud Logging is for monitoring not analytics, and Bigtable is optimized for latency not analytics querying.",
+    "tags": ["storage", "bigquery", "cloud-storage", "analytics", "backup", "cost-optimization"]
+  },
+  {
+    "id": "gcp-storage-adv-002",
+    "category": "GCP",
+    "subcategory": "Storage",
+    "front": "Mountkirk Games needs to generate anonymized usage reports and delete PII after a specific period with minimal cost. What should you do?",
+    "back": "Archive audit logs in BigQuery and generate reports using Google Data Studio. BigQuery allows easy querying for report generation with low storage costs. Cloud Storage has no query language, Pub/Sub doesn't address log storage, and persistent disks are expensive for long-term storage.",
+    "tags": ["storage", "bigquery", "data-studio", "compliance", "cost-optimization", "pii"]
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "gcp-security-001",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "EHR has a public health website with sluggish response times and DDoS attacks from known IP ranges. They need to improve latency and prevent DDoS traffic. What should you do?",
+    "back": "Deploy an external HTTP(S) load balancer, configure Google Cloud Armor, and move the application onto Compute Engine virtual machines. Cloud Armor can block DDoS attacks at the edge, and the load balancer improves latency. Firewall rules don't block malicious traffic into VPC, and GKE services don't expose pods externally.",
+    "tags": ["security", "cloud-armor", "ddos", "load-balancing", "networking"]
+  },
+  {
+    "id": "gcp-security-002",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "How do you ensure Cloud Storage buckets in europe-west2 region don't leave that geographic area?",
+    "back": "Enable Virtual Private Cloud Service Controls and create a service perimeter around the Cloud Storage resources. VPC Service Controls mitigates data exfiltration risk. Encryption doesn't stop exfiltration, IAM roles handle identity-based access (not perimeter security), and ACLs define access but don't prevent exfiltration.",
+    "tags": ["security", "vpc-service-controls", "data-exfiltration", "storage", "compliance"]
+  },
+  {
+    "id": "gcp-security-003",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "EHR sales employees need to access web-based sales tools from anywhere using BeyondCorp model. They have Google Workspace accounts for SSO. What should you do?",
+    "back": "Create an Identity-Aware Proxy (IAP) connector that points to the sales tool application. IAP connector allows managing access to HTTP-based apps outside Google Cloud. Google groups don't grant access, Cloud Armor doesn't authenticate, and AppEngine roles don't apply to on-premises apps.",
+    "tags": ["security", "iap", "beyondcorp", "identity", "access-control"]
+  },
+  {
+    "id": "gcp-security-004",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "How do you protect PII data while generating anonymized usage reports and deleting PII after a specific period?",
+    "back": "Use Cloud Data Loss Prevention (DLP) API to de-identify data for the recommendation service. Cloud DLP is specifically designed for data de-identification. AutoML doesn't provide de-identification, on-premises doesn't meet cloud requirements, and manual ML models are excessive.",
+    "tags": ["security", "dlp", "pii", "data-protection", "compliance"]
+  },
+  {
+    "id": "gcp-security-005",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "Where should you store credentials for 30 microservices that need database access?",
+    "back": "Use a secret management system like Secret Manager. It provides secure, centralized storage for API keys, passwords, and certificates with access control and audit capabilities. Source code is discoverable, environment variables are plain text, and config files require manual key rotation.",
+    "tags": ["security", "secret-manager", "credentials", "best-practices"]
+  },
+  {
+    "id": "gcp-security-006",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "Security team needs detailed visibility of all resources in the organization. Which IAM roles should you give them following Google best practices?",
+    "back": "Organization viewer and Project viewer. Organization viewer grants permissions to view the organization's display name, and Project viewer allows seeing resources within projects. Project owner is too broad, and Organization administrator gives unnecessary change permissions.",
+    "tags": ["security", "iam", "roles", "best-practices", "visibility"]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "gcp-networking-adv-001",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "You need network connectivity between Google Cloud and on-premises. You want to ensure compatibility with on-premises networking. What should you do?",
+    "back": "Create a network plan for your VPC using non-overlapping CIDR ranges with your on-premises environment, and use a Cloud Interconnect connection. This ensures correct routing. Overlapping ranges cause routing issues, and auto mode IP ranges don't guarantee non-overlap.",
+    "tags": ["networking", "vpc", "interconnect", "hybrid-cloud", "cidr"]
+  },
+  {
+    "id": "gcp-networking-adv-002",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "EHR needs to connect to Google Cloud with lower latency using existing firewall with lower bandwidth interfaces. What connectivity option should you provision?",
+    "back": "Provision a Partner Interconnect connection. It allows connecting directly to a partner network connected to Google, lowering latency and using existing lower bandwidth interfaces. Carrier Peering doesn't provide private IP addressing, Internet connection doesn't provide RFC1918 communications, and Dedicated Interconnect requires new hardware.",
+    "tags": ["networking", "interconnect", "partner-interconnect", "latency"]
+  },
+  {
+    "id": "gcp-networking-adv-003",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "You have a 3-tier web application (web, API, database) in the same VPC. Traffic should flow web→API→database, but not web→database. How should you configure the network with minimal steps?",
+    "back": "Add tags to each tier and set up firewall rules to allow the desired traffic flow. Tags identify tiers and can be used in firewall rules for both target and source. Subnets alone don't restrict traffic, software firewalls add complexity, and routes require firewall rules anyway.",
+    "tags": ["networking", "vpc", "firewall-rules", "tags", "security"]
+  },
+  {
+    "id": "gcp-networking-adv-004",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "VM instances in an autoscaling managed instance group are being terminated and re-launched every minute. Instances don't have public IPs but respond correctly to curl. What should you do?",
+    "back": "Ensure a firewall rule exists to allow load balancer health checks to reach the instances. Health check failures mark VMs as unhealthy and cause termination. The issue isn't access to the load balancer or needing public IPs - it's health check access.",
+    "tags": ["networking", "load-balancing", "health-checks", "firewall-rules", "troubleshooting"]
+  },
+  {
+    "id": "gcp-networking-adv-005",
+    "category": "GCP",
+    "subcategory": "Networking",
+    "front": "HRL wants to serve video content to fans in emerging regions from their existing public cloud provider. What should you do?",
+    "back": "Use Cloud CDN to cache the video content from HRL's existing public cloud provider. Cloud CDN can cache data hosted on other cloud providers and supports large objects like video. Multi-region buckets don't serve all areas with similar latency, Apigee Edge has 512KB limit, and replicating adds unnecessary complexity.",
+    "tags": ["networking", "cdn", "multi-cloud", "performance", "caching"]
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "gcp-data-001",
+    "category": "GCP",
+    "subcategory": "Data & Analytics",
+    "front": "You have 1000 meeting rooms across 5 offices on 3 continents. Each room has a motion sensor reporting status every second. Devices may have inconsistent connectivity. Which solution should you design?",
+    "back": "Have devices poll for connectivity to Pub/Sub and publish latest messages on a regular interval to a shared topic. Pub/Sub can handle the frequency, and consumers can pull from the shared topic for processing. Persistent connections don't handle disconnections, Cloud SQL has connection limits and isn't ideal for sensor data, and App Engine persistent connections have the same disconnection issue.",
+    "tags": ["data", "pubsub", "iot", "messaging", "scalability"]
+  }
+]

@@ -7,6 +7,12 @@ import '../../styles/StudyGuide.css';
 import computeCards from '../../data/study-guide/gcp/compute.json';
 import storageCards from '../../data/study-guide/gcp/storage.json';
 import networkingCards from '../../data/study-guide/gcp/networking.json';
+import securityCards from '../../data/study-guide/gcp/security.json';
+import networkingAdvancedCards from '../../data/study-guide/gcp/networking-advanced.json';
+import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
+import computeAdvancedCards from '../../data/study-guide/gcp/compute-advanced.json';
+import monitoringCards from '../../data/study-guide/gcp/monitoring-operations.json';
+import dataAnalyticsCards from '../../data/study-guide/gcp/data-analytics.json';
 import arraysCards from '../../data/study-guide/coding/arrays.json';
 import graphsCards from '../../data/study-guide/coding/graphs.json';
 import dpCards from '../../data/study-guide/coding/dynamic-programming.json';
@@ -31,6 +37,42 @@ const decks: StudyDeck[] = [
     subcategory: 'Networking',
     category: 'GCP',
     cards: networkingCards as StudyCard[],
+  },
+  {
+    name: 'Security',
+    subcategory: 'Security',
+    category: 'GCP',
+    cards: securityCards as StudyCard[],
+  },
+  {
+    name: 'Networking Advanced',
+    subcategory: 'Networking',
+    category: 'GCP',
+    cards: networkingAdvancedCards as StudyCard[],
+  },
+  {
+    name: 'Storage Advanced',
+    subcategory: 'Storage',
+    category: 'GCP',
+    cards: storageAdvancedCards as StudyCard[],
+  },
+  {
+    name: 'Compute Advanced',
+    subcategory: 'Compute',
+    category: 'GCP',
+    cards: computeAdvancedCards as StudyCard[],
+  },
+  {
+    name: 'Monitoring & Operations',
+    subcategory: 'Monitoring & Operations',
+    category: 'GCP',
+    cards: monitoringCards as StudyCard[],
+  },
+  {
+    name: 'Data & Analytics',
+    subcategory: 'Data & Analytics',
+    category: 'GCP',
+    cards: dataAnalyticsCards as StudyCard[],
   },
   {
     name: 'Arrays',
