@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -8,26 +8,17 @@
     <meta name="description" content="tron swan dot com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="dns-prefetch" href="//tronswan.com" />
     <link rel="apple-touch-icon" href="/robotard_192x192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <link
-      rel="preload"
-      href="/robotard-removebg-preview.png"
-      as="image"
-      type="image/png"
-    />
+    <link rel="preload" href="/robotard-removebg-preview.png" as="image" type="image/png" />
     <style>
       /* Critical CSS for above-the-fold content */
       :root {
-        --primary-bg: #faf8f1;
-        --primary-text: #000000;
-        --accent-color: #000000;
-        --transition-speed: 0.2s;
+        --primary-bg: #282c34;
+        --primary-text: #ffffff;
+        --accent-color: #f89859;
+        --transition-speed: 0.3s;
       }
       .App {
         text-align: center;
@@ -61,9 +52,9 @@
         margin: 0;
       }
       .swantron-link a {
-        color: var(--primary-text);
+        color: var(--accent-color);
         text-decoration: none;
-        transition: opacity var(--transition-speed) ease;
+        transition: all var(--transition-speed) ease;
       }
     </style>
     <title>tron swan dot com</title>
@@ -71,11 +62,9 @@
   <body>
     <noscript>tron swan dot com</noscript>
     <div id="root"></div>
-    <script
-      src="https://sdk.scdn.co/spotify-player.js"
-      onload="window.onSpotifyWebPlaybackSDKReady = () => console.log('Spotify Web Playback SDK is ready')"
-      onerror="console.error('Failed to load Spotify SDK')"
-    ></script>
+    <script src="https://sdk.scdn.co/spotify-player.js" 
+            onload="window.onSpotifyWebPlaybackSDKReady = () => console.log('Spotify Web Playback SDK is ready')" 
+            onerror="console.error('Failed to load Spotify SDK')"></script>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

@@ -1,111 +1,88 @@
 /* App.css */
 
-/* CSS Variables for theming - matching swantron.com */
+/* CSS Variables for theming */
 :root {
-  --primary-bg: #faf8f1; /* linen background from swantron.com */
-  --secondary-bg: #ffffff;
-  --primary-text: #000000;
+  --primary-bg: #282c34;
+  --secondary-bg: #f0f0f0;
+  --primary-text: #ffffff;
   --secondary-text: #333333;
-  --accent-color: #000000;
+  --accent-color: #f89859;
   --error-color: #ff4444;
   --success-color: #4caf50;
-  --border-radius: 0;
-  --transition-speed: 0.2s;
-  --max-width: 744px; /* matching swantron.com max-width (680px + 32px * 2) */
-  --container-padding: 32px;
-  --border-color: #e5e5e5;
-  --header-height: 4.5rem;
-  --footer-height: 4.5rem;
+  --border-radius: 10px;
+  --transition-speed: 0.3s;
+  --max-width: 1200px;
+  --container-padding: 20px;
+  --border-color: #dfe6e9;
 }
 
-/* Base styles - matching swantron.com */
+/* Base styles */
 .App {
+  text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--primary-bg);
-  color: var(--primary-text);
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  text-align: left;
 }
 
-/* Container for content - matching swantron.com */
+/* Container for content */
 .App-container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: var(--container-padding);
   width: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header styles - matching swantron.com */
+/* Header styles */
 .App-header {
   background-color: var(--primary-bg);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Site header - matching swantron.com */
-.site-header {
-  height: var(--header-height);
-  display: flex;
   align-items: center;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-  width: 100%;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.site-title {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 0;
-}
-
-.site-title a {
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
   color: var(--primary-text);
-  text-decoration: none;
+  padding: 2rem;
 }
 
-/* Navigation styles - matching swantron.com */
+/* Navigation styles */
 .main-nav {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: 2.5rem;
-  margin-left: 3rem;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  padding: 1.2rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .nav-link {
   color: var(--primary-text);
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 400;
-  transition: opacity var(--transition-speed) ease;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  transition: all var(--transition-speed) ease;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  font-weight: 500;
 }
 
-.nav-link:hover {
-  opacity: 0.7;
-}
-
+.nav-link:hover,
 .nav-link.active {
-  opacity: 1;
-}
-
-/* Main content - matching swantron.com */
-.main-content {
-  flex: 1;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  padding: 3.5rem 0 4rem;
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(248, 152, 89, 0.3);
 }
 
 /* Home container styles */
@@ -115,9 +92,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 2rem;
   min-height: 60vh;
-  text-align: center;
 }
 
 .home-description {
@@ -151,23 +127,26 @@
 .App-title {
   font-size: clamp(1.5rem, 5vw, 2.5rem);
   margin-bottom: 2rem;
-  font-weight: 500;
-  color: var(--primary-text);
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Swantron link styles */
+/* Swantron link styles - larger and more prominent */
 .swantron-link {
   font-size: clamp(1.8rem, 6vw, 3rem);
   margin: 1rem 0;
-  font-weight: 500;
-  transition: opacity var(--transition-speed) ease;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all var(--transition-speed) ease;
 }
 
 .swantron-link a {
   color: var(--primary-text);
   text-decoration: none;
-  transition: opacity var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
   display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   /* Touch-friendly improvements */
   min-height: 44px;
@@ -178,11 +157,13 @@
 }
 
 .swantron-link a:hover {
-  opacity: 0.7;
+  color: var(--accent-color);
+  transform: scale(1.05);
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
 }
 
 .swantron-link a:active {
-  opacity: 0.5;
+  transform: scale(0.98);
 }
 
 /* Get it button styles */
@@ -191,28 +172,33 @@
 }
 
 .get-it-button {
-  background-color: var(--primary-text);
+  background-color: var(--accent-color);
   color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   font-size: clamp(1.2rem, 3vw, 1.5rem);
-  font-weight: 500;
+  font-weight: bold;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: opacity var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
   text-transform: lowercase;
   font-family: inherit;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .get-it-button:hover {
-  opacity: 0.7;
+  background-color: #e6894a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .get-it-button:active {
-  opacity: 0.5;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .get-it-button:focus {
-  outline: 2px solid var(--primary-text);
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -226,20 +212,24 @@
 
 /* Link styles */
 .App-link {
-  color: var(--primary-text);
+  color: var(--accent-color);
   text-decoration: none;
-  transition: opacity var(--transition-speed) ease;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
   position: relative;
 }
 
 .App-link:hover,
 .App-link:focus {
-  opacity: 0.7;
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  transform: translateY(-2px);
   outline: none;
 }
 
 .App-link:focus-visible {
-  outline: 2px solid var(--primary-text);
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -247,44 +237,48 @@
 .fizzbuzz-container {
   background-color: var(--secondary-bg);
   padding: 2rem;
+  border-radius: var(--border-radius);
   margin-top: 2rem;
   width: 100%;
   max-width: 600px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .fizzbuzz-title {
   font-size: clamp(1.2rem, 4vw, 1.8rem);
-  color: var(--primary-text);
+  color: var(--secondary-text);
   margin-bottom: 1rem;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .fizzbuzz-sequence {
   font-size: clamp(1rem, 3vw, 1.2rem);
-  color: var(--primary-text);
+  color: var(--secondary-text);
   line-height: 1.6;
 }
 
 /* Input styles */
 input[type='number'] {
-  background-color: var(--secondary-bg);
+  background-color: var(--accent-color);
   color: var(--primary-text);
-  border: 1px solid var(--border-color);
+  border: none;
   padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius);
   margin-top: 1rem;
   font-size: 1rem;
   width: 100%;
   max-width: 300px;
-  transition: border-color var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
 }
 
 input[type='number']:focus {
   outline: none;
-  border-color: var(--primary-text);
+  box-shadow: 0 0 0 2px var(--primary-bg);
+  transform: scale(1.02);
 }
 
 input[type='number']::placeholder {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Weather display styles */
@@ -298,13 +292,14 @@ input[type='number']::placeholder {
 }
 
 .weather-item {
-  background-color: var(--secondary-bg);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 1rem;
-  transition: opacity var(--transition-speed) ease;
+  border-radius: var(--border-radius);
+  transition: transform var(--transition-speed) ease;
 }
 
 .weather-item:hover {
-  opacity: 0.7;
+  transform: translateY(-5px);
 }
 
 /* Error message styles */
@@ -312,6 +307,7 @@ input[type='number']::placeholder {
   color: var(--error-color);
   background-color: rgba(255, 68, 68, 0.1);
   padding: 1rem;
+  border-radius: var(--border-radius);
   margin: 1rem 0;
   width: 100%;
   max-width: 600px;
@@ -319,8 +315,8 @@ input[type='number']::placeholder {
 
 /* Loading state styles */
 .loading-spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: var(--primary-text);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--accent-color);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -437,25 +433,6 @@ input[type='number']::placeholder {
   }
 }
 
-/* Footer styles - matching swantron.com */
-.site-footer {
-  height: var(--footer-height);
-  display: flex;
-  align-items: center;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-  width: 100%;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  opacity: 0.6;
-}
-
-.site-footer p {
-  margin: 0;
-}
-
 /* Error Boundary styles */
 .error-boundary {
   display: flex;
@@ -464,6 +441,7 @@ input[type='number']::placeholder {
   min-height: 400px;
   padding: 2rem;
   background-color: var(--secondary-bg);
+  border-radius: var(--border-radius);
   margin: 2rem;
 }
 
@@ -494,24 +472,27 @@ input[type='number']::placeholder {
 
 .error-boundary-retry-button,
 .error-boundary-reload-button {
-  background-color: var(--primary-text);
-  color: var(--primary-bg);
+  background-color: var(--accent-color);
+  color: white;
   border: none;
   padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 1rem;
-  transition: opacity var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .error-boundary-retry-button:hover,
 .error-boundary-reload-button:hover {
-  opacity: 0.7;
+  background-color: var(--primary-bg);
+  transform: translateY(-2px);
 }
 
 .error-boundary-details {
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  border-radius: var(--border-radius);
   margin-top: 1rem;
 }
 
@@ -527,18 +508,6 @@ input[type='number']::placeholder {
   overflow-x: auto;
   white-space: pre-wrap;
   color: var(--error-color);
-}
-
-/* Responsive adjustments for header */
-@media (max-width: 768px) {
-  .main-nav {
-    gap: 1.5rem;
-    margin-left: 1.5rem;
-  }
-
-  .site-title {
-    font-size: 1.25rem;
-  }
 }
 
 /* Print styles */

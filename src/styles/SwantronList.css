@@ -1,8 +1,9 @@
-/* Swantron page styles - matching swantron.com */
+/* Swantron page styles */
 .swantron-page {
   min-height: 100vh;
   background-color: var(--primary-bg);
   color: var(--primary-text);
+  padding: 2rem;
 }
 
 .swantron-list-container {
@@ -11,14 +12,16 @@
 }
 
 .swantron-list-header {
+  text-align: center;
   margin-bottom: 3rem;
 }
 
 .swantron-list-header h1 {
   font-size: clamp(2rem, 6vw, 3.5rem);
   margin-bottom: 1rem;
-  font-weight: 500;
-  color: var(--primary-text);
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: var(--accent-color);
 }
 
 .swantron-subtitle {
@@ -39,40 +42,44 @@
 .swantron-search-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
   font-size: 1rem;
-  background-color: var(--secondary-bg);
+  background-color: rgba(255, 255, 255, 0.1);
   color: var(--primary-text);
-  transition: border-color var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .swantron-search-input:focus {
   outline: none;
-  border-color: var(--primary-text);
+  box-shadow: 0 0 0 2px rgba(248, 152, 89, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .swantron-search-input::placeholder {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .swantron-search-button {
-  background-color: var(--primary-text);
-  color: var(--primary-bg);
+  background-color: var(--accent-color);
+  color: white;
   border: none;
   padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 500;
-  transition: opacity var(--transition-speed) ease;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
 }
 
 .swantron-search-button:hover {
-  opacity: 0.7;
+  background-color: #e6813f;
+  transform: translateY(-2px);
 }
 
 .swantron-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
   margin-bottom: 3rem;
 }
@@ -87,22 +94,24 @@
 }
 
 .pagination-button {
-  background-color: var(--primary-text);
-  color: var(--primary-bg);
+  background-color: var(--accent-color);
+  color: white;
   border: none;
   padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 500;
-  transition: opacity var(--transition-speed) ease;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
 }
 
 .pagination-button:hover:not(:disabled) {
-  opacity: 0.7;
+  background-color: #e6813f;
+  transform: translateY(-2px);
 }
 
 .pagination-button:disabled {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -126,11 +135,17 @@
 .error-message {
   color: var(--error-color);
   background-color: rgba(255, 68, 68, 0.1);
+  border-radius: var(--border-radius);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .swantron-page {
+    padding: 1rem;
+  }
+
   .swantron-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
   }
 
@@ -156,6 +171,10 @@
 }
 
 @media (max-width: 480px) {
+  .swantron-grid {
+    grid-template-columns: 1fr;
+  }
+
   .swantron-list-header {
     margin-bottom: 2rem;
   }
