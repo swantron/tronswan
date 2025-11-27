@@ -155,8 +155,11 @@ function App() {
   return (
     <Router>
       <div className='App' data-testid='app-container'>
-        <header className='App-header' data-testid='app-header'>
-          <div className='App-container'>
+        <header className='site-header' data-testid='app-header'>
+          <div className='header-content'>
+            <h1 className='site-title'>
+              <Link to='/'>tron swan dot com</Link>
+            </h1>
             <nav className='main-nav'>
               <Link
                 to='/'
@@ -269,7 +272,11 @@ function App() {
                 hello
               </Link>
             </nav>
+          </div>
+        </header>
 
+        <main className='main-content'>
+          <div className='App-container'>
             <ErrorBoundary>
               <Routes>
                 <Route
@@ -313,7 +320,11 @@ function App() {
               </Routes>
             </ErrorBoundary>
           </div>
-        </header>
+        </main>
+
+        <footer className='site-footer'>
+          <p>&copy; {new Date().getFullYear()} tron swan dot com</p>
+        </footer>
       </div>
     </Router>
   );
