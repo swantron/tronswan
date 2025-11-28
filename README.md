@@ -1,6 +1,8 @@
 # tron swan dot com
 
 [![Test Coverage](https://img.shields.io/badge/coverage-93.98%25-brightgreen?logo=vitest&logoColor=white)](https://github.com/swantron/tronswan/actions)
+
+<!-- Build trigger -->
 [![Build Status](https://github.com/swantron/tronswan/workflows/react%20app%20CI:CD%20with%20playwright/badge.svg)](https://github.com/swantron/tronswan/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

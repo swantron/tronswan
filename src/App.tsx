@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Music from './components/music/Music';
+import RecipeDetail from './components/recipe/RecipeDetail';
+import RecipeList from './components/recipe/RecipeList';
 import HealthPage from './components/status/HealthPage';
 import SwantronDetail from './components/swantron/SwantronDetail';
 import SwantronList from './components/swantron/SwantronList';
@@ -11,7 +13,6 @@ import Hello from './components/ui/Hello';
 import MLB from './components/ui/MLB';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
-import StudyGuide from './components/ui/StudyGuide';
 import Weather from './components/ui/Weather';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
@@ -218,20 +219,18 @@ function App() {
               >
                 weathertron
               </Link>
-              <a
-                href='https://chomptron.com'
+              <Link
+                to='/recipes'
                 className='nav-link'
-                target='_blank'
-                rel='noopener noreferrer'
                 onClick={() =>
-                  logger.info('Navigation clicked - Chomptron (external)', {
-                    target: 'https://chomptron.com',
+                  logger.info('Navigation clicked - Recipes', {
+                    target: '/recipes',
                     timestamp: new Date().toISOString(),
                   })
                 }
               >
                 chomptron
-              </a>
+              </Link>
               <Link
                 to='/health'
                 className='nav-link'
@@ -281,6 +280,8 @@ function App() {
                     </>
                   }
                 />
+                <Route path='/recipes' element={<RecipeList />} />
+                <Route path='/recipes/:id' element={<RecipeDetail />} />
                 <Route path='/swantron' element={<SwantronList />} />
                 <Route path='/swantron/:id' element={<SwantronDetail />} />
                 <Route path='/weather' element={<Weather />} />
@@ -308,7 +309,6 @@ function App() {
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
-                <Route path='/study-guide' element={<StudyGuide />} />
                 <Route path='/health' element={<HealthPage />} />
               </Routes>
             </ErrorBoundary>
