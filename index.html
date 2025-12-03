@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -11,12 +11,7 @@
     <link rel="dns-prefetch" href="//tronswan.com" />
     <link rel="apple-touch-icon" href="/robotard_192x192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <link
-      rel="preload"
-      href="/robotard-removebg-preview.png"
-      as="image"
-      type="image/png"
-    />
+    <link rel="preload" href="/robotard-removebg-preview.png" as="image" type="image/png" />
     <style>
       /* Critical CSS for above-the-fold content */
       :root {
@@ -67,11 +62,9 @@
   <body>
     <noscript>tron swan dot com</noscript>
     <div id="root"></div>
-    <script
-      src="https://sdk.scdn.co/spotify-player.js"
-      onload="window.onSpotifyWebPlaybackSDKReady = () => console.log('Spotify Web Playback SDK is ready')"
-      onerror="console.error('Failed to load Spotify SDK')"
-    ></script>
+    <script src="https://sdk.scdn.co/spotify-player.js" 
+            onload="window.onSpotifyWebPlaybackSDKReady = () => console.log('Spotify Web Playback SDK is ready')" 
+            onerror="console.error('Failed to load Spotify SDK')"></script>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
