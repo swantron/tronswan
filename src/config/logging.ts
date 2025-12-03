@@ -28,13 +28,13 @@ export const developmentConfig: LoggerConfig = {
 };
 
 export const productionConfig: LoggerConfig = {
-  level: LogLevel.INFO, // Changed from ERROR to INFO to see more useful logs
-  enableConsole: true, // Enable console logging in production for Digital Ocean
-  enableProductionLogging: true,
+  level: LogLevel.ERROR,
+  enableConsole: false,
+  enableProductionLogging: false,
   serviceName: 'tronswan-prod',
   maxContextDepth: 3,
   enableStackTrace: false,
-  enablePerformanceLogging: true, // Enable performance logging in production
+  enablePerformanceLogging: false,
   logRetentionDays: 30,
 };
 
