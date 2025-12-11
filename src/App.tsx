@@ -13,6 +13,7 @@ import Hello from './components/ui/Hello';
 import MLB from './components/ui/MLB';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
+import StudyGuide from './components/ui/StudyGuide';
 import Weather from './components/ui/Weather';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
@@ -309,6 +310,7 @@ function App() {
                 <Route path='/trontronbuzztron' element={<FizzBuzz />} />
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
+                <Route path='/study-guide' element={<StudyGuide />} />
                 <Route path='/health' element={<HealthPage />} />
               </Routes>
             </ErrorBoundary>
