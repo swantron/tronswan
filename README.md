@@ -38,7 +38,7 @@ building / deploying / learning
 
 ## Tech Stack
 
-- **Frontend**: React 18.2, TypeScript, React Router 6.22
+- **Frontend**: React 19.2, TypeScript, React Router 7.10
 - **Styling**: CSS3 with CSS Variables, Responsive Design
 - **SEO**: react-helmet-async for dynamic meta tags and Open Graph
 - **Testing**: Vitest, React Testing Library, Playwright (E2E)

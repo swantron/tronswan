@@ -383,18 +383,13 @@ const Music: React.FC = () => {
     });
 
     try {
-      const { spotifyPlaybackService } = await import(
-        '../../services/spotifyPlaybackService'
-      );
+      const { spotifyPlaybackService } =
+        await import('../../services/spotifyPlaybackService');
 
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
 
-      // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
-      // We'll remove this once we figure out the API response issue
-      const debugBypass = true; // Set to false to re-enable premium check
-
-      if (!premiumCheck.hasPremium && !debugBypass) {
+      if (!premiumCheck.hasPremium) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
@@ -411,13 +406,6 @@ const Music: React.FC = () => {
           );
         }
         return;
-      }
-
-      if (debugBypass) {
-        logger.info('📝 DEBUG: Bypassing premium check for testing', {
-          actualPremiumStatus: premiumCheck.hasPremium,
-          user: premiumCheck.user,
-        });
       }
 
       // Initialize player if not already done
@@ -522,17 +510,13 @@ const Music: React.FC = () => {
     });
 
     try {
-      const { spotifyPlaybackService } = await import(
-        '../../services/spotifyPlaybackService'
-      );
+      const { spotifyPlaybackService } =
+        await import('../../services/spotifyPlaybackService');
 
       // Check Premium status first
       const premiumCheck = await spotifyPlaybackService.checkPremiumStatus();
 
-      // TEMPORARY DEBUG: Let's bypass the premium check to see if playback works
-      const debugBypass = true; // Set to false to re-enable premium check
-
-      if (!premiumCheck.hasPremium && !debugBypass) {
+      if (!premiumCheck.hasPremium) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             '🎵 Session Expired\n\n' +
@@ -606,17 +590,6 @@ const Music: React.FC = () => {
         <div className='music-loading'>
           <div className='loading-spinner' aria-label='Loading music data' />
           <p>Loading your music data...</p>
-          {process.env.NODE_ENV === 'development' && (
-            <div
-              style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666' }}
-            >
-              <p>Debug Info:</p>
-              <p>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</p>
-              <p>Has User: {user ? 'Yes' : 'No'}</p>
-              <p>Has Tracks: {topTracks.length > 0 ? 'Yes' : 'No'}</p>
-              <p>URL: {window.location.href}</p>
-            </div>
-          )}
         </div>
       </div>
     );

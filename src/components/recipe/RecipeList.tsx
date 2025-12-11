@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import SEO from '../ui/SEO';
 import { logger } from '../../utils/logger';
+import SEO from '../ui/SEO';
 
 const RecipeList: React.FC = () => {
   React.useEffect(() => {

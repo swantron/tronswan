@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import SEO from '../ui/SEO';
 import { logger } from '../../utils/logger';
+import SEO from '../ui/SEO';
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

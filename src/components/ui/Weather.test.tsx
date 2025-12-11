@@ -155,9 +155,7 @@ describe('Weather Component', () => {
       screen.getByText('Real-time weather data from OpenWeatherMap API')
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /Search by city name, city\/state combo, or zip code/
-      )
+      screen.getByText(/Search by city name, city\/state combo, or zip code/)
     ).toBeInTheDocument();
   });
 
@@ -715,7 +713,10 @@ describe('Weather Component', () => {
     (global.fetch as any).mockImplementation(url => {
       // Check that zip code is normalized with ",us" appended
       // URL encoding might have %2C for comma
-      if (url.includes('/weather?') && (url.includes('59715,us') || url.includes('59715%2Cus'))) {
+      if (
+        url.includes('/weather?') &&
+        (url.includes('59715,us') || url.includes('59715%2Cus'))
+      ) {
         return Promise.resolve({
           ok: true,
           json: async () => ({
@@ -730,7 +731,10 @@ describe('Weather Component', () => {
             name: 'Bozeman',
           }),
         });
-      } else if (url.includes('/forecast?') && (url.includes('59715,us') || url.includes('59715%2Cus'))) {
+      } else if (
+        url.includes('/forecast?') &&
+        (url.includes('59715,us') || url.includes('59715%2Cus'))
+      ) {
         return Promise.resolve({
           ok: true,
           json: async () => ({
@@ -776,10 +780,11 @@ describe('Weather Component', () => {
       const isWeatherCall = url.includes('/weather?');
       const isForecastCall = url.includes('/forecast?');
       // Should be normalized to "Bozeman,MT,us" format
-      const hasBozemanMTUS = (url.includes('Bozeman') && url.includes('MT') && url.includes('us')) ||
-                              (url.includes('Bozeman%2CMT%2Cus')) ||
-                              (url.includes('Bozeman,MT,us'));
-      
+      const hasBozemanMTUS =
+        (url.includes('Bozeman') && url.includes('MT') && url.includes('us')) ||
+        url.includes('Bozeman%2CMT%2Cus') ||
+        url.includes('Bozeman,MT,us');
+
       if (isWeatherCall && hasBozemanMTUS) {
         return Promise.resolve({
           ok: true,
@@ -838,7 +843,10 @@ describe('Weather Component', () => {
     (global.fetch as any).mockImplementation(url => {
       // Check that zip code with country code is passed as-is
       // URL encoding might have %2C for comma
-      if (url.includes('/weather?') && (url.includes('10001,us') || url.includes('10001%2Cus'))) {
+      if (
+        url.includes('/weather?') &&
+        (url.includes('10001,us') || url.includes('10001%2Cus'))
+      ) {
         return Promise.resolve({
           ok: true,
           json: async () => ({
@@ -853,7 +861,10 @@ describe('Weather Component', () => {
             name: 'New York',
           }),
         });
-      } else if (url.includes('/forecast?') && (url.includes('10001,us') || url.includes('10001%2Cus'))) {
+      } else if (
+        url.includes('/forecast?') &&
+        (url.includes('10001,us') || url.includes('10001%2Cus'))
+      ) {
         return Promise.resolve({
           ok: true,
           json: async () => ({

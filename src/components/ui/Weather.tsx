@@ -410,22 +410,67 @@ function Weather() {
     if (match) {
       const city = match[1].trim();
       const stateCode = match[2].toUpperCase();
-      
+
       // List of US state codes
       const usStateCodes = [
-        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-        'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-        'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
-        'DC' // District of Columbia
+        'AL',
+        'AK',
+        'AZ',
+        'AR',
+        'CA',
+        'CO',
+        'CT',
+        'DE',
+        'FL',
+        'GA',
+        'HI',
+        'ID',
+        'IL',
+        'IN',
+        'IA',
+        'KS',
+        'KY',
+        'LA',
+        'ME',
+        'MD',
+        'MA',
+        'MI',
+        'MN',
+        'MS',
+        'MO',
+        'MT',
+        'NE',
+        'NV',
+        'NH',
+        'NJ',
+        'NM',
+        'NY',
+        'NC',
+        'ND',
+        'OH',
+        'OK',
+        'OR',
+        'PA',
+        'RI',
+        'SC',
+        'SD',
+        'TN',
+        'TX',
+        'UT',
+        'VT',
+        'VA',
+        'WA',
+        'WV',
+        'WI',
+        'WY',
+        'DC', // District of Columbia
       ];
-      
+
       // If it's a US state code, format as "city,state,us"
       if (usStateCodes.includes(stateCode)) {
         return `${city},${stateCode},us`;
       }
-      
+
       // Otherwise, assume it's a country code and return as-is
       return trimmed;
     }
@@ -702,8 +747,8 @@ function Weather() {
 
   // Debounce function for autocomplete
   const debounce = (func: Function, wait: number) => {
-    let timeout: NodeJS.Timeout;
-    return function executedFunction(...args: any[]) {
+    let timeout: ReturnType<typeof setTimeout>;
+    return function executedFunction(...args: unknown[]) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);
@@ -803,13 +848,16 @@ function Weather() {
                   autoComplete='off'
                 />
                 {showSuggestions && suggestions.length > 0 && (
-                  <div className='suggestions-dropdown' data-testid='suggestions-dropdown'>
+                  <div
+                    className='suggestions-dropdown'
+                    data-testid='suggestions-dropdown'
+                  >
                     {suggestions.map((suggestion, index) => (
                       <div
                         key={index}
                         className='suggestion-item'
                         onClick={() => handleSuggestionClick(suggestion)}
-                        onMouseDown={(e) => e.preventDefault()} // Prevent blur on click
+                        onMouseDown={e => e.preventDefault()} // Prevent blur on click
                       >
                         {suggestion.display}
                       </div>
@@ -913,8 +961,8 @@ function Weather() {
         <div className='weather-info'>
           <p>Real-time weather data from OpenWeatherMap API</p>
           <p>
-            Search by city name, city/state combo, or zip code (e.g., "Bozeman,
-            MT" or "59715")
+            Search by city name, city/state combo, or zip code (e.g., &quot;Bozeman,
+            MT&quot; or &quot;59715&quot;)
           </p>
         </div>
       </div>

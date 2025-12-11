@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
+import type { StudyCard, StudyDeck } from '../../types/studyGuide';
 import { logger } from '../../utils/logger';
-import SEO from './SEO';
 import '../../styles/StudyGuide.css';
-
+import arraysCards from '../../data/study-guide/coding/arrays.json';
+import dpCards from '../../data/study-guide/coding/dynamic-programming.json';
+import graphsCards from '../../data/study-guide/coding/graphs.json';
+import computeAdvancedCards from '../../data/study-guide/gcp/compute-advanced.json';
 import computeCards from '../../data/study-guide/gcp/compute.json';
-import storageCards from '../../data/study-guide/gcp/storage.json';
+import dataAnalyticsCards from '../../data/study-guide/gcp/data-analytics.json';
+import monitoringCards from '../../data/study-guide/gcp/monitoring-operations.json';
+import networkingAdvancedCards from '../../data/study-guide/gcp/networking-advanced.json';
 import networkingCards from '../../data/study-guide/gcp/networking.json';
 import securityCards from '../../data/study-guide/gcp/security.json';
-import networkingAdvancedCards from '../../data/study-guide/gcp/networking-advanced.json';
 import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
-import computeAdvancedCards from '../../data/study-guide/gcp/compute-advanced.json';
-import monitoringCards from '../../data/study-guide/gcp/monitoring-operations.json';
-import dataAnalyticsCards from '../../data/study-guide/gcp/data-analytics.json';
-import arraysCards from '../../data/study-guide/coding/arrays.json';
-import graphsCards from '../../data/study-guide/coding/graphs.json';
-import dpCards from '../../data/study-guide/coding/dynamic-programming.json';
+import storageCards from '../../data/study-guide/gcp/storage.json';
 
-import type { StudyCard, StudyDeck } from '../../types/studyGuide';
+import SEO from './SEO';
 
 const decks: StudyDeck[] = [
   {
@@ -98,7 +97,9 @@ function StudyGuide() {
   const [selectedDeck, setSelectedDeck] = useState<StudyDeck | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'GCP' | 'Coding'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<
+    'all' | 'GCP' | 'Coding'
+  >('all');
 
   useEffect(() => {
     logger.info('Study Guide page loaded', {
@@ -213,7 +214,9 @@ function StudyGuide() {
                 >
                   <div className='deck-header'>
                     <span className='deck-category-badge'>{deck.category}</span>
-                    <span className='deck-card-count'>{deck.cards.length} cards</span>
+                    <span className='deck-card-count'>
+                      {deck.cards.length} cards
+                    </span>
                   </div>
                   <h3 className='deck-name'>{deck.name}</h3>
                   <p className='deck-subcategory'>{deck.subcategory}</p>
@@ -298,7 +301,8 @@ function StudyGuide() {
                 className='nav-button'
                 onClick={handleNextCard}
                 disabled={
-                  !selectedDeck || currentCardIndex === selectedDeck.cards.length - 1
+                  !selectedDeck ||
+                  currentCardIndex === selectedDeck.cards.length - 1
                 }
               >
                 Next →
