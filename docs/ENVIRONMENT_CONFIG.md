@@ -40,15 +40,20 @@ For deployed environments, set these as environment variables in your DigitalOce
 ### Required Variables:
 
 - `VITE_WEATHER_API_KEY` - OpenWeatherMap API key
-- `VITE_GITHUB_TOKEN` - GitHub token (optional, for health page)
-- `VITE_DIGITALOCEAN_TOKEN` - DigitalOcean API token (optional, for health page)
 
 ### Optional Variables:
 
 - `VITE_WEATHER_CITY` - Weather city (default: Bozeman)
 - `VITE_WEATHER_UNITS` - Weather units (default: imperial)
 - `VITE_SITE_URL` - Site URL (default: https://tronswan.com)
+- `VITE_GITHUB_TOKEN` - GitHub token (for health page monitoring)
 - `VITE_GITHUB_OWNER` - GitHub username/organization (default: swantron)
+- `VITE_DIGITALOCEAN_TOKEN` - DigitalOcean API token (for health page monitoring)
+- `VITE_DIGITALOCEAN_APP_ID` - DigitalOcean App Platform app ID
+- `VITE_SPOTIFY_CLIENT_ID` - Spotify Client ID (for music player)
+- `VITE_SPOTIFY_CLIENT_SECRET` - Spotify Client Secret (for music player)
+- `VITE_SPOTIFY_REDIRECT_URI` - Spotify OAuth redirect URI
+- `VITE_GOOGLE_DOCS_API_KEY` - Google Docs API key (for dynamic resume)
 
 ## Configuration System
 

@@ -38,12 +38,12 @@ building / deploying / learning
 
 ## Tech Stack
 
-- **Frontend**: React 18.3, TypeScript, React Router
+- **Frontend**: React 18.2, TypeScript, React Router 6.22
 - **Styling**: CSS3 with CSS Variables, Responsive Design
 - **SEO**: react-helmet-async for dynamic meta tags and Open Graph
 - **Testing**: Vitest, React Testing Library, Playwright (E2E)
-- **Build Tools**: Vite, TypeScript
-- **Server**: Express.js for production deployment
+- **Build Tools**: Vite 7.1, TypeScript 5.9
+- **Server**: Express.js 5.1 for production deployment
 - **Deployment**: DigitalOcean App Platform
 - **APIs**: 
   - WordPress REST API (blog posts)
@@ -87,17 +87,22 @@ building / deploying / learning
    VITE_WEATHER_CITY=Bozeman
    VITE_WEATHER_UNITS=imperial
 
+   # Site configuration
+   VITE_SITE_URL=https://tronswan.com
+
    # Optional: Health monitoring features
    VITE_GITHUB_TOKEN=your_github_token
+   VITE_GITHUB_OWNER=swantron
    VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token
+   VITE_DIGITALOCEAN_APP_ID=your_digitalocean_app_id
 
    # Optional: Spotify integration (for music player)
    VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
+   VITE_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
    VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/music/callback
 
    # Optional: Google Docs API (for dynamic resume)
    VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key
-   VITE_GOOGLE_DOCS_DOCUMENT_ID=your_document_id
    ```
 
 ### Available Scripts
@@ -351,17 +356,22 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 **Required for basic functionality:**
 
 - `VITE_WEATHER_API_KEY`: OpenWeatherMap API key
-- `VITE_WEATHER_CITY`: Default city for weather data
-- `VITE_WEATHER_UNITS`: Units for weather data (imperial/metric)
+- `VITE_WEATHER_CITY`: Default city for weather data (default: `Bozeman`)
+- `VITE_WEATHER_UNITS`: Units for weather data (default: `imperial`)
 
 **Optional features:**
 
+- `VITE_SITE_URL`: Site URL for SEO and links (default: `https://tronswan.com`)
 - `VITE_GITHUB_TOKEN`: GitHub API token for health page monitoring
+- `VITE_GITHUB_OWNER`: GitHub username/organization (default: `swantron`)
 - `VITE_DIGITALOCEAN_TOKEN`: DigitalOcean API token for infrastructure monitoring
+- `VITE_DIGITALOCEAN_APP_ID`: DigitalOcean App Platform app ID
 - `VITE_SPOTIFY_CLIENT_ID`: Spotify Client ID for music player integration
+- `VITE_SPOTIFY_CLIENT_SECRET`: Spotify Client Secret for music player integration
 - `VITE_SPOTIFY_REDIRECT_URI`: Spotify OAuth redirect URI (default: `/music/callback`)
 - `VITE_GOOGLE_DOCS_API_KEY`: Google Docs API key for dynamic resume content
-- `VITE_GOOGLE_DOCS_DOCUMENT_ID`: Google Docs document ID for resume
+
+**Note:** The Google Docs document ID is hardcoded in the service. See [Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md) for details.
 
 ## Scripts
 
