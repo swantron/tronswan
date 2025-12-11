@@ -23,21 +23,36 @@ building / deploying / learning
 - 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
 - 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
+- 🎵 **Spotify Music Player** - Full-featured Spotify integration with top tracks, artists, playlists, liked songs, and music playback (Premium required)
+- ⚾ **MLB Standings** - Comprehensive MLB statistics with standings, team stats, playoff race, and rankings
+- 📄 **Dynamic Resume** - Resume content dynamically loaded from Google Docs API ([see Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md))
+- 🎬 **Video Shorts Gallery** - Collection of video shorts with modal player
 - 🎮 **Interactive Games** - FizzBuzz calculator and fun components
 - 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
+- 🔍 **SEO Optimization** - Comprehensive SEO with react-helmet-async for meta tags, Open Graph, and Twitter cards
+- 📝 **Structured Logging** - Advanced logging system with performance tracking ([see Logging Guide](docs/LOGGING_GUIDE.md))
 - 📱 **Responsive Design** - Works on all devices
 - ⚡ **Fast Performance** - Optimized with modern React patterns
-- 🧪 **High Test Coverage** - 93.98% test coverage with Vitest
+- 🧪 **High Test Coverage** - 93.98% test coverage with Vitest and Playwright E2E tests
 - 🚀 **Automated Deployment** - CI/CD pipeline with post-deployment verification ([see CI/CD Setup](docs/CI_SETUP.md))
 
 ## Tech Stack
 
 - **Frontend**: React 18.3, TypeScript, React Router
 - **Styling**: CSS3 with CSS Variables, Responsive Design
-- **Testing**: Vitest, React Testing Library, Playwright
+- **SEO**: react-helmet-async for dynamic meta tags and Open Graph
+- **Testing**: Vitest, React Testing Library, Playwright (E2E)
 - **Build Tools**: Vite, TypeScript
+- **Server**: Express.js for production deployment
 - **Deployment**: DigitalOcean App Platform
-- **APIs**: WordPress REST API, OpenWeatherMap API, GitHub API, DigitalOcean API
+- **APIs**: 
+  - WordPress REST API (blog posts)
+  - OpenWeatherMap API (weather data)
+  - GitHub API (CI/CD status)
+  - DigitalOcean API (infrastructure monitoring)
+  - Spotify Web API (music integration)
+  - MLB Stats API (baseball standings)
+  - Google Docs API (resume content)
 - **Package Manager**: Yarn
 - **CI/CD**: GitHub Actions with Playwright testing
 
@@ -75,41 +90,82 @@ building / deploying / learning
    # Optional: Health monitoring features
    VITE_GITHUB_TOKEN=your_github_token
    VITE_DIGITALOCEAN_TOKEN=your_digitalocean_token
+
+   # Optional: Spotify integration (for music player)
+   VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
+   VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/music/callback
+
+   # Optional: Google Docs API (for dynamic resume)
+   VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key
+   VITE_GOOGLE_DOCS_DOCUMENT_ID=your_document_id
    ```
 
 ### Available Scripts
 
+**Development:**
 - `yarn dev`: Runs the app in development mode with Vite
-- `yarn start`: Alias for `yarn dev`
+- `yarn start`: Starts the Express production server (requires build first)
+- `yarn build`: Builds the app for production with Vite
+- `yarn preview`: Preview the production build locally
+
+**Testing:**
 - `yarn test`: Launches the Vitest test runner in watch mode
 - `yarn test:run`: Runs tests once and exits
 - `yarn test:coverage`: Runs tests with coverage reporting
 - `yarn test:ui`: Launches the Vitest UI for interactive testing
 - `yarn test:e2e`: Runs Playwright end-to-end tests
+- `yarn test:e2e:ui`: Runs Playwright tests with UI mode
+- `yarn test:e2e:headed`: Runs Playwright tests in headed browser
+- `yarn test:e2e:debug`: Runs Playwright tests in debug mode
 - `yarn test:all`: Runs both unit and e2e tests
+
+**Code Quality:**
 - `yarn type-check`: Runs TypeScript type checking without emitting files
-- `yarn build`: Builds the app for production with Vite
-- `yarn preview`: Preview the production build locally
+- `yarn lint`: Runs ESLint to check code quality
+- `yarn lint:fix`: Runs ESLint and fixes auto-fixable issues
+- `yarn format`: Formats code with Prettier
+- `yarn format:check`: Checks code formatting without making changes
+- `yarn check-all`: Runs type-check, lint, and format:check
 
 ### Project Structure
 
 ```
 src/
 ├── components/          # React components
-│   ├── DigitalOceanStatus.tsx  # Infrastructure monitoring
-│   ├── GitHubStatus.tsx        # GitHub Actions monitoring
-│   ├── HealthPage.tsx          # Main health dashboard
-│   └── ...                     # Other components
+│   ├── music/           # Spotify music player components
+│   ├── recipe/          # AI recipe app components
+│   ├── status/          # Health monitoring components
+│   ├── swantron/        # Blog post components
+│   ├── ui/              # UI components (Weather, MLB, Resume, etc.)
+│   └── video/           # Video player components
 ├── services/            # API service modules
 │   ├── digitalOceanService.ts  # DigitalOcean API integration
 │   ├── githubService.ts        # GitHub API integration
-│   └── ...                     # Other services
+│   ├── spotifyService.ts      # Spotify Web API integration
+│   ├── spotifyPlaybackService.ts  # Spotify playback control
+│   ├── googleDocsService.ts   # Google Docs API integration
+│   └── swantronService.ts     # WordPress blog API
 ├── hooks/               # Custom React hooks
+│   ├── useResumeData.ts       # Resume data fetching hook
+│   ├── useApiRequest.ts       # API request hook
+│   └── useDateFormatter.ts    # Date formatting hook
 ├── utils/               # Utility functions and configuration
+│   ├── logger.ts        # Structured logging system
+│   └── runtimeConfig.ts # Runtime configuration
+├── config/              # Configuration files
+│   └── logging.ts       # Logging configuration
+├── types/               # TypeScript type definitions
+├── data/                # Static data (study guides, etc.)
 └── styles/              # CSS stylesheets
 
-tests/                   # Playwright end-to-end tests
-scripts/                 # Utility scripts
+tests/                   # Test files
+├── e2e/                 # Playwright end-to-end tests
+├── smoke/               # Smoke tests
+├── regression/          # Regression tests
+├── page-objects/        # Page object models
+└── fixtures/            # Test fixtures
+
+server.js                # Express production server
 .github/workflows/       # GitHub Actions CI/CD
 ```
 
@@ -135,20 +191,101 @@ The application includes a comprehensive health monitoring system accessible at 
 
 See [Health Page Guide](docs/HEALTH_PAGE_README.md) for detailed information about the health monitoring features.
 
+### Key Features in Detail
+
+#### 🎵 Spotify Music Player
+
+A full-featured Spotify integration that provides an enhanced music experience:
+
+- **Authentication**: OAuth 2.0 flow with Spotify
+- **Top Tracks & Artists**: View your top tracks and artists with customizable time ranges (last month, 6 months, year, all time)
+- **Recently Played**: See your recent listening history
+- **Liked Songs**: Browse and play your entire liked songs library with pagination
+- **Playlists**: View all your playlists with track listings
+- **Music Playback**: Direct playback control (requires Spotify Premium)
+- **Music Player Component**: Embedded player with play/pause controls
+- **Currently Playing**: Real-time display of currently playing track
+
+#### ⚾ MLB Standings
+
+Comprehensive Major League Baseball statistics and analysis:
+
+- **Standings View**: Current standings for all divisions (AL/NL East, Central, West)
+- **Team Stats Deep Dive**: Detailed team statistics including:
+  - Home vs Away records
+  - Day vs Night games
+  - Performance vs left/right-handed pitchers
+  - Surface type (grass/turf) performance
+  - Close games (extra innings, one-run games)
+  - Last 10 games performance
+  - Expected win-loss records
+- **Playoff Race**: Wild card standings and playoff positioning
+- **Rankings**: Top 10 teams ranked by:
+  - Best records
+  - Most runs scored
+  - Fewest runs allowed
+  - Best run differential
+  - Hottest teams (last 10 games)
+  - Best home field advantage
+
+#### 📄 Dynamic Resume
+
+Resume content dynamically loaded from Google Docs:
+
+- **Google Docs Integration**: Resume content fetched from Google Docs API
+- **Auto-refresh**: Content updates automatically when Google Doc is modified
+- **Last Updated**: Displays when content was last fetched
+- **Error Handling**: Graceful error handling with retry functionality
+
+See [Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md) for setup instructions.
+
+#### 🎬 Video Shorts Gallery
+
+A collection of video shorts with an interactive gallery:
+
+- **Video Collection**: Browse through a collection of video shorts
+- **Modal Player**: Click any video to play in a full-screen modal
+- **Thumbnail Previews**: Video thumbnails with hover effects
+- **Keyboard Navigation**: Full keyboard support for accessibility
+
+#### 🔍 SEO Optimization
+
+Comprehensive SEO implementation:
+
+- **Dynamic Meta Tags**: Page-specific titles, descriptions, and keywords
+- **Open Graph**: Facebook/LinkedIn sharing optimization
+- **Twitter Cards**: Twitter sharing optimization
+- **Structured Data**: JSON-LD structured data support
+- **Canonical URLs**: Proper canonical URL handling
+- **Runtime Configuration**: SEO tags configured at runtime
+
+#### 📝 Structured Logging
+
+Advanced logging system with performance tracking:
+
+- **Log Levels**: Debug, Info, Warn, Error with configurable levels
+- **Performance Tracking**: Measure async operation performance
+- **Context Logging**: Rich context data with every log entry
+- **Development Mode**: Enhanced logging in development
+- **Production Mode**: Optimized logging for production
+
+See [Logging Guide](docs/LOGGING_GUIDE.md) for detailed information.
+
 ### Testing
 
-This project maintains high test coverage with comprehensive unit tests for all components, hooks, and services.
+This project maintains high test coverage with comprehensive unit tests and end-to-end tests.
 
 - **Current Coverage**: 93.98%
-- **Test Framework**: Vitest + React Testing Library
+- **Unit Testing**: Vitest + React Testing Library
+- **E2E Testing**: Playwright for browser automation
 - **TypeScript Support**: All tests written in TypeScript with full type safety
 - **Fast Execution**: Vitest provides faster test execution compared to Jest
 - **Modern Tooling**: Built on Vite for optimal performance and developer experience
 - **Coverage Reports**: Generated automatically as part of CI/CD pipeline
 - **Coverage Badge**: Shows current test coverage percentage
+- **Test Organization**: Tests organized by type (smoke, regression, e2e) with page object models
 
-To run tests locally:
-
+**Unit Tests:**
 ```bash
 # Run all tests in watch mode
 yarn test
@@ -163,9 +300,37 @@ yarn test:coverage
 yarn test:ui
 ```
 
+**End-to-End Tests:**
+```bash
+# Run Playwright E2E tests
+yarn test:e2e
+
+# Run with UI mode (interactive)
+yarn test:e2e:ui
+
+# Run in headed browser (see browser)
+yarn test:e2e:headed
+
+# Debug mode
+yarn test:e2e:debug
+
+# Run all tests (unit + e2e)
+yarn test:all
+```
+
 ## Deployment
 
 The application is deployed to DigitalOcean using their App Platform. The deployment is automated through GitHub Actions with comprehensive testing and verification.
+
+### Production Server
+
+The application uses an Express.js server (`server.js`) for production deployment that:
+
+- Serves static files from the Vite build
+- Handles client-side routing (SPA fallback)
+- Includes request logging and security middleware
+- Detects and logs suspicious requests
+- Provides graceful shutdown handling
 
 ### Automated CI/CD Pipeline
 
@@ -189,10 +354,14 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 - `VITE_WEATHER_CITY`: Default city for weather data
 - `VITE_WEATHER_UNITS`: Units for weather data (imperial/metric)
 
-**Optional for health monitoring:**
+**Optional features:**
 
-- `VITE_GITHUB_TOKEN`: GitHub API token for health page
+- `VITE_GITHUB_TOKEN`: GitHub API token for health page monitoring
 - `VITE_DIGITALOCEAN_TOKEN`: DigitalOcean API token for infrastructure monitoring
+- `VITE_SPOTIFY_CLIENT_ID`: Spotify Client ID for music player integration
+- `VITE_SPOTIFY_REDIRECT_URI`: Spotify OAuth redirect URI (default: `/music/callback`)
+- `VITE_GOOGLE_DOCS_API_KEY`: Google Docs API key for dynamic resume content
+- `VITE_GOOGLE_DOCS_DOCUMENT_ID`: Google Docs document ID for resume
 
 ## Scripts
 
