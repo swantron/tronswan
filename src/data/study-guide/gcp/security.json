@@ -46,5 +46,13 @@
     "front": "Security team needs detailed visibility of all resources in the organization. Which IAM roles should you give them following Google best practices?",
     "back": "Organization viewer and Project viewer. Organization viewer grants permissions to view the organization's display name, and Project viewer allows seeing resources within projects. Project owner is too broad, and Organization administrator gives unnecessary change permissions.",
     "tags": ["security", "iam", "roles", "best-practices", "visibility"]
+  },
+  {
+    "id": "gcp-security-007",
+    "category": "GCP",
+    "subcategory": "Security",
+    "front": "A healthcare organization needs to store PHI in Google Cloud and comply with HIPAA. What are the best practices for privacy when using Google Cloud BAA (Business Associate Agreement)?",
+    "back": "1) Execute a BAA with Google before storing PHI, 2) Use only HIPAA-eligible services (Cloud Storage, BigQuery, Cloud SQL, etc.), 3) Enable encryption at rest and in transit, 4) Implement least-privilege IAM policies, 5) Enable audit logging for all PHI access, 6) Use VPC Service Controls to prevent data exfiltration, 7) Ensure data residency compliance (use specific regions), 8) Implement proper access controls and authentication. The BAA makes Google a business associate, but you remain responsible for configuring services correctly and maintaining administrative safeguards.",
+    "tags": ["security", "hipaa", "baa", "phi", "compliance", "privacy", "best-practices", "healthcare"]
   }
 ]
