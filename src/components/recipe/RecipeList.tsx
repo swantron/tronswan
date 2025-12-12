@@ -2,6 +2,7 @@ import React from 'react';
 
 import { logger } from '../../utils/logger';
 import SEO from '../ui/SEO';
+import '../../styles/Recipe.css';
 
 const RecipeList: React.FC = () => {
   React.useEffect(() => {

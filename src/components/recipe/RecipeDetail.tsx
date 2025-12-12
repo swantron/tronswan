@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { logger } from '../../utils/logger';
 import SEO from '../ui/SEO';
+import '../../styles/Recipe.css';
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
