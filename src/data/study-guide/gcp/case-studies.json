@@ -1,0 +1,98 @@
+[
+  {
+    "id": "gcp-case-study-001",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Altostrat Media Case Study: They use GKE, Cloud Storage, BigQuery, and Cloud Run. They need to accelerate operational workflows, optimize storage costs, enable natural language interaction, and detect inappropriate content. What key GCP services and patterns should you recommend?",
+    "back": "1) CI/CD: Cloud Build + Artifact Registry for containerized deployments, 2) Storage: Cloud Storage with lifecycle policies and nearline/coldline tiers for cost optimization, 3) AI: Vertex AI (Generative AI Studio) for content summarization, Cloud Vision API + Cloud Natural Language API for metadata extraction, 4) Content Moderation: Cloud Video Intelligence API + Cloud Vision API for inappropriate content detection, 5) Chatbots: Dialogflow CX for 24/7 support, 6) Hybrid connectivity: Cloud VPN or Cloud Interconnect for on-premises integration, 7) Monitoring: Cloud Monitoring + Cloud Logging with Pub/Sub for alerting (replace email), 8) Cost optimization: Storage classes, committed use discounts, and right-sizing recommendations.",
+    "tags": ["case-study", "altostrat", "media", "gke", "storage", "ai", "gen-ai", "cost-optimization"]
+  },
+  {
+    "id": "gcp-case-study-002",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Cymbal Retail Case Study: They have MySQL, SQL Server, Redis, MongoDB, Kubernetes, SFTP integrations, and legacy IVR. They need catalog enrichment with gen AI, conversational commerce, and technical stack modernization. What GCP architecture would you design?",
+    "back": "1) Database migration: Cloud SQL for MySQL/SQL Server, Memorystore for Redis, Cloud SQL for PostgreSQL or Firestore for MongoDB migration, 2) Catalog enrichment: Vertex AI (Generative AI) for product attributes/descriptions, Imagen API for image generation/variations, 3) Conversational commerce: Discovery AI (Retail API) for product search, Dialogflow CX for virtual agents, 4) Data integration: Cloud Storage + Cloud Functions/Cloud Run for SFTP replacement, Pub/Sub for event-driven processing, Dataflow for ETL, 5) Kubernetes: GKE for containerized apps with Anthos for hybrid management, 6) Monitoring: Cloud Monitoring + Cloud Logging (replace Grafana/Nagios), 7) Security: Cloud Armor, VPC Service Controls, Secret Manager, 8) HITL: Cloud Workstations or custom UI connecting to Vertex AI APIs for human review workflow.",
+    "tags": ["case-study", "cymbal", "retail", "gen-ai", "discovery-ai", "database-migration", "conversational-commerce"]
+  },
+  {
+    "id": "gcp-case-study-003",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "EHR Healthcare Case Study: Migrating from colocation with Kubernetes clusters, MySQL/MS SQL/Redis/MongoDB, legacy file/API integrations, Active Directory, and open-source monitoring. They need 99.9% availability, centralized visibility, regulatory compliance, and faster insurance provider onboarding. What's your migration and architecture plan?",
+    "back": "1) High availability: Multi-region deployment with Cloud Load Balancing, GKE with auto-scaling and pod disruption budgets, Cloud SQL with high availability configuration, 2) Database migration: Cloud SQL for MySQL/SQL Server, Memorystore for Redis, Firestore or Cloud SQL for PostgreSQL for MongoDB, 3) Hybrid connectivity: Cloud VPN or Dedicated Interconnect for secure on-premises connections, 4) CI/CD: Cloud Build + Artifact Registry + Cloud Deploy for GKE, 5) Monitoring: Cloud Monitoring + Cloud Logging + Error Reporting, Pub/Sub + Cloud Functions for alerting (replace email), 6) Compliance: Cloud IAM with least privilege, Cloud Audit Logs, VPC Service Controls, encryption at rest/transit, 7) Data ingestion: Cloud Storage + Cloud Functions/Cloud Run for file-based integrations, Apigee or Cloud Endpoints for API management, 8) Identity: Cloud Identity or integrate with Active Directory via Cloud Identity Sync, 9) Analytics: BigQuery for healthcare trend analysis and reporting.",
+    "tags": ["case-study", "ehr", "healthcare", "migration", "high-availability", "compliance", "hipaa"]
+  },
+  {
+    "id": "gcp-case-study-004",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "KnightMotives Automotive Case Study: On-premises IT with mainframe ERP, fragmented vehicle codebases, rural connectivity issues, and need for autonomous vehicle AI, data monetization, and modern dealer tools. What GCP solutions address their technical requirements?",
+    "back": "1) In-vehicle UX: Cloud IoT Core for vehicle connectivity, Edge TPU for on-device AI, Cloud Functions for real-time processing, 2) Network: Cloud VPN for plant connectivity, Cloud CDN for content delivery, consider Anthos for edge computing in rural areas, 3) Legacy modernization: Cloud SQL or Spanner for ERP migration, Cloud Run/Cloud Functions for microservices, 4) Autonomous vehicles: Vertex AI for ML models, AI Platform for training, Cloud Storage for simulation data, BigQuery for analytics, 5) Data monetization: BigQuery for data warehouse, Dataproc for big data processing, Pub/Sub for real-time streams, Dataflow for ETL, 6) Security: Cloud Armor, VPC Service Controls, Cloud IAM, Secret Manager, Cloud Security Command Center, 7) EU compliance: Data residency in EU regions, Cloud DLP for PII protection, 8) Dealer tools: Cloud Run for build-to-order system, Firestore for CRM, Cloud SQL for inventory, 9) Monitoring: Cloud Monitoring + Cloud Logging for observability across hybrid environment.",
+    "tags": ["case-study", "knightmotives", "automotive", "iot", "autonomous-vehicles", "edge-computing", "data-monetization"]
+  },
+  {
+    "id": "gcp-case-study-005",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Altostrat Media: They need to modernize CI/CD for containerized deployments with centralized management. What GCP services provide this?",
+    "back": "Cloud Build for CI/CD pipelines, Artifact Registry for container image storage, Cloud Deploy for continuous delivery to GKE clusters, and optionally Anthos Config Management for multi-cluster configuration. This provides centralized CI/CD management across on-premises and cloud Kubernetes environments.",
+    "tags": ["case-study", "altostrat", "cicd", "gke", "cloud-build", "artifact-registry"]
+  },
+  {
+    "id": "gcp-case-study-006",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Cymbal Retail: They need to replace SFTP file transfers and ETL batch processing with modern cloud solutions. What GCP services would you use?",
+    "back": "Cloud Storage as the SFTP replacement (with Transfer Service for SFTP compatibility if needed), Cloud Functions or Cloud Run for event-driven processing when files arrive, Pub/Sub for event streaming, and Dataflow for ETL batch processing. This eliminates manual SFTP processes and enables real-time or near-real-time data processing.",
+    "tags": ["case-study", "cymbal", "data-integration", "sftp", "etl", "dataflow", "cloud-storage"]
+  },
+  {
+    "id": "gcp-case-study-007",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "EHR Healthcare: They need 99.9% availability for customer-facing systems. How do you achieve this in GCP?",
+    "back": "Multi-region deployment with Cloud Load Balancing for global distribution, GKE with multiple node pools across zones, Cloud SQL with high availability (multi-zone), Cloud Storage with multi-region buckets, Cloud CDN for static content, health checks and auto-scaling configured, and disaster recovery with backup/restore procedures. Design for redundancy at every layer.",
+    "tags": ["case-study", "ehr", "high-availability", "multi-region", "disaster-recovery"]
+  },
+  {
+    "id": "gcp-case-study-008",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "KnightMotives: They need reliable network connectivity for vehicles in rural areas to support real-time AI features. What GCP solutions help?",
+    "back": "Cloud IoT Core for device connectivity and management, Edge TPU for on-device AI processing (reducing cloud dependency), Cloud CDN for content caching at edge locations, Anthos for edge computing capabilities, and consider Google's global network infrastructure. For critical features, design for offline-first capabilities with local AI processing.",
+    "tags": ["case-study", "knightmotives", "iot", "edge-computing", "rural-connectivity", "edge-tpu"]
+  },
+  {
+    "id": "gcp-case-study-009",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Altostrat Media: They want AI-powered detection of harmful content and ensure AI decisions are auditable. What GCP services provide this?",
+    "back": "Cloud Vision API for image/video content moderation, Cloud Video Intelligence API for video analysis, Cloud Natural Language API for text analysis, Vertex AI with Explainable AI features for model interpretability, Cloud Audit Logs for tracking all AI API calls and decisions, and Cloud Logging for detailed audit trails. Use Vertex AI Model Monitoring for ongoing model performance tracking.",
+    "tags": ["case-study", "altostrat", "content-moderation", "explainable-ai", "audit-logging"]
+  },
+  {
+    "id": "gcp-case-study-010",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "Cymbal Retail: They need a Human-in-the-Loop (HITL) review system for gen AI-generated product content. How would you architect this?",
+    "back": "Vertex AI Generative AI APIs generate content, store results in Cloud Storage or Firestore, Cloud Run hosts a review UI that displays generated content, associates approve/reject/modify through the UI, approved content updates the product catalog (Cloud SQL/Firestore), rejected content triggers regeneration or manual entry, and Cloud Workflows orchestrates the entire HITL process. Use Pub/Sub for event-driven notifications.",
+    "tags": ["case-study", "cymbal", "hitl", "gen-ai", "workflows", "human-review"]
+  },
+  {
+    "id": "gcp-case-study-011",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "EHR Healthcare: They need to maintain legacy file- and API-based integrations with insurance providers on-premises while migrating to GCP. What connectivity solution ensures secure, high-performance connections?",
+    "back": "Cloud VPN (IPsec) for secure site-to-site connectivity, or Dedicated Interconnect for higher bandwidth and lower latency, Cloud Storage with Transfer Service for file-based integrations, Apigee API Management for API integrations, Cloud Functions or Cloud Run for processing integration logic, and VPC Service Controls to prevent data exfiltration. This maintains existing integrations while modernizing the backend.",
+    "tags": ["case-study", "ehr", "hybrid-cloud", "vpn", "interconnect", "api-management"]
+  },
+  {
+    "id": "gcp-case-study-012",
+    "category": "GCP",
+    "subcategory": "Case Studies",
+    "front": "KnightMotives: They need to monetize corporate data while ensuring EU data protection compliance. What GCP architecture supports this?",
+    "back": "BigQuery for data warehouse with EU region data residency, Cloud DLP for PII detection and de-identification, Dataproc or Dataflow for data processing pipelines, Pub/Sub for real-time data streams, Apigee for API monetization (exposing data as APIs), VPC Service Controls to prevent unauthorized data access, Cloud IAM for fine-grained access control, and Cloud Audit Logs for compliance tracking. Ensure all data processing occurs in EU regions.",
+    "tags": ["case-study", "knightmotives", "data-monetization", "gdpr", "data-residency", "compliance"]
+  }
+]

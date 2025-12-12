@@ -15,6 +15,7 @@ import networkingCards from '../../data/study-guide/gcp/networking.json';
 import securityCards from '../../data/study-guide/gcp/security.json';
 import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
 import storageCards from '../../data/study-guide/gcp/storage.json';
+import caseStudiesCards from '../../data/study-guide/gcp/case-studies.json';
 
 import SEO from './SEO';
 
@@ -72,6 +73,12 @@ const decks: StudyDeck[] = [
     subcategory: 'Data & Analytics',
     category: 'GCP',
     cards: dataAnalyticsCards as StudyCard[],
+  },
+  {
+    name: 'Case Studies',
+    subcategory: 'Case Studies',
+    category: 'GCP',
+    cards: caseStudiesCards as StudyCard[],
   },
   {
     name: 'Arrays',
