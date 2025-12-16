@@ -16,6 +16,7 @@ import securityCards from '../../data/study-guide/gcp/security.json';
 import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
 import storageCards from '../../data/study-guide/gcp/storage.json';
 import caseStudiesCards from '../../data/study-guide/gcp/case-studies.json';
+import practiceQuestionsCards from '../../data/study-guide/gcp/practice-questions.json';
 
 import SEO from './SEO';
 
@@ -79,6 +80,12 @@ const decks: StudyDeck[] = [
     subcategory: 'Case Studies',
     category: 'GCP',
     cards: caseStudiesCards as StudyCard[],
+  },
+  {
+    name: 'Practice Questions',
+    subcategory: 'Practice Questions',
+    category: 'GCP',
+    cards: practiceQuestionsCards as StudyCard[],
   },
   {
     name: 'Arrays',

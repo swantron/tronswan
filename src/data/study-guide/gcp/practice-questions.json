@@ -1,0 +1,122 @@
+[
+  {
+    "id": "gcp-practice-001",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Cymbal Retail is migrating its e-commerce frontend to Google Kubernetes Engine (GKE). The application is stateless and handles variable traffic patterns, with spikes during sales events. Management requires a solution that minimizes compute costs while ensuring the application remains available even if a specific zone fails. You need to design the node architecture. What should you do?",
+    "back": "Create a GKE Standard cluster with a regional control plane. Configure a node pool using standard VMs for the baseline load and a separate node pool using Spot VMs with cluster autoscaling for burst traffic. This approach balances cost and reliability (Section 1.1 & 2.3). Using a regional control plane ensures high availability against zonal failures. Using standard VMs for baseline load guarantees capacity for core traffic, while Spot VMs provide significant cost savings for burst traffic. Spot VMs are volatile, so they should not be the only source of compute for the entire workload, but they are ideal for stateless bursts.",
+    "tags": ["practice-question", "gke", "cost-optimization", "high-availability", "spot-vms", "autoscaling"]
+  },
+  {
+    "id": "gcp-practice-002",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "EHR Healthcare handles sensitive patient data and must comply with strict regulatory requirements (HIPAA). They need to store 500 TB of medical imaging files. The data must be encrypted using keys that EHR Healthcare manages and stores in a dedicated hardware security module (HSM) to meet compliance standards. They want to minimize operational overhead. Which storage and security configuration should you recommend?",
+    "back": "Store data in Cloud Storage. Configure Customer-Managed Encryption Keys (CMEK) backed by Cloud Key Management Service (Cloud KMS) with a Cloud HSM protection level. Section 3.1 (Designing for security) and 3.2 (Compliance). Cloud Storage is suitable for unstructured object data like images. To meet the requirement of managing keys in a Hardware Security Module (HSM) with minimal overhead, Cloud KMS with the Cloud HSM protection level is the correct managed solution. CSEK requires more operational overhead to manage keys on-prem/client-side.",
+    "tags": ["practice-question", "storage", "security", "hipaa", "cmek", "cloud-kms", "hsm", "encryption"]
+  },
+  {
+    "id": "gcp-practice-003",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Altostrat Media is designing a global content metadata database. The application requires strong consistency, horizontal scalability for both reads and writes, and 99.999% availability. The database will be accessed by services in North America, Europe, and Asia. Which database service should you choose?",
+    "back": "Google Cloud Spanner configured with a multi-region instance configuration. Section 1.3 (Choosing data processing solutions). Cloud Spanner is the only service that provides a globally distributed relational database with strong consistency, horizontal write scalability, and 99.999% availability (in multi-region configurations). Cloud SQL does not scale writes horizontally. Bigtable is eventually consistent (typically) or lacks SQL semantics. Firestore is NoSQL.",
+    "tags": ["practice-question", "database", "spanner", "global", "strong-consistency", "high-availability"]
+  },
+  {
+    "id": "gcp-practice-004",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Your organization is adopting a 'Cloud First' strategy. You are designing the network connectivity between your on-premises data center and Google Cloud. The requirement is a private connection with consistent low latency and a bandwidth capacity of at least 20 Gbps. You also need an SLA for availability. What should you provision?",
+    "back": "Two Dedicated Interconnect circuits (2 x 10 Gbps) across two different metropolitan areas. Section 2.1 (Configuring network topologies). Dedicated Interconnect provides private, high-bandwidth (10 Gbps increments), low-latency connectivity. To achieve the highest SLA (99.99%), Google requires two connections in one metro and two in another. However, even for a standard 99.9% SLA, redundancy is required. 20 Gbps requires Dedicated Interconnect (Partner is usually lower capacity or harder to bundle to 20Gbps easily without multiple attachments). Spanning two metros ensures higher reliability than a single metro.",
+    "tags": ["practice-question", "networking", "dedicated-interconnect", "hybrid-cloud", "high-availability", "sla"]
+  },
+  {
+    "id": "gcp-practice-005",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "KnightMotives Automotive is building a new generative AI feature for their mobile app using Vertex AI. They want to use a large language model (LLM) to answer user questions about their specific car manuals and maintenance history. They need to ensure the model answers are grounded in their own private data and minimize hallucinations. What approach should they take?",
+    "back": "Use Vertex AI Agent Builder (Search) to index the manuals and maintenance history, and ground the Gemini model responses in this data store. Section 2.5 (Configuring prebuilt solutions or APIs with Vertex AI) and 1.3 (AI/ML solutions). Vertex AI Agent Builder (formerly Gen App Builder) allows you to create search and conversation apps grounded in enterprise data (RAG - Retrieval Augmented Generation). This is the most efficient way to reduce hallucinations and use private data without training a model from scratch.",
+    "tags": ["practice-question", "ai", "vertex-ai", "agent-builder", "rag", "llm", "gen-ai"]
+  },
+  {
+    "id": "gcp-practice-006",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "You are managing a microservices application running on Cloud Run. You are preparing to deploy a new version of the 'checkout' service. You want to route 10% of the traffic to the new revision to monitor for errors before rolling it out to all users. You want to use a native serverless capability to minimize operational complexity. What should you do?",
+    "back": "Deploy the new revision and use Cloud Run traffic splitting to allocate 10% of traffic to the new revision (tagged) and 90% to the current revision. Section 2.3 (Serverless computing) and 4.1 (SDLC/Deployment). Cloud Run has built-in traffic splitting capabilities that allow for canary deployments (gradual rollouts) without needing external load balancers or service meshes. This meets the requirement for minimal operational complexity.",
+    "tags": ["practice-question", "cloud-run", "deployment", "canary", "traffic-splitting", "serverless"]
+  },
+  {
+    "id": "gcp-practice-007",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "A financial institution wants to prevent data exfiltration. They are using BigQuery to analyze sensitive data. They need to ensure that the BigQuery API can only be accessed from within their specific VPC and that data cannot be copied to unauthorized Google Cloud projects or external storage buckets. Which security control should you implement?",
+    "back": "Implement VPC Service Controls to define a service perimeter around the project and BigQuery resources. Section 3.1 (Designing for security - VPC Service Controls). VPC Service Controls allow you to define a service perimeter that mitigates data exfiltration risks. It prevents resources (like BigQuery or Storage) from being accessed from outside the perimeter and prevents data from being copied to resources outside the perimeter (e.g., an attacker's bucket).",
+    "tags": ["practice-question", "security", "vpc-service-controls", "data-exfiltration", "bigquery", "compliance"]
+  },
+  {
+    "id": "gcp-practice-008",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "You are designing a disaster recovery (DR) strategy for a critical analytics application. The business requires a Recovery Time Objective (RTO) of 12 hours and a Recovery Point Objective (RPO) of 24 hours. The priority is to minimize the cost of the DR solution during normal operations. Which strategy fits these requirements?",
+    "back": "Backup and Restore: Regularly back up data to Cloud Storage and create machine images. In the event of a disaster, provision new resources and restore data. Section 1.2 (Backup and recovery) and 1.1 (Cost optimization). An RTO of 12 hours and RPO of 24 hours are relatively loose constraints. A 'Backup and Restore' (Cold) strategy is the most cost-effective because you do not pay for idle compute resources in the DR region until a disaster occurs.",
+    "tags": ["practice-question", "disaster-recovery", "rto", "rpo", "backup", "cost-optimization"]
+  },
+  {
+    "id": "gcp-practice-009",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Your team is manually creating and updating Google Cloud resources via the Console, leading to configuration drift and inconsistent environments. You need to implement a process to automate infrastructure provisioning, ensure reproducibility, and integrate with your existing CI/CD pipeline. What should you do?",
+    "back": "Use Terraform to define infrastructure as code (IaC). Store the state file in a remote backend (Cloud Storage) and use Cloud Build to apply changes. Section 4.1 (Analyzing and defining technical processes) and 2.3 (Infrastructure orchestration). Terraform is the industry standard for IaC and is strongly supported by Google Cloud. Storing state remotely and using Cloud Build allows for a secure, automated, and consistent pipeline (GitOps workflow) that solves configuration drift.",
+    "tags": ["practice-question", "iac", "terraform", "cloud-build", "cicd", "infrastructure"]
+  },
+  {
+    "id": "gcp-practice-010",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "A retail company wants to migrate a legacy monolith application to Google Cloud. They are unsure of the application's dependencies and current resource utilization. They need to generate a TCO report and a migration plan with right-sizing recommendations. Which tool should they use?",
+    "back": "Google Cloud Migration Center. Section 1.4 (Creating a migration plan). Google Cloud Migration Center (which unifies tools like StratoZone) is designed to discover assets, assess dependencies, collect utilization data, and provide TCO and right-sizing recommendations for migrations.",
+    "tags": ["practice-question", "migration", "migration-center", "tco", "right-sizing"]
+  },
+  {
+    "id": "gcp-practice-011",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "You are designing the training infrastructure for a massive AI model that requires high-performance computing capabilities. The workload requires synchronized training across thousands of chips with minimized latency between nodes. You want to use a fully managed, optimized solution designed specifically for large-scale AI workloads. What should you choose?",
+    "back": "Google Cloud AI Hypercomputer with Cloud TPUs. Section 1.3 (Google Cloud AI and machine learning solutions) and 2.4 (Using AI Hypercomputer). The exam guide explicitly mentions 'AI Hypercomputer' for running large-scale AI model trainings. It integrates optimized hardware (TPUs/GPUs), storage, and software for maximum performance and efficiency in AI training.",
+    "tags": ["practice-question", "ai", "hypercomputer", "tpu", "ml-training", "hpc"]
+  },
+  {
+    "id": "gcp-practice-012",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Your organization uses a shared VPC architecture. Several service projects are attached to a host project. You need to ensure that developers in one service project cannot accidentally create firewall rules that allow ingress from the public internet (0.0.0.0/0) to their instances. This restriction must be enforced centrally across the organization. What should you do?",
+    "back": "Implement an Organization Policy with the constraint compute.restrictFirewallCreation or define a Hierarchical Firewall Policy at the folder/org level. Section 3.1 (Security controls - Organization Policy/Hierarchical firewall). Organization Policies can enforce constraints (like preventing specific firewall configurations). Alternatively, Hierarchical Firewall Policies allow you to define rules at the Org/Folder level that override or exist alongside project-level rules, effectively preventing developers from opening insecure ports.",
+    "tags": ["practice-question", "security", "organization-policy", "firewall", "shared-vpc", "hierarchical-firewall"]
+  },
+  {
+    "id": "gcp-practice-013",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "A media company stores petabytes of video archives in Cloud Storage Nearline. They have noticed that data retrieval costs are higher than expected because they access the data more frequently than anticipated (daily). They want to optimize costs without moving data manually. What should they do?",
+    "back": "Enable Autoclass on the Cloud Storage bucket. Section 1.1 (Cost optimization) and 2.2 (Data lifecycle management). Autoclass automatically transitions objects between storage classes (Standard, Nearline, Archive) based on their access patterns. If data is accessed frequently, Autoclass moves it to Standard to save on retrieval fees. If it's not accessed, it moves to colder tiers to save on storage fees. This optimizes costs dynamically.",
+    "tags": ["practice-question", "storage", "cloud-storage", "autoclass", "cost-optimization", "lifecycle"]
+  },
+  {
+    "id": "gcp-practice-014",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "You are troubleshooting a performance issue in a distributed microservices application running on GKE. Users report high latency for specific requests. You need to visualize the latency of the request as it propagates through the various services to identify the bottleneck. Which tool should you use?",
+    "back": "Cloud Trace. Section 1.1 (Observability) and 4.1 (Troubleshooting). Cloud Trace is a distributed tracing system that collects latency data from your applications and displays it in the Google Cloud Console. It allows you to see how long a request took at each step (span) of the microservices chain.",
+    "tags": ["practice-question", "monitoring", "cloud-trace", "troubleshooting", "performance", "observability"]
+  },
+  {
+    "id": "gcp-practice-015",
+    "category": "GCP",
+    "subcategory": "Practice Questions",
+    "front": "Cymbal Bank wants to use Generative AI to summarize internal financial reports. They are concerned about data privacy. They need to ensure that their sensitive data is not used to train Google's foundation models and that their data remains within their control. They plan to use Vertex AI. How does Google Cloud handle this requirement?",
+    "back": "When using Vertex AI Generative AI APIs, customer data is not used to train Google's foundation models by default. Section 3.1 (Securing AI) and 3.2 (Compliance). A key value proposition of Vertex AI for enterprise is data privacy. Google explicitly states that customer data (prompts/responses) submitted to the Vertex AI API is not used to train the foundation models (like Gemini) that are available to other customers.",
+    "tags": ["practice-question", "ai", "vertex-ai", "privacy", "data-protection", "gen-ai", "compliance"]
+  }
+]
