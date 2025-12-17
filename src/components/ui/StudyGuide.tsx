@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
 import type { StudyCard, StudyDeck } from '../../types/studyGuide';
-import { logger } from '../../utils/logger';
 import '../../styles/StudyGuide.css';
 import arraysCards from '../../data/study-guide/coding/arrays.json';
 import dpCards from '../../data/study-guide/coding/dynamic-programming.json';
 import graphsCards from '../../data/study-guide/coding/graphs.json';
+import caseStudiesCards from '../../data/study-guide/gcp/case-studies.json';
 import computeAdvancedCards from '../../data/study-guide/gcp/compute-advanced.json';
 import computeCards from '../../data/study-guide/gcp/compute.json';
 import dataAnalyticsCards from '../../data/study-guide/gcp/data-analytics.json';
 import monitoringCards from '../../data/study-guide/gcp/monitoring-operations.json';
 import networkingAdvancedCards from '../../data/study-guide/gcp/networking-advanced.json';
 import networkingCards from '../../data/study-guide/gcp/networking.json';
+import practiceQuestionsCards from '../../data/study-guide/gcp/practice-questions.json';
 import securityCards from '../../data/study-guide/gcp/security.json';
 import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
 import storageCards from '../../data/study-guide/gcp/storage.json';
-import caseStudiesCards from '../../data/study-guide/gcp/case-studies.json';
-import practiceQuestionsCards from '../../data/study-guide/gcp/practice-questions.json';
+import { logger } from '../../utils/logger';
 
 import SEO from './SEO';
 

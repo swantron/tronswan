@@ -961,8 +961,8 @@ function Weather() {
         <div className='weather-info'>
           <p>Real-time weather data from OpenWeatherMap API</p>
           <p>
-            Search by city name, city/state combo, or zip code (e.g., &quot;Bozeman,
-            MT&quot; or &quot;59715&quot;)
+            Search by city name, city/state combo, or zip code (e.g.,
+            &quot;Bozeman, MT&quot; or &quot;59715&quot;)
           </p>
         </div>
       </div>
