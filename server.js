@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 
 // Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -86,12 +87,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check endpoint for DigitalOcean
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Check if build directory exists
+const buildDir = path.join(__dirname, 'build');
+if (!existsSync(buildDir)) {
+  logger.error('Build directory not found', { buildDir });
+  process.exit(1);
+}
+
 // Serve static files
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(buildDir));
 
 // Handle client-side routing (SPA) - catch all non-API routes
 app.get(/^(?!\/api).*$/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  const indexPath = path.join(buildDir, 'index.html');
+  if (!existsSync(indexPath)) {
+    logger.error('index.html not found in build directory', { indexPath });
+    res.status(500).send('Application not built correctly');
+    return;
+  }
+  res.sendFile(indexPath);
 });
 
 // Error handling middleware
