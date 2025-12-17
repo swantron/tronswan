@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import type { StudyCard, StudyDeck } from '../../types/studyGuide';
 import '../../styles/StudyGuide.css';
 import arraysCards from '../../data/study-guide/coding/arrays.json';
 import dpCards from '../../data/study-guide/coding/dynamic-programming.json';
@@ -16,6 +15,7 @@ import practiceQuestionsCards from '../../data/study-guide/gcp/practice-question
 import securityCards from '../../data/study-guide/gcp/security.json';
 import storageAdvancedCards from '../../data/study-guide/gcp/storage-advanced.json';
 import storageCards from '../../data/study-guide/gcp/storage.json';
+import type { StudyCard, StudyDeck } from '../../types/studyGuide';
 import { logger } from '../../utils/logger';
 
 import SEO from './SEO';
