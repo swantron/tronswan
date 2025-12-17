@@ -28,7 +28,7 @@ interface UseApiRequestReturn<T> {
  */
 export const useApiRequest = <T>(
   apiFunction: () => Promise<T>,
-  dependencies: any[] = [],
+  dependencies: unknown[] = [],
   options: UseApiRequestOptions<T> = {}
 ): UseApiRequestReturn<T> => {
   const {
@@ -85,6 +85,7 @@ export const useApiRequest = <T>(
   // Execute request when dependencies change
   useEffect(() => {
     executeRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependencies, executeRequest]);
 
   // Retry when retryCount changes (but not on initial load)

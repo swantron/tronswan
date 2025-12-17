@@ -1,4 +1,6 @@
-type PerfEntryCallback = (entry: any) => void;
+import type { Metric } from 'web-vitals';
+
+type PerfEntryCallback = (entry: Metric) => void;
 
 const reportWebVitals = (onPerfEntry?: PerfEntryCallback) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {

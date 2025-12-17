@@ -21,6 +21,11 @@ interface SpotifyPlayerOptions {
   volume?: number;
 }
 
+interface SpotifyPlayerState {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 interface SpotifyPlayer {
   connect(): Promise<boolean>;
   disconnect(): void;
@@ -32,13 +37,20 @@ interface SpotifyPlayer {
   seek(position_ms: number): Promise<void>;
   previousTrack(): Promise<void>;
   nextTrack(): Promise<void>;
-  addListener(event: string, callback: (state: any) => void): boolean;
-  removeListener(event: string, callback?: (state: any) => void): boolean;
+  addListener(
+    event: string,
+    callback: (state: SpotifyPlayerState) => void
+  ): boolean;
+  removeListener(
+    event: string,
+    callback?: (state: SpotifyPlayerState) => void
+  ): boolean;
 }
 
 interface SpotifyPlaybackState {
   context: {
     uri: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     metadata: any;
   };
   disallows: {
@@ -557,7 +569,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.pause();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.pause();
       logger.info('Playback paused');
       return true;
     } catch (error) {
@@ -573,7 +588,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.resume();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.resume();
       logger.info('Playback resumed');
       return true;
     } catch (error) {
@@ -589,7 +607,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.togglePlay();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.togglePlay();
       logger.info('Playback toggled');
       return true;
     } catch (error) {
@@ -605,7 +626,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.nextTrack();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.nextTrack();
       logger.info('Skipped to next track');
       return true;
     } catch (error) {
@@ -621,7 +645,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.previousTrack();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.previousTrack();
       logger.info('Skipped to previous track');
       return true;
     } catch (error) {
@@ -637,7 +664,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.setVolume(volume);
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.setVolume(volume);
       logger.info('Volume set', { volume });
       return true;
     } catch (error) {
@@ -653,7 +683,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      await this.player!.seek(positionMs);
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      await this.player.seek(positionMs);
       logger.info('Seeked to position', { positionMs });
       return true;
     } catch (error) {
@@ -669,7 +702,10 @@ export class SpotifyPlaybackService {
     }
 
     try {
-      const state = await this.player!.getCurrentState();
+      if (!this.player) {
+        throw new Error('Player not initialized');
+      }
+      const state = await this.player.getCurrentState();
       return state;
     } catch (error) {
       logger.error('Error getting current state', { error });
@@ -687,6 +723,7 @@ export class SpotifyPlaybackService {
 
   public async checkPremiumStatus(): Promise<{
     hasPremium: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user?: any;
     error?: string;
   }> {

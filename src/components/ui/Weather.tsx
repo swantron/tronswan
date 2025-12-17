@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
@@ -58,6 +58,14 @@ interface WeatherDisplayProps {
 interface ForecastDisplayProps {
   forecast: DailyForecast[];
   temperatureUnit: 'imperial' | 'metric' | 'kelvin';
+}
+
+interface GeocodingResult {
+  name: string;
+  state?: string;
+  country?: string;
+  lat?: number;
+  lon?: number;
 }
 
 // Temperature conversion utilities
@@ -479,181 +487,189 @@ function Weather() {
     return trimmed;
   };
 
-  const fetchWeatherData = async (city: string) => {
-    setLoading(true);
-    setErrorMessage('');
+  const fetchWeatherData = useCallback(
+    async (city: string) => {
+      setLoading(true);
+      setErrorMessage('');
 
-    const normalizedQuery = normalizeSearchQuery(city);
-    logger.info('Weather data fetch started', {
-      city,
-      normalizedQuery,
-      temperatureUnit,
-      timestamp: new Date().toISOString(),
-    });
+      const normalizedQuery = normalizeSearchQuery(city);
+      logger.info('Weather data fetch started', {
+        city,
+        normalizedQuery,
+        temperatureUnit,
+        timestamp: new Date().toISOString(),
+      });
 
-    try {
-      // Initialize runtime config if not already done
-      await runtimeConfig.initialize();
-
-      const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
-      // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
-      const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
-
-      const response = await logger.measureAsync(
-        'weather-api-call',
-        async () => {
-          return await fetch(url);
-        },
-        { city, apiUnit }
-      );
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          logger.warn('Location not found in weather API', {
-            city,
-            normalizedQuery: normalizeSearchQuery(city),
-            status: response.status,
-          });
-          throw new Error(
-            'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
-          );
-        }
-        logger.error('Weather API error', {
-          city,
-          status: response.status,
-          statusText: response.statusText,
-        });
-        throw new Error('Weather data fetch failed');
-      }
-
-      const data = await response.json();
-
-      // Fetch state information using geocoding API
-      let stateName: string | null = null;
       try {
-        const geoUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${data.coord.lat}&lon=${data.coord.lon}&limit=1&appid=${apiKey}`;
-        const geoResponse = await fetch(geoUrl);
-        if (geoResponse.ok) {
-          const geoData = await geoResponse.json();
-          if (geoData && geoData.length > 0 && geoData[0].state) {
-            stateName = geoData[0].state;
+        // Initialize runtime config if not already done
+        await runtimeConfig.initialize();
+
+        const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+        // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
+        const apiUnit =
+          temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
+
+        const response = await logger.measureAsync(
+          'weather-api-call',
+          async () => {
+            return await fetch(url);
+          },
+          { city, apiUnit }
+        );
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            logger.warn('Location not found in weather API', {
+              city,
+              normalizedQuery: normalizeSearchQuery(city),
+              status: response.status,
+            });
+            throw new Error(
+              'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
+            );
           }
-        }
-      } catch (geoError) {
-        logger.warn('Could not fetch state information', { error: geoError });
-        // Continue without state - not critical
-      }
-
-      logger.info('Weather data fetched successfully', {
-        city: data.name,
-        state: stateName,
-        country: data.sys.country,
-        temperature: data.main.temp,
-        description: data.weather?.[0]?.description,
-        temperatureUnit,
-        timestamp: new Date().toISOString(),
-      });
-
-      setWeather({
-        temperature: data.main.temp,
-        feelsLike: data.main.feels_like,
-        tempMin: data.main.temp_min,
-        tempMax: data.main.temp_max,
-        pressure: data.main.pressure,
-        humidity: data.main.humidity,
-        windSpeed: data.wind?.speed,
-        windDirection: data.wind?.deg,
-        visibility: data.visibility,
-        cloudCoverage: data.clouds?.all,
-        sunrise: data.sys.sunrise,
-        sunset: data.sys.sunset,
-        weatherDescription: data.weather?.[0]?.description,
-        city: data.name,
-        state: stateName,
-        country: data.sys.country,
-      });
-      setCurrentCity(data.name);
-    } catch (error) {
-      logger.error('Error fetching weather data', { error, city });
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'api call to openweathermap failed.. check the console'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchForecastData = async (city: string) => {
-    setLoading(true);
-    setErrorMessage('');
-
-    const normalizedQuery = normalizeSearchQuery(city);
-    logger.info('Forecast data fetch started', {
-      city,
-      normalizedQuery,
-      temperatureUnit,
-      timestamp: new Date().toISOString(),
-    });
-
-    try {
-      await runtimeConfig.initialize();
-
-      const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
-      // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
-      const apiUnit = temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
-      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
-
-      const response = await logger.measureAsync(
-        'forecast-api-call',
-        async () => {
-          return await fetch(url);
-        },
-        { city, apiUnit }
-      );
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          logger.warn('Location not found in forecast API', {
+          logger.error('Weather API error', {
             city,
-            normalizedQuery: normalizeSearchQuery(city),
             status: response.status,
+            statusText: response.statusText,
           });
-          throw new Error(
-            'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
-          );
+          throw new Error('Weather data fetch failed');
         }
-        logger.error('Forecast API error', {
-          city,
-          status: response.status,
-          statusText: response.statusText,
+
+        const data = await response.json();
+
+        // Fetch state information using geocoding API
+        let stateName: string | null = null;
+        try {
+          const geoUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${data.coord.lat}&lon=${data.coord.lon}&limit=1&appid=${apiKey}`;
+          const geoResponse = await fetch(geoUrl);
+          if (geoResponse.ok) {
+            const geoData = await geoResponse.json();
+            if (geoData && geoData.length > 0 && geoData[0].state) {
+              stateName = geoData[0].state;
+            }
+          }
+        } catch (geoError) {
+          logger.warn('Could not fetch state information', { error: geoError });
+          // Continue without state - not critical
+        }
+
+        logger.info('Weather data fetched successfully', {
+          city: data.name,
+          state: stateName,
+          country: data.sys.country,
+          temperature: data.main.temp,
+          description: data.weather?.[0]?.description,
+          temperatureUnit,
+          timestamp: new Date().toISOString(),
         });
-        throw new Error('Forecast data fetch failed');
+
+        setWeather({
+          temperature: data.main.temp,
+          feelsLike: data.main.feels_like,
+          tempMin: data.main.temp_min,
+          tempMax: data.main.temp_max,
+          pressure: data.main.pressure,
+          humidity: data.main.humidity,
+          windSpeed: data.wind?.speed,
+          windDirection: data.wind?.deg,
+          visibility: data.visibility,
+          cloudCoverage: data.clouds?.all,
+          sunrise: data.sys.sunrise,
+          sunset: data.sys.sunset,
+          weatherDescription: data.weather?.[0]?.description,
+          city: data.name,
+          state: stateName,
+          country: data.sys.country,
+        });
+        setCurrentCity(data.name);
+      } catch (error) {
+        logger.error('Error fetching weather data', { error, city });
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : 'api call to openweathermap failed.. check the console'
+        );
+      } finally {
+        setLoading(false);
       }
+    },
+    [temperatureUnit]
+  );
 
-      const data = await response.json();
-      const dailyForecast = groupForecastByDay(data.list);
+  const fetchForecastData = useCallback(
+    async (city: string) => {
+      setLoading(true);
+      setErrorMessage('');
 
-      logger.info('Forecast data fetched successfully', {
-        city: data.city.name,
-        forecastDays: dailyForecast.length,
+      const normalizedQuery = normalizeSearchQuery(city);
+      logger.info('Forecast data fetch started', {
+        city,
+        normalizedQuery,
         temperatureUnit,
         timestamp: new Date().toISOString(),
       });
 
-      setForecast(dailyForecast);
-      setCurrentCity(data.city.name);
-    } catch (error) {
-      logger.error('Error fetching forecast data', { error, city });
-      setErrorMessage(
-        error instanceof Error ? error.message : 'Forecast data fetch failed'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        await runtimeConfig.initialize();
+
+        const apiKey = runtimeConfig.get('VITE_WEATHER_API_KEY');
+        // Use metric for Kelvin since OpenWeatherMap doesn't support Kelvin directly
+        const apiUnit =
+          temperatureUnit === 'kelvin' ? 'metric' : temperatureUnit;
+        const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(normalizedQuery)}&appid=${apiKey}&units=${apiUnit}`;
+
+        const response = await logger.measureAsync(
+          'forecast-api-call',
+          async () => {
+            return await fetch(url);
+          },
+          { city, apiUnit }
+        );
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            logger.warn('Location not found in forecast API', {
+              city,
+              normalizedQuery: normalizeSearchQuery(city),
+              status: response.status,
+            });
+            throw new Error(
+              'Location not found. Try: city name, "city, state", or zip code (e.g., "Bozeman, MT" or "59715").'
+            );
+          }
+          logger.error('Forecast API error', {
+            city,
+            status: response.status,
+            statusText: response.statusText,
+          });
+          throw new Error('Forecast data fetch failed');
+        }
+
+        const data = await response.json();
+        const dailyForecast = groupForecastByDay(data.list);
+
+        logger.info('Forecast data fetched successfully', {
+          city: data.city.name,
+          forecastDays: dailyForecast.length,
+          temperatureUnit,
+          timestamp: new Date().toISOString(),
+        });
+
+        setForecast(dailyForecast);
+        setCurrentCity(data.city.name);
+      } catch (error) {
+        logger.error('Error fetching forecast data', { error, city });
+        setErrorMessage(
+          error instanceof Error ? error.message : 'Forecast data fetch failed'
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [temperatureUnit]
+  );
 
   useEffect(() => {
     // Initialize runtime config and get default city
@@ -681,7 +697,7 @@ function Weather() {
     };
 
     initializeWeather();
-  }, []);
+  }, [fetchWeatherData, fetchForecastData, temperatureUnit]);
 
   const handleCitySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -714,8 +730,8 @@ function Weather() {
 
       const response = await fetch(url);
       if (response.ok) {
-        const data = await response.json();
-        const formattedSuggestions = data.map((item: any) => {
+        const data = (await response.json()) as GeocodingResult[];
+        const formattedSuggestions = data.map((item: GeocodingResult) => {
           let display = item.name;
           if (item.state) {
             display += `, ${item.state}`;
@@ -857,7 +873,14 @@ function Weather() {
                         key={index}
                         className='suggestion-item'
                         onClick={() => handleSuggestionClick(suggestion)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            handleSuggestionClick(suggestion);
+                          }
+                        }}
                         onMouseDown={e => e.preventDefault()} // Prevent blur on click
+                        role='button'
+                        tabIndex={0}
                       >
                         {suggestion.display}
                       </div>

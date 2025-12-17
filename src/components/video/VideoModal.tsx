@@ -50,7 +50,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
       onClick={handleBackdropClick}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
-          handleBackdropClick(e as any);
+          handleBackdropClick(e as React.MouseEvent);
         }
       }}
       role='button'

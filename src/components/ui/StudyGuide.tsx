@@ -224,6 +224,13 @@ function StudyGuide() {
                   key={deck.name}
                   className='deck-card'
                   onClick={() => handleDeckSelect(deck)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDeckSelect(deck);
+                    }
+                  }}
+                  role='button'
+                  tabIndex={0}
                   data-testid={`deck-${deck.name}`}
                 >
                   <div className='deck-header'>
@@ -268,6 +275,13 @@ function StudyGuide() {
                 <div
                   className={`study-card ${isFlipped ? 'flipped' : ''}`}
                   onClick={handleCardFlip}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleCardFlip();
+                    }
+                  }}
+                  role='button'
+                  tabIndex={0}
                   data-testid='study-card'
                 >
                   <div className='card-front'>
