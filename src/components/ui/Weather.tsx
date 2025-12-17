@@ -351,7 +351,7 @@ function Weather() {
     'imperial' | 'metric' | 'kelvin'
   >('imperial');
   const [suggestions, setSuggestions] = useState<
-    Array<{ name: string; state?: string; country: string; display: string }>
+    Array<{ name: string; state?: string; country?: string; display: string }>
   >([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [suggestionsLoading, setSuggestionsLoading] = useState<boolean>(false);
@@ -788,7 +788,7 @@ function Weather() {
   const handleSuggestionClick = (suggestion: {
     name: string;
     state?: string;
-    country: string;
+    country?: string;
     display: string;
   }) => {
     // Format the suggestion for search
