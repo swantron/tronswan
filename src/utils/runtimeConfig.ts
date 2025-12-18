@@ -17,6 +17,7 @@ interface RuntimeConfig {
   VITE_SPOTIFY_CLIENT_ID: string;
   VITE_SPOTIFY_CLIENT_SECRET: string;
   VITE_SPOTIFY_REDIRECT_URI: string;
+  VITE_SWANTRON_API_URL: string;
 }
 
 class RuntimeConfigManager {
@@ -53,6 +54,7 @@ class RuntimeConfigManager {
       'VITE_SPOTIFY_CLIENT_ID',
       'VITE_SPOTIFY_CLIENT_SECRET',
       'VITE_SPOTIFY_REDIRECT_URI',
+      'VITE_SWANTRON_API_URL',
     ];
 
     envVars.forEach(key => {

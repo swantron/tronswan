@@ -1,8 +1,16 @@
 import { SwantronServiceResponse, Post, SwantronService } from '../types';
 import { logger } from '../utils/logger';
+import { runtimeConfig } from '../utils/runtimeConfig';
 
-// Swantron WordPress API service
-const SWANTRON_API_URL = 'https://swantron.com/wp-json/wp/v2';
+// Get Hugo API base URL from config, fallback to GitLab Pages URL
+// Note: runtimeConfig.getWithDefault works even if not initialized (uses fallback)
+const getSwantronApiUrl = (): string => {
+  const apiUrl = runtimeConfig.getWithDefault(
+    'VITE_SWANTRON_API_URL',
+    'https://swantron.gitlab.io/swantron'
+  );
+  return apiUrl;
+};
 
 // Helper function to extract first image from post content
 const extractImageFromContent = (content: string): string | null => {
@@ -10,21 +18,95 @@ const extractImageFromContent = (content: string): string | null => {
   return imgMatch ? imgMatch[1] : null;
 };
 
-// WordPress API response types
-interface WordPressPost {
+// Hugo JSON API response types
+interface HugoPost {
   id: number;
-  title: { rendered: string };
-  excerpt: { rendered: string };
-  content: { rendered: string };
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
   date: string;
+  permalink: string;
   link: string;
-  _embedded?: {
-    'wp:featuredmedia'?: Array<{ source_url: string }>;
-    'wp:term'?: Array<
-      Array<{ id: number; name: string; slug: string; link: string }>
-    >;
-  };
+  featuredImage: string | null;
+  categories: Array<{ id: number; name: string; slug: string; link: string }>;
+  tags: Array<{ id: number; name: string; slug: string; link: string }>;
 }
+
+interface HugoPostsResponse {
+  posts: HugoPost[];
+  total: number;
+}
+
+interface HugoPostsByIdResponse {
+  [key: string]: HugoPost;
+}
+
+// Cache for all posts to avoid refetching
+let allPostsCache: HugoPost[] | null = null;
+let allPostsCacheTimestamp: number = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Fetch all posts from Hugo API
+const fetchAllPosts = async (): Promise<HugoPost[]> => {
+  const now = Date.now();
+  if (
+    allPostsCache &&
+    now - allPostsCacheTimestamp < CACHE_DURATION
+  ) {
+    return allPostsCache;
+  }
+
+  const apiUrl = getSwantronApiUrl();
+  const url = `${apiUrl}/api/posts/index.json`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data: HugoPostsResponse = await response.json();
+
+  if (!data.posts || !Array.isArray(data.posts)) {
+    logger.error('Invalid response format from Hugo API', {
+      expected: 'object with posts array',
+      received: data,
+    });
+    throw new Error('Invalid response format from Hugo API');
+  }
+
+  allPostsCache = data.posts;
+  allPostsCacheTimestamp = now;
+
+  return data.posts;
+};
+
+// Helper to convert Hugo post to Post format
+const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
+  // If featuredImage is relative, make it absolute
+  let featuredImage = hugoPost.featuredImage;
+  if (featuredImage && !featuredImage.startsWith('http')) {
+    const apiUrl = getSwantronApiUrl();
+    featuredImage = `${apiUrl}${featuredImage}`;
+  }
+  // Fallback to extracting from content if no featured image
+  if (!featuredImage) {
+    featuredImage = extractImageFromContent(hugoPost.content);
+  }
+
+  return {
+    id: hugoPost.id,
+    title: hugoPost.title,
+    excerpt: hugoPost.excerpt,
+    content: hugoPost.content,
+    date: hugoPost.date,
+    featuredImage,
+    categories: hugoPost.categories || [],
+    tags: hugoPost.tags || [],
+    link: hugoPost.link,
+  };
+};
 
 export const swantronService: SwantronService = {
   async getPosts(
@@ -32,48 +114,23 @@ export const swantronService: SwantronService = {
     perPage: number = 10
   ): Promise<SwantronServiceResponse> {
     try {
-      const url = `${SWANTRON_API_URL}/posts?_embed&page=${page}&per_page=${perPage}`;
+      const allPosts = await fetchAllPosts();
 
-      const response = await fetch(url);
+      // Sort by date (newest first)
+      const sortedPosts = [...allPosts].sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const posts: WordPressPost[] = await response.json();
-
-      if (!Array.isArray(posts)) {
-        logger.error('Invalid response format from swantron.com API', {
-          expected: 'array',
-          received: posts,
-        });
-        throw new Error('Invalid response format from swantron.com API');
-      }
-
-      const totalPages = response.headers.get('X-WP-TotalPages') || '1';
+      // Calculate pagination
+      const totalPosts = sortedPosts.length;
+      const totalPages = Math.ceil(totalPosts / perPage);
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+      const paginatedPosts = sortedPosts.slice(startIndex, endIndex);
 
       return {
-        posts: posts.map((post: WordPressPost): Post => {
-          // Try to get featured image, fallback to content image
-          let featuredImage: string | null =
-            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-          if (!featuredImage) {
-            featuredImage = extractImageFromContent(post.content.rendered);
-          }
-
-          return {
-            id: post.id,
-            title: post.title.rendered,
-            excerpt: post.excerpt.rendered,
-            content: post.content.rendered,
-            date: post.date,
-            featuredImage,
-            categories: post._embedded?.['wp:term']?.[0] || [],
-            tags: post._embedded?.['wp:term']?.[1] || [],
-            link: post.link,
-          };
-        }),
-        totalPages: parseInt(totalPages, 10),
+        posts: paginatedPosts.map(convertHugoPostToPost),
+        totalPages,
       };
     } catch (error) {
       logger.apiError(
@@ -87,36 +144,28 @@ export const swantronService: SwantronService = {
 
   async getPostById(id: number): Promise<Post> {
     try {
-      const response = await fetch(`${SWANTRON_API_URL}/posts/${id}?_embed`);
+      const apiUrl = getSwantronApiUrl();
+      const url = `${apiUrl}/api/posts/by-id.json`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const post: WordPressPost = await response.json();
+      const data: HugoPostsByIdResponse = await response.json();
+      const postId = id.toString();
+      const hugoPost = data[postId];
 
-      // Try to get featured image, fallback to content image
-      let featuredImage: string | null =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-      if (!featuredImage) {
-        featuredImage = extractImageFromContent(post.content.rendered);
+      if (!hugoPost) {
+        throw new Error(`Post with id ${id} not found`);
       }
 
-      return {
-        id: post.id,
-        title: post.title.rendered,
-        excerpt: post.excerpt.rendered,
-        content: post.content.rendered,
-        date: post.date,
-        featuredImage,
-        categories: post._embedded?.['wp:term']?.[0] || [],
-        tags: post._embedded?.['wp:term']?.[1] || [],
-        link: post.link,
-      };
+      return convertHugoPostToPost(hugoPost);
     } catch (error) {
       logger.apiError(
         'Swantron',
-        'getPost',
+        'getPostById',
         error instanceof Error ? error : new Error('Unknown error')
       );
       throw error;
@@ -129,48 +178,32 @@ export const swantronService: SwantronService = {
     perPage: number = 10
   ): Promise<SwantronServiceResponse> {
     try {
-      const url = `${SWANTRON_API_URL}/posts?search=${encodeURIComponent(query)}&_embed&page=${page}&per_page=${perPage}`;
+      const allPosts = await fetchAllPosts();
+      const queryLower = query.toLowerCase();
 
-      const response = await fetch(url);
+      // Filter posts by search query (title, excerpt, content)
+      const filteredPosts = allPosts.filter(post => {
+        const titleMatch = post.title.toLowerCase().includes(queryLower);
+        const excerptMatch = post.excerpt.toLowerCase().includes(queryLower);
+        const contentMatch = post.content.toLowerCase().includes(queryLower);
+        return titleMatch || excerptMatch || contentMatch;
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
+      // Sort by date (newest first)
+      const sortedPosts = [...filteredPosts].sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
 
-      const posts: WordPressPost[] = await response.json();
-
-      if (!Array.isArray(posts)) {
-        logger.error('Invalid response format from swantron.com API', {
-          expected: 'array',
-          received: posts,
-        });
-        throw new Error('Invalid response format from swantron.com API');
-      }
-
-      const totalPages = response.headers.get('X-WP-TotalPages') || '1';
+      // Calculate pagination
+      const totalPosts = sortedPosts.length;
+      const totalPages = Math.ceil(totalPosts / perPage);
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+      const paginatedPosts = sortedPosts.slice(startIndex, endIndex);
 
       return {
-        posts: posts.map((post: WordPressPost): Post => {
-          // Try to get featured image, fallback to content image
-          let featuredImage: string | null =
-            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-          if (!featuredImage) {
-            featuredImage = extractImageFromContent(post.content.rendered);
-          }
-
-          return {
-            id: post.id,
-            title: post.title.rendered,
-            excerpt: post.excerpt.rendered,
-            content: post.content.rendered,
-            date: post.date,
-            featuredImage,
-            categories: post._embedded?.['wp:term']?.[0] || [],
-            tags: post._embedded?.['wp:term']?.[1] || [],
-            link: post.link,
-          };
-        }),
-        totalPages: parseInt(totalPages, 10),
+        posts: paginatedPosts.map(convertHugoPostToPost),
+        totalPages,
       };
     } catch (error) {
       logger.apiError(

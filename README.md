@@ -20,7 +20,7 @@ building / deploying / learning
 
 ## Features
 
-- 🦢 **Personal Blog Integration** - Fetches posts from swantron.com
+- 🦢 **Personal Blog Integration** - Fetches posts from Hugo static site API (swantron.com)
 - 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP
 - 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
 - 🎵 **Spotify Music Player** - Full-featured Spotify integration with top tracks, artists, playlists, liked songs, and music playback (Premium required)
@@ -46,7 +46,7 @@ building / deploying / learning
 - **Server**: Express.js 5.1 for production deployment
 - **Deployment**: DigitalOcean App Platform
 - **APIs**: 
-  - WordPress REST API (blog posts)
+  - Hugo JSON API (blog posts from static Hugo site)
   - OpenWeatherMap API (weather data)
   - GitHub API (CI/CD status)
   - DigitalOcean API (infrastructure monitoring)
@@ -103,6 +103,9 @@ building / deploying / learning
 
    # Optional: Google Docs API (for dynamic resume)
    VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key
+
+   # Optional: Swantron Hugo API (for blog posts)
+   VITE_SWANTRON_API_URL=https://swantron.gitlab.io/swantron
    ```
 
 ### Available Scripts
@@ -149,7 +152,7 @@ src/
 │   ├── spotifyService.ts      # Spotify Web API integration
 │   ├── spotifyPlaybackService.ts  # Spotify playback control
 │   ├── googleDocsService.ts   # Google Docs API integration
-│   └── swantronService.ts     # WordPress blog API
+│   └── swantronService.ts     # Hugo JSON API for blog posts
 ├── hooks/               # Custom React hooks
 │   ├── useResumeData.ts       # Resume data fetching hook
 │   ├── useApiRequest.ts       # API request hook
@@ -370,6 +373,7 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 - `VITE_SPOTIFY_CLIENT_SECRET`: Spotify Client Secret for music player integration
 - `VITE_SPOTIFY_REDIRECT_URI`: Spotify OAuth redirect URI (default: `/music/callback`)
 - `VITE_GOOGLE_DOCS_API_KEY`: Google Docs API key for dynamic resume content
+- `VITE_SWANTRON_API_URL`: Base URL for Hugo static site API (default: `https://swantron.gitlab.io/swantron`)
 
 **Note:** The Google Docs document ID is hardcoded in the service. See [Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md) for details.
 
