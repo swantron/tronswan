@@ -372,26 +372,42 @@ describe('swantronService', () => {
   });
 
   describe('getPostById', () => {
-    const mockPostByIdResponse = {
-      '1': {
-        id: 1,
-        slug: 'single-post',
-        title: 'Single Post',
-        excerpt: 'Single excerpt',
-        content: 'Single content',
-        date: '2023-12-25T10:00:00Z',
-        permalink: '/index.php/2023/12/25/single-post/',
-        link: '/index.php/2023/12/25/single-post/',
-        featuredImage: 'https://example.com/image.jpg',
-        categories: [{ id: 1, name: 'Category', slug: 'category', link: '/categories/category/' }],
-        tags: [{ id: 1, name: 'Tag', slug: 'tag', link: '/tags/tag/' }],
-      },
+    const mockAllPostsForById = {
+      posts: [
+        {
+          id: 1,
+          slug: 'single-post',
+          title: 'Single Post',
+          excerpt: 'Single excerpt',
+          content: 'Single content',
+          date: '2023-12-25T10:00:00Z',
+          permalink: '/index.php/2023/12/25/single-post/',
+          link: '/index.php/2023/12/25/single-post/',
+          featuredImage: 'https://example.com/image.jpg',
+          categories: [{ id: 1, name: 'Category', slug: 'category', link: '/categories/category/' }],
+          tags: [{ id: 1, name: 'Tag', slug: 'tag', link: '/tags/tag/' }],
+        },
+        {
+          id: 2,
+          slug: 'another-post',
+          title: 'Another Post',
+          excerpt: 'Another excerpt',
+          content: 'Another content',
+          date: '2023-12-24T10:00:00Z',
+          permalink: '/index.php/2023/12/24/another-post/',
+          link: '/index.php/2023/12/24/another-post/',
+          featuredImage: null,
+          categories: [],
+          tags: [],
+        },
+      ],
+      total: 2,
     };
 
     test('should fetch single post successfully', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue(mockPostByIdResponse),
+        json: vi.fn().mockResolvedValue(mockAllPostsForById),
       };
 
       global.fetch.mockResolvedValue(mockResponse);
@@ -399,7 +415,7 @@ describe('swantronService', () => {
       const result = await swantronService.getPostById(1);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/by-id.json'
+        'https://swantron.github.io/swantron/api/posts/index.json'
       );
       expect(result.id).toBe(1);
       expect(result.title).toBe('Single Post');
@@ -411,7 +427,7 @@ describe('swantronService', () => {
     test('should handle post not found', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue({}),
+        json: vi.fn().mockResolvedValue(mockAllPostsForById),
       };
 
       global.fetch.mockResolvedValue(mockResponse);

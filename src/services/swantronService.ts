@@ -38,9 +38,6 @@ interface HugoPostsResponse {
   total: number;
 }
 
-interface HugoPostsByIdResponse {
-  [key: string]: HugoPost;
-}
 
 // Cache for all posts to avoid refetching
 let allPostsCache: HugoPost[] | null = null;
@@ -144,18 +141,11 @@ export const swantronService: SwantronService = {
 
   async getPostById(id: number): Promise<Post> {
     try {
-      const apiUrl = getSwantronApiUrl();
-      const url = `${apiUrl}/api/posts/by-id.json`;
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data: HugoPostsByIdResponse = await response.json();
-      const postId = id.toString();
-      const hugoPost = data[postId];
+      // Fetch all posts (uses cache if available)
+      const allPosts = await fetchAllPosts();
+      
+      // Find the post by ID
+      const hugoPost = allPosts.find(post => post.id === id);
 
       if (!hugoPost) {
         throw new Error(`Post with id ${id} not found`);
