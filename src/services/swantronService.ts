@@ -2,12 +2,12 @@ import { SwantronServiceResponse, Post, SwantronService } from '../types';
 import { logger } from '../utils/logger';
 import { runtimeConfig } from '../utils/runtimeConfig';
 
-// Get Hugo API base URL from config, fallback to GitLab Pages URL
+// Get Hugo API base URL from config, fallback to GitHub Pages URL
 // Note: runtimeConfig.getWithDefault works even if not initialized (uses fallback)
 const getSwantronApiUrl = (): string => {
   const apiUrl = runtimeConfig.getWithDefault(
     'VITE_SWANTRON_API_URL',
-    'https://swantron.gitlab.io/swantron'
+    'https://swantron.github.io/swantron'
   );
   return apiUrl;
 };
