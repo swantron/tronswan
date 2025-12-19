@@ -44,6 +44,7 @@ const Shorts: React.FC = () => {
     { id: 'seeya', title: 'seeya', videoSrc: '/seeya.mp4' },
     { id: 'dynomite', title: 'dynomite', videoSrc: '/dynomite.mp4' },
     { id: 'working', title: 'working', videoSrc: '/working.mp4' },
+    { id: 'hard-at-work', title: 'hard at work', videoSrc: '/hard-at-work.mp4' },
   ];
 
   const handleVideoClick = (video: VideoItem) => {
