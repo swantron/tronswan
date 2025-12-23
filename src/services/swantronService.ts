@@ -38,7 +38,6 @@ interface HugoPostsResponse {
   total: number;
 }
 
-
 // Cache for all posts to avoid refetching
 let allPostsCache: HugoPost[] | null = null;
 let allPostsCacheTimestamp: number = 0;
@@ -47,10 +46,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 // Fetch all posts from Hugo API
 const fetchAllPosts = async (): Promise<HugoPost[]> => {
   const now = Date.now();
-  if (
-    allPostsCache &&
-    now - allPostsCacheTimestamp < CACHE_DURATION
-  ) {
+  if (allPostsCache && now - allPostsCacheTimestamp < CACHE_DURATION) {
     return allPostsCache;
   }
 
@@ -143,7 +139,7 @@ export const swantronService: SwantronService = {
     try {
       // Fetch all posts (uses cache if available)
       const allPosts = await fetchAllPosts();
-      
+
       // Find the post by ID
       const hugoPost = allPosts.find(post => post.id === id);
 

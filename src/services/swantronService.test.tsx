@@ -1,11 +1,4 @@
-import {
-  vi,
-  expect,
-  describe,
-  test,
-  beforeEach,
-  afterEach,
-} from 'vitest';
+import { vi, expect, describe, test, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 
 // Mock logger before importing the service
@@ -71,7 +64,12 @@ describe('swantronService', () => {
       permalink: string;
       link: string;
       featuredImage: string | null;
-      categories: Array<{ id: number; name: string; slug: string; link: string }>;
+      categories: Array<{
+        id: number;
+        name: string;
+        slug: string;
+        link: string;
+      }>;
       tags: Array<{ id: number; name: string; slug: string; link: string }>;
     }> = [
       {
@@ -84,7 +82,14 @@ describe('swantronService', () => {
         permalink: '/index.php/2023/12/26/test-post-2/',
         link: '/index.php/2023/12/26/test-post-2/',
         featuredImage: 'https://example.com/image2.jpg',
-        categories: [{ id: 1, name: 'Category 2', slug: 'category-2', link: '/categories/category-2/' }],
+        categories: [
+          {
+            id: 1,
+            name: 'Category 2',
+            slug: 'category-2',
+            link: '/categories/category-2/',
+          },
+        ],
         tags: [{ id: 1, name: 'Tag 2', slug: 'tag-2', link: '/tags/tag-2/' }],
       },
       {
@@ -97,7 +102,14 @@ describe('swantronService', () => {
         permalink: '/index.php/2023/12/25/test-post-1/',
         link: '/index.php/2023/12/25/test-post-1/',
         featuredImage: 'https://example.com/image1.jpg',
-        categories: [{ id: 1, name: 'Category 1', slug: 'category-1', link: '/categories/category-1/' }],
+        categories: [
+          {
+            id: 1,
+            name: 'Category 1',
+            slug: 'category-1',
+            link: '/categories/category-1/',
+          },
+        ],
         tags: [{ id: 1, name: 'Tag 1', slug: 'tag-1', link: '/tags/tag-1/' }],
       },
       {
@@ -121,7 +133,6 @@ describe('swantronService', () => {
     };
 
     test('should fetch posts successfully with default parameters', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockHugoResponse),
@@ -147,14 +158,20 @@ describe('swantronService', () => {
         content: 'Test content 2',
         date: '2023-12-26T10:00:00Z',
         featuredImage: 'https://example.com/image2.jpg',
-        categories: [{ id: 1, name: 'Category 2', slug: 'category-2', link: '/categories/category-2/' }],
+        categories: [
+          {
+            id: 1,
+            name: 'Category 2',
+            slug: 'category-2',
+            link: '/categories/category-2/',
+          },
+        ],
         tags: [{ id: 1, name: 'Tag 2', slug: 'tag-2', link: '/tags/tag-2/' }],
         link: '/index.php/2023/12/26/test-post-2/',
       });
     });
 
     test('should fetch posts with custom page and perPage parameters', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockHugoResponse),
@@ -174,7 +191,6 @@ describe('swantronService', () => {
     });
 
     test('should handle pagination correctly', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockHugoResponse),
@@ -191,7 +207,6 @@ describe('swantronService', () => {
     });
 
     test('should handle HTTP error responses', async () => {
-      
       const mockResponse = {
         ok: false,
         status: 404,
@@ -206,7 +221,6 @@ describe('swantronService', () => {
     });
 
     test('should handle invalid response format', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue({ posts: 'not-an-array' }),
@@ -220,7 +234,6 @@ describe('swantronService', () => {
     });
 
     test('should handle posts without featured image', async () => {
-      
       const postsWithoutImage = {
         posts: [
           {
@@ -255,7 +268,6 @@ describe('swantronService', () => {
     });
 
     test('should extract image from content when no featured image is set', async () => {
-      
       const postsWithContentImage = {
         posts: [
           {
@@ -263,7 +275,8 @@ describe('swantronService', () => {
             slug: 'post-with-content-image',
             title: 'Post with content image',
             excerpt: 'Has image in content',
-            content: '<p>Some text here</p><img src="https://example.com/content-image.jpg" alt="Content image" /><p>More text</p>',
+            content:
+              '<p>Some text here</p><img src="https://example.com/content-image.jpg" alt="Content image" /><p>More text</p>',
             date: '2023-12-27T10:00:00Z',
             permalink: '/index.php/2023/12/27/post-with-content-image/',
             link: '/index.php/2023/12/27/post-with-content-image/',
@@ -290,7 +303,6 @@ describe('swantronService', () => {
     });
 
     test('should handle relative featured image URLs', async () => {
-      
       const postsWithRelativeImage = {
         posts: [
           {
@@ -325,7 +337,6 @@ describe('swantronService', () => {
     });
 
     test('should cache posts for subsequent requests', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockHugoResponse),
@@ -346,14 +357,12 @@ describe('swantronService', () => {
     });
 
     test('should handle network errors', async () => {
-      
       global.fetch.mockRejectedValue(new Error('Network error'));
 
       await expect(swantronService.getPosts()).rejects.toThrow('Network error');
     });
 
     test('should use custom API URL from environment variable', async () => {
-      
       process.env.VITE_SWANTRON_API_URL = 'https://custom-api.example.com';
 
       const mockResponse = {
@@ -384,7 +393,14 @@ describe('swantronService', () => {
           permalink: '/index.php/2023/12/25/single-post/',
           link: '/index.php/2023/12/25/single-post/',
           featuredImage: 'https://example.com/image.jpg',
-          categories: [{ id: 1, name: 'Category', slug: 'category', link: '/categories/category/' }],
+          categories: [
+            {
+              id: 1,
+              name: 'Category',
+              slug: 'category',
+              link: '/categories/category/',
+            },
+          ],
           tags: [{ id: 1, name: 'Tag', slug: 'tag', link: '/tags/tag/' }],
         },
         {
@@ -420,8 +436,17 @@ describe('swantronService', () => {
       expect(result.id).toBe(1);
       expect(result.title).toBe('Single Post');
       expect(result.featuredImage).toBe('https://example.com/image.jpg');
-      expect(result.categories).toEqual([{ id: 1, name: 'Category', slug: 'category', link: '/categories/category/' }]);
-      expect(result.tags).toEqual([{ id: 1, name: 'Tag', slug: 'tag', link: '/tags/tag/' }]);
+      expect(result.categories).toEqual([
+        {
+          id: 1,
+          name: 'Category',
+          slug: 'category',
+          link: '/categories/category/',
+        },
+      ]);
+      expect(result.tags).toEqual([
+        { id: 1, name: 'Tag', slug: 'tag', link: '/tags/tag/' },
+      ]);
     });
 
     test('should handle post not found', async () => {
@@ -473,8 +498,22 @@ describe('swantronService', () => {
           permalink: '/index.php/2023/12/25/search-result/',
           link: '/index.php/2023/12/25/search-result/',
           featuredImage: 'https://example.com/search-image.jpg',
-          categories: [{ id: 1, name: 'Search Category', slug: 'search-category', link: '/categories/search-category/' }],
-          tags: [{ id: 1, name: 'Search Tag', slug: 'search-tag', link: '/tags/search-tag/' }],
+          categories: [
+            {
+              id: 1,
+              name: 'Search Category',
+              slug: 'search-category',
+              link: '/categories/search-category/',
+            },
+          ],
+          tags: [
+            {
+              id: 1,
+              name: 'Search Tag',
+              slug: 'search-tag',
+              link: '/tags/search-tag/',
+            },
+          ],
         },
         {
           id: 2,
@@ -507,7 +546,6 @@ describe('swantronService', () => {
     };
 
     test('should search posts successfully', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -525,7 +563,6 @@ describe('swantronService', () => {
     });
 
     test('should search posts with custom parameters', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -543,7 +580,6 @@ describe('swantronService', () => {
     });
 
     test('should handle pagination for search results', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -560,7 +596,6 @@ describe('swantronService', () => {
     });
 
     test('should search in title, excerpt, and content', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -576,7 +611,6 @@ describe('swantronService', () => {
     });
 
     test('should handle case-insensitive search', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -591,7 +625,6 @@ describe('swantronService', () => {
     });
 
     test('should handle empty search results', async () => {
-      
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockAllPosts),
@@ -606,7 +639,6 @@ describe('swantronService', () => {
     });
 
     test('should handle HTTP error responses for search', async () => {
-      
       const mockResponse = {
         ok: false,
         status: 400,
@@ -622,7 +654,6 @@ describe('swantronService', () => {
     });
 
     test('should handle network errors for search', async () => {
-      
       global.fetch.mockRejectedValue(new Error('Network error'));
 
       await expect(swantronService.searchPosts('query')).rejects.toThrow(
