@@ -31,3 +31,34 @@
 .chomptron-external-link:hover {
   text-decoration: underline;
 }
+
+.chomptron-quota-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.warning-title {
+  font-weight: 600;
+  color: #856404;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.warning-message {
+  color: #856404;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.warning-info {
+  color: #856404;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
