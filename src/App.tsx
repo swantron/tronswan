@@ -2,11 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Music from './components/music/Music';
-import RecipeDetail from './components/recipe/RecipeDetail';
-import RecipeList from './components/recipe/RecipeList';
 import HealthPage from './components/status/HealthPage';
 import SwantronDetail from './components/swantron/SwantronDetail';
 import SwantronList from './components/swantron/SwantronList';
+import Chomptron from './components/ui/Chomptron';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import FizzBuzz from './components/ui/FizzBuzz';
 import Hello from './components/ui/Hello';
@@ -221,11 +220,11 @@ function App() {
                 weathertron
               </Link>
               <Link
-                to='/recipes'
+                to='/chomptron'
                 className='nav-link'
                 onClick={() =>
-                  logger.info('Navigation clicked - Recipes', {
-                    target: '/recipes',
+                  logger.info('Navigation clicked - Chomptron', {
+                    target: '/chomptron',
                     timestamp: new Date().toISOString(),
                   })
                 }
@@ -281,8 +280,7 @@ function App() {
                     </>
                   }
                 />
-                <Route path='/recipes' element={<RecipeList />} />
-                <Route path='/recipes/:id' element={<RecipeDetail />} />
+                <Route path='/chomptron' element={<Chomptron />} />
                 <Route path='/swantron' element={<SwantronList />} />
                 <Route path='/swantron/:id' element={<SwantronDetail />} />
                 <Route path='/weather' element={<Weather />} />

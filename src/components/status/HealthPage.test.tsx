@@ -4,10 +4,30 @@ import { HelmetProvider } from 'react-helmet-async';
 import { vi, expect, describe, it, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
-import HealthPage from './HealthPage';
+// Mock logger before importing
+vi.mock('../../utils/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
+// Mock runtimeConfig
+vi.mock('../../utils/runtimeConfig', () => ({
+  runtimeConfig: {
+    initialize: vi.fn().mockResolvedValue(undefined),
+    get: vi.fn().mockReturnValue(''),
+    getWithDefault: vi
+      .fn()
+      .mockImplementation((key, defaultValue) => defaultValue),
+    has: vi.fn().mockReturnValue(false),
+    isInitialized: vi.fn().mockReturnValue(true),
+  },
+}));
 
 // Mock the services
-vi.mock('../services/githubService', () => ({
+vi.mock('../../services/githubService', () => ({
   default: {
     getUser: vi.fn().mockResolvedValue({
       login: 'swantron',
@@ -21,14 +41,19 @@ vi.mock('../services/githubService', () => ({
   },
 }));
 
-vi.mock('../services/digitalOceanService', () => ({
+vi.mock('../../services/digitalOceanService', () => ({
   default: {
     getDroplets: vi.fn().mockResolvedValue([]),
     getLoadBalancers: vi.fn().mockResolvedValue([]),
     getDatabases: vi.fn().mockResolvedValue([]),
     getAccount: vi.fn().mockResolvedValue({ account: {} }),
+    getApp: vi.fn().mockResolvedValue({ app: { id: 'test-app' } }),
   },
 }));
+
+import { logger } from '../../utils/logger';
+
+import HealthPage from './HealthPage';
 
 describe('HealthPage', () => {
   const renderWithHelmet = (component: React.ReactElement) => {
@@ -122,6 +147,64 @@ describe('HealthPage', () => {
     // Wait for the title to be rendered by Helmet
     await waitFor(() => {
       expect(document.querySelector('title')).toBeInTheDocument();
+    });
+  });
+
+  it('logs tab changes when clicking tabs', () => {
+    renderWithHelmet(<HealthPage />);
+
+    const deploymentsTab = screen.getByText('🚀 Deployments');
+    fireEvent.click(deploymentsTab);
+
+    expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
+      from: 'services',
+      to: 'deployments',
+      timestamp: expect.any(String),
+    });
+
+    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+    fireEvent.click(infrastructureTab);
+
+    expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
+      from: 'deployments',
+      to: 'infrastructure',
+      timestamp: expect.any(String),
+    });
+
+    const servicesTab = screen.getByText('🌐 Services & APIs');
+    fireEvent.click(servicesTab);
+
+    expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
+      from: 'infrastructure',
+      to: 'services',
+      timestamp: expect.any(String),
+    });
+  });
+
+  it('handles DigitalOcean data change callback', async () => {
+    renderWithHelmet(<HealthPage />);
+
+    // Switch to infrastructure tab
+    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+    fireEvent.click(infrastructureTab);
+
+    await waitFor(() => {
+      // The DigitalOceanStatus component should be rendered
+      expect(screen.getByText('☁️ Infrastructure')).toHaveClass('active');
+    });
+  });
+
+  it('refresh button shows refreshing state', async () => {
+    renderWithHelmet(<HealthPage />);
+
+    const refreshButton = screen.getByTestId('refresh-button');
+    expect(refreshButton).not.toHaveClass('refreshing');
+
+    fireEvent.click(refreshButton);
+
+    // Button should show refreshing state
+    await waitFor(() => {
+      expect(refreshButton).toHaveTextContent('🔄 Refreshing...');
     });
   });
 });

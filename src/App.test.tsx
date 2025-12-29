@@ -183,14 +183,17 @@ describe('App Component', () => {
       });
     });
 
-    test('logs when recipes link is clicked', () => {
+    test('logs when chomptron link is clicked', () => {
       render(<App />);
-      const recipesLink = screen.getByRole('link', { name: 'chomptron' });
-      fireEvent.click(recipesLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Recipes', {
-        target: '/recipes',
-        timestamp: expect.any(String),
-      });
+      const chomptronLink = screen.getByRole('link', { name: 'chomptron' });
+      fireEvent.click(chomptronLink);
+      expect(logger.info).toHaveBeenCalledWith(
+        'Navigation clicked - Chomptron',
+        {
+          target: '/chomptron',
+          timestamp: expect.any(String),
+        }
+      );
     });
 
     test('logs when health link is clicked', () => {

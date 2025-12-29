@@ -312,4 +312,241 @@ describe('SwantronList Component', () => {
       error: apiError,
     });
   });
+
+  test('renders pagination when totalPages > 1', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 3,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByRole('button', { name: 'Previous' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+  });
+
+  test('does not render pagination when totalPages === 1', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 1,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('swantron-list')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText(/Page \d+ of \d+/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Previous' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Next' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('Previous button is disabled on first page', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 3,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+
+    const prevButton = screen.getByRole('button', { name: 'Previous' });
+    expect(prevButton).toBeDisabled();
+  });
+
+  test('Next button is disabled on last page', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 2,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+    });
+
+    const nextButton = screen.getByRole('button', { name: 'Next' });
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+    });
+
+    const nextButtonAfterClick = screen.getByRole('button', { name: 'Next' });
+    expect(nextButtonAfterClick).toBeDisabled();
+  });
+
+  test('clicking Previous button decreases page and logs', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 3,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+
+    // Navigate to page 2 first
+    const nextButton = screen.getByRole('button', { name: 'Next' });
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 2 of 3')).toBeInTheDocument();
+    });
+
+    // Now click Previous
+    const prevButton = screen.getByRole('button', { name: 'Previous' });
+    fireEvent.click(prevButton);
+
+    await waitFor(() => {
+      expect(logger.info).toHaveBeenCalledWith(
+        'Swantron pagination - Previous clicked',
+        {
+          fromPage: 2,
+          toPage: 1,
+          searchQuery: '',
+          timestamp: expect.any(String),
+        }
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+  });
+
+  test('clicking Next button increases page and logs', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 3,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+
+    const nextButton = screen.getByRole('button', { name: 'Next' });
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(logger.info).toHaveBeenCalledWith(
+        'Swantron pagination - Next clicked',
+        {
+          fromPage: 1,
+          toPage: 2,
+          searchQuery: '',
+          timestamp: expect.any(String),
+        }
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 2 of 3')).toBeInTheDocument();
+    });
+  });
+
+  test('Previous button does not go below page 1', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 3,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+
+    const prevButton = screen.getByRole('button', { name: 'Previous' });
+    expect(prevButton).toBeDisabled();
+
+    // Even if we try to click (shouldn't happen when disabled, but test the logic)
+    fireEvent.click(prevButton);
+
+    // Should still be on page 1
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+    });
+  });
+
+  test('Next button does not go above totalPages', async () => {
+    (swantronService.getPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 2,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+    });
+
+    // Navigate to last page
+    const nextButton = screen.getByRole('button', { name: 'Next' });
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+    });
+
+    const nextButtonOnLastPage = screen.getByRole('button', { name: 'Next' });
+    expect(nextButtonOnLastPage).toBeDisabled();
+  });
+
+  test('pagination logs include search query when searching', async () => {
+    (swantronService.getPosts as any).mockResolvedValue(mockPostsResponse);
+    (swantronService.searchPosts as any).mockResolvedValue({
+      posts: mockPosts,
+      totalPages: 2,
+    });
+
+    renderWithRouter(<SwantronList />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('swantron-list')).toBeInTheDocument();
+    });
+
+    // Perform a search
+    const searchInput = screen.getByPlaceholderText('Search posts...');
+    fireEvent.change(searchInput, { target: { value: 'test query' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+    });
+
+    // Click Next
+    const nextButton = screen.getByRole('button', { name: 'Next' });
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(logger.info).toHaveBeenCalledWith(
+        'Swantron pagination - Next clicked',
+        {
+          fromPage: 1,
+          toPage: 2,
+          searchQuery: 'test query',
+          timestamp: expect.any(String),
+        }
+      );
+    });
+  });
 });
