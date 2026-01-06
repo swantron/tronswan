@@ -88,7 +88,9 @@ describe('Chomptron Component', () => {
     renderWithRouter(<Chomptron />);
     expect(screen.getByText(/Visit/)).toBeInTheDocument();
     expect(
-      screen.getByText(/for the full experience with recipe history, favorites, and more/)
+      screen.getByText(
+        /for the full experience with recipe history, favorites, and more/
+      )
     ).toBeInTheDocument();
   });
 
@@ -268,10 +270,9 @@ describe('Chomptron Component', () => {
       return null;
     });
 
-    const storageEvent = new StorageEvent('storage', {
-      key: 'chomptron_quota_error',
-      newValue: 'true',
-    });
+    const storageEvent: any = new window.Event('storage');
+    storageEvent.key = 'chomptron_quota_error';
+    storageEvent.newValue = 'true';
     window.dispatchEvent(storageEvent);
 
     // Should now show warning

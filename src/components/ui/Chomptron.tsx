@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { logger } from '../../utils/logger';
 
@@ -53,7 +53,8 @@ const Chomptron: React.FC = () => {
     checkApiStatus();
 
     // Listen for storage events from chomptron.com iframe
-    const handleStorageChange = (e: StorageEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleStorageChange = (e: any) => {
       if (
         e.key === 'chomptron_quota_error' ||
         e.key === 'chomptron_retry_after'
