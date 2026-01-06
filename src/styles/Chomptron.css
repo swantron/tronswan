@@ -22,6 +22,66 @@
   line-height: 1.6;
 }
 
+.chomptron-description {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.chomptron-widget {
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.widget-input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.widget-input {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+.widget-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.widget-button {
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.widget-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.widget-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.widget-hint {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin: 0;
+}
+
 .chomptron-external-link {
   color: #007bff;
   text-decoration: none;
@@ -61,4 +121,15 @@
   margin: 0.5rem 0 0 0;
   font-size: 0.9rem;
   line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .widget-input-group {
+    flex-direction: column;
+  }
+  
+  .widget-button {
+    width: 100%;
+  }
 }

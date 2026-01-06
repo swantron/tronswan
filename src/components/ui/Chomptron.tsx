@@ -10,6 +10,7 @@ const Chomptron: React.FC = () => {
     'unknown' | 'available' | 'quota-exceeded'
   >('unknown');
   const [retryAfter, setRetryAfter] = useState<number | null>(null);
+  const [ingredients, setIngredients] = useState<string>('');
 
   React.useEffect(() => {
     logger.info('Chomptron page loaded', {
@@ -65,6 +66,21 @@ const Chomptron: React.FC = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  const handleGenerate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (ingredients.trim()) {
+      // Redirect to chomptron.com with ingredients as URL parameter
+      const encodedIngredients = encodeURIComponent(ingredients.trim());
+      window.open(
+        `https://chomptron.com?ingredients=${encodedIngredients}`,
+        '_blank'
+      );
+      logger.info('Quick recipe generator used', {
+        ingredients: ingredients.trim(),
+      });
+    }
+  };
+
   const formatRetryTime = (seconds: number | null): string => {
     if (seconds === null) return '';
     if (seconds < 60) return `${seconds} second${seconds !== 1 ? 's' : ''}`;
@@ -88,6 +104,35 @@ const Chomptron: React.FC = () => {
       <div className='chomptron-container' data-testid='chomptron-container'>
         <div className='chomptron-header'>
           <h1>chomptron</h1>
+
+          <p className='chomptron-description'>
+            AI-powered recipe generator using Google Gemini. Enter ingredients
+            and get instant recipes.
+          </p>
+
+          <form onSubmit={handleGenerate} className='chomptron-widget'>
+            <div className='widget-input-group'>
+              <input
+                type='text'
+                value={ingredients}
+                onChange={e => setIngredients(e.target.value)}
+                placeholder='e.g., chicken, tomatoes, garlic, pasta'
+                className='widget-input'
+                data-testid='ingredient-input'
+              />
+              <button
+                type='submit'
+                className='widget-button'
+                disabled={!ingredients.trim()}
+                data-testid='generate-button'
+              >
+                Generate Recipe ✨
+              </button>
+            </div>
+            <p className='widget-hint'>
+              Opens chomptron.com with your ingredients pre-filled
+            </p>
+          </form>
 
           {apiStatus === 'quota-exceeded' && (
             <div
@@ -135,7 +180,7 @@ const Chomptron: React.FC = () => {
             >
               chomptron.com
             </a>{' '}
-            for the full AI-powered recipe experience.
+            for the full experience with recipe history, favorites, and more.
           </p>
         </div>
       </div>
