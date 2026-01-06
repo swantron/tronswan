@@ -88,7 +88,7 @@ describe('Chomptron Component', () => {
     renderWithRouter(<Chomptron />);
     expect(screen.getByText(/Visit/)).toBeInTheDocument();
     expect(
-      screen.getByText(/for the full AI-powered recipe experience/)
+      screen.getByText(/for the full experience with recipe history, favorites, and more/)
     ).toBeInTheDocument();
   });
 
@@ -299,5 +299,20 @@ describe('Chomptron Component', () => {
 
     expect(screen.getByTestId('quota-warning')).toBeInTheDocument();
     expect(screen.queryByText(/Please retry in/)).not.toBeInTheDocument();
+  });
+
+  test('renders quick generator widget', () => {
+    renderWithRouter(<Chomptron />);
+    expect(screen.getByTestId('ingredient-input')).toBeInTheDocument();
+    expect(screen.getByTestId('generate-button')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/chicken, tomatoes, garlic, pasta/)
+    ).toBeInTheDocument();
+  });
+
+  test('generate button is disabled when input is empty', () => {
+    renderWithRouter(<Chomptron />);
+    const button = screen.getByTestId('generate-button');
+    expect(button).toBeDisabled();
   });
 });
