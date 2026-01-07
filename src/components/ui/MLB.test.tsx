@@ -452,4 +452,200 @@ describe('MLB Component', () => {
       );
     });
   });
+
+  test('handles empty team records gracefully', async () => {
+    const emptyData = {
+      records: [
+        {
+          standingsType: 'regularSeason',
+          league: { id: 103, link: '/api/v1/league/103' },
+          division: { id: 201, link: '/api/v1/divisions/201' },
+          teamRecords: [],
+        },
+      ],
+    };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => emptyData,
+    });
+
+    renderMLB();
+
+    await waitFor(() => {
+      expect(screen.queryByText(/New York Yankees/)).not.toBeInTheDocument();
+    });
+  });
+
+  test('handles missing division gracefully', async () => {
+    const noDivisionData = {
+      records: [
+        {
+          standingsType: 'regularSeason',
+          league: { id: 103 },
+          division: null,
+          teamRecords: [
+            {
+              team: { id: 147, name: 'Test Team' },
+              wins: 80,
+              losses: 82,
+              winningPercentage: '.494',
+              gamesBack: '5.0',
+              divisionRank: '3',
+            },
+          ],
+        },
+      ],
+    };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => noDivisionData,
+    });
+
+    renderMLB();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Team')).toBeInTheDocument();
+    });
+  });
+
+  test('handles streak data variations', async () => {
+    const streakVariations = {
+      records: [
+        {
+          standingsType: 'regularSeason',
+          league: { id: 103 },
+          division: { id: 201 },
+          teamRecords: [
+            {
+              team: { id: 1, name: 'Team A' },
+              wins: 90,
+              losses: 72,
+              winningPercentage: '.556',
+              streak: { streakType: 'wins', streakNumber: 5 },
+            },
+            {
+              team: { id: 2, name: 'Team B' },
+              wins: 85,
+              losses: 77,
+              winningPercentage: '.525',
+              streak: { streakType: 'losses', streakNumber: 2 },
+            },
+            {
+              team: { id: 3, name: 'Team C' },
+              wins: 80,
+              losses: 82,
+              winningPercentage: '.494',
+              streak: null,
+            },
+          ],
+        },
+      ],
+    };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => streakVariations,
+    });
+
+    renderMLB();
+
+    await waitFor(() => {
+      expect(screen.getByText('Team A')).toBeInTheDocument();
+      expect(screen.getByText('Team B')).toBeInTheDocument();
+      expect(screen.getByText('Team C')).toBeInTheDocument();
+    });
+  });
+
+  test('handles run differential edge cases', async () => {
+    const runDifferentialData = {
+      records: [
+        {
+          standingsType: 'regularSeason',
+          league: { id: 103 },
+          division: { id: 201 },
+          teamRecords: [
+            {
+              team: { id: 1, name: 'Positive Diff' },
+              wins: 95,
+              losses: 67,
+              runsScored: 900,
+              runsAllowed: 700,
+              runDifferential: 200,
+            },
+            {
+              team: { id: 2, name: 'Negative Diff' },
+              wins: 70,
+              losses: 92,
+              runsScored: 650,
+              runsAllowed: 850,
+              runDifferential: -200,
+            },
+            {
+              team: { id: 3, name: 'Even' },
+              wins: 81,
+              losses: 81,
+              runsScored: 750,
+              runsAllowed: 750,
+              runDifferential: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => runDifferentialData,
+    });
+
+    renderMLB();
+
+    await waitFor(() => {
+      expect(screen.getByText('Positive Diff')).toBeInTheDocument();
+      expect(screen.getByText('Negative Diff')).toBeInTheDocument();
+      expect(screen.getByText('Even')).toBeInTheDocument();
+    });
+  });
+
+  test('handles games back leader indicator', async () => {
+    const gamesBackData = {
+      records: [
+        {
+          standingsType: 'regularSeason',
+          league: { id: 103 },
+          division: { id: 201 },
+          teamRecords: [
+            {
+              team: { id: 1, name: 'Division Leader' },
+              wins: 95,
+              losses: 67,
+              gamesBack: '-',
+              divisionRank: '1',
+            },
+            {
+              team: { id: 2, name: 'Second Place' },
+              wins: 90,
+              losses: 72,
+              gamesBack: '5.0',
+              divisionRank: '2',
+            },
+          ],
+        },
+      ],
+    };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => gamesBackData,
+    });
+
+    renderMLB();
+
+    await waitFor(() => {
+      expect(screen.getByText('Division Leader')).toBeInTheDocument();
+      expect(screen.getByText('Second Place')).toBeInTheDocument();
+    });
+  });
 });

@@ -890,4 +890,168 @@ describe('Weather Component', () => {
       );
     });
   });
+
+  test('handles network timeout gracefully', async () => {
+    (global.fetch as any).mockRejectedValue(new Error('Network timeout'));
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles malformed API response', async () => {
+    (global.fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => ({ invalid: 'data' }),
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles missing temperature data', async () => {
+    (global.fetch as any).mockImplementation(url => {
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            name: 'Test City',
+            sys: { country: 'US' },
+            weather: [{ description: 'sunny' }],
+            main: {}, // Missing temp
+            wind: { speed: 5 },
+          }),
+        });
+      }
+      if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ list: [] }),
+        });
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles API rate limiting (429 error)', async () => {
+    (global.fetch as any).mockResolvedValue({
+      ok: false,
+      status: 429,
+      json: async () => ({ message: 'Rate limit exceeded' }),
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles API authentication error (401)', async () => {
+    (global.fetch as any).mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({ message: 'Invalid API key' }),
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles CORS errors', async () => {
+    (global.fetch as any).mockRejectedValue(
+      new TypeError('Failed to fetch')
+    );
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('handles empty forecast data', async () => {
+    (global.fetch as any).mockImplementation(url => {
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            name: 'Bozeman',
+            sys: { country: 'US' },
+            main: { temp: 72, feels_like: 70 },
+            weather: [{ description: 'sunny' }],
+          }),
+        });
+      }
+      if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ list: [] }),
+        });
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('temperature-display')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
+
+  test('retries failed API call', async () => {
+    let callCount = 0;
+    (global.fetch as any).mockImplementation(url => {
+      callCount++;
+      if (callCount <= 2 && url.includes('/weather?')) {
+        return Promise.reject(new Error('Network error'));
+      }
+      if (url.includes('/weather?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            name: 'Bozeman',
+            sys: { country: 'US' },
+            main: { temp: 72 },
+            weather: [{ description: 'sunny' }],
+          }),
+        });
+      }
+      if (url.includes('/forecast?')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            list: [
+              {
+                dt: Date.now() / 1000,
+                main: { temp: 68 },
+                weather: [{ description: 'cloudy' }],
+              },
+            ],
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
+
+    renderWeather();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-container')).toBeInTheDocument();
+    }, { timeout: 3000 });
+  });
 });

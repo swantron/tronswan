@@ -316,4 +316,90 @@ describe('Chomptron Component', () => {
     const button = screen.getByTestId('generate-button');
     expect(button).toBeDisabled();
   });
+
+  test('handles storage event for quota error', async () => {
+    const localStorageMock = {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+
+    renderWithRouter(<Chomptron />);
+
+    expect(screen.queryByTestId('quota-warning')).not.toBeInTheDocument();
+
+    // Simulate storage event with quota error
+    localStorageMock.getItem.mockImplementation((key: string) => {
+      if (key === 'chomptron_quota_error') return 'true';
+      if (key === 'chomptron_retry_after') return '120';
+      return null;
+    });
+
+    const storageEvent: any = new window.Event('storage');
+    storageEvent.key = 'chomptron_quota_error';
+    storageEvent.newValue = 'true';
+    window.dispatchEvent(storageEvent);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('quota-warning')).toBeInTheDocument();
+    });
+  });
+
+  test('clears quota warning when storage event resolves', async () => {
+    const localStorageMock = {
+      getItem: vi.fn((key: string) => {
+        if (key === 'chomptron_quota_error') return 'true';
+        if (key === 'chomptron_retry_after') return '60';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+
+    renderWithRouter(<Chomptron />);
+
+    expect(screen.getByTestId('quota-warning')).toBeInTheDocument();
+
+    // Simulate storage event clearing quota error
+    localStorageMock.getItem.mockImplementation(() => null);
+
+    const storageEvent: any = new window.Event('storage');
+    storageEvent.key = 'chomptron_quota_error';
+    storageEvent.newValue = null;
+    window.dispatchEvent(storageEvent);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('quota-warning')).not.toBeInTheDocument();
+    });
+  });
+
+  test('ignores storage events for unrelated keys', async () => {
+    const localStorageMock = {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+
+    renderWithRouter(<Chomptron />);
+
+    const storageEvent: any = new window.Event('storage');
+    storageEvent.key = 'some_other_key';
+    storageEvent.newValue = 'value';
+    window.dispatchEvent(storageEvent);
+
+    // Should not trigger any state change
+    expect(screen.queryByTestId('quota-warning')).not.toBeInTheDocument();
+  });
 });
