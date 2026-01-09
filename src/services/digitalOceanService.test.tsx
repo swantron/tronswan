@@ -195,7 +195,7 @@ describe('DigitalOceanService', () => {
             health_check: {
               protocol: 'http',
               port: 80,
-              path: '/health',
+              path: '/api/health',
               check_interval_seconds: 10,
               response_timeout_seconds: 5,
               healthy_threshold: 3,

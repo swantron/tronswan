@@ -223,7 +223,7 @@ function HealthPage() {
         title='Service Health & Deployment Status - Tron Swan'
         description='Monitor service health, deployment status, and infrastructure metrics for Tron Swan applications. Real-time status from GitHub Actions and DigitalOcean.'
         keywords='service health, deployment status, GitHub Actions, DigitalOcean, monitoring, DevOps'
-        url='/health'
+        url='/status'
       />
 
       <div className='health-content'>

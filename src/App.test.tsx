@@ -73,7 +73,7 @@ describe('App Component', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'health' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'status' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'shorts' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'music' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'mlb' })).toBeInTheDocument();
@@ -196,12 +196,12 @@ describe('App Component', () => {
       );
     });
 
-    test('logs when health link is clicked', () => {
+    test('logs when status link is clicked', () => {
       render(<App />);
-      const healthLink = screen.getByRole('link', { name: 'health' });
-      fireEvent.click(healthLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Health', {
-        target: '/health',
+      const statusLink = screen.getByRole('link', { name: 'status' });
+      fireEvent.click(statusLink);
+      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Status', {
+        target: '/status',
         timestamp: expect.any(String),
       });
     });

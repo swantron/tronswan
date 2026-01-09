@@ -87,8 +87,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint for DigitalOcean
-app.get('/health', (req, res) => {
+// Health check endpoints for DigitalOcean and monitoring
+// Use /api/health to avoid conflict with React Router
+app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 

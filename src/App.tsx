@@ -232,16 +232,16 @@ function App() {
                 chomptron
               </Link>
               <Link
-                to='/health'
+                to='/status'
                 className='nav-link'
                 onClick={() =>
-                  logger.info('Navigation clicked - Health', {
-                    target: '/health',
+                  logger.info('Navigation clicked - Status', {
+                    target: '/status',
                     timestamp: new Date().toISOString(),
                   })
                 }
               >
-                health
+                status
               </Link>
               <Link
                 to='/shorts'
@@ -309,7 +309,7 @@ function App() {
                 <Route path='/hello' element={<Hello />} />
                 <Route path='/resume' element={<Resume />} />
                 <Route path='/study-guide' element={<StudyGuide />} />
-                <Route path='/health' element={<HealthPage />} />
+                <Route path='/status' element={<HealthPage />} />
               </Routes>
             </ErrorBoundary>
           </div>
