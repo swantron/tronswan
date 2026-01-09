@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from 'react';
 
+import { uptimeService } from '../../services/uptimeService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import '../../styles/ServiceHealth.css';
@@ -320,25 +321,44 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         serviceDataRef.current.map(service => checkServiceHealth(service))
       );
 
+      // Record uptime data and add uptime stats to each service
+      const servicesWithUptime = updatedServices.map(service => {
+        uptimeService.recordCheck({
+          serviceName: service.name,
+          timestamp: service.lastChecked,
+          status: service.status,
+          responseTime: service.responseTime,
+        });
+
+        const stats = uptimeService.getUptimeStats(service.name, 30);
+        return {
+          ...service,
+          uptime: stats.uptimePercentage,
+        };
+      });
+
       // Log summary of health check results
-      const healthyCount = updatedServices.filter(
+      const healthyCount = servicesWithUptime.filter(
         s => s.status === 'healthy'
       ).length;
-      const downCount = updatedServices.filter(s => s.status === 'down').length;
+      const downCount = servicesWithUptime.filter(
+        s => s.status === 'down'
+      ).length;
 
       logger.info('Health check completed for all services', {
-        totalServices: updatedServices.length,
+        totalServices: servicesWithUptime.length,
         healthyServices: healthyCount,
         downServices: downCount,
-        services: updatedServices.map(s => ({
+        services: servicesWithUptime.map(s => ({
           name: s.name,
           status: s.status,
           responseTime: s.responseTime,
+          uptime: s.uptime,
         })),
         timestamp: new Date().toISOString(),
       });
 
-      setServiceData(updatedServices);
+      setServiceData(servicesWithUptime);
     }, []);
 
     // Expose checkAllServices to parent component
@@ -468,28 +488,32 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
                   </div>
 
                   <div className='service-metrics'>
+                    {service.responseTime !== undefined && (
+                      <div className='metric metric-highlight'>
+                        <span className='metric-label'>Response:</span>
+                        <span className='metric-value response-time'>
+                          {service.responseTime}ms
+                        </span>
+                      </div>
+                    )}
+
+                    {service.uptime !== undefined && (
+                      <div className='metric metric-highlight'>
+                        <span className='metric-label'>30d Uptime:</span>
+                        <span
+                          className={`metric-value uptime ${service.uptime >= 99.9 ? 'uptime-excellent' : service.uptime >= 95 ? 'uptime-good' : 'uptime-poor'}`}
+                        >
+                          {service.uptime.toFixed(2)}%
+                        </span>
+                      </div>
+                    )}
+
                     <div className='metric'>
                       <span className='metric-label'>Last Checked:</span>
                       <span className='metric-value'>
                         {service.lastChecked.toLocaleTimeString()}
                       </span>
                     </div>
-
-                    {service.responseTime && (
-                      <div className='metric'>
-                        <span className='metric-label'>Response Time:</span>
-                        <span className='metric-value'>
-                          {service.responseTime}ms
-                        </span>
-                      </div>
-                    )}
-
-                    {service.uptime && (
-                      <div className='metric'>
-                        <span className='metric-label'>Uptime:</span>
-                        <span className='metric-value'>{service.uptime}%</span>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

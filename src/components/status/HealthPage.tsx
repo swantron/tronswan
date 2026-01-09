@@ -12,6 +12,7 @@ import SEO from '../ui/SEO';
 
 import DigitalOceanStatus from './DigitalOceanStatus';
 import GitHubStatus from './GitHubStatus';
+import IncidentHistory from './IncidentHistory';
 import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
 
 import '../../styles/HealthPage.css';
@@ -283,6 +284,9 @@ function HealthPage() {
             </div>
           );
         })()}
+
+        {/* Incident History */}
+        <IncidentHistory days={7} />
 
         <div className='health-controls'>
           <button

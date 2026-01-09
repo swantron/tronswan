@@ -227,6 +227,39 @@
   font-size: var(--font-sm);
 }
 
+.metric-highlight {
+  background: rgba(248, 152, 89, 0.08);
+  font-weight: 700;
+}
+
+.metric-highlight .metric-label {
+  color: var(--accent-color, #f89859);
+  font-weight: 700;
+}
+
+.response-time {
+  font-family: 'Courier New', monospace;
+  color: #4fd1c5;
+  font-size: var(--font-base);
+}
+
+.uptime {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-base);
+}
+
+.uptime-excellent {
+  color: #48bb78;
+}
+
+.uptime-good {
+  color: #ed8936;
+}
+
+.uptime-poor {
+  color: #f56565;
+}
+
 .service-summary {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(248, 152, 89, 0.3);
