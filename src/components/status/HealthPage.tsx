@@ -82,11 +82,14 @@ function HealthPage() {
   const [activeTab, setActiveTab] = useState<
     'services' | 'deployments' | 'infrastructure'
   >('services');
+  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
+  const [countdown, setCountdown] = useState(30);
   const serviceHealthRef = useRef<ServiceHealthRef>(null);
 
   const refreshData = async () => {
     setIsRefreshing(true);
     setLastUpdated(new Date());
+    setCountdown(30);
 
     // Trigger service health checks
     if (serviceHealthRef.current) {
@@ -94,6 +97,44 @@ function HealthPage() {
     }
 
     setIsRefreshing(false);
+  };
+
+  // Calculate overall status
+  const getOverallStatus = () => {
+    const services = Object.values(healthData.services);
+    const healthyCount = services.filter(s => s === 'healthy').length;
+    const totalCount = services.length;
+    const downCount = services.filter(s => s === 'down').length;
+    const degradedCount = services.filter(s => s === 'degraded').length;
+
+    return {
+      allHealthy: healthyCount === totalCount,
+      healthyCount,
+      totalCount,
+      downCount,
+      degradedCount,
+      status:
+        downCount > 0 ? 'down' : degradedCount > 0 ? 'degraded' : 'healthy',
+    };
+  };
+
+  // Count deployment issues
+  const getDeploymentStatus = () => {
+    const failedDeployments = [
+      ...healthData.github.tronswanActions,
+      ...healthData.github.chomptronActions,
+      ...healthData.github.secureBaseImagesActions,
+      ...healthData.github.readmeLintActions,
+    ].filter(run => run.conclusion === 'failure').length;
+
+    return { failedDeployments };
+  };
+
+  // Count infrastructure issues
+  const getInfrastructureStatus = () => {
+    return {
+      hasError: !!healthData.digitalocean.error,
+    };
   };
 
   useEffect(() => {
@@ -153,9 +194,28 @@ function HealthPage() {
 
     fetchDigitalOceanData();
 
-    const interval = setInterval(refreshData, 30000); // Refresh every 30 seconds
-    return () => clearInterval(interval);
-  }, []);
+    // Auto-refresh interval with countdown
+    const interval = setInterval(() => {
+      if (autoRefreshEnabled) {
+        refreshData();
+      }
+    }, 30000);
+
+    // Countdown timer
+    const countdownInterval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          return 30;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(countdownInterval);
+    };
+  }, [autoRefreshEnabled]);
 
   return (
     <div className='health-page'>
@@ -171,6 +231,59 @@ function HealthPage() {
           Service Health & Status
         </h1>
 
+        {/* Overall Status Summary */}
+        {(() => {
+          const overallStatus = getOverallStatus();
+          return (
+            <div
+              className={`overall-status-card status-${overallStatus.status}`}
+            >
+              <div className='status-indicator'>
+                {overallStatus.allHealthy ? (
+                  <>
+                    <span className='status-icon'>✅</span>
+                    <span className='status-text'>All Systems Operational</span>
+                  </>
+                ) : overallStatus.downCount > 0 ? (
+                  <>
+                    <span className='status-icon'>🔴</span>
+                    <span className='status-text'>System Issues Detected</span>
+                  </>
+                ) : (
+                  <>
+                    <span className='status-icon'>⚠️</span>
+                    <span className='status-text'>Degraded Performance</span>
+                  </>
+                )}
+              </div>
+              <div className='status-metrics'>
+                <div className='metric'>
+                  <span className='metric-value'>
+                    {overallStatus.healthyCount}/{overallStatus.totalCount}
+                  </span>
+                  <span className='metric-label'>services healthy</span>
+                </div>
+                {overallStatus.downCount > 0 && (
+                  <div className='metric metric-error'>
+                    <span className='metric-value'>
+                      {overallStatus.downCount}
+                    </span>
+                    <span className='metric-label'>down</span>
+                  </div>
+                )}
+                {overallStatus.degradedCount > 0 && (
+                  <div className='metric metric-warning'>
+                    <span className='metric-value'>
+                      {overallStatus.degradedCount}
+                    </span>
+                    <span className='metric-label'>degraded</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
         <div className='health-controls'>
           <button
             className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
@@ -180,52 +293,135 @@ function HealthPage() {
           >
             {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
           </button>
+          <button
+            className={`auto-refresh-toggle ${autoRefreshEnabled ? 'enabled' : 'disabled'}`}
+            onClick={() => setAutoRefreshEnabled(!autoRefreshEnabled)}
+            title={
+              autoRefreshEnabled
+                ? 'Disable auto-refresh'
+                : 'Enable auto-refresh'
+            }
+          >
+            {autoRefreshEnabled ? '⏸️ Pause' : '▶️ Resume'}
+          </button>
           <span className='last-updated' data-testid='last-updated'>
             Last updated: {lastUpdated.toLocaleTimeString()}
+            {autoRefreshEnabled && (
+              <span className='countdown'> • Next refresh in {countdown}s</span>
+            )}
           </span>
+        </div>
+
+        {/* Quick Actions */}
+        <div className='quick-actions'>
+          <a
+            href='https://github.com/swantron/tronswan/actions'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='quick-action-link'
+          >
+            📊 GitHub Actions →
+          </a>
+          <a
+            href='https://cloud.digitalocean.com/apps'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='quick-action-link'
+          >
+            ☁️ DO Dashboard →
+          </a>
+          <a
+            href='https://console.cloud.google.com/run/detail/us-central1/chomptron/observability/metrics?project=chomptron'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='quick-action-link'
+          >
+            📈 GCP Metrics →
+          </a>
         </div>
 
         {/* Tab Navigation */}
         <div className='tab-navigation'>
-          <button
-            className={`tab-button ${activeTab === 'services' ? 'active' : ''}`}
-            onClick={() => {
-              logger.info('Health tab changed', {
-                from: activeTab,
-                to: 'services',
-                timestamp: new Date().toISOString(),
-              });
-              setActiveTab('services');
-            }}
-          >
-            🌐 Services & APIs
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'deployments' ? 'active' : ''}`}
-            onClick={() => {
-              logger.info('Health tab changed', {
-                from: activeTab,
-                to: 'deployments',
-                timestamp: new Date().toISOString(),
-              });
-              setActiveTab('deployments');
-            }}
-          >
-            🚀 Deployments
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'infrastructure' ? 'active' : ''}`}
-            onClick={() => {
-              logger.info('Health tab changed', {
-                from: activeTab,
-                to: 'infrastructure',
-                timestamp: new Date().toISOString(),
-              });
-              setActiveTab('infrastructure');
-            }}
-          >
-            ☁️ Infrastructure
-          </button>
+          {(() => {
+            const overallStatus = getOverallStatus();
+            const deploymentStatus = getDeploymentStatus();
+            const infraStatus = getInfrastructureStatus();
+
+            return (
+              <>
+                <button
+                  className={`tab-button ${activeTab === 'services' ? 'active' : ''}`}
+                  onClick={() => {
+                    logger.info('Health tab changed', {
+                      from: activeTab,
+                      to: 'services',
+                      timestamp: new Date().toISOString(),
+                    });
+                    setActiveTab('services');
+                  }}
+                >
+                  🌐 Services & APIs
+                  {overallStatus.downCount > 0 && (
+                    <span className='tab-badge badge-error'>
+                      {overallStatus.downCount}
+                    </span>
+                  )}
+                  {overallStatus.downCount === 0 &&
+                    overallStatus.degradedCount === 0 && (
+                      <span className='tab-badge badge-success'>✓</span>
+                    )}
+                  {overallStatus.degradedCount > 0 &&
+                    overallStatus.downCount === 0 && (
+                      <span className='tab-badge badge-warning'>
+                        {overallStatus.degradedCount}
+                      </span>
+                    )}
+                </button>
+                <button
+                  className={`tab-button ${activeTab === 'deployments' ? 'active' : ''}`}
+                  onClick={() => {
+                    logger.info('Health tab changed', {
+                      from: activeTab,
+                      to: 'deployments',
+                      timestamp: new Date().toISOString(),
+                    });
+                    setActiveTab('deployments');
+                  }}
+                >
+                  🚀 Deployments
+                  {deploymentStatus.failedDeployments > 0 && (
+                    <span className='tab-badge badge-error'>
+                      {deploymentStatus.failedDeployments}
+                    </span>
+                  )}
+                  {!healthData.github.loading &&
+                    deploymentStatus.failedDeployments === 0 && (
+                      <span className='tab-badge badge-success'>✓</span>
+                    )}
+                </button>
+                <button
+                  className={`tab-button ${activeTab === 'infrastructure' ? 'active' : ''}`}
+                  onClick={() => {
+                    logger.info('Health tab changed', {
+                      from: activeTab,
+                      to: 'infrastructure',
+                      timestamp: new Date().toISOString(),
+                    });
+                    setActiveTab('infrastructure');
+                  }}
+                >
+                  ☁️ Infrastructure
+                  {infraStatus.hasError && (
+                    <span className='tab-badge badge-error'>!</span>
+                  )}
+                  {!healthData.digitalocean.loading &&
+                    !infraStatus.hasError && (
+                      <span className='tab-badge badge-success'>✓</span>
+                    )}
+                </button>
+              </>
+            );
+          })()}
         </div>
 
         {/* Tab Content */}

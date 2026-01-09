@@ -111,6 +111,230 @@
   cursor: not-allowed;
 }
 
+/* Tab Badges */
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.badge-success {
+  background: #4caf50;
+  color: white;
+}
+
+.badge-warning {
+  background: #ff9800;
+  color: white;
+}
+
+.badge-error {
+  background: #f44336;
+  color: white;
+}
+
+/* Overall Status Card */
+.overall-status-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.overall-status-card.status-healthy {
+  border-color: rgba(76, 175, 80, 0.5);
+  background: rgba(76, 175, 80, 0.05);
+}
+
+.overall-status-card.status-degraded {
+  border-color: rgba(255, 152, 0, 0.5);
+  background: rgba(255, 152, 0, 0.05);
+}
+
+.overall-status-card.status-down {
+  border-color: rgba(244, 67, 54, 0.5);
+  background: rgba(244, 67, 54, 0.05);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.status-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.status-text {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-text, #ffffff);
+}
+
+.status-metrics {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  min-width: 100px;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--accent-color, #f89859);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metric-error .metric-value {
+  color: #f44336;
+}
+
+.metric-warning .metric-value {
+  color: #ff9800;
+}
+
+/* Auto-refresh toggle */
+.auto-refresh-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  color: var(--accent-color, #f89859);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auto-refresh-toggle:hover {
+  background: rgba(248, 152, 89, 0.15);
+  transform: translateY(-2px);
+}
+
+.auto-refresh-toggle.enabled {
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.auto-refresh-toggle.disabled {
+  border-color: #ff9800;
+  color: #ff9800;
+}
+
+.countdown {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.quick-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(248, 152, 89, 0.3);
+  border-radius: 8px;
+  color: var(--accent-color, #f89859);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.quick-action-link:hover {
+  background: rgba(248, 152, 89, 0.15);
+  border-color: var(--accent-color, #f89859);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .health-title {
+    font-size: 2rem;
+  }
+
+  .status-text {
+    font-size: 1.5rem;
+  }
+
+  .status-icon {
+    font-size: 2rem;
+  }
+
+  .status-metrics {
+    gap: 1rem;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .health-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .quick-actions {
+    flex-direction: column;
+  }
+
+  .quick-action-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tab-navigation {
+    flex-direction: column;
+  }
+
+  .tab-button {
+    width: 100%;
+  }
+}
+
 /* Tab Content */
 .tab-content {
   margin-top: 2rem;
