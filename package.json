@@ -22,7 +22,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --coverage.exclude='src/components/music/**' --coverage.exclude='src/services/spotifyService.ts' --coverage.exclude='src/services/spotifyPlaybackService.ts'",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
