@@ -37,11 +37,7 @@
 
 /* Header styles */
 .App-header {
-  background: 
-    linear-gradient(135deg, rgba(248, 152, 89, 0.03) 0%, rgba(40, 44, 52, 1) 20%, rgba(40, 44, 52, 1) 80%, rgba(255, 107, 107, 0.03) 100%),
-    radial-gradient(circle at 10% 20%, rgba(248, 152, 89, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
-    var(--primary-bg);
+  background: var(--primary-bg);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -156,7 +152,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear, logoFloat 3s ease-in-out infinite;
+    animation: App-logo-spin infinite 20s linear;
   }
 }
 
@@ -421,10 +417,10 @@ input[type='number']::placeholder {
 
 @keyframes logoFloat {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px) rotate(180deg);
+    transform: translateY(-10px);
   }
 }
 
