@@ -1,0 +1,34 @@
+.page-transition {
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.page-transition.fadeIn {
+  animation-name: fadeInPage;
+}
+
+.page-transition.fadeOut {
+  animation-name: fadeOutPage;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutPage {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

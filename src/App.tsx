@@ -1,5 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 
 import Music from './components/music/Music';
 import HealthPage from './components/status/HealthPage';
@@ -10,6 +16,7 @@ import ErrorBoundary from './components/ui/ErrorBoundary';
 import FizzBuzz from './components/ui/FizzBuzz';
 import Hello from './components/ui/Hello';
 import MLB from './components/ui/MLB';
+import PageTransition from './components/ui/PageTransition';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
 import StudyGuide from './components/ui/StudyGuide';
@@ -144,6 +151,123 @@ function Home() {
   );
 }
 
+function Navigation() {
+  const location = useLocation();
+
+  return (
+    <nav className='main-nav'>
+      <Link
+        to='/'
+        className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Home', {
+            target: '/',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        home
+      </Link>
+      <Link
+        to='/swantron'
+        className={`nav-link ${location.pathname.startsWith('/swantron') ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Swantron', {
+            target: '/swantron',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        swantron
+      </Link>
+      <Link
+        to='/music'
+        className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Music', {
+            target: '/music',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        music
+      </Link>
+      <Link
+        to='/mlb'
+        className={`nav-link ${location.pathname === '/mlb' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - MLB', {
+            target: '/mlb',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        mlb
+      </Link>
+      <Link
+        to='/weather'
+        className={`nav-link ${location.pathname === '/weather' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Weather', {
+            target: '/weather',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        weathertron
+      </Link>
+      <Link
+        to='/chomptron'
+        className={`nav-link ${location.pathname === '/chomptron' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Chomptron', {
+            target: '/chomptron',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        chomptron
+      </Link>
+      <Link
+        to='/status'
+        className={`nav-link ${location.pathname === '/status' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Status', {
+            target: '/status',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        status
+      </Link>
+      <Link
+        to='/shorts'
+        className={`nav-link ${location.pathname === '/shorts' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Shorts', {
+            target: '/shorts',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        shorts
+      </Link>
+      <Link
+        to='/hello'
+        className={`nav-link ${location.pathname === '/hello' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Hello', {
+            target: '/hello',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        hello
+      </Link>
+    </nav>
+  );
+}
+
 function App() {
   React.useEffect(() => {
     logger.info('App initialized', {
@@ -158,159 +282,52 @@ function App() {
       <div className='App' data-testid='app-container'>
         <header className='App-header' data-testid='app-header'>
           <div className='App-container'>
-            <nav className='main-nav'>
-              <Link
-                to='/'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Home', {
-                    target: '/',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                home
-              </Link>
-              <Link
-                to='/swantron'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Swantron', {
-                    target: '/swantron',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                swantron
-              </Link>
-              <Link
-                to='/music'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Music', {
-                    target: '/music',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                music
-              </Link>
-              <Link
-                to='/mlb'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - MLB', {
-                    target: '/mlb',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                mlb
-              </Link>
-              <Link
-                to='/weather'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Weather', {
-                    target: '/weather',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                weathertron
-              </Link>
-              <Link
-                to='/chomptron'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Chomptron', {
-                    target: '/chomptron',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                chomptron
-              </Link>
-              <Link
-                to='/status'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Status', {
-                    target: '/status',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                status
-              </Link>
-              <Link
-                to='/shorts'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Shorts', {
-                    target: '/shorts',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                shorts
-              </Link>
-              <Link
-                to='/hello'
-                className='nav-link'
-                onClick={() =>
-                  logger.info('Navigation clicked - Hello', {
-                    target: '/hello',
-                    timestamp: new Date().toISOString(),
-                  })
-                }
-              >
-                hello
-              </Link>
-            </nav>
+            <Navigation />
 
             <ErrorBoundary>
-              <Routes>
-                <Route
-                  path='/'
-                  element={
-                    <>
-                      <SEO />
-                      <Home />
-                    </>
-                  }
-                />
-                <Route path='/chomptron' element={<Chomptron />} />
-                <Route path='/swantron' element={<SwantronList />} />
-                <Route path='/swantron/:id' element={<SwantronDetail />} />
-                <Route path='/weather' element={<Weather />} />
-                <Route path='/hacking' element={<Hacking />} />
-                <Route path='/gangamstyle' element={<GangamStyle />} />
-                <Route path='/dealwithit' element={<DealWithIt />} />
-                <Route path='/dealwithfont' element={<DealWithFont />} />
-                <Route path='/dealwithword' element={<DealWithWord />} />
-                <Route path='/wrigley' element={<Wrigley />} />
-                <Route path='/baseball2' element={<Baseball2 />} />
-                <Route path='/kingkong' element={<KingKong />} />
-                <Route path='/buschleague' element={<BuschLeague />} />
-                <Route path='/thumbsup' element={<ThumbsUp />} />
-                <Route path='/jobwelldone' element={<JobWellDone />} />
-                <Route path='/coffee' element={<Coffee />} />
-                <Route path='/mishap' element={<Mishap />} />
-                <Route path='/peloton' element={<Peloton />} />
-                <Route path='/seeya' element={<Seeya />} />
-                <Route path='/dynomite' element={<Dynomite />} />
-                <Route path='/working' element={<Working />} />
-                <Route path='/shorts' element={<Shorts />} />
-                <Route path='/music' element={<Music />} />
-                <Route path='/music/callback' element={<Music />} />
-                <Route path='/mlb' element={<MLB />} />
-                <Route path='/trontronbuzztron' element={<FizzBuzz />} />
-                <Route path='/hello' element={<Hello />} />
-                <Route path='/resume' element={<Resume />} />
-                <Route path='/study-guide' element={<StudyGuide />} />
-                <Route path='/status' element={<HealthPage />} />
-              </Routes>
+              <PageTransition>
+                <Routes>
+                  <Route
+                    path='/'
+                    element={
+                      <>
+                        <SEO />
+                        <Home />
+                      </>
+                    }
+                  />
+                  <Route path='/chomptron' element={<Chomptron />} />
+                  <Route path='/swantron' element={<SwantronList />} />
+                  <Route path='/swantron/:id' element={<SwantronDetail />} />
+                  <Route path='/weather' element={<Weather />} />
+                  <Route path='/hacking' element={<Hacking />} />
+                  <Route path='/gangamstyle' element={<GangamStyle />} />
+                  <Route path='/dealwithit' element={<DealWithIt />} />
+                  <Route path='/dealwithfont' element={<DealWithFont />} />
+                  <Route path='/dealwithword' element={<DealWithWord />} />
+                  <Route path='/wrigley' element={<Wrigley />} />
+                  <Route path='/baseball2' element={<Baseball2 />} />
+                  <Route path='/kingkong' element={<KingKong />} />
+                  <Route path='/buschleague' element={<BuschLeague />} />
+                  <Route path='/thumbsup' element={<ThumbsUp />} />
+                  <Route path='/jobwelldone' element={<JobWellDone />} />
+                  <Route path='/coffee' element={<Coffee />} />
+                  <Route path='/mishap' element={<Mishap />} />
+                  <Route path='/peloton' element={<Peloton />} />
+                  <Route path='/seeya' element={<Seeya />} />
+                  <Route path='/dynomite' element={<Dynomite />} />
+                  <Route path='/working' element={<Working />} />
+                  <Route path='/shorts' element={<Shorts />} />
+                  <Route path='/music' element={<Music />} />
+                  <Route path='/music/callback' element={<Music />} />
+                  <Route path='/mlb' element={<MLB />} />
+                  <Route path='/trontronbuzztron' element={<FizzBuzz />} />
+                  <Route path='/hello' element={<Hello />} />
+                  <Route path='/resume' element={<Resume />} />
+                  <Route path='/study-guide' element={<StudyGuide />} />
+                  <Route path='/status' element={<HealthPage />} />
+                </Routes>
+              </PageTransition>
             </ErrorBoundary>
           </div>
         </header>
