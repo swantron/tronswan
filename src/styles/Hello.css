@@ -21,26 +21,24 @@
 }
 
 .hello-subtitle {
-  font-size: clamp(1rem, 3vw, 1.4rem);
-  margin-bottom: 3rem;
-  color: var(--primary-text);
-  opacity: 0.9;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  margin-bottom: 2.5rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  opacity: 1;
 }
 
 .hello-description {
   margin: 2rem auto 3rem;
   max-width: 600px;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: var(--border-radius);
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  padding: 1.5rem;
 }
 
 .hello-description p {
-  margin: 0.8rem 0;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  line-height: 1.6;
-  opacity: 0.9;
+  margin: 0.5rem 0;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  line-height: 1.8;
+  color: var(--primary-text);
 }
 
 .hello-links {
@@ -66,85 +64,35 @@
   border: 2px solid transparent;
 }
 
-.hello-link.linkedin {
+.hello-link.primary {
   background-color: var(--accent-color);
   color: var(--primary-bg);
   border-color: var(--accent-color);
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
 }
 
-.hello-link.linkedin:hover {
+.hello-link.primary:hover {
   background-color: #e6813f;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
 }
 
-.hello-link.personal {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
+.hello-link.secondary {
+  background-color: transparent;
+  color: var(--primary-text);
+  border-color: rgba(248, 152, 89, 0.4);
+}
+
+.hello-link.secondary:hover {
+  background-color: rgba(248, 152, 89, 0.1);
   border-color: var(--accent-color);
-}
-
-.hello-link.personal:hover {
-  background-color: #e6813f;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.recipes {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  border-color: var(--accent-color);
-}
-
-.hello-link.recipes:hover {
-  background-color: #e6813f;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.fizzbuzz {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  border-color: var(--accent-color);
-}
-
-.hello-link.fizzbuzz:hover {
-  background-color: #e6813f;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.resume {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  border-color: var(--accent-color);
-}
-
-.hello-link.resume:hover {
-  background-color: #e6813f;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.study-guide {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  border-color: var(--accent-color);
-}
-
-.hello-link.study-guide:hover {
-  background-color: #e6813f;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.2);
 }
 
 .hello-info {
   margin: 4rem auto 2rem;
   max-width: 700px;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: var(--border-radius);
-  border: 1px solid rgba(248, 152, 89, 0.2);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -152,18 +100,10 @@
   justify-content: center;
 }
 
-.hello-info h3 {
-  color: var(--accent-color);
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-size: 1.4rem;
-}
-
 .hello-info p {
   margin: 1rem 0;
   font-size: 1rem;
   line-height: 1.7;
-  opacity: 0.9;
   text-align: center;
 }
 

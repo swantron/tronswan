@@ -21,26 +21,19 @@ describe('Hello Component', () => {
 
   test('renders subtitle', () => {
     render(<Hello />);
-    expect(
-      screen.getByText('👋 connect with joseph swanson')
-    ).toBeInTheDocument();
+    expect(screen.getByText('joseph swanson')).toBeInTheDocument();
   });
 
   test('renders description section', () => {
     render(<Hello />);
-    expect(
-      screen.getByText(
-        'Staff Software Engineer building full-stack solutions with a focus on DevX, CI/CD, AI, IaC, and React'
-      )
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Based in Bozeman, Montana 🏔️')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Staff Software Engineer @ Esri')).toBeInTheDocument();
+    expect(screen.getByText('DevX · CI/CD · AI · IaC · React')).toBeInTheDocument();
+    expect(screen.getByText('Bozeman, Montana 🏔️')).toBeInTheDocument();
   });
 
   test('renders LinkedIn link', () => {
     render(<Hello />);
-    const linkedinLink = screen.getByText('💼 LinkedIn Profile');
+    const linkedinLink = screen.getByText('💼 linkedin');
     expect(linkedinLink).toBeInTheDocument();
     expect(linkedinLink.closest('a')).toHaveAttribute(
       'href',
@@ -59,7 +52,7 @@ describe('Hello Component', () => {
 
   test('renders personal website link', () => {
     render(<Hello />);
-    const personalLink = screen.getByText('🦢 swan tron dot com');
+    const personalLink = screen.getByText('🦢 blog');
     expect(personalLink).toBeInTheDocument();
     expect(personalLink.closest('a')).toHaveAttribute(
       'href',
@@ -72,13 +65,13 @@ describe('Hello Component', () => {
     );
     expect(personalLink.closest('a')).toHaveAttribute(
       'aria-label',
-      "Joseph's personal website"
+      "Joseph's blog"
     );
   });
 
   test('renders recipe website link', () => {
     render(<Hello />);
-    const recipeLink = screen.getByText('🍳 chomp tron dot com');
+    const recipeLink = screen.getByText('🍳 chomptron.com');
     expect(recipeLink).toBeInTheDocument();
     expect(recipeLink.closest('a')).toHaveAttribute(
       'href',
@@ -91,27 +84,16 @@ describe('Hello Component', () => {
     );
     expect(recipeLink.closest('a')).toHaveAttribute(
       'aria-label',
-      'AI-powered recipe app with Gemini'
+      'AI-powered recipe app'
     );
   });
 
-  test('renders fizzbuzz link', () => {
+  test('renders resume link', () => {
     render(<Hello />);
-    const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron');
-    expect(fizzbuzzLink).toBeInTheDocument();
-    expect(fizzbuzzLink.closest('a')).toHaveAttribute(
-      'href',
-      '/trontronbuzztron'
-    );
-    expect(fizzbuzzLink.closest('a')).toHaveAttribute(
-      'aria-label',
-      'TronTronBuzzTron FizzBuzz generator'
-    );
-  });
-
-  test('renders about this site section', () => {
-    render(<Hello />);
-    expect(screen.getByText('About This Site')).toBeInTheDocument();
+    const resumeLink = screen.getByText('📄 resume');
+    expect(resumeLink).toBeInTheDocument();
+    expect(resumeLink.closest('a')).toHaveAttribute('href', '/resume');
+    expect(resumeLink.closest('a')).toHaveAttribute('aria-label', 'Resume');
   });
 
   test('renders building/deploying/learning text with correct class', () => {
@@ -125,7 +107,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(6);
+    expect(allLinks).toHaveLength(4);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
@@ -139,7 +121,7 @@ describe('Hello Component', () => {
 
     // Check internal link has aria-label
     const internalLink = allLinks.find(
-      link => link.getAttribute('href') === '/trontronbuzztron'
+      link => link.getAttribute('href') === '/resume'
     );
     expect(internalLink).toHaveAttribute('aria-label');
   });
@@ -147,15 +129,15 @@ describe('Hello Component', () => {
   test('links have correct CSS classes', () => {
     render(<Hello />);
 
-    const linkedinLink = screen.getByText('💼 LinkedIn Profile').closest('a');
-    const personalLink = screen.getByText('🦢 swan tron dot com').closest('a');
-    const recipeLink = screen.getByText('🍳 chomp tron dot com').closest('a');
-    const fizzbuzzLink = screen.getByText('🤖 trontronbuzztron').closest('a');
+    const linkedinLink = screen.getByText('💼 linkedin').closest('a');
+    const personalLink = screen.getByText('🦢 blog').closest('a');
+    const recipeLink = screen.getByText('🍳 chomptron.com').closest('a');
+    const resumeLink = screen.getByText('📄 resume').closest('a');
 
-    expect(linkedinLink).toHaveClass('hello-link', 'linkedin');
-    expect(personalLink).toHaveClass('hello-link', 'personal');
-    expect(recipeLink).toHaveClass('hello-link', 'recipes');
-    expect(fizzbuzzLink).toHaveClass('hello-link', 'fizzbuzz');
+    expect(linkedinLink).toHaveClass('hello-link', 'primary');
+    expect(personalLink).toHaveClass('hello-link', 'primary');
+    expect(recipeLink).toHaveClass('hello-link', 'secondary');
+    expect(resumeLink).toHaveClass('hello-link', 'secondary');
   });
 
   test('component structure is correct', () => {
@@ -181,14 +163,10 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     // Check for emojis in context
-    expect(
-      screen.getByText(/👋 connect with joseph swanson/)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Based in Bozeman, Montana 🏔️/)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/💼 LinkedIn Profile/)).toBeInTheDocument();
-    expect(screen.getByText(/🦢 swan tron dot com/)).toBeInTheDocument();
-    expect(screen.getByText(/🍳 chomp tron dot com/)).toBeInTheDocument();
+    expect(screen.getByText(/Bozeman, Montana 🏔️/)).toBeInTheDocument();
+    expect(screen.getByText(/💼 linkedin/)).toBeInTheDocument();
+    expect(screen.getByText(/🦢 blog/)).toBeInTheDocument();
+    expect(screen.getByText(/🍳 chomptron.com/)).toBeInTheDocument();
+    expect(screen.getByText(/📄 resume/)).toBeInTheDocument();
   });
 });
