@@ -119,12 +119,8 @@
   justify-content: center;
   padding: 2rem;
   min-height: 60vh;
-  background: linear-gradient(135deg, rgba(248, 152, 89, 0.08) 0%, rgba(255, 107, 107, 0.08) 100%);
   border-radius: var(--border-radius);
-  backdrop-filter: blur(5px);
   margin: 1rem 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   animation: fadeIn 0.6s ease-in-out;
 }
 
