@@ -61,33 +61,15 @@
   width: 100%;
   max-width: 400px;
   text-align: center;
-  border: 2px solid transparent;
-}
-
-.hello-link.primary {
   background-color: var(--accent-color);
   color: var(--primary-bg);
-  border-color: var(--accent-color);
-  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  border: 2px solid var(--accent-color);
 }
 
-.hello-link.primary:hover {
+.hello-link:hover {
   background-color: #e6813f;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.secondary {
-  background-color: transparent;
-  color: var(--primary-text);
-  border-color: rgba(248, 152, 89, 0.4);
-}
-
-.hello-link.secondary:hover {
-  background-color: rgba(248, 152, 89, 0.1);
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.2);
 }
 
 .hello-info {

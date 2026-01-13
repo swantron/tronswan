@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+
 import PageTransition from './PageTransition';
 
 describe('PageTransition Component', () => {

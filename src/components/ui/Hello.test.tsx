@@ -26,14 +26,18 @@ describe('Hello Component', () => {
 
   test('renders description section', () => {
     render(<Hello />);
-    expect(screen.getByText('Staff Software Engineer @ Esri')).toBeInTheDocument();
-    expect(screen.getByText('DevX · CI/CD · AI · IaC · React')).toBeInTheDocument();
-    expect(screen.getByText('Bozeman, Montana 🏔️')).toBeInTheDocument();
+    expect(
+      screen.getByText('Staff Software Engineer @ Demandbase')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('DevX · CI/CD · AI · IaC · React')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Bozeman, Montana')).toBeInTheDocument();
   });
 
   test('renders LinkedIn link', () => {
     render(<Hello />);
-    const linkedinLink = screen.getByText('💼 linkedin');
+    const linkedinLink = screen.getByText('linkedin');
     expect(linkedinLink).toBeInTheDocument();
     expect(linkedinLink.closest('a')).toHaveAttribute(
       'href',
@@ -52,11 +56,11 @@ describe('Hello Component', () => {
 
   test('renders personal website link', () => {
     render(<Hello />);
-    const personalLink = screen.getByText('🦢 blog');
+    const personalLink = screen.getByText('swantron');
     expect(personalLink).toBeInTheDocument();
     expect(personalLink.closest('a')).toHaveAttribute(
       'href',
-      'https://swantron.com'
+      'https://swantron.github.io/swantron/'
     );
     expect(personalLink.closest('a')).toHaveAttribute('target', '_blank');
     expect(personalLink.closest('a')).toHaveAttribute(
@@ -71,7 +75,7 @@ describe('Hello Component', () => {
 
   test('renders recipe website link', () => {
     render(<Hello />);
-    const recipeLink = screen.getByText('🍳 chomptron.com');
+    const recipeLink = screen.getByText('chomptron');
     expect(recipeLink).toBeInTheDocument();
     expect(recipeLink.closest('a')).toHaveAttribute(
       'href',
@@ -90,7 +94,7 @@ describe('Hello Component', () => {
 
   test('renders resume link', () => {
     render(<Hello />);
-    const resumeLink = screen.getByText('📄 resume');
+    const resumeLink = screen.getByText('resume');
     expect(resumeLink).toBeInTheDocument();
     expect(resumeLink.closest('a')).toHaveAttribute('href', '/resume');
     expect(resumeLink.closest('a')).toHaveAttribute('aria-label', 'Resume');
@@ -107,7 +111,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(4);
+    expect(allLinks).toHaveLength(5);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
@@ -129,15 +133,17 @@ describe('Hello Component', () => {
   test('links have correct CSS classes', () => {
     render(<Hello />);
 
-    const linkedinLink = screen.getByText('💼 linkedin').closest('a');
-    const personalLink = screen.getByText('🦢 blog').closest('a');
-    const recipeLink = screen.getByText('🍳 chomptron.com').closest('a');
-    const resumeLink = screen.getByText('📄 resume').closest('a');
+    const linkedinLink = screen.getByText('linkedin').closest('a');
+    const githubLink = screen.getByText('github').closest('a');
+    const personalLink = screen.getByText('swantron').closest('a');
+    const recipeLink = screen.getByText('chomptron').closest('a');
+    const resumeLink = screen.getByText('resume').closest('a');
 
-    expect(linkedinLink).toHaveClass('hello-link', 'primary');
-    expect(personalLink).toHaveClass('hello-link', 'primary');
-    expect(recipeLink).toHaveClass('hello-link', 'secondary');
-    expect(resumeLink).toHaveClass('hello-link', 'secondary');
+    expect(linkedinLink).toHaveClass('hello-link');
+    expect(githubLink).toHaveClass('hello-link');
+    expect(personalLink).toHaveClass('hello-link');
+    expect(recipeLink).toHaveClass('hello-link');
+    expect(resumeLink).toHaveClass('hello-link');
   });
 
   test('component structure is correct', () => {
@@ -159,14 +165,15 @@ describe('Hello Component', () => {
     expect(document.querySelector('.hello-info')).toBeInTheDocument();
   });
 
-  test('emoji icons are present', () => {
+  test('link text is present', () => {
     render(<Hello />);
 
-    // Check for emojis in context
-    expect(screen.getByText(/Bozeman, Montana 🏔️/)).toBeInTheDocument();
-    expect(screen.getByText(/💼 linkedin/)).toBeInTheDocument();
-    expect(screen.getByText(/🦢 blog/)).toBeInTheDocument();
-    expect(screen.getByText(/🍳 chomptron.com/)).toBeInTheDocument();
-    expect(screen.getByText(/📄 resume/)).toBeInTheDocument();
+    // Check for text
+    expect(screen.getByText(/Bozeman, Montana/)).toBeInTheDocument();
+    expect(screen.getByText(/linkedin/)).toBeInTheDocument();
+    expect(screen.getByText(/swantron/)).toBeInTheDocument();
+    expect(screen.getByText(/github/)).toBeInTheDocument();
+    expect(screen.getByText(/chomptron/)).toBeInTheDocument();
+    expect(screen.getByText(/resume/)).toBeInTheDocument();
   });
 });
