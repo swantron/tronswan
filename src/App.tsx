@@ -181,30 +181,6 @@ function Navigation() {
         swantron
       </Link>
       <Link
-        to='/music'
-        className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
-        onClick={() =>
-          logger.info('Navigation clicked - Music', {
-            target: '/music',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        music
-      </Link>
-      <Link
-        to='/mlb'
-        className={`nav-link ${location.pathname === '/mlb' ? 'active' : ''}`}
-        onClick={() =>
-          logger.info('Navigation clicked - MLB', {
-            target: '/mlb',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        mlb
-      </Link>
-      <Link
         to='/weather'
         className={`nav-link ${location.pathname === '/weather' ? 'active' : ''}`}
         onClick={() =>
@@ -227,6 +203,30 @@ function Navigation() {
         }
       >
         chomptron
+      </Link>
+      <Link
+        to='/music'
+        className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Music', {
+            target: '/music',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        music
+      </Link>
+      <Link
+        to='/mlb'
+        className={`nav-link ${location.pathname === '/mlb' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - MLB', {
+            target: '/mlb',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        mlb
       </Link>
       <Link
         to='/status'
