@@ -11,18 +11,19 @@
   z-index: 1000;
   padding: 2rem;
   backdrop-filter: blur(5px);
+  overflow-y: auto;
 }
 
 .video-modal-content {
   background: var(--card-bg);
   border-radius: var(--border-radius);
-  max-width: 90vw;
-  max-height: 90vh;
-  width: 100%;
+  max-width: 800px;
+  width: 90vw;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   animation: modalSlideIn 0.3s ease-out;
+  margin: auto;
 }
 
 @keyframes modalSlideIn {
@@ -61,7 +62,7 @@
 }
 
 .video-modal-header {
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 1.5rem 2rem 1rem 2rem;
   text-align: center;
   background: linear-gradient(
     135deg,
@@ -72,7 +73,7 @@
 }
 
 .video-modal-title {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
   margin: 0;
   font-weight: bold;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -84,14 +85,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 300px;
 }
 
 .video-modal-video {
   width: 100%;
-  max-width: 800px;
+  max-width: 100%;
   height: auto;
   border-radius: calc(var(--border-radius) - 2px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: block;
 }
 
 .video-modal-actions {
