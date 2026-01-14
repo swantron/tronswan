@@ -11,7 +11,7 @@
   z-index: 1000;
   backdrop-filter: blur(5px);
   overflow-y: auto;
-  padding: 0;
+  padding: 2rem;
 }
 
 .video-modal-content {
@@ -20,11 +20,11 @@
   max-width: 800px;
   width: 90vw;
   max-height: 90vh;
-  margin: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   animation: modalSlideIn 0.3s ease-out;
+  margin: auto;
 }
 
 @keyframes modalSlideIn {
