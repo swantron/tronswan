@@ -42,7 +42,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
       
       // Restore scroll position
       const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'unset';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
