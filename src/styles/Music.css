@@ -512,7 +512,7 @@
 }
 
 .music-help summary::before {
-  content: '▶ ';
+  content: 'Play ';
   transition: transform var(--transition-speed) ease;
 }
 

@@ -62,7 +62,7 @@ describe('Shorts Component', () => {
   it('renders play overlay buttons', () => {
     render(<ShortsWithRouter />);
 
-    const playButtons = screen.getAllByText('▶');
+    const playButtons = screen.getAllByText('Play');
     expect(playButtons.length).toBeGreaterThan(0);
 
     playButtons.forEach(button => {

@@ -305,7 +305,7 @@ export class SpotifyPlaybackService {
     try {
       // Ready event
       this.player.addListener('ready', ({ device_id }) => {
-        logger.info('✅ Spotify player is ready!', {
+        logger.info('Spotify player is ready!', {
           device_id,
           timestamp: new Date().toISOString(),
         });
@@ -315,7 +315,7 @@ export class SpotifyPlaybackService {
 
       // Not Ready event
       this.player.addListener('not_ready', ({ device_id }) => {
-        logger.warn('❌ Spotify player has gone offline', {
+        logger.warn('Spotify player has gone offline', {
           device_id,
           timestamp: new Date().toISOString(),
         });
@@ -395,7 +395,7 @@ export class SpotifyPlaybackService {
       });
 
       if (response.ok) {
-        logger.info('✅ Track playback API call successful', { trackUri });
+        logger.info('Track playback API call successful', { trackUri });
         return true;
       } else if (response.status === 401) {
         // Token might be expired, try to refresh
@@ -411,7 +411,7 @@ export class SpotifyPlaybackService {
         }
       } else {
         const errorText = await response.text();
-        logger.error('❌ Failed to start track playback via API', {
+        logger.error('Failed to start track playback via API', {
           status: response.status,
           statusText: response.statusText,
           error: errorText,
@@ -473,7 +473,7 @@ export class SpotifyPlaybackService {
       }
 
       // Transfer playback to our device
-      logger.info('🔄 Transferring playback to our device', {
+      logger.info('Transferring playback to our device', {
         deviceId: this.deviceId,
       });
 
@@ -493,13 +493,13 @@ export class SpotifyPlaybackService {
       );
 
       if (transferResponse.ok || transferResponse.status === 204) {
-        logger.info('✅ Successfully transferred playback to our device');
+        logger.info('Successfully transferred playback to our device');
         // Wait a moment for the transfer to complete
         await new Promise(resolve => setTimeout(resolve, 1000));
         return true;
       } else {
         const errorText = await transferResponse.text();
-        logger.error('❌ Failed to transfer playback to our device', {
+        logger.error('Failed to transfer playback to our device', {
           status: transferResponse.status,
           statusText: transferResponse.statusText,
           error: errorText,

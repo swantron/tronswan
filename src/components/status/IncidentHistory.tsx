@@ -56,7 +56,7 @@ function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
         <span className='incident-count'>
           {incidents.length === 0 ? (
             <span className='no-incidents'>
-              ✓ No incidents in last {days} days
+              No incidents in last {days} days
             </span>
           ) : (
             <>
@@ -78,7 +78,7 @@ function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
             className='expand-toggle'
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? '▼ Show less' : '▶ Show all'}
+            {expanded ? 'Show less' : 'Show all'}
           </button>
         )}
       </div>
@@ -91,11 +91,7 @@ function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
               className={`incident-item ${incident.resolved ? 'resolved' : 'active'} status-${incident.status}`}
             >
               <div className='incident-icon'>
-                {incident.resolved
-                  ? '✓'
-                  : incident.status === 'down'
-                    ? '🔴'
-                    : '⚠️'}
+                {incident.resolved ? '' : incident.status === 'down' ? '' : ''}
               </div>
               <div className='incident-details'>
                 <div className='incident-service'>{incident.serviceName}</div>

@@ -242,17 +242,17 @@ function HealthPage() {
               <div className='status-indicator'>
                 {overallStatus.allHealthy ? (
                   <>
-                    <span className='status-icon'>✅</span>
+                    <span className='status-icon' />
                     <span className='status-text'>All Systems Operational</span>
                   </>
                 ) : overallStatus.downCount > 0 ? (
                   <>
-                    <span className='status-icon'>🔴</span>
+                    <span className='status-icon' />
                     <span className='status-text'>System Issues Detected</span>
                   </>
                 ) : (
                   <>
-                    <span className='status-icon'>⚠️</span>
+                    <span className='status-icon' />
                     <span className='status-text'>Degraded Performance</span>
                   </>
                 )}
@@ -295,7 +295,7 @@ function HealthPage() {
             disabled={isRefreshing}
             data-testid='refresh-button'
           >
-            {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
+            {isRefreshing ? 'Refreshing...' : 'Refresh'}
           </button>
           <button
             className={`auto-refresh-toggle ${autoRefreshEnabled ? 'enabled' : 'disabled'}`}
@@ -306,7 +306,7 @@ function HealthPage() {
                 : 'Enable auto-refresh'
             }
           >
-            {autoRefreshEnabled ? '⏸️ Pause' : '▶️ Resume'}
+            {autoRefreshEnabled ? 'Pause' : 'Resume'}
           </button>
           <span className='last-updated' data-testid='last-updated'>
             Last updated: {lastUpdated.toLocaleTimeString()}
@@ -324,7 +324,7 @@ function HealthPage() {
             rel='noopener noreferrer'
             className='quick-action-link'
           >
-            📊 GitHub Actions →
+            GitHub Actions →
           </a>
           <a
             href='https://cloud.digitalocean.com/apps'
@@ -332,7 +332,7 @@ function HealthPage() {
             rel='noopener noreferrer'
             className='quick-action-link'
           >
-            ☁️ DO Dashboard →
+            DO Dashboard →
           </a>
           <a
             href='https://console.cloud.google.com/run/detail/us-central1/chomptron/observability/metrics?project=chomptron'
@@ -340,7 +340,7 @@ function HealthPage() {
             rel='noopener noreferrer'
             className='quick-action-link'
           >
-            📈 GCP Metrics →
+            GCP Metrics →
           </a>
         </div>
 
@@ -364,7 +364,7 @@ function HealthPage() {
                     setActiveTab('services');
                   }}
                 >
-                  🌐 Services & APIs
+                  Services & APIs
                   {overallStatus.downCount > 0 && (
                     <span className='tab-badge badge-error'>
                       {overallStatus.downCount}
@@ -372,7 +372,7 @@ function HealthPage() {
                   )}
                   {overallStatus.downCount === 0 &&
                     overallStatus.degradedCount === 0 && (
-                      <span className='tab-badge badge-success'>✓</span>
+                      <span className='tab-badge badge-success' />
                     )}
                   {overallStatus.degradedCount > 0 &&
                     overallStatus.downCount === 0 && (
@@ -392,7 +392,7 @@ function HealthPage() {
                     setActiveTab('deployments');
                   }}
                 >
-                  🚀 Deployments
+                  Deployments
                   {deploymentStatus.failedDeployments > 0 && (
                     <span className='tab-badge badge-error'>
                       {deploymentStatus.failedDeployments}
@@ -400,7 +400,7 @@ function HealthPage() {
                   )}
                   {!healthData.github.loading &&
                     deploymentStatus.failedDeployments === 0 && (
-                      <span className='tab-badge badge-success'>✓</span>
+                      <span className='tab-badge badge-success' />
                     )}
                 </button>
                 <button
@@ -414,13 +414,13 @@ function HealthPage() {
                     setActiveTab('infrastructure');
                   }}
                 >
-                  ☁️ Infrastructure
+                  Infrastructure
                   {infraStatus.hasError && (
                     <span className='tab-badge badge-error'>!</span>
                   )}
                   {!healthData.digitalocean.loading &&
                     !infraStatus.hasError && (
-                      <span className='tab-badge badge-success'>✓</span>
+                      <span className='tab-badge badge-success' />
                     )}
                 </button>
               </>
@@ -472,7 +472,7 @@ function HealthPage() {
               rel='noopener noreferrer'
               className='resource-link'
             >
-              📊 AI Studio Projects
+              AI Studio Projects
             </a>
             <a
               href='https://console.cloud.google.com/cloud-build/builds?project=chomptron'
@@ -488,7 +488,7 @@ function HealthPage() {
               rel='noopener noreferrer'
               className='resource-link'
             >
-              📈 Cloud Run Metrics
+              Cloud Run Metrics
             </a>
           </div>
         </div>

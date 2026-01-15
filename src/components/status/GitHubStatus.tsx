@@ -89,26 +89,26 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
     if (status === 'completed') {
       switch (conclusion) {
         case 'success':
-          return '✅';
+          return '';
         case 'failure':
-          return '❌';
+          return '';
         case 'cancelled':
-          return '⏹️';
+          return '';
         case 'skipped':
-          return '⏭️';
+          return '';
         case 'timed_out':
-          return '⏰';
+          return '';
         case 'action_required':
-          return '⚠️';
+          return '';
         default:
-          return '❓';
+          return '';
       }
     } else if (status === 'in_progress') {
-      return '🔄';
+      return '';
     } else if (status === 'queued') {
-      return '⏳';
+      return '';
     }
-    return '❓';
+    return '';
   };
 
   const getStatusClass = (status: string, conclusion?: string | null) => {
@@ -156,7 +156,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
   if (data.error) {
     return (
       <div className='github-status error'>
-        <div className='error-icon'>⚠️</div>
+        <div className='error-icon' />
         <p>Error: {data.error}</p>
         <small>Check your GitHub API token configuration</small>
       </div>
@@ -513,7 +513,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                       <span
                         className={`status ${repo.private ? 'private' : 'public'}`}
                       >
-                        {repo.private ? '🔒' : '🌐'}
+                        {repo.private ? 'Private' : 'Public'}
                         {repo.private ? 'Private' : 'Public'}
                       </span>
                     </div>

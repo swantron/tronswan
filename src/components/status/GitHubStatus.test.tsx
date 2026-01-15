@@ -226,8 +226,8 @@ describe('GitHubStatus Component', () => {
         />
       );
 
-      // Check for success icon
-      expect(screen.getByText(/✅/)).toBeInTheDocument();
+      // Status icon is now empty, just verify the component renders
+      expect(screen.getAllByText(/Actions/).length).toBeGreaterThan(0);
     });
 
     it('renders action details correctly', () => {
@@ -310,7 +310,6 @@ describe('GitHubStatus Component', () => {
       // Switch to repos tab
       fireEvent.click(screen.getByText('Repos (1)'));
 
-      expect(screen.getByText(/🌐/)).toBeInTheDocument();
       expect(screen.getByText(/Public/)).toBeInTheDocument();
     });
 

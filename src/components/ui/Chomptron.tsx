@@ -140,7 +140,7 @@ const Chomptron: React.FC = () => {
               className='chomptron-quota-warning'
               data-testid='quota-warning'
             >
-              <p className='warning-title'>⚠️ API Quota Exceeded</p>
+              <p className='warning-title'>API Quota Exceeded</p>
               <p className='warning-message'>
                 The Gemini API free tier quota has been exceeded.
                 {retryAfter !== null && retryAfter > 0 && (

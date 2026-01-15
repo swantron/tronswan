@@ -873,12 +873,12 @@ function MLB() {
           )}
           {renderRankingTable(
             rankings.byRunDiff,
-            '📊 Best Run Differential',
+            'Best Run Differential',
             'runDiff'
           )}
           {renderRankingTable(
             rankings.byLastTen,
-            '🔥 Hottest Teams (Last 10)',
+            'Hottest Teams (Last 10)',
             'lastTen'
           )}
           {renderRankingTable(

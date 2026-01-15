@@ -79,7 +79,7 @@ describe('HealthPage', () => {
 
     const refreshButton = screen.getByTestId('refresh-button');
     expect(refreshButton).toBeInTheDocument();
-    expect(refreshButton).toHaveTextContent('🔄 Refresh');
+    expect(refreshButton).toHaveTextContent('Refresh');
   });
 
   it('shows last updated time', () => {
@@ -94,9 +94,9 @@ describe('HealthPage', () => {
   it('renders tab buttons', () => {
     renderWithHelmet(<HealthPage />);
 
-    expect(screen.getByText('🌐 Services & APIs')).toBeInTheDocument();
-    expect(screen.getByText('🚀 Deployments')).toBeInTheDocument();
-    expect(screen.getByText('☁️ Infrastructure')).toBeInTheDocument();
+    expect(screen.getByText('Services & APIs')).toBeInTheDocument();
+    expect(screen.getByText('Deployments')).toBeInTheDocument();
+    expect(screen.getByText('Infrastructure')).toBeInTheDocument();
   });
 
   it('handles refresh button click', async () => {
@@ -106,7 +106,7 @@ describe('HealthPage', () => {
 
     // Button should be clickable initially
     expect(refreshButton).toBeInTheDocument();
-    expect(refreshButton).toHaveTextContent('🔄 Refresh');
+    expect(refreshButton).toHaveTextContent('Refresh');
 
     // Click the button
     fireEvent.click(refreshButton);
@@ -118,9 +118,9 @@ describe('HealthPage', () => {
   it('switches between tabs', () => {
     renderWithHelmet(<HealthPage />);
 
-    const servicesTab = screen.getByText('🌐 Services & APIs');
-    const deploymentsTab = screen.getByText('🚀 Deployments');
-    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+    const servicesTab = screen.getByText('Services & APIs');
+    const deploymentsTab = screen.getByText('Deployments');
+    const infrastructureTab = screen.getByText('Infrastructure');
 
     // Services tab should be active by default
     expect(servicesTab).toHaveClass('active');
@@ -154,7 +154,7 @@ describe('HealthPage', () => {
   it('logs tab changes when clicking tabs', () => {
     renderWithHelmet(<HealthPage />);
 
-    const deploymentsTab = screen.getByText('🚀 Deployments');
+    const deploymentsTab = screen.getByText('Deployments');
     fireEvent.click(deploymentsTab);
 
     expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
@@ -163,7 +163,7 @@ describe('HealthPage', () => {
       timestamp: expect.any(String),
     });
 
-    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+    const infrastructureTab = screen.getByText('Infrastructure');
     fireEvent.click(infrastructureTab);
 
     expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
@@ -172,7 +172,7 @@ describe('HealthPage', () => {
       timestamp: expect.any(String),
     });
 
-    const servicesTab = screen.getByText('🌐 Services & APIs');
+    const servicesTab = screen.getByText('Services & APIs');
     fireEvent.click(servicesTab);
 
     expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
@@ -186,12 +186,12 @@ describe('HealthPage', () => {
     renderWithHelmet(<HealthPage />);
 
     // Switch to infrastructure tab
-    const infrastructureTab = screen.getByText('☁️ Infrastructure');
+    const infrastructureTab = screen.getByText('Infrastructure');
     fireEvent.click(infrastructureTab);
 
     await waitFor(() => {
       // The DigitalOceanStatus component should be rendered
-      expect(screen.getByText('☁️ Infrastructure')).toHaveClass('active');
+      expect(screen.getByText('Infrastructure')).toHaveClass('active');
     });
   });
 
@@ -205,7 +205,7 @@ describe('HealthPage', () => {
 
     // Button should show refreshing state
     await waitFor(() => {
-      expect(refreshButton).toHaveTextContent('🔄 Refreshing...');
+      expect(refreshButton).toHaveTextContent('Refreshing...');
     });
   });
 });

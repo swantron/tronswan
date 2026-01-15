@@ -217,7 +217,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
     <div className={`music-player-container ${isVisible ? 'visible' : ''}`}>
       <div className='music-player'>
         <div className='music-player-header'>
-          <h3>🎵 Now Playing</h3>
+          <h3>Now Playing</h3>
           <div className='player-header-controls'>
             <button
               className='minimize-btn'
@@ -316,7 +316,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ isVisible, onClose }) => {
                   onClick={handlePlayPause}
                   aria-label={playbackState.isPlaying ? 'Pause' : 'Play'}
                 >
-                  {playbackState.isPlaying ? '⏸' : '▶'}
+                  {playbackState.isPlaying ? 'Pause' : 'Play'}
                 </button>
                 <button
                   className='control-btn next-btn'

@@ -129,7 +129,9 @@ describe('DigitalOceanStatus Component', () => {
         />
       );
 
-      expect(screen.getByText('🔄')).toBeInTheDocument();
+      expect(
+        screen.getByText('Loading DigitalOcean data...')
+      ).toBeInTheDocument();
       expect(
         screen.getByText('Loading DigitalOcean data...')
       ).toBeInTheDocument();
@@ -146,7 +148,7 @@ describe('DigitalOceanStatus Component', () => {
         />
       );
 
-      expect(screen.getByText('⚠️')).toBeInTheDocument();
+      expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
       expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
       expect(
         screen.getByText('Check your DigitalOcean API token configuration')
@@ -215,7 +217,7 @@ describe('DigitalOceanStatus Component', () => {
       expect(
         screen.getByText('DigitalOcean App Platform Application')
       ).toBeInTheDocument();
-      expect(screen.getByText('ACTIVE')).toBeInTheDocument();
+      expect(screen.getAllByText('ACTIVE').length).toBeGreaterThan(0);
       expect(screen.getByText('Phase: ACTIVE')).toBeInTheDocument();
     });
 
@@ -349,7 +351,8 @@ describe('DigitalOceanStatus Component', () => {
         />
       );
 
-      expect(screen.getByText(/✅/)).toBeInTheDocument();
+      // Status icon is now empty, just verify the component renders
+      expect(screen.getAllByText(/App Platform/).length).toBeGreaterThan(0);
     });
 
     test('renders correct status icon for inactive status', () => {
@@ -363,7 +366,8 @@ describe('DigitalOceanStatus Component', () => {
         />
       );
 
-      expect(screen.getByText(/❓/)).toBeInTheDocument();
+      // Status icon is now empty, just verify the component renders
+      expect(screen.getByText(/DigitalOcean/)).toBeInTheDocument();
     });
   });
 

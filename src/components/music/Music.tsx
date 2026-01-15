@@ -392,17 +392,17 @@ const Music: React.FC = () => {
       if (!premiumCheck.hasPremium) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
-            '🎵 Session Expired\n\n' +
+            'Session Expired\n\n' +
               'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           // Optionally redirect to re-authenticate
           window.location.reload();
         } else {
           alert(
-            '🎵 Spotify Premium Required\n\n' +
+            'Spotify Premium Required\n\n' +
               'To play music directly on this website, you need a Spotify Premium account.\n\n' +
               'Premium allows for web playback control. You can still browse your music and \n' +
-              'click the Spotify links (♪) to play songs in your Spotify app.'
+              'click the Spotify links to play songs in your Spotify app.'
           );
         }
         return;
@@ -414,7 +414,7 @@ const Music: React.FC = () => {
 
         // Show loading message
         alert(
-          '🎵 Setting up music player...\n\nThis may take a few seconds. Please wait.'
+          'Setting up music player...\n\nThis may take a few seconds. Please wait.'
         );
 
         try {
@@ -454,7 +454,7 @@ const Music: React.FC = () => {
               ? initError.message
               : 'Unknown error occurred';
           alert(
-            `🎵 Music Player Setup Failed\n\n` +
+            `Music Player Setup Failed\n\n` +
               `${errorMessage}\n\n` +
               `Please make sure:\n` +
               `1. Spotify is open in another browser tab or app\n` +
@@ -477,19 +477,19 @@ const Music: React.FC = () => {
 
       if (success) {
         setShowMusicPlayer(true);
-        logger.info('✅ Track playback started successfully', {
+        logger.info('Track playback started successfully', {
           trackName: track.name,
           timestamp: new Date().toISOString(),
         });
       } else {
-        logger.error('❌ Failed to start track playback', {
+        logger.error('Failed to start track playback', {
           trackName: track.name,
           playerReady: spotifyPlaybackService.isPlayerReady(),
           deviceId: spotifyPlaybackService.getDeviceId(),
           timestamp: new Date().toISOString(),
         });
         alert(
-          "❌ Failed to start playback.\n\nPlease make sure:\n1. Spotify is open on another device/tab\n2. You're logged into the same account\n3. Try refreshing and trying again"
+          "Failed to start playback.\n\nPlease make sure:\n1. Spotify is open on another device/tab\n2. You're logged into the same account\n3. Try refreshing and trying again"
         );
       }
     } catch (error) {
@@ -519,16 +519,16 @@ const Music: React.FC = () => {
       if (!premiumCheck.hasPremium) {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
-            '🎵 Session Expired\n\n' +
+            'Session Expired\n\n' +
               'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           window.location.reload();
         } else {
           alert(
-            '🎵 Spotify Premium Required\n\n' +
+            'Spotify Premium Required\n\n' +
               'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
               'Premium allows for web playback control. You can still browse your playlists and \n' +
-              'click the Spotify links (♪) to open them in your Spotify app.'
+              'click the Spotify links to open them in your Spotify app.'
           );
         }
         return;
@@ -544,7 +544,7 @@ const Music: React.FC = () => {
         if (!initialized) {
           logger.error('Failed to initialize Spotify player');
           alert(
-            '🎵 Music Player Setup Failed\n\n' +
+            'Music Player Setup Failed\n\n' +
               'Failed to initialize music player.\n\n' +
               'Please make sure you have Spotify Premium and Spotify is open.'
           );
@@ -628,7 +628,7 @@ const Music: React.FC = () => {
             onClick={handleLogin}
             aria-label='Login with Spotify'
           >
-            <span className='spotify-icon'>♪</span>
+            <span className='spotify-icon' />
             Connect with Spotify
           </button>
         </div>
@@ -727,7 +727,7 @@ const Music: React.FC = () => {
                   className='help-modal-close'
                   onClick={() => setShowHelpModal(false)}
                 >
-                  ✕
+                  Close
                 </button>
               </div>
               <div className='help-modal-content'>
@@ -748,16 +748,19 @@ const Music: React.FC = () => {
                     </li>
                     <li>Discover new music through your listening history</li>
                     <li>
-                      Click the ♪ buttons to open songs in your Spotify app
+                      Click the Spotify buttons to open songs in your Spotify
+                      app
                     </li>
-                    <li>If you have Premium, click ▶ to play directly here</li>
+                    <li>
+                      If you have Premium, click Play to play directly here
+                    </li>
                   </ul>
                 </div>
 
                 <div className='help-section'>
                   <h4>how to play music (premium users)</h4>
                   <ol>
-                    <li>Click any &ldquo;▶ Play&rdquo; button below</li>
+                    <li>Click any Play button below</li>
                     <li>
                       You&apos;ll be prompted with a Spotify login page (if not
                       already logged in)
@@ -879,7 +882,7 @@ const Music: React.FC = () => {
                     onClick={() => handlePlayTrack(track)}
                     aria-label={`Play ${track.name}`}
                   >
-                    ▶ Play
+                    Play
                   </button>
                   <a
                     href={track.external_urls.spotify}
@@ -888,7 +891,7 @@ const Music: React.FC = () => {
                     className='spotify-link'
                     aria-label={`Open ${track.name} on Spotify`}
                   >
-                    ♪
+                    Spotify
                   </a>
                 </div>
               </div>
@@ -926,7 +929,7 @@ const Music: React.FC = () => {
                   className='spotify-link'
                   aria-label={`Open ${artist.name} on Spotify`}
                 >
-                  ♪
+                  Spotify
                 </a>
               </div>
             ))}
@@ -956,7 +959,7 @@ const Music: React.FC = () => {
                   className='spotify-link'
                   aria-label={`Open ${track.name} on Spotify`}
                 >
-                  ♪
+                  Spotify
                 </a>
               </div>
             ))}
@@ -1001,7 +1004,7 @@ const Music: React.FC = () => {
                         onClick={() => handlePlayTrack(track)}
                         aria-label={`Play ${track.name}`}
                       >
-                        ▶ Play
+                        Play
                       </button>
                     </div>
                   </div>
@@ -1012,7 +1015,7 @@ const Music: React.FC = () => {
                     className='spotify-link'
                     aria-label={`Open ${track.name} on Spotify`}
                   >
-                    ♪
+                    Spotify
                   </a>
                 </div>
               ))}
@@ -1060,7 +1063,7 @@ const Music: React.FC = () => {
                         className='playlist-link'
                         aria-label={`Open ${playlist.name} on Spotify`}
                       >
-                        ♪
+                        Spotify
                       </a>
                     </div>
                   </div>
@@ -1098,7 +1101,7 @@ const Music: React.FC = () => {
                         onClick={() => handlePlayPlaylist(playlist)}
                         aria-label={`Play ${playlist.name}`}
                       >
-                        ▶ Play Playlist
+                        Play Playlist
                       </button>
                     </div>
                   </div>

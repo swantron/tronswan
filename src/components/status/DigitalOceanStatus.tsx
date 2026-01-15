@@ -36,33 +36,33 @@ function DigitalOceanStatus({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-        return '✅';
+        return '';
       case 'new':
-        return '🆕';
+        return '';
       case 'off':
-        return '⏸️';
+        return '';
       case 'archive':
-        return '📦';
+        return '';
       case 'online':
-        return '✅';
+        return '';
       case 'creating':
-        return '🔄';
+        return '';
       case 'resizing':
-        return '📏';
+        return '';
       case 'migrating':
-        return '🚚';
+        return '';
       case 'backing_up':
-        return '💾';
+        return '';
       case 'restoring':
-        return '🔄';
+        return '';
       case 'maintenance':
-        return '🔧';
+        return '';
       case 'offline':
-        return '❌';
+        return '';
       case 'errored':
-        return '❌';
+        return '';
       default:
-        return '❓';
+        return '';
     }
   };
 
@@ -106,7 +106,7 @@ function DigitalOceanStatus({
   if (data.loading) {
     return (
       <div className='digitalocean-status loading'>
-        <div className='loading-spinner'>🔄</div>
+        <div className='loading-spinner' />
         <p>Loading DigitalOcean data...</p>
       </div>
     );
@@ -115,7 +115,7 @@ function DigitalOceanStatus({
   if (data.error) {
     return (
       <div className='digitalocean-status error'>
-        <div className='error-icon'>⚠️</div>
+        <div className='error-icon' />
         <p>Error: {data.error}</p>
         <small>Check your DigitalOcean API token configuration</small>
       </div>

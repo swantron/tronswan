@@ -103,7 +103,7 @@ const Shorts: React.FC = () => {
                 <source src={video.videoSrc} type='video/mp4' />
               </video>
               <div className='shorts-play-overlay'>
-                <div className='shorts-play-button'>▶</div>
+                <div className='shorts-play-button'>Play</div>
               </div>
             </div>
             <div className='shorts-info'>

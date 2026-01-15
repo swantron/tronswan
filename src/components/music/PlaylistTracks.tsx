@@ -171,7 +171,7 @@ const PlaylistTracks: React.FC<PlaylistTracksProps> = ({
                 onClick={() => onPlayTrack(track)}
                 aria-label={`Play ${track.name}`}
               >
-                ▶ Play
+                Play
               </button>
               <a
                 href={track.external_urls.spotify}
@@ -180,7 +180,7 @@ const PlaylistTracks: React.FC<PlaylistTracksProps> = ({
                 className='spotify-link'
                 aria-label={`Open ${track.name} on Spotify`}
               >
-                ♪
+                Spotify
               </a>
             </div>
           </div>

@@ -145,7 +145,7 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
               </span>
             </div>
             <div className='forecast-description'>{day.description}</div>
-            <div className='forecast-humidity'>💧 {day.humidity}%</div>
+            <div className='forecast-humidity'>{day.humidity}%</div>
           </div>
         ))}
       </div>
@@ -230,7 +230,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.tempMin && weather.tempMax && (
           <div className='weather-item'>
             <p data-testid='temp-range-display'>
-              📊 Range: {Math.round(convertTempForDisplay(weather.tempMin))}
+              Range: {Math.round(convertTempForDisplay(weather.tempMin))}
               {getTemperatureUnit()} -{' '}
               {Math.round(convertTempForDisplay(weather.tempMax))}
               {getTemperatureUnit()}
@@ -245,21 +245,19 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.pressure && (
           <div className='weather-item'>
             <p data-testid='pressure-display'>
-              🏔️ Pressure: {weather.pressure} hPa
+              Pressure: {weather.pressure} hPa
             </p>
           </div>
         )}
         {weather.humidity && (
           <div className='weather-item'>
-            <p data-testid='humidity-display'>
-              💧 Humidity: {weather.humidity}%
-            </p>
+            <p data-testid='humidity-display'>Humidity: {weather.humidity}%</p>
           </div>
         )}
         {weather.cloudCoverage !== null && (
           <div className='weather-item'>
             <p data-testid='clouds-display'>
-              ☁️ Cloud Coverage: {weather.cloudCoverage}%
+              Cloud Coverage: {weather.cloudCoverage}%
             </p>
           </div>
         )}
@@ -897,7 +895,7 @@ function Weather() {
                 disabled={loading || !cityInput.trim()}
                 data-testid='search-button'
               >
-                {loading ? '⏳' : '🔍'}
+                {loading ? 'Loading' : 'Search'}
               </button>
             </div>
           </form>
