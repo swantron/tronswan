@@ -79,14 +79,16 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
         <div className='video-modal-video-container'>
           <video
+            key={videoSrc}
             autoPlay
             muted
             loop
             playsInline
+            controls
             className='video-modal-video'
             data-testid={`${testId}-modal-video`}
+            src={videoSrc}
           >
-            <source src={videoSrc} type='video/mp4' />
             <p className='video-fallback'>
               Your browser does not support the video tag.
               <br />
