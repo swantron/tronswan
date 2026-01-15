@@ -4,7 +4,7 @@
   background-color: var(--primary-bg);
   color: var(--primary-text);
   padding: var(--page-padding, 2rem 1rem);
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-family-base);
 }
 
 .music-content {

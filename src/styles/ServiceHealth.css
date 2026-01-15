@@ -238,13 +238,13 @@
 }
 
 .response-time {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
   color: #4fd1c5;
   font-size: var(--font-base);
 }
 
 .uptime {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
   font-size: var(--font-base);
 }
 

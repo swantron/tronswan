@@ -87,7 +87,7 @@
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--border-radius);
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
 }
 
 .fizzbuzz-rules {

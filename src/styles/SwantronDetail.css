@@ -129,7 +129,7 @@
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.9em;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
 }
 
 .swantron-detail-body pre {

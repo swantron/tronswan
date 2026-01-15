@@ -87,7 +87,7 @@
 
 /* Building/Deploying/Learning Animation */
 .building-learning-text {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
   font-weight: bold;
   font-size: 1.2rem;
   color: var(--accent-color);
