@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import '../../styles/VideoModal.css';
 
 interface VideoModalProps {
@@ -27,13 +28,16 @@ const VideoModal: React.FC<VideoModalProps> = ({
     if (isOpen) {
       // Save current scroll position
       const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
       
       document.addEventListener('keydown', handleEscape);
       
       // Prevent body scroll when modal is open and preserve scroll position
+      // Use body instead of documentElement to avoid containing block issues
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = `-${scrollX}px`;
       document.body.style.width = '100%';
     }
 
@@ -42,18 +46,22 @@ const VideoModal: React.FC<VideoModalProps> = ({
       
       // Restore scroll position
       const scrollY = document.body.style.top;
+      const scrollX = document.body.style.left;
+      
       document.body.style.overflow = 'unset';
       document.body.style.position = '';
       document.body.style.top = '';
+      document.body.style.left = '';
       document.body.style.width = '';
       
       if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        window.scrollTo(
+          parseInt(scrollX || '0') * -1 || 0,
+          parseInt(scrollY || '0') * -1 || 0
+        );
       }
     };
   }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
 
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
@@ -68,7 +76,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
     }
   };
 
-  return (
+  if (!isOpen) return null;
+
+  const modalContent = (
     <div
       className='video-modal-overlay'
       onClick={handleBackdropClick}
@@ -118,6 +128,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
       </div>
     </div>
   );
+
+  // Render modal using portal to document.body to avoid containing block issues
+  return createPortal(modalContent, document.body);
 };
 
 export default VideoModal;
