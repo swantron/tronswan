@@ -6,12 +6,12 @@
 }
 
 .mlb-content {
-  max-width: 1400px;
+  max-width: var(--max-width);
   margin: 0 auto;
 }
 
 .mlb-title {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3.5rem);
   text-align: center;
   margin-bottom: 2rem;
   color: var(--accent-color, #f89859);
@@ -536,7 +536,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .mlb-title {
-    font-size: 2rem;
+    font-size: clamp(1.8rem, 5.5vw, 3rem);
   }
 
   .division-title {
@@ -597,7 +597,7 @@
   }
 
   .mlb-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
   }
 
   .standings-table {

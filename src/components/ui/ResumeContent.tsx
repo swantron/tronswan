@@ -1,4 +1,5 @@
 import React from 'react';
+import SEO from './SEO';
 import '../../styles/Resume.css';
 
 interface ResumeContentProps {
@@ -124,6 +125,12 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
   return (
     <div className='resume-container'>
+      <SEO
+        title='Resume - Joseph Swanson | Tron Swan'
+        description="View Joseph Swanson's professional resume. Staff Software Engineer at Demandbase specializing in DevX, CI/CD, AI, IaC, and React."
+        keywords='Joseph Swanson, resume, software engineer, Demandbase, DevX, CI/CD, React, TypeScript, Montana'
+        url='/resume'
+      />
       <div className='resume-content'>
         <header className='resume-header'>
           <h1 className='resume-name'>

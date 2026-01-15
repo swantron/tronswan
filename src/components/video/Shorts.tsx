@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import SEO from '../ui/SEO';
 import VideoModal from './VideoModal';
 import './Shorts.css';
 
@@ -63,6 +64,12 @@ const Shorts: React.FC = () => {
 
   return (
     <div className='shorts-container'>
+      <SEO
+        title='Shorts - Video Gallery | Tron Swan'
+        description='Watch short video clips featuring fun animations and moments. A collection of entertaining video shorts.'
+        keywords='video shorts, animations, video gallery, tronswan videos'
+        url='/shorts'
+      />
       <div className='shorts-header'>
         <h1 className='shorts-title'>Shorts</h1>
       </div>

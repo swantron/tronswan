@@ -3,7 +3,7 @@
   min-height: 100vh;
   background-color: var(--primary-bg);
   color: var(--primary-text);
-  padding: 2rem;
+  padding: var(--page-padding, 2rem 1rem);
 }
 
 .weather-content {

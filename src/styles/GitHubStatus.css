@@ -30,8 +30,8 @@
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #007bff;
+  border: 3px solid rgba(248, 152, 89, 0.1);
+  border-top: 3px solid var(--accent-color, #f89859);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 16px;
@@ -50,9 +50,10 @@
 .github-status.error {
   padding: 20px;
   text-align: center;
-  color: #dc3545;
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
+  color: var(--error-color, #ff4444);
+  background: rgba(255, 68, 68, 0.1);
+  border: 2px solid var(--error-color, #ff4444);
+  border-radius: 8px;
 }
 
 .error-icon {
@@ -61,17 +62,20 @@
 }
 
 .retry-button {
-  background: #dc3545;
+  background: var(--error-color, #ff4444);
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: var(--border-radius, 8px);
   cursor: pointer;
   margin-top: 12px;
+  transition: all var(--transition-speed, 0.3s) ease;
 }
 
 .retry-button:hover {
-  background: #c82333;
+  background: #e63939;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
 }
 
 /* Tabs */

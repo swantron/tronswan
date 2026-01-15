@@ -1,10 +1,10 @@
 .chomptron-page {
   min-height: 100vh;
-  padding: 2rem;
+  padding: 2rem 1rem;
 }
 
 .chomptron-container {
-  max-width: 800px;
+  max-width: var(--max-width);
   margin: 0 auto;
 }
 
@@ -13,9 +13,9 @@
 }
 
 .chomptron-header h1 {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3.5rem);
   margin-bottom: 1rem;
-  color: #f89859;
+  color: var(--accent-color, #f89859);
 }
 
 .chomptron-header p {

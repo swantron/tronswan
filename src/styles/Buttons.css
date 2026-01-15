@@ -1,0 +1,131 @@
+/* Shared Button Styles */
+/* These classes can be used across the site for consistent button styling */
+
+/* Primary Button - Main action buttons */
+.btn-primary {
+  background-color: var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
+  border: 2px solid var(--accent-color, #f89859);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius, 10px);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed, 0.3s) ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #e6894a;
+  border-color: #e6894a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary:focus {
+  outline: 2px solid var(--accent-color, #f89859);
+  outline-offset: 2px;
+}
+
+/* Secondary Button - Outline style */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--accent-color, #f89859);
+  border: 2px solid var(--accent-color, #f89859);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius, 10px);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed, 0.3s) ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: rgba(248, 152, 89, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary:focus {
+  outline: 2px solid var(--accent-color, #f89859);
+  outline-offset: 2px;
+}
+
+/* Toggle Button - For tabs, filters, etc. */
+.btn-toggle {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--accent-color, #f89859);
+  background: rgba(248, 152, 89, 0.05);
+  color: var(--accent-color, #f89859);
+  border-radius: var(--border-radius, 10px);
+  cursor: pointer;
+  transition: all var(--transition-speed, 0.3s) ease;
+}
+
+.btn-toggle:hover:not(:disabled) {
+  background: rgba(248, 152, 89, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-toggle.active {
+  background: var(--accent-color, #f89859);
+  color: var(--primary-bg, #282c34);
+  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.4);
+}
+
+.btn-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-toggle:focus {
+  outline: 2px solid var(--accent-color, #f89859);
+  outline-offset: 2px;
+}
+
+/* Small Button Variant */
+.btn-primary.btn-sm,
+.btn-secondary.btn-sm,
+.btn-toggle.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Large Button Variant */
+.btn-primary.btn-lg,
+.btn-secondary.btn-lg,
+.btn-toggle.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-toggle {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-toggle {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
