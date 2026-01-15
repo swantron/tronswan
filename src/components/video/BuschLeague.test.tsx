@@ -29,12 +29,9 @@ describe('BuschLeague', () => {
   it('renders the video source with correct path', () => {
     render(<BuschLeague />);
 
-    const source = screen
-      .getByTestId('buschleague-modal-video')
-      .querySelector('source');
-    expect(source).toBeInTheDocument();
-    expect(source).toHaveAttribute('src', '/buschleague.mp4');
-    expect(source).toHaveAttribute('type', 'video/mp4');
+    const video = screen.getByTestId('buschleague-modal-video');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/buschleague.mp4');
   });
 
   it('renders the container with correct test id', () => {

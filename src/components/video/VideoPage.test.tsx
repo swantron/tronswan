@@ -22,9 +22,7 @@ describe('VideoPage Component', () => {
     render(<VideoPage {...mockProps} />);
     const videoElement = screen.getByTestId('test-video-modal-video');
     expect(videoElement).toBeInTheDocument();
-    expect(videoElement.querySelector('source')?.getAttribute('src')).toBe(
-      '/test-video.mp4'
-    );
+    expect(videoElement).toHaveAttribute('src', '/test-video.mp4');
   });
 
   test('video has correct attributes', () => {

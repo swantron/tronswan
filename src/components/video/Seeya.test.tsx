@@ -29,12 +29,9 @@ describe('Seeya', () => {
   it('renders the video source with correct path', () => {
     render(<Seeya />);
 
-    const source = screen
-      .getByTestId('seeya-modal-video')
-      .querySelector('source');
-    expect(source).toBeInTheDocument();
-    expect(source).toHaveAttribute('src', '/seeya.mp4');
-    expect(source).toHaveAttribute('type', 'video/mp4');
+    const video = screen.getByTestId('seeya-modal-video');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/seeya.mp4');
   });
 
   it('renders the container with correct test id', () => {

@@ -29,12 +29,9 @@ describe('Baseball2', () => {
   it('renders the video source with correct path', () => {
     render(<Baseball2 />);
 
-    const source = screen
-      .getByTestId('baseball2-modal-video')
-      .querySelector('source');
-    expect(source).toBeInTheDocument();
-    expect(source).toHaveAttribute('src', '/baseball_2.mp4');
-    expect(source).toHaveAttribute('type', 'video/mp4');
+    const video = screen.getByTestId('baseball2-modal-video');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/baseball_2.mp4');
   });
 
   it('renders the container with correct test id', () => {

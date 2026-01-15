@@ -29,12 +29,9 @@ describe('Working Component', () => {
   it('renders the video source with correct path', () => {
     render(<Working />);
 
-    const source = screen
-      .getByTestId('working-modal-video')
-      .querySelector('source');
-    expect(source).toBeInTheDocument();
-    expect(source).toHaveAttribute('src', '/working.mp4');
-    expect(source).toHaveAttribute('type', 'video/mp4');
+    const video = screen.getByTestId('working-modal-video');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/working.mp4');
   });
 
   it('renders the container with correct test id', () => {

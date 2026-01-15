@@ -29,12 +29,9 @@ describe('JobWellDone', () => {
   it('renders the video source with correct path', () => {
     render(<JobWellDone />);
 
-    const source = screen
-      .getByTestId('jobwelldone-modal-video')
-      .querySelector('source');
-    expect(source).toBeInTheDocument();
-    expect(source).toHaveAttribute('src', '/jobwelldone.mp4');
-    expect(source).toHaveAttribute('type', 'video/mp4');
+    const video = screen.getByTestId('jobwelldone-modal-video');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/jobwelldone.mp4');
   });
 
   it('renders the container with correct test id', () => {
