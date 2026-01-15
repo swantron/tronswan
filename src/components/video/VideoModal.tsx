@@ -29,9 +29,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
       // Save current scroll position
       const scrollY = window.scrollY;
       const scrollX = window.scrollX;
-      
+
       document.addEventListener('keydown', handleEscape);
-      
+
       // Prevent body scroll when modal is open and preserve scroll position
       // Use body instead of documentElement to avoid containing block issues
       document.body.style.overflow = 'hidden';
@@ -43,17 +43,17 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      
+
       // Restore scroll position
       const scrollY = document.body.style.top;
       const scrollX = document.body.style.left;
-      
+
       document.body.style.overflow = 'unset';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.width = '';
-      
+
       if (scrollY) {
         window.scrollTo(
           parseInt(scrollX || '0') * -1 || 0,

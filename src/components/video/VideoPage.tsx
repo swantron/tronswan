@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 import SEO from '../ui/SEO';
+
 import VideoModal from './VideoModal';
+
 import '../../styles/Video.css';
 
 interface VideoPageProps {

@@ -70,7 +70,7 @@ describe('HealthPage', () => {
     renderWithHelmet(<HealthPage />);
 
     expect(screen.getByTestId('health-title')).toHaveTextContent(
-      'Service Health & Status'
+      'service health & status'
     );
   });
 

@@ -13,9 +13,7 @@
 }
 
 .chomptron-header h1 {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  margin-bottom: 1rem;
-  color: var(--accent-color, #f89859);
+  /* Extends page-title - gradient text styling applied via page-title class */
 }
 
 .chomptron-header p {

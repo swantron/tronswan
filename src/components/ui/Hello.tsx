@@ -14,7 +14,7 @@ function Hello() {
       />
 
       <div className='hello-content'>
-        <h1 className='hello-title' data-testid='hello-title'>
+        <h1 className='page-title hello-title' data-testid='hello-title'>
           hello
         </h1>
         <p className='hello-subtitle'>joseph swanson</p>

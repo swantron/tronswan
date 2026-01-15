@@ -191,7 +191,10 @@ function StudyGuide() {
       />
 
       <div className='study-guide-content'>
-        <h1 className='study-guide-title' data-testid='study-guide-title'>
+        <h1
+          className='page-title study-guide-title'
+          data-testid='study-guide-title'
+        >
           study guide
         </h1>
 

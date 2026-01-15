@@ -18,7 +18,7 @@ describe('Shorts Component', () => {
   it('renders the shorts title', () => {
     render(<ShortsWithRouter />);
 
-    const title = screen.getByText('Shorts');
+    const title = screen.getByText('shorts');
 
     expect(title).toBeInTheDocument();
     expect(title.tagName).toBe('H1');
@@ -85,11 +85,11 @@ describe('Shorts Component', () => {
   it('renders container with correct classes', () => {
     render(<ShortsWithRouter />);
 
-    const container = screen.getByText('Shorts').closest('.shorts-container');
+    const container = screen.getByText('shorts').closest('.shorts-container');
     expect(container).toBeInTheDocument();
 
     const grid = screen
-      .getByText('Shorts')
+      .getByText('shorts')
       .closest('.shorts-container')
       ?.querySelector('.shorts-grid');
     expect(grid).toBeInTheDocument();

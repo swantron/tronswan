@@ -836,7 +836,7 @@ function Weather() {
       />
 
       <div className='weather-content'>
-        <h1 className='weather-title' data-testid='weather-title'>
+        <h1 className='page-title weather-title' data-testid='weather-title'>
           weathertron
         </h1>
 

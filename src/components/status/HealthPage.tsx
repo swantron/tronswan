@@ -228,8 +228,8 @@ function HealthPage() {
       />
 
       <div className='health-content'>
-        <h1 className='health-title' data-testid='health-title'>
-          Service Health & Status
+        <h1 className='page-title health-title' data-testid='health-title'>
+          service health & status
         </h1>
 
         {/* Overall Status Summary */}

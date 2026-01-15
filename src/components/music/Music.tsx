@@ -605,8 +605,8 @@ const Music: React.FC = () => {
           url='/music'
         />
         <div className='music-auth'>
-          <h1>🎵 Non-janky Spotify</h1>
-          <p className='auth-tagline'>it&apos;s Spotify, but less janky</p>
+          <h1 className='page-title'>music</h1>
+          <p className='auth-tagline'>it&apos;s spotify, but less janky</p>
 
           <p>
             Connect your Spotify account to access your top tracks, playlists,
@@ -655,8 +655,8 @@ const Music: React.FC = () => {
             />
           )}
           <div>
-            <h1>🎵 Spotify Interface</h1>
-            <p className='user-subtitle'>it&apos;s Spotify, but less janky</p>
+            <h1 className='page-title'>music</h1>
+            <p className='user-subtitle'>it&apos;s spotify, but less janky</p>
           </div>
         </div>
 
@@ -699,7 +699,7 @@ const Music: React.FC = () => {
             className='help-button'
             onClick={() => setShowHelpModal(true)}
           >
-            🎵 How this enhanced music player works
+            how this enhanced music player works
           </button>
         </div>
 
@@ -722,7 +722,7 @@ const Music: React.FC = () => {
               tabIndex={-1}
             >
               <div className='help-modal-header'>
-                <h3>🎵 How this enhanced music player works</h3>
+                <h3>how this enhanced music player works</h3>
                 <button
                   className='help-modal-close'
                   onClick={() => setShowHelpModal(false)}
@@ -732,7 +732,7 @@ const Music: React.FC = () => {
               </div>
               <div className='help-modal-content'>
                 <div className='help-section'>
-                  <h4>🔒 Spotify Premium Required</h4>
+                  <h4>spotify premium required</h4>
                   <p>
                     To play music directly on this website, you need Spotify
                     Premium. This is a requirement from Spotify, not our
@@ -741,7 +741,7 @@ const Music: React.FC = () => {
                 </div>
 
                 <div className='help-section'>
-                  <h4>What You Can Do (After Login)</h4>
+                  <h4>what you can do (after login)</h4>
                   <ul>
                     <li>
                       Browse your personal playlists, top tracks, and artists
@@ -755,7 +755,7 @@ const Music: React.FC = () => {
                 </div>
 
                 <div className='help-section'>
-                  <h4>How to Play Music (Premium Users)</h4>
+                  <h4>how to play music (premium users)</h4>
                   <ol>
                     <li>Click any &ldquo;▶ Play&rdquo; button below</li>
                     <li>
@@ -771,7 +771,7 @@ const Music: React.FC = () => {
                 </div>
 
                 <div className='help-section'>
-                  <h4>Login Required</h4>
+                  <h4>login required</h4>
                   <p>
                     You need to log in with your Spotify account to access your
                     music data. Once logged in, you can browse your playlists,
@@ -787,7 +787,7 @@ const Music: React.FC = () => {
 
       {currentlyPlaying && (
         <div className='currently-playing'>
-          <h3>🎧 Currently Playing</h3>
+          <h3>currently playing</h3>
           <div className='current-track'>
             {currentlyPlaying.album.images[0] && (
               <img
@@ -810,31 +810,31 @@ const Music: React.FC = () => {
           className={`tab-btn ${activeTab === 'tracks' ? 'active' : ''}`}
           onClick={() => handleTabChange('tracks')}
         >
-          Top Tracks ({topTracks.length})
+          top tracks ({topTracks.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'artists' ? 'active' : ''}`}
           onClick={() => handleTabChange('artists')}
         >
-          Top Artists ({topArtists.length})
+          top artists ({topArtists.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'recent' ? 'active' : ''}`}
           onClick={() => handleTabChange('recent')}
         >
-          Recently Played ({recentlyPlayed.length})
+          recently played ({recentlyPlayed.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'liked' ? 'active' : ''}`}
           onClick={() => handleTabChange('liked')}
         >
-          Liked Songs ({likedSongsTotal})
+          liked songs ({likedSongsTotal})
         </button>
         <button
           className={`tab-btn ${activeTab === 'playlists' ? 'active' : ''}`}
           onClick={() => handleTabChange('playlists')}
         >
-          Playlists ({playlistsTotal})
+          playlists ({playlistsTotal})
         </button>
       </div>
 
@@ -966,7 +966,7 @@ const Music: React.FC = () => {
         {activeTab === 'liked' && (
           <div className='liked-songs-container'>
             <div className='liked-songs-header'>
-              <h3>Your Liked Songs</h3>
+              <h3>your liked songs</h3>
               <p className='liked-songs-count'>
                 {likedSongs.length} of {likedSongsTotal} songs
               </p>
@@ -1035,7 +1035,7 @@ const Music: React.FC = () => {
         {activeTab === 'playlists' && !selectedPlaylist && (
           <div className='playlists-container'>
             <div className='playlists-header'>
-              <h3>Your Playlists</h3>
+              <h3>your playlists</h3>
               <p className='playlists-count'>
                 {playlists.length} of {playlistsTotal} playlists
               </p>

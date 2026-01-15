@@ -104,7 +104,7 @@ const Chomptron: React.FC = () => {
 
       <div className='chomptron-container' data-testid='chomptron-container'>
         <div className='chomptron-header'>
-          <h1>chomptron</h1>
+          <h1 className='page-title'>chomptron</h1>
 
           <p className='chomptron-description'>
             AI-powered recipe generator using Google Gemini. Enter ingredients

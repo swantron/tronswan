@@ -67,7 +67,10 @@ function FizzBuzz() {
       />
 
       <div className='fizzbuzz-content'>
-        <h1 className='fizzbuzz-page-title' data-testid='fizzbuzz-page-title'>
+        <h1
+          className='page-title fizzbuzz-page-title'
+          data-testid='fizzbuzz-page-title'
+        >
           trontronbuzztron
         </h1>
         <p className='fizzbuzz-subtitle'>

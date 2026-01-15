@@ -11,12 +11,7 @@
 }
 
 .mlb-title {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--accent-color, #f89859);
-  text-shadow: 0 0 20px rgba(248, 152, 89, 0.3);
-  font-weight: bold;
+  /* Extends page-title - gradient text styling applied via page-title class */
   letter-spacing: 2px;
 }
 
@@ -536,7 +531,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .mlb-title {
-    font-size: clamp(1.8rem, 5.5vw, 3rem);
+    /* Responsive sizing inherited from page-title */
   }
 
   .division-title {
@@ -597,7 +592,7 @@
   }
 
   .mlb-title {
-    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    /* Responsive sizing inherited from page-title */
   }
 
   .standings-table {

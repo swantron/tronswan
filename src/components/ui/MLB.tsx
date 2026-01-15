@@ -256,8 +256,8 @@ function MLB() {
       />
 
       <div className='mlb-content'>
-        <h1 className='mlb-title' data-testid='mlb-title'>
-          MLB Standings
+        <h1 className='page-title mlb-title' data-testid='mlb-title'>
+          mlb standings
         </h1>
 
         {/* View Mode Toggle */}

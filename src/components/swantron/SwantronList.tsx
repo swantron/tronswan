@@ -79,7 +79,7 @@ const SwantronList: React.FC = () => {
 
       <div className='swantron-list-container' data-testid='swantron-list'>
         <div className='swantron-list-header'>
-          <h1>og blog</h1>
+          <h1 className='page-title'>og blog</h1>
           <form onSubmit={handleSearch} className='swantron-search-form'>
             <input
               type='text'

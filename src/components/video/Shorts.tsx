@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 import SEO from '../ui/SEO';
+
 import VideoModal from './VideoModal';
+
 import './Shorts.css';
 
 interface VideoItem {
@@ -71,7 +73,7 @@ const Shorts: React.FC = () => {
         url='/shorts'
       />
       <div className='shorts-header'>
-        <h1 className='shorts-title'>Shorts</h1>
+        <h1 className='page-title shorts-title'>shorts</h1>
       </div>
 
       <div className='shorts-grid'>

@@ -197,6 +197,23 @@
   text-shadow: none;
   letter-spacing: -0.02em;
   animation: fadeIn 0.8s ease-in-out;
+  text-transform: lowercase;
+}
+
+/* Shared page title style - matches App-title */
+.page-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin-bottom: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f89859 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  letter-spacing: -0.02em;
+  animation: fadeIn 0.8s ease-in-out;
+  text-transform: lowercase;
+  text-align: center;
 }
 
 /* Swantron link styles - larger and more prominent */
@@ -477,7 +494,8 @@ input[type='number']::placeholder {
     margin: 0.8rem 0;
   }
 
-  .App-title {
+  .App-title,
+  .page-title {
     font-size: clamp(1.8rem, 5.5vw, 3rem);
   }
 }
@@ -487,7 +505,8 @@ input[type='number']::placeholder {
     height: 30vmin;
   }
 
-  .App-title {
+  .App-title,
+  .page-title {
     font-size: clamp(1.6rem, 5vw, 2.5rem);
   }
 
@@ -544,7 +563,8 @@ input[type='number']::placeholder {
     min-width: 40px;
   }
 
-  .App-title {
+  .App-title,
+  .page-title {
     font-size: clamp(1.4rem, 4.5vw, 2rem);
   }
 }

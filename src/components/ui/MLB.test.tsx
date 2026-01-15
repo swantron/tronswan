@@ -148,7 +148,7 @@ describe('MLB Component', () => {
   test('renders MLB page title', async () => {
     renderMLB();
 
-    expect(screen.getByTestId('mlb-title')).toHaveTextContent('MLB Standings');
+    expect(screen.getByTestId('mlb-title')).toHaveTextContent('mlb standings');
   });
 
   test('renders loading state initially', () => {
