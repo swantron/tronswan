@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 
 const SEO = ({
-  title = 'tronswan - Software Development Portfolio & Projects',
+  title = 'tron swan dot com',
   description = "Explore tronswan's portfolio featuring real-time weather updates, MLB statistics, Spotify music integration, service health monitoring, and links to chomptron AI recipe app (GCP/Gemini) and swantron blog. Built by Joseph Swanson.",
   keywords = 'Joseph Swanson, software development, portfolio, weather app, MLB stats, Spotify integration, health monitoring, DevOps, chomptron, AI recipes, Gemini, GCP, Cloud Build, swantron, React, TypeScript',
   image = '/robotard_512x512.png',
