@@ -6,6 +6,8 @@ import { describe, it, expect } from 'vitest';
 
 import Shorts from './Shorts';
 
+// Mock react-helmet-async is already done globally in setupTests.ts
+
 const ShortsWithRouter = () => (
   <BrowserRouter>
     <Shorts />

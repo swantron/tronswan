@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 import '@testing-library/jest-dom';
@@ -6,27 +6,33 @@ import '@testing-library/jest-dom';
 import DealWithFont from './DealWithFont';
 
 describe('DealWithFont Component', () => {
-  test('renders deal with font title', () => {
+  test('renders deal with font title', async () => {
     render(<DealWithFont />);
-    const titleElement = screen.getByText(/deal with font/i);
-    expect(titleElement).toBeInTheDocument();
+    await waitFor(() => {
+      const titleElement = screen.getByText(/deal with font/i);
+      expect(titleElement).toBeInTheDocument();
+    });
   });
 
-  test('renders video element', () => {
+  test('renders video element', async () => {
     render(<DealWithFont />);
-    const videoElement = screen.getByTestId('dealwithfont-modal-video');
-    expect(videoElement).toBeInTheDocument();
+    await waitFor(() => {
+      const videoElement = screen.getByTestId('dealwithfont-modal-video');
+      expect(videoElement).toBeInTheDocument();
+    });
   });
 
-  test('video has correct attributes', () => {
+  test('video has correct attributes', async () => {
     render(<DealWithFont />);
-    const videoElement = screen.getByTestId('dealwithfont-modal-video');
-    // Check that video element exists and has the expected properties
-    expect(videoElement).toBeInTheDocument();
-    expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
-    expect((videoElement as HTMLVideoElement).muted).toBe(true);
-    expect((videoElement as HTMLVideoElement).loop).toBe(true);
-    expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
+    await waitFor(() => {
+      const videoElement = screen.getByTestId('dealwithfont-modal-video');
+      // Check that video element exists and has the expected properties
+      expect(videoElement).toBeInTheDocument();
+      expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
+      expect((videoElement as HTMLVideoElement).muted).toBe(true);
+      expect((videoElement as HTMLVideoElement).loop).toBe(true);
+      expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
+    });
   });
 
   test('renders container with correct test id', () => {

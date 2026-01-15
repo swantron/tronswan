@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { expect, describe, test } from 'vitest';
 import '@testing-library/jest-dom';
@@ -12,27 +12,35 @@ describe('VideoPage Component', () => {
     testId: 'test-video',
   };
 
-  test('renders title correctly', () => {
+  test('renders title correctly', async () => {
     render(<VideoPage {...mockProps} />);
-    const titleElement = screen.getByText('Test Video');
-    expect(titleElement).toBeInTheDocument();
+    // VideoModal renders via portal, so wait for it
+    await waitFor(() => {
+      const titleElement = screen.getByText('Test Video');
+      expect(titleElement).toBeInTheDocument();
+    });
   });
 
-  test('renders video element with correct source', () => {
+  test('renders video element with correct source', async () => {
     render(<VideoPage {...mockProps} />);
-    const videoElement = screen.getByTestId('test-video-modal-video');
-    expect(videoElement).toBeInTheDocument();
-    expect(videoElement).toHaveAttribute('src', '/test-video.mp4');
+    // VideoModal renders via portal to document.body
+    await waitFor(() => {
+      const videoElement = screen.getByTestId('test-video-modal-video');
+      expect(videoElement).toBeInTheDocument();
+      expect(videoElement).toHaveAttribute('src', '/test-video.mp4');
+    });
   });
 
-  test('video has correct attributes', () => {
+  test('video has correct attributes', async () => {
     render(<VideoPage {...mockProps} />);
-    const videoElement = screen.getByTestId('test-video-modal-video');
-    expect(videoElement).toBeInTheDocument();
-    expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
-    expect((videoElement as HTMLVideoElement).muted).toBe(true);
-    expect((videoElement as HTMLVideoElement).loop).toBe(true);
-    expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
+    await waitFor(() => {
+      const videoElement = screen.getByTestId('test-video-modal-video');
+      expect(videoElement).toBeInTheDocument();
+      expect((videoElement as HTMLVideoElement).autoplay).toBe(true);
+      expect((videoElement as HTMLVideoElement).muted).toBe(true);
+      expect((videoElement as HTMLVideoElement).loop).toBe(true);
+      expect((videoElement as HTMLVideoElement).playsInline).toBe(true);
+    });
   });
 
   test('renders container with correct test id', () => {
@@ -41,15 +49,17 @@ describe('VideoPage Component', () => {
     expect(container).toBeInTheDocument();
   });
 
-  test('renders fallback content with download link', () => {
+  test('renders fallback content with download link', async () => {
     render(<VideoPage {...mockProps} />);
-    const fallbackElement = screen.getByText(
-      'Your browser does not support the video tag.'
-    );
-    expect(fallbackElement).toBeInTheDocument();
+    await waitFor(() => {
+      const fallbackElement = screen.getByText(
+        'Your browser does not support the video tag.'
+      );
+      expect(fallbackElement).toBeInTheDocument();
 
-    const downloadLink = screen.getByText('Download MP4 version');
-    expect(downloadLink).toBeInTheDocument();
-    expect(downloadLink).toHaveAttribute('href', '/test-video.mp4');
+      const downloadLink = screen.getByText('Download MP4 version');
+      expect(downloadLink).toBeInTheDocument();
+      expect(downloadLink).toHaveAttribute('href', '/test-video.mp4');
+    });
   });
 });
