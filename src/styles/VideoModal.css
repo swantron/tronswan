@@ -11,6 +11,7 @@
   z-index: 1000;
   backdrop-filter: blur(5px);
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .video-modal-content {
@@ -25,6 +26,7 @@
   animation: modalSlideIn 0.3s ease-out;
   display: flex;
   flex-direction: column;
+  margin: auto;
 }
 
 @keyframes modalSlideIn {
