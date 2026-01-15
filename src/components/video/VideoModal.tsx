@@ -16,7 +16,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
   videoSrc,
   testId,
 }) => {
-  // Handle escape key press
+  // Handle escape key press and scroll position
   useEffect(() => {
     const handleEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -25,14 +25,31 @@ const VideoModal: React.FC<VideoModalProps> = ({
     };
 
     if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
       document.addEventListener('keydown', handleEscape);
-      // Prevent body scroll when modal is open
+      
+      // Prevent body scroll when modal is open and preserve scroll position
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      
+      // Restore scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     };
   }, [isOpen, onClose]);
 
