@@ -26,7 +26,7 @@
 /* Weather search styles */
 .weather-search {
   margin-bottom: 3rem;
-  max-width: 800px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -43,19 +43,24 @@
 }
 
 .autocomplete-wrapper {
-  flex: 1;
+  flex: 1 1 auto;
   position: relative;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .city-input {
-  flex: 1;
-  padding: 1rem 1.5rem;
-  font-size: 1.1rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
   border: 2px solid rgba(248, 152, 89, 0.3);
   border-radius: var(--border-radius);
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--primary-text);
   transition: all var(--transition-speed) ease;
+  box-sizing: border-box;
 }
 
 .city-input:focus {
@@ -68,6 +73,7 @@
 .city-input::placeholder {
   color: var(--primary-text);
   opacity: 0.6;
+  font-size: 0.8rem;
 }
 
 .city-input:disabled {
@@ -97,6 +103,8 @@
   transition: all var(--transition-speed) ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--primary-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .suggestion-item:last-child {
@@ -124,7 +132,7 @@
   margin-top: 0.25rem;
   color: var(--primary-text);
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.8;
 }
 
