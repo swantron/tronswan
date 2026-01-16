@@ -1,6 +1,8 @@
 .chomptron-page {
   min-height: 100vh;
-  padding: 2rem 1rem;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  padding: var(--page-padding, 2rem 1rem);
 }
 
 .chomptron-container {
@@ -19,12 +21,14 @@
 .chomptron-header p {
   font-size: 1.2rem;
   line-height: 1.6;
+  color: var(--primary-text);
 }
 
 .chomptron-description {
   font-size: 1.1rem;
-  color: #ffffff;
+  color: var(--primary-text);
   margin-bottom: 2rem;
+  opacity: 0.9;
 }
 
 .chomptron-widget {
@@ -40,49 +44,68 @@
 
 .widget-input {
   flex: 1;
-  padding: 1rem;
-  font-size: 1rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  transition: border-color 0.2s;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: 2px solid rgba(248, 152, 89, 0.3);
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+  transition: all var(--transition-speed) ease;
 }
 
 .widget-input:focus {
   outline: none;
-  border-color: #f89859;
+  border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(248, 152, 89, 0.2);
+}
+
+.widget-input::placeholder {
+  color: var(--primary-text);
+  opacity: 0.6;
+}
+
+.widget-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .widget-button {
   padding: 1rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  background-color: #f89859;
+  font-size: 1.2rem;
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all var(--transition-speed) ease;
+  min-width: 60px;
   white-space: nowrap;
 }
 
 .widget-button:hover:not(:disabled) {
-  background-color: #e6813f;
+  background-color: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.4);
 }
 
 .widget-button:disabled {
-  background-color: #ccc;
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .widget-hint {
   font-size: 0.9rem;
-  color: #ffffff;
+  color: var(--primary-text);
+  opacity: 0.8;
   text-align: center;
   margin: 0;
 }
 
 .chomptron-external-link {
-  color: #f89859;
+  color: var(--accent-color);
   text-decoration: none;
   font-weight: 600;
 }
@@ -92,9 +115,9 @@
 }
 
 .chomptron-quota-warning {
-  background-color: #fff3cd;
-  border: 1px solid #ffc107;
-  border-radius: 8px;
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 2px solid rgba(255, 193, 7, 0.5);
+  border-radius: var(--border-radius);
   padding: 1rem;
   margin: 1.5rem 0;
   max-width: 600px;
@@ -104,19 +127,21 @@
 
 .warning-title {
   font-weight: 600;
-  color: #856404;
+  color: var(--accent-color);
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
 }
 
 .warning-message {
-  color: #856404;
+  color: var(--primary-text);
+  opacity: 0.9;
   margin: 0.5rem 0;
   line-height: 1.5;
 }
 
 .warning-info {
-  color: #856404;
+  color: var(--primary-text);
+  opacity: 0.8;
   margin: 0.5rem 0 0 0;
   font-size: 0.9rem;
   line-height: 1.4;
