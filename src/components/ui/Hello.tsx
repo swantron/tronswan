@@ -48,7 +48,7 @@ function Hello() {
 
           <a
             className='hello-link'
-            href='https://swantron.github.io/swantron/'
+            href='https://swantron.com/'
             target='_blank'
             rel='noopener noreferrer'
             aria-label="Joseph's blog"

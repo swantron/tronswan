@@ -60,7 +60,7 @@ describe('Hello Component', () => {
     expect(personalLink).toBeInTheDocument();
     expect(personalLink.closest('a')).toHaveAttribute(
       'href',
-      'https://swantron.github.io/swantron/'
+      'https://swantron.com/'
     );
     expect(personalLink.closest('a')).toHaveAttribute('target', '_blank');
     expect(personalLink.closest('a')).toHaveAttribute(

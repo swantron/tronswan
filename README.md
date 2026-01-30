@@ -105,7 +105,7 @@ building / deploying / learning
    VITE_GOOGLE_DOCS_API_KEY=your_google_docs_api_key
 
    # Optional: Swantron Hugo API (for blog posts)
-   VITE_SWANTRON_API_URL=https://swantron.github.io/swantron
+   VITE_SWANTRON_API_URL=https://swantron.com
    ```
 
 ### Available Scripts
@@ -373,7 +373,7 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 - `VITE_SPOTIFY_CLIENT_SECRET`: Spotify Client Secret for music player integration
 - `VITE_SPOTIFY_REDIRECT_URI`: Spotify OAuth redirect URI (default: `/music/callback`)
 - `VITE_GOOGLE_DOCS_API_KEY`: Google Docs API key for dynamic resume content
-- `VITE_SWANTRON_API_URL`: Base URL for Hugo static site API (default: `https://swantron.github.io/swantron`)
+- `VITE_SWANTRON_API_URL`: Base URL for Hugo static site API (default: `https://swantron.com`)
 
 **Note:** The Google Docs document ID is hardcoded in the service. See [Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md) for details.
 

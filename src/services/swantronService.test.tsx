@@ -143,7 +143,7 @@ describe('swantronService', () => {
       const result = await swantronService.getPosts();
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/index.json'
+        'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(3); // We only have 3 posts total
       expect(result.totalPages).toBe(1); // Math.ceil(3 / 10) = 1
@@ -182,7 +182,7 @@ describe('swantronService', () => {
       const result = await swantronService.getPosts(1, 2);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/index.json'
+        'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(2); // perPage = 2
       expect(result.totalPages).toBe(2); // Math.ceil(3 / 2) = 2
@@ -332,7 +332,7 @@ describe('swantronService', () => {
       const result = await swantronService.getPosts();
 
       expect(result.posts[0].featuredImage).toBe(
-        'https://swantron.github.io/swantron/uploads/2023/image.jpg'
+        'https://swantron.com/uploads/2023/image.jpg'
       );
     });
 
@@ -431,7 +431,7 @@ describe('swantronService', () => {
       const result = await swantronService.getPostById(1);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/index.json'
+        'https://swantron.com/api/posts/index.json'
       );
       expect(result.id).toBe(1);
       expect(result.title).toBe('Single Post');
@@ -556,7 +556,7 @@ describe('swantronService', () => {
       const result = await swantronService.searchPosts('search');
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/index.json'
+        'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(1); // Only "Search Result" matches "search"
       expect(result.posts[0].title).toBe('Search Result');
@@ -573,7 +573,7 @@ describe('swantronService', () => {
       const result = await swantronService.searchPosts('test', 1, 1);
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://swantron.github.io/swantron/api/posts/index.json'
+        'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(1); // perPage = 1
       expect(result.totalPages).toBe(2); // Math.ceil(2 matching posts / 1 perPage) = 2
