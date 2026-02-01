@@ -105,6 +105,13 @@ interface StandingsData {
 }
 
 function MLB() {
+  const [timeRemaining, setTimeRemaining] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
+
   const [standings, setStandings] = useState<DivisionStanding[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -115,6 +122,30 @@ function MLB() {
     'standings' | 'teamStats' | 'playoff' | 'rankings'
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const openingDay = new Date('2026-03-26T00:00:00'); // March 26, 2026
+      const now = new Date();
+      const difference = openingDay.getTime() - now.getTime();
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+
+        setTimeRemaining({ days, hours, minutes, seconds });
+      } else {
+        setTimeRemaining(null); // Opening Day has passed
+      }
+    };
+
+    calculateTimeRemaining();
+    const timer = setInterval(calculateTimeRemaining, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const getDivisionName = (divisionId: number): string => {
     const divisions: Record<number, string> = {
@@ -258,6 +289,44 @@ function MLB() {
       />
 
       <div className='mlb-content'>
+        {timeRemaining && (
+          <Card className='opening-day-countdown'>
+            <div className='countdown-content'>
+              <h2 className='countdown-title'>COUNTDOWN TO OPENING DAY 2026</h2>
+              <div className='timers'>
+                <div className='timer-block'>
+                  <span className='timer-value'>{timeRemaining.days}</span>
+                  <span className='timer-label'>DAYS</span>
+                </div>
+                <div className='timer-separator'>:</div>
+                <div className='timer-block'>
+                  <span className='timer-value'>
+                    {String(timeRemaining.hours).padStart(2, '0')}
+                  </span>
+                  <span className='timer-label'>HRS</span>
+                </div>
+                <div className='timer-separator'>:</div>
+                <div className='timer-block'>
+                  <span className='timer-value'>
+                    {String(timeRemaining.minutes).padStart(2, '0')}
+                  </span>
+                  <span className='timer-label'>MIN</span>
+                </div>
+                <div className='timer-separator'>:</div>
+                <div className='timer-block'>
+                  <span className='timer-value'>
+                    {String(timeRemaining.seconds).padStart(2, '0')}
+                  </span>
+                  <span className='timer-label'>SEC</span>
+                </div>
+              </div>
+              <p className='countdown-footer'>
+                Showing 2025 Season Data Until First Pitch
+              </p>
+            </div>
+          </Card>
+        )}
+
         <h1 className='page-title mlb-title' data-testid='mlb-title'>
           mlb standings
         </h1>
