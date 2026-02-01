@@ -1,70 +1,23 @@
 /* App.css */
 
-/* CSS Variables for theming */
-:root {
-  --primary-bg: #282c34;
-  --secondary-bg: #f0f0f0;
-  --primary-text: #ffffff;
-  --secondary-text: #333333;
-  --accent-color: #f89859;
-  --error-color: #ff4444;
-  --success-color: #4caf50;
-  --border-radius: 10px;
-  --transition-speed: 0.3s;
-  --max-width: 1200px;
-  --container-padding: 20px;
-  --border-color: #dfe6e9;
-  
-  /* Spacing */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-  --page-padding: 2rem 1rem;
-  
-  /* Typography Scale */
-  --font-xs: clamp(0.75rem, 1.5vw, 0.875rem);
-  --font-sm: clamp(0.875rem, 2vw, 1rem);
-  --font-base: clamp(1rem, 2.5vw, 1.125rem);
-  --font-lg: clamp(1.125rem, 3vw, 1.25rem);
-  --font-xl: clamp(1.25rem, 4vw, 1.5rem);
-  --font-2xl: clamp(1.5rem, 5vw, 2rem);
-  --font-3xl: clamp(2rem, 6vw, 3.5rem);
-  
-  /* Transitions */
-  --transition-fast: 0.15s;
-  --transition-normal: 0.3s;
-  --transition-slow: 0.5s;
-  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Breakpoints (for reference in JS) */
-  --breakpoint-sm: 480px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-
-  /* Typography - Font Families */
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  --font-family-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Base styles */
+/* Base styles using Theme Variables */
 .App {
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
 }
 
 /* Container for content */
 .App-container {
-  max-width: var(--max-width);
+  max-width: 1280px;
   margin: 0 auto;
-  padding: var(--container-padding);
+  padding: var(--space-4);
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -72,77 +25,65 @@
 
 /* Header styles */
 .App-header {
-  background: var(--primary-bg);
+  background: var(--bg-dark);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  font-size: calc(10px + 2vmin);
-  color: var(--primary-text);
-  padding: 2rem;
+  padding: var(--space-4);
   position: relative;
+  overflow-x: hidden;
 }
 
-/* Navigation styles */
+/* Navigation styles - Glassmorphism Dock */
 .main-nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 2rem;
-  padding: 1.2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--border-radius);
-  max-width: 1000px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+  padding: var(--space-2);
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 100px;
+  /* Pill shape */
+
+  max-width: fit-content;
   margin-left: auto;
   margin-right: auto;
   position: sticky;
-  top: 0;
+  top: var(--space-4);
   z-index: 100;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all var(--transition-normal);
 }
 
 .nav-link {
-  color: var(--primary-text);
+  color: var(--text-secondary);
   text-decoration: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 6px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1.05rem;
-  white-space: nowrap;
-  border: 1px solid transparent;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 99px;
+  transition: all var(--transition-fast);
+  font-size: 0.95rem;
   font-weight: 500;
+  letter-spacing: -0.01em;
   position: relative;
 }
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0%;
-  height: 2px;
-  background: linear-gradient(90deg, #f89859, #ff6b6b);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
+.nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.nav-link:hover::after {
-  width: 80%;
-}
-
-.nav-link:hover,
 .nav-link.active {
-  background: linear-gradient(135deg, rgba(248, 152, 89, 0.9), rgba(255, 107, 107, 0.9));
-  color: var(--primary-bg);
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.4);
+  color: var(--text-primary);
+  background: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
 /* Home container styles */
@@ -152,33 +93,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--space-8);
   min-height: 60vh;
-  border-radius: var(--border-radius);
-  margin: 1rem 0;
-  animation: fadeIn 0.6s ease-in-out;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .home-description {
-  margin-top: 2rem;
+  margin-top: var(--space-8);
   max-width: 800px;
   text-align: center;
-}
-
-.home-description p {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  line-height: 1.6;
-  margin: 1rem 0;
-  opacity: 0.9;
 }
 
 /* Logo styles */
 .App-logo {
   height: 40vmin;
-  max-height: 300px;
+  max-height: 320px;
   pointer-events: none;
-  transition: transform var(--transition-speed) ease;
-  filter: drop-shadow(0 4px 20px rgba(248, 152, 89, 0.3));
+  transition: transform var(--transition-normal);
+  filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.3));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -188,252 +120,52 @@
 }
 
 .App-logo:hover {
-  filter: drop-shadow(0 6px 30px rgba(248, 152, 89, 0.5));
+  filter: drop-shadow(0 0 60px rgba(99, 102, 241, 0.5));
   transform: scale(1.05);
 }
 
 /* Title styles */
-.App-title {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  margin-bottom: 2rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #f89859 0%, #ff6b6b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
-  letter-spacing: -0.02em;
-  animation: fadeIn 0.8s ease-in-out;
-  text-transform: lowercase;
-}
-
-/* Shared page title style - matches App-title */
+.App-title,
 .page-title {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  margin-bottom: 2rem;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
-  background: linear-gradient(135deg, #f89859 0%, #ff6b6b 100%);
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-6);
+  background: linear-gradient(135deg, white 0%, #a5b4fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: none;
-  letter-spacing: -0.02em;
-  animation: fadeIn 0.8s ease-in-out;
+  text-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
   text-transform: lowercase;
   text-align: center;
 }
 
-/* Swantron link styles - larger and more prominent */
+/* Swantron Main Link */
 .swantron-link {
-  font-size: clamp(2rem, 7vw, 3.5rem);
-  margin: 1rem 0;
-  font-weight: 800;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  transition: all var(--transition-speed) ease;
+  margin: var(--space-4) 0;
 }
 
 .swantron-link a {
-  color: var(--primary-text);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: transparent;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-normal);
   display: inline-block;
-  padding: 0.8rem 1.5rem;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  min-height: 44px;
-  min-width: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: linear-gradient(135deg, rgba(248, 152, 89, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
-  border: 2px solid transparent;
-  overflow: hidden;
-}
-
-.swantron-link a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(248, 152, 89, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.swantron-link a:hover::before {
-  left: 100%;
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .swantron-link a:hover {
-  color: var(--accent-color);
-  transform: scale(1.08) translateY(-2px);
-  text-shadow: 3px 3px 8px rgba(248, 152, 89, 0.6);
-  border-color: rgba(248, 152, 89, 0.5);
-  box-shadow: 0 8px 25px rgba(248, 152, 89, 0.3);
-}
-
-.swantron-link a:active {
-  transform: scale(1.02) translateY(0);
-}
-
-/* Get it button styles */
-.get-it-section {
-  margin-top: 2rem;
-}
-
-.get-it-button {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  border: none;
-  padding: 1rem 2rem;
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
-  font-weight: bold;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  text-transform: lowercase;
-  font-family: inherit;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.get-it-button:hover {
-  background-color: #e6894a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.get-it-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.get-it-button:focus {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-/* External links styles */
-.external-links {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* Link styles */
-.App-link {
-  color: var(--accent-color);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  transition: all var(--transition-speed) ease;
-  position: relative;
-}
-
-.App-link:hover,
-.App-link:focus {
-  background-color: var(--accent-color);
-  color: var(--primary-bg);
-  transform: translateY(-2px);
-  outline: none;
-}
-
-.App-link:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-/* FizzBuzz component styles */
-.fizzbuzz-container {
-  background-color: var(--secondary-bg);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  margin-top: 2rem;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.fizzbuzz-title {
-  font-size: clamp(1.2rem, 4vw, 1.8rem);
-  color: var(--secondary-text);
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-
-.fizzbuzz-sequence {
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  color: var(--secondary-text);
-  line-height: 1.6;
-}
-
-/* Input styles */
-input[type='number'] {
-  background-color: var(--accent-color);
-  color: var(--primary-text);
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: var(--border-radius);
-  margin-top: 1rem;
-  font-size: 1rem;
-  width: 100%;
-  max-width: 300px;
-  transition: all var(--transition-speed) ease;
-}
-
-input[type='number']:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--primary-bg);
-  transform: scale(1.02);
-}
-
-input[type='number']::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Weather display styles */
-.weather-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  width: 100%;
-  max-width: 800px;
-  margin: 2rem auto;
-}
-
-.weather-item {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  transition: transform var(--transition-speed) ease;
-}
-
-.weather-item:hover {
-  transform: translateY(-5px);
-}
-
-/* Error message styles */
-.error-message {
-  color: var(--error-color);
-  background-color: rgba(255, 68, 68, 0.1);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  margin: 1rem 0;
-  width: 100%;
-  max-width: 600px;
-}
-
-/* Loading state styles */
-.loading-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-left-color: var(--accent-color);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 2rem auto;
+  transform: translateY(-4px) scale(1.02);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Animations */
@@ -441,12 +173,7 @@ input[type='number']::placeholder {
   from {
     transform: rotate(0deg);
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-@keyframes spin {
   to {
     transform: rotate(360deg);
   }
@@ -457,211 +184,26 @@ input[type='number']::placeholder {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes logoFloat {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .App-header {
-    padding: 1rem;
-  }
-
-  .weather-container {
-    grid-template-columns: 1fr;
-  }
-
-  .fizzbuzz-container {
-    padding: 1.5rem;
-  }
-
   .main-nav {
-    gap: 0.5rem;
-    padding: 1rem;
+    border-radius: var(--radius-lg);
+    gap: 4px;
+    padding: var(--space-2);
+    width: 95%;
+    bottom: 20px;
+    /* Move to bottom for mobile? Optional */
   }
 
   .nav-link {
-    padding: 0.65rem 1rem;
-    font-size: 1rem;
-  }
-
-  .swantron-link {
-    font-size: clamp(1.8rem, 6vw, 2.8rem);
-    margin: 0.8rem 0;
-  }
-
-  .App-title,
-  .page-title {
-    font-size: clamp(1.8rem, 5.5vw, 3rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .App-logo {
-    height: 30vmin;
-  }
-
-  .App-title,
-  .page-title {
-    font-size: clamp(1.6rem, 5vw, 2.5rem);
-  }
-
-  .main-nav {
-    gap: 0.45rem;
-    padding: 0.8rem;
-    max-width: 100%;
-  }
-
-  .nav-link {
-    padding: 0.55rem 0.9rem;
-    font-size: 0.95rem;
-  }
-
-  .swantron-link {
-    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
-    margin: 0.6rem 0;
-  }
-
-  input[type='number'] {
-    padding: 0.6rem 1rem;
-  }
-}
-
-/* Very small screens */
-@media (max-width: 360px) {
-  .App-header {
-    padding: 0.5rem;
-  }
-
-  .home-container {
-    padding: 1rem;
-    min-height: 50vh;
-  }
-
-  .main-nav {
-    gap: 0.4rem;
-    padding: 0.7rem;
-  }
-
-  .nav-link {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-  }
-
-  .swantron-link {
-    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
-    margin: 0.5rem 0;
-  }
-
-  .swantron-link a {
-    padding: 0.6rem 1rem;
-    min-height: 40px;
-    min-width: 40px;
-  }
-
-  .App-title,
-  .page-title {
-    font-size: clamp(1.4rem, 4.5vw, 2rem);
-  }
-}
-
-/* Error Boundary styles */
-.error-boundary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  padding: 2rem;
-  background-color: var(--secondary-bg);
-  border-radius: var(--border-radius);
-  margin: 2rem;
-}
-
-.error-boundary-content {
-  text-align: center;
-  max-width: 600px;
-  color: var(--secondary-text);
-}
-
-.error-boundary-content h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--error-color);
-}
-
-.error-boundary-content p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
-.error-boundary-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.error-boundary-retry-button,
-.error-boundary-reload-button {
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all var(--transition-speed) ease;
-}
-
-.error-boundary-retry-button:hover,
-.error-boundary-reload-button:hover {
-  background-color: var(--primary-bg);
-  transform: translateY(-2px);
-}
-
-.error-boundary-details {
-  text-align: left;
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  margin-top: 1rem;
-}
-
-.error-boundary-details summary {
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.error-boundary-stack {
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  color: var(--error-color);
-}
-
-/* Print styles */
-@media print {
-  .App-header {
-    background-color: white;
-    color: black;
-  }
-
-  .App-link {
-    color: black;
-    text-decoration: underline;
+    font-size: 0.85rem;
+    padding: var(--space-2) var(--space-3);
   }
 }

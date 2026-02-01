@@ -6,6 +6,7 @@ import { logger } from '../../utils/logger';
 import SEO from '../ui/SEO';
 
 import SwantronCard from './SwantronCard';
+import { Button } from '../common/Button';
 import '../../styles/SwantronList.css';
 
 const SwantronList: React.FC = () => {
@@ -96,9 +97,9 @@ const SwantronList: React.FC = () => {
               placeholder='Search posts...'
               className='swantron-search-input'
             />
-            <button type='submit' className='swantron-search-button'>
+            <Button type='submit' variant='primary'>
               Search
-            </button>
+            </Button>
           </form>
         </div>
 
@@ -120,7 +121,7 @@ const SwantronList: React.FC = () => {
 
             {totalPages > 1 && (
               <div className='pagination'>
-                <button
+                <Button
                   onClick={() => {
                     const newPage = Math.max(page - 1, 1);
                     logger.info('Swantron pagination - Previous clicked', {
@@ -132,14 +133,14 @@ const SwantronList: React.FC = () => {
                     setPage(newPage);
                   }}
                   disabled={page === 1}
-                  className='pagination-button'
+                  variant='secondary'
                 >
                   Previous
-                </button>
+                </Button>
                 <span className='pagination-info'>
                   Page {page} of {totalPages}
                 </span>
-                <button
+                <Button
                   onClick={() => {
                     const newPage = Math.min(page + 1, totalPages);
                     logger.info('Swantron pagination - Next clicked', {
@@ -151,10 +152,10 @@ const SwantronList: React.FC = () => {
                     setPage(newPage);
                   }}
                   disabled={page === totalPages}
-                  className='pagination-button'
+                  variant='secondary'
                 >
                   Next
-                </button>
+                </Button>
               </div>
             )}
           </>
