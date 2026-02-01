@@ -1,7 +1,7 @@
 .health-page {
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: var(--primary-bg, #282c34);
+  /* Background inherited from global body */
   color: var(--primary-text, #ffffff);
 }
 
@@ -56,6 +56,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -138,28 +139,26 @@
 
 /* Overall Status Card */
 .overall-status-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: transparent;
   padding: 2rem;
   margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(248, 152, 89, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: none;
 }
 
 .overall-status-card.status-healthy {
   border-color: rgba(76, 175, 80, 0.5);
-  background: rgba(76, 175, 80, 0.05);
+  background: transparent;
 }
 
 .overall-status-card.status-degraded {
   border-color: rgba(255, 152, 0, 0.5);
-  background: rgba(255, 152, 0, 0.05);
+  background: transparent;
 }
 
 .overall-status-card.status-down {
   border-color: rgba(244, 67, 54, 0.5);
-  background: rgba(244, 67, 54, 0.05);
+  background: transparent;
 }
 
 .status-indicator {
@@ -193,7 +192,7 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border-radius: 12px;
   min-width: 100px;
 }
@@ -336,12 +335,10 @@
 }
 
 .health-section {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  background: transparent;
   padding: 2rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(248, 152, 89, 0.2);
+  border: none;
+  box-shadow: none;
 }
 
 .section-title {
