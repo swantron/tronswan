@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { logger } from '../../utils/logger';
 
 import SEO from './SEO';
+import { Card } from '../common/Card';
 import '../../styles/FizzBuzz.css';
 
 interface FizzBuzzDisplayProps {
@@ -77,39 +78,41 @@ function FizzBuzz() {
           🤖 robot-powered FizzBuzz sequence generator
         </p>
 
-        <div className='fizzbuzz-input-section'>
-          <label htmlFor='fizzbuzz-input' className='fizzbuzz-label'>
-            Enter a number to generate FizzBuzz sequence:
-          </label>
-          <input
-            id='fizzbuzz-input'
-            type='number'
-            value={inputNumber}
-            onChange={handleInputChange}
-            placeholder='Enter a number (e.g., 100)'
-            aria-label='Enter a number for FizzBuzz'
-            min='1'
-            max='1000'
-            className='fizzbuzz-input'
-          />
-        </div>
-
-        {inputNumber &&
-          !isNaN(Number(inputNumber)) &&
-          parseInt(inputNumber) > 0 && (
-            <FizzBuzzDisplay
-              number={parseInt(inputNumber)}
-              onGenerate={() => {
-                logger.info('FizzBuzz sequence generated', {
-                  inputNumber: parseInt(inputNumber),
-                  sequenceLength: parseInt(inputNumber),
-                  timestamp: new Date().toISOString(),
-                });
-              }}
+        <Card className='fizzbuzz-card'>
+          <div className='fizzbuzz-input-section'>
+            <label htmlFor='fizzbuzz-input' className='fizzbuzz-label'>
+              Enter a number to generate FizzBuzz sequence:
+            </label>
+            <input
+              id='fizzbuzz-input'
+              type='number'
+              value={inputNumber}
+              onChange={handleInputChange}
+              placeholder='Enter a number (e.g., 100)'
+              aria-label='Enter a number for FizzBuzz'
+              min='1'
+              max='1000'
+              className='fizzbuzz-input'
             />
-          )}
+          </div>
 
-        <div className='fizzbuzz-rules'>
+          {inputNumber &&
+            !isNaN(Number(inputNumber)) &&
+            parseInt(inputNumber) > 0 && (
+              <FizzBuzzDisplay
+                number={parseInt(inputNumber)}
+                onGenerate={() => {
+                  logger.info('FizzBuzz sequence generated', {
+                    inputNumber: parseInt(inputNumber),
+                    sequenceLength: parseInt(inputNumber),
+                    timestamp: new Date().toISOString(),
+                  });
+                }}
+              />
+            )}
+        </Card>
+
+        <Card className='fizzbuzz-rules'>
           <h3>FizzBuzz Rules:</h3>
           <ul>
             <li>Numbers divisible by 3 → &quot;Fizz&quot;</li>
@@ -117,7 +120,7 @@ function FizzBuzz() {
             <li>Numbers divisible by both 3 and 5 → &quot;FizzBuzz&quot;</li>
             <li>All other numbers → the number itself</li>
           </ul>
-        </div>
+        </Card>
 
         <div className='fizzbuzz-info'>
           <p>

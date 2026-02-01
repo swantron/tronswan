@@ -4,6 +4,8 @@ import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 
 import SEO from './SEO';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 import '../../styles/Weather.css';
 
 interface WeatherData {
@@ -124,7 +126,7 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
       <h3 className='forecast-title'>5-Day Forecast</h3>
       <div className='forecast-grid'>
         {forecast.map((day, index) => (
-          <div key={index} className='forecast-day'>
+          <Card key={index} className='forecast-day' hoverable>
             <div className='forecast-date'>{formatDate(day.date)}</div>
             <div className='forecast-icon'>
               <img
@@ -146,7 +148,7 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
             </div>
             <div className='forecast-description'>{day.description}</div>
             <div className='forecast-humidity'>{day.humidity}%</div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>
@@ -200,42 +202,42 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
     <div className='weather-container' data-testid='weather-display'>
       {/* Weather Description */}
       {weather.weatherDescription && (
-        <div className='weather-item weather-description'>
+        <Card className='weather-item weather-description'>
           <p data-testid='weather-description-display'>
             🌤️ {weather.weatherDescription}
           </p>
-        </div>
+        </Card>
       )}
 
       {/* Temperature Section */}
       <div className='weather-section'>
         <h3>Temperature</h3>
         {weather.temperature && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='temperature-display'>
               🌡️ {Math.round(convertTempForDisplay(weather.temperature))}
               {getTemperatureUnit()}
             </p>
-          </div>
+          </Card>
         )}
         {weather.feelsLike && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='feels-like-display'>
               🤔 Feels like{' '}
               {Math.round(convertTempForDisplay(weather.feelsLike))}
               {getTemperatureUnit()}
             </p>
-          </div>
+          </Card>
         )}
         {weather.tempMin && weather.tempMax && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='temp-range-display'>
               Range: {Math.round(convertTempForDisplay(weather.tempMin))}
               {getTemperatureUnit()} -{' '}
               {Math.round(convertTempForDisplay(weather.tempMax))}
               {getTemperatureUnit()}
             </p>
-          </div>
+          </Card>
         )}
       </div>
 
@@ -243,23 +245,23 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
       <div className='weather-section'>
         <h3>Atmospheric Conditions</h3>
         {weather.pressure && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='pressure-display'>
               Pressure: {weather.pressure} hPa
             </p>
-          </div>
+          </Card>
         )}
         {weather.humidity && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='humidity-display'>Humidity: {weather.humidity}%</p>
-          </div>
+          </Card>
         )}
         {weather.cloudCoverage !== null && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='clouds-display'>
               Cloud Coverage: {weather.cloudCoverage}%
             </p>
-          </div>
+          </Card>
         )}
       </div>
 
@@ -267,21 +269,21 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
       <div className='weather-section'>
         <h3>Wind & Visibility</h3>
         {weather.windSpeed && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='wind-display'>
               💨 Wind: {weather.windSpeed} mph{' '}
               {weather.windDirection
                 ? getWindDirection(weather.windDirection)
                 : ''}
             </p>
-          </div>
+          </Card>
         )}
         {weather.visibility && (
-          <div className='weather-item'>
+          <Card className='weather-item'>
             <p data-testid='visibility-display'>
               👁️ Visibility: {Math.round(weather.visibility / 1609.34)} miles
             </p>
-          </div>
+          </Card>
         )}
       </div>
 
@@ -290,31 +292,31 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         <div className='weather-section'>
           <h3>Sun Times</h3>
           {weather.sunrise && (
-            <div className='weather-item'>
+            <Card className='weather-item'>
               <p data-testid='sunrise-display'>
                 🌅 Sunrise: {formatTime(weather.sunrise)}
               </p>
-            </div>
+            </Card>
           )}
           {weather.sunset && (
-            <div className='weather-item'>
+            <Card className='weather-item'>
               <p data-testid='sunset-display'>
                 🌇 Sunset: {formatTime(weather.sunset)}
               </p>
-            </div>
+            </Card>
           )}
         </div>
       )}
 
       {/* Location */}
       {weather.city && (
-        <div className='weather-item weather-location'>
+        <Card className='weather-item weather-location'>
           <p data-testid='location-display'>
             📍 {weather.city}
             {weather.state ? `, ${weather.state}` : ''}
             {weather.country ? `, ${weather.country}` : ''}
           </p>
-        </div>
+        </Card>
       )}
     </div>
   );
@@ -375,7 +377,7 @@ function Weather() {
       icon: dayItems[0].weather[0].icon,
       humidity: Math.round(
         dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
-          dayItems.length
+        dayItems.length
       ),
     }));
   };
@@ -889,14 +891,14 @@ function Weather() {
                   <div className='suggestions-loading'>Searching...</div>
                 )}
               </div>
-              <button
+              <Button
                 type='submit'
                 className='search-button'
                 disabled={loading || !cityInput.trim()}
                 data-testid='search-button'
               >
                 {loading ? 'Loading' : 'Search'}
-              </button>
+              </Button>
             </div>
           </form>
 
@@ -909,8 +911,8 @@ function Weather() {
 
         <div className='weather-controls'>
           <div className='view-toggle'>
-            <button
-              className={`toggle-button ${viewMode === 'current' ? 'active' : ''}`}
+            <Button
+              variant={viewMode === 'current' ? 'primary' : 'secondary'}
               onClick={() => {
                 logger.info('Weather view mode changed', {
                   from: viewMode,
@@ -923,9 +925,9 @@ function Weather() {
               disabled={loading}
             >
               Current
-            </button>
-            <button
-              className={`toggle-button ${viewMode === 'forecast' ? 'active' : ''}`}
+            </Button>
+            <Button
+              variant={viewMode === 'forecast' ? 'primary' : 'secondary'}
               onClick={() => {
                 logger.info('Weather view mode changed', {
                   from: viewMode,
@@ -938,31 +940,34 @@ function Weather() {
               disabled={loading}
             >
               Forecast
-            </button>
+            </Button>
           </div>
 
           <div className='temperature-unit-toggle'>
-            <button
-              className={`unit-button ${temperatureUnit === 'imperial' ? 'active' : ''}`}
+            <Button
+              variant={temperatureUnit === 'imperial' ? 'primary' : 'ghost'}
               onClick={() => handleTemperatureUnitChange('imperial')}
               disabled={loading}
+              size='sm'
             >
               °F
-            </button>
-            <button
-              className={`unit-button ${temperatureUnit === 'metric' ? 'active' : ''}`}
+            </Button>
+            <Button
+              variant={temperatureUnit === 'metric' ? 'primary' : 'ghost'}
               onClick={() => handleTemperatureUnitChange('metric')}
               disabled={loading}
+              size='sm'
             >
               °C
-            </button>
-            <button
-              className={`unit-button ${temperatureUnit === 'kelvin' ? 'active' : ''}`}
+            </Button>
+            <Button
+              variant={temperatureUnit === 'kelvin' ? 'primary' : 'ghost'}
               onClick={() => handleTemperatureUnitChange('kelvin')}
               disabled={loading}
+              size='sm'
             >
               K
-            </button>
+            </Button>
           </div>
         </div>
 

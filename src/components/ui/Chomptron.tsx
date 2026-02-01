@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { logger } from '../../utils/logger';
 
 import SEO from './SEO';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 import '../../styles/Chomptron.css';
 
 const Chomptron: React.FC = () => {
@@ -103,87 +105,89 @@ const Chomptron: React.FC = () => {
       />
 
       <div className='chomptron-container' data-testid='chomptron-container'>
-        <div className='chomptron-header'>
-          <h1 className='page-title'>chomptron</h1>
+        <Card className='chomptron-card'>
+          <div className='chomptron-header'>
+            <h1 className='page-title'>chomptron</h1>
 
-          <p className='chomptron-description'>
-            AI-powered recipe generator using Google Gemini. Enter ingredients
-            and get instant recipes.
-          </p>
-
-          <form onSubmit={handleGenerate} className='chomptron-widget'>
-            <div className='widget-input-group'>
-              <input
-                type='text'
-                value={ingredients}
-                onChange={e => setIngredients(e.target.value)}
-                placeholder='e.g., chicken, tomatoes, garlic, pasta'
-                className='widget-input'
-                data-testid='ingredient-input'
-              />
-              <button
-                type='submit'
-                className='widget-button'
-                disabled={!ingredients.trim()}
-                data-testid='generate-button'
-              >
-                Generate Recipe ✨
-              </button>
-            </div>
-            <p className='widget-hint'>
-              Opens chomptron.com with your ingredients pre-filled
+            <p className='chomptron-description'>
+              AI-powered recipe generator using Google Gemini. Enter ingredients
+              and get instant recipes.
             </p>
-          </form>
 
-          {apiStatus === 'quota-exceeded' && (
-            <div
-              className='chomptron-quota-warning'
-              data-testid='quota-warning'
-            >
-              <p className='warning-title'>API Quota Exceeded</p>
-              <p className='warning-message'>
-                The Gemini API free tier quota has been exceeded.
-                {retryAfter !== null && retryAfter > 0 && (
-                  <span> Please retry in {formatRetryTime(retryAfter)}.</span>
-                )}
-              </p>
-              <p className='warning-info'>
-                For more information, visit{' '}
-                <a
-                  href='https://ai.google.dev/gemini-api/docs/rate-limits'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='chomptron-external-link'
+            <form onSubmit={handleGenerate} className='chomptron-widget'>
+              <div className='widget-input-group'>
+                <input
+                  type='text'
+                  value={ingredients}
+                  onChange={e => setIngredients(e.target.value)}
+                  placeholder='e.g., chicken, tomatoes, garlic, pasta'
+                  className='widget-input'
+                  data-testid='ingredient-input'
+                />
+                <Button
+                  type='submit'
+                  className='widget-button'
+                  disabled={!ingredients.trim()}
+                  data-testid='generate-button'
                 >
-                  Gemini API rate limits
-                </a>{' '}
-                or{' '}
-                <a
-                  href='https://ai.dev/usage?tab=rate-limit'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='chomptron-external-link'
-                >
-                  check your usage
-                </a>
-                .
+                  Generate Recipe ✨
+                </Button>
+              </div>
+              <p className='widget-hint'>
+                Opens chomptron.com with your ingredients pre-filled
               </p>
-            </div>
-          )}
+            </form>
 
-          <p>
-            Visit{' '}
-            <a
-              href='https://chomptron.com'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='chomptron-external-link'
-            >
-              chomptron.com
-            </a>{' '}
-            for the full experience with recipe history, favorites, and more.
-          </p>
-        </div>
+            {apiStatus === 'quota-exceeded' && (
+              <div
+                className='chomptron-quota-warning'
+                data-testid='quota-warning'
+              >
+                <p className='warning-title'>API Quota Exceeded</p>
+                <p className='warning-message'>
+                  The Gemini API free tier quota has been exceeded.
+                  {retryAfter !== null && retryAfter > 0 && (
+                    <span> Please retry in {formatRetryTime(retryAfter)}.</span>
+                  )}
+                </p>
+                <p className='warning-info'>
+                  For more information, visit{' '}
+                  <a
+                    href='https://ai.google.dev/gemini-api/docs/rate-limits'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='chomptron-external-link'
+                  >
+                    Gemini API rate limits
+                  </a>{' '}
+                  or{' '}
+                  <a
+                    href='https://ai.dev/usage?tab=rate-limit'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='chomptron-external-link'
+                  >
+                    check your usage
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            <p>
+              Visit{' '}
+              <a
+                href='https://chomptron.com'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='chomptron-external-link'
+              >
+                chomptron.com
+              </a>{' '}
+              for the full experience with recipe history, favorites, and more.
+            </p>
+          </div>
+        </Card>
       </div>
     </div>
   );

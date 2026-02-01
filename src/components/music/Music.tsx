@@ -14,6 +14,8 @@ import SEO from '../ui/SEO';
 
 import MusicPlayer from './MusicPlayer';
 import PlaylistTracks from './PlaylistTracks';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 import '../../styles/Music.css';
 
 const Music: React.FC = () => {
@@ -393,16 +395,16 @@ const Music: React.FC = () => {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             'Session Expired\n\n' +
-              'Your Spotify session has expired. Please refresh the page to log in again.'
+            'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           // Optionally redirect to re-authenticate
           window.location.reload();
         } else {
           alert(
             'Spotify Premium Required\n\n' +
-              'To play music directly on this website, you need a Spotify Premium account.\n\n' +
-              'Premium allows for web playback control. You can still browse your music and \n' +
-              'click the Spotify links to play songs in your Spotify app.'
+            'To play music directly on this website, you need a Spotify Premium account.\n\n' +
+            'Premium allows for web playback control. You can still browse your music and \n' +
+            'click the Spotify links to play songs in your Spotify app.'
           );
         }
         return;
@@ -455,12 +457,12 @@ const Music: React.FC = () => {
               : 'Unknown error occurred';
           alert(
             `Music Player Setup Failed\n\n` +
-              `${errorMessage}\n\n` +
-              `Please make sure:\n` +
-              `1. Spotify is open in another browser tab or app\n` +
-              `2. You're logged into the same Spotify account\n` +
-              `3. Your browser allows the Spotify player to load\n` +
-              `4. Try refreshing the page and trying again`
+            `${errorMessage}\n\n` +
+            `Please make sure:\n` +
+            `1. Spotify is open in another browser tab or app\n` +
+            `2. You're logged into the same Spotify account\n` +
+            `3. Your browser allows the Spotify player to load\n` +
+            `4. Try refreshing the page and trying again`
           );
           return;
         }
@@ -520,15 +522,15 @@ const Music: React.FC = () => {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             'Session Expired\n\n' +
-              'Your Spotify session has expired. Please refresh the page to log in again.'
+            'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           window.location.reload();
         } else {
           alert(
             'Spotify Premium Required\n\n' +
-              'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
-              'Premium allows for web playback control. You can still browse your playlists and \n' +
-              'click the Spotify links to open them in your Spotify app.'
+            'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
+            'Premium allows for web playback control. You can still browse your playlists and \n' +
+            'click the Spotify links to open them in your Spotify app.'
           );
         }
         return;
@@ -545,8 +547,8 @@ const Music: React.FC = () => {
           logger.error('Failed to initialize Spotify player');
           alert(
             'Music Player Setup Failed\n\n' +
-              'Failed to initialize music player.\n\n' +
-              'Please make sure you have Spotify Premium and Spotify is open.'
+            'Failed to initialize music player.\n\n' +
+            'Please make sure you have Spotify Premium and Spotify is open.'
           );
           return;
         }
@@ -623,14 +625,15 @@ const Music: React.FC = () => {
               {authError}
             </div>
           )}
-          <button
+          <Button
             className='spotify-login-btn'
             onClick={handleLogin}
             aria-label='Login with Spotify'
+            size='lg'
           >
             <span className='spotify-icon' />
             Connect with Spotify
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -683,24 +686,24 @@ const Music: React.FC = () => {
             </div>
 
             <div className='logout-container'>
-              <button
+              <Button
                 className='logout-btn'
                 onClick={handleLogout}
                 aria-label='Logout from Spotify'
               >
                 Logout
-              </button>
+              </Button>
             </div>
           </div>
         </div>
 
         <div className='music-help'>
-          <button
+          <Button
             className='help-button'
             onClick={() => setShowHelpModal(true)}
           >
             how this enhanced music player works
-          </button>
+          </Button>
         </div>
 
         {showHelpModal && (
@@ -809,43 +812,48 @@ const Music: React.FC = () => {
       )}
 
       <div className='music-tabs'>
-        <button
-          className={`tab-btn ${activeTab === 'tracks' ? 'active' : ''}`}
+        <Button
+          variant={activeTab === 'tracks' ? 'secondary' : 'ghost'}
           onClick={() => handleTabChange('tracks')}
+          className={activeTab === 'tracks' ? 'active' : ''}
         >
           top tracks ({topTracks.length})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'artists' ? 'active' : ''}`}
+        </Button>
+        <Button
+          variant={activeTab === 'artists' ? 'secondary' : 'ghost'}
           onClick={() => handleTabChange('artists')}
+          className={activeTab === 'artists' ? 'active' : ''}
         >
           top artists ({topArtists.length})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'recent' ? 'active' : ''}`}
+        </Button>
+        <Button
+          variant={activeTab === 'recent' ? 'secondary' : 'ghost'}
           onClick={() => handleTabChange('recent')}
+          className={activeTab === 'recent' ? 'active' : ''}
         >
           recently played ({recentlyPlayed.length})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'liked' ? 'active' : ''}`}
+        </Button>
+        <Button
+          variant={activeTab === 'liked' ? 'secondary' : 'ghost'}
           onClick={() => handleTabChange('liked')}
+          className={activeTab === 'liked' ? 'active' : ''}
         >
           liked songs ({likedSongsTotal})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'playlists' ? 'active' : ''}`}
+        </Button>
+        <Button
+          variant={activeTab === 'playlists' ? 'secondary' : 'ghost'}
           onClick={() => handleTabChange('playlists')}
+          className={activeTab === 'playlists' ? 'active' : ''}
         >
           playlists ({playlistsTotal})
-        </button>
+        </Button>
       </div>
 
       <div className='music-content'>
         {activeTab === 'tracks' && (
           <div className='tracks-grid'>
             {topTracks.map((track, index) => (
-              <div key={track.id} className='track-card'>
+              <Card key={track.id} className='track-card' hoverable>
                 <div className='track-rank'>#{index + 1}</div>
                 {track.album.images[0] && (
                   <img
@@ -877,13 +885,14 @@ const Music: React.FC = () => {
                   </span>
                 </div>
                 <div className='track-actions'>
-                  <button
+                  <Button
                     className='play-btn'
                     onClick={() => handlePlayTrack(track)}
                     aria-label={`Play ${track.name}`}
+                    size='sm'
                   >
                     Play
-                  </button>
+                  </Button>
                   <a
                     href={track.external_urls.spotify}
                     target='_blank'
@@ -894,7 +903,7 @@ const Music: React.FC = () => {
                     Spotify
                   </a>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         )}
@@ -902,7 +911,7 @@ const Music: React.FC = () => {
         {activeTab === 'artists' && (
           <div className='artists-grid'>
             {topArtists.map((artist, index) => (
-              <div key={artist.id} className='artist-card'>
+              <Card key={artist.id} className='artist-card' hoverable>
                 <div className='artist-rank'>#{index + 1}</div>
                 {artist.images[0] && (
                   <img
@@ -931,7 +940,7 @@ const Music: React.FC = () => {
                 >
                   Spotify
                 </a>
-              </div>
+              </Card>
             ))}
           </div>
         )}
@@ -939,7 +948,7 @@ const Music: React.FC = () => {
         {activeTab === 'recent' && (
           <div className='recent-tracks'>
             {recentlyPlayed.map((track, index) => (
-              <div key={`${track.id}-${index}`} className='recent-track'>
+              <Card key={`${track.id}-${index}`} className='recent-track' hoverable>
                 {track.album.images[0] && (
                   <img
                     src={track.album.images[0].url}
@@ -961,7 +970,7 @@ const Music: React.FC = () => {
                 >
                   Spotify
                 </a>
-              </div>
+              </Card>
             ))}
           </div>
         )}
@@ -977,7 +986,7 @@ const Music: React.FC = () => {
 
             <div className='tracks-grid'>
               {likedSongs.map((track, index) => (
-                <div key={track.id} className='track-card'>
+                <Card key={track.id} className='track-card' hoverable>
                   <div className='track-rank'>
                     {likedSongsOffset + index + 1}
                   </div>
@@ -999,13 +1008,14 @@ const Music: React.FC = () => {
                       </span>
                     </div>
                     <div className='track-actions'>
-                      <button
+                      <Button
                         className='play-btn'
                         onClick={() => handlePlayTrack(track)}
                         aria-label={`Play ${track.name}`}
+                        size='sm'
                       >
                         Play
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   <a
@@ -1017,19 +1027,20 @@ const Music: React.FC = () => {
                   >
                     Spotify
                   </a>
-                </div>
+                </Card>
               ))}
             </div>
 
             {likedSongsHasMore && (
               <div className='load-more-container'>
-                <button
+                <Button
                   className='load-more-btn'
                   onClick={loadMoreLikedSongs}
                   disabled={loading}
+                  variant='secondary'
                 >
                   {loading ? 'Loading...' : 'Load More Songs'}
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -1046,7 +1057,7 @@ const Music: React.FC = () => {
 
             <div className='playlists-grid'>
               {playlists.map(playlist => (
-                <div key={playlist.id} className='playlist-card'>
+                <Card key={playlist.id} className='playlist-card' hoverable>
                   <div className='playlist-image-container'>
                     <img
                       src={
@@ -1089,35 +1100,39 @@ const Music: React.FC = () => {
                       )}
                     </div>
                     <div className='playlist-actions'>
-                      <button
+                      <Button
                         className='view-tracks-btn'
                         onClick={() => handleViewPlaylist(playlist)}
                         aria-label={`View tracks in ${playlist.name}`}
+                        size='sm'
+                        variant='secondary'
                       >
                         📝 View Tracks
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         className='play-btn'
                         onClick={() => handlePlayPlaylist(playlist)}
                         aria-label={`Play ${playlist.name}`}
+                        size='sm'
                       >
                         Play Playlist
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
 
             {playlistsHasMore && (
               <div className='load-more-container'>
-                <button
+                <Button
                   className='load-more-btn'
                   onClick={loadMorePlaylists}
                   disabled={loading}
+                  variant='secondary'
                 >
                   {loading ? 'Loading...' : 'Load More Playlists'}
-                </button>
+                </Button>
               </div>
             )}
           </div>

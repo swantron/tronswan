@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { logger } from '../../utils/logger';
 
 import SEO from './SEO';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 import '../../styles/MLB.css';
 
 interface SplitRecord {
@@ -262,8 +264,9 @@ function MLB() {
 
         {/* View Mode Toggle */}
         <div className='view-mode-toggle'>
-          <button
-            className={`mode-button ${viewMode === 'standings' ? 'active' : ''}`}
+          <Button
+            variant={viewMode === 'standings' ? 'primary' : 'ghost'}
+            className={viewMode === 'standings' ? 'active' : ''}
             onClick={() => {
               logger.info('View mode changed', {
                 from: viewMode,
@@ -275,9 +278,10 @@ function MLB() {
             disabled={loading}
           >
             Standings
-          </button>
-          <button
-            className={`mode-button ${viewMode === 'teamStats' ? 'active' : ''}`}
+          </Button>
+          <Button
+            variant={viewMode === 'teamStats' ? 'primary' : 'ghost'}
+            className={viewMode === 'teamStats' ? 'active' : ''}
             onClick={() => {
               logger.info('View mode changed', {
                 from: viewMode,
@@ -289,9 +293,10 @@ function MLB() {
             disabled={loading}
           >
             Team Stats
-          </button>
-          <button
-            className={`mode-button ${viewMode === 'playoff' ? 'active' : ''}`}
+          </Button>
+          <Button
+            variant={viewMode === 'playoff' ? 'primary' : 'ghost'}
+            className={viewMode === 'playoff' ? 'active' : ''}
             onClick={() => {
               logger.info('View mode changed', {
                 from: viewMode,
@@ -303,9 +308,10 @@ function MLB() {
             disabled={loading}
           >
             Playoff Race
-          </button>
-          <button
-            className={`mode-button ${viewMode === 'rankings' ? 'active' : ''}`}
+          </Button>
+          <Button
+            variant={viewMode === 'rankings' ? 'primary' : 'ghost'}
+            className={viewMode === 'rankings' ? 'active' : ''}
             onClick={() => {
               logger.info('View mode changed', {
                 from: viewMode,
@@ -317,13 +323,14 @@ function MLB() {
             disabled={loading}
           >
             Rankings
-          </button>
+          </Button>
         </div>
 
         {/* League Filter (only for standings view) */}
         {viewMode === 'standings' && (
           <div className='league-filter'>
-            <button
+            <Button
+              variant={selectedLeague === 'all' ? 'secondary' : 'ghost'}
               className={`filter-button ${selectedLeague === 'all' ? 'active' : ''}`}
               onClick={() => {
                 logger.info('League filter changed', {
@@ -334,10 +341,12 @@ function MLB() {
                 setSelectedLeague('all');
               }}
               disabled={loading}
+              size='sm'
             >
               All
-            </button>
-            <button
+            </Button>
+            <Button
+              variant={selectedLeague === 'AL' ? 'secondary' : 'ghost'}
               className={`filter-button ${selectedLeague === 'AL' ? 'active' : ''}`}
               onClick={() => {
                 logger.info('League filter changed', {
@@ -348,10 +357,12 @@ function MLB() {
                 setSelectedLeague('AL');
               }}
               disabled={loading}
+              size='sm'
             >
               American League
-            </button>
-            <button
+            </Button>
+            <Button
+              variant={selectedLeague === 'NL' ? 'secondary' : 'ghost'}
               className={`filter-button ${selectedLeague === 'NL' ? 'active' : ''}`}
               onClick={() => {
                 logger.info('League filter changed', {
@@ -362,16 +373,19 @@ function MLB() {
                 setSelectedLeague('NL');
               }}
               disabled={loading}
+              size='sm'
             >
               National League
-            </button>
+            </Button>
           </div>
         )}
 
         {loading ? (
           <div className='loading-spinner' aria-label='Loading MLB standings' />
         ) : errorMessage ? (
-          <div className='error-message'>{errorMessage}</div>
+          <Card className='error-card'>
+            <div className='error-message'>{errorMessage}</div>
+          </Card>
         ) : (
           <>
             {viewMode === 'standings' && renderStandings()}
@@ -399,7 +413,7 @@ function MLB() {
     return (
       <div className='divisions-container'>
         {filteredStandings.map((division, divIndex) => (
-          <div key={divIndex} className='division-section'>
+          <Card key={divIndex} className='division-section'>
             <h2 className='division-title'>
               {getDivisionName(division.division.id)}
             </h2>
@@ -462,7 +476,7 @@ function MLB() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     );
@@ -500,7 +514,7 @@ function MLB() {
               );
 
               return (
-                <div key={team.team.id} className='team-stats-card'>
+                <Card key={team.team.id} className='team-stats-card'>
                   <div
                     className='team-stats-header'
                     onClick={() =>
@@ -660,7 +674,7 @@ function MLB() {
                       </div>
                     </div>
                   )}
-                </div>
+                </Card>
               );
             })}
         </div>
@@ -684,7 +698,7 @@ function MLB() {
     );
 
     const renderPlayoffTable = (teams: TeamRecord[], leagueName: string) => (
-      <div className='playoff-section'>
+      <Card className='playoff-section'>
         <h2 className='division-title'>{leagueName}</h2>
         <div className='standings-table-container'>
           <table className='standings-table playoff-table'>
@@ -755,7 +769,7 @@ function MLB() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
     );
 
     return (
@@ -801,7 +815,7 @@ function MLB() {
         | 'lastTen'
         | 'homeAdv'
     ) => (
-      <div className='ranking-section'>
+      <Card className='ranking-section'>
         <h3 className='ranking-title'>{title}</h3>
         <div className='ranking-list'>
           {teams.slice(0, 10).map((team, idx) => {
@@ -852,7 +866,7 @@ function MLB() {
             );
           })}
         </div>
-      </div>
+      </Card>
     );
 
     return (
