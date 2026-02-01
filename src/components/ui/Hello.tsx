@@ -48,25 +48,7 @@ function Hello() {
               github
             </a>
 
-            <a
-              className='hello-link'
-              href='https://swantron.com/'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label="Joseph's blog"
-            >
-              swantron
-            </a>
 
-            <a
-              className='hello-link'
-              href='https://chomptron.com'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='AI-powered recipe app'
-            >
-              chomptron
-            </a>
 
             <a className='hello-link' href='/resume' aria-label='Resume'>
               resume

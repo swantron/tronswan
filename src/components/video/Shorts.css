@@ -2,7 +2,7 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 2rem 1rem;
-  background-color: var(--primary-bg);
+  background-color: var(--bg-dark);
   min-height: 100vh;
 }
 
