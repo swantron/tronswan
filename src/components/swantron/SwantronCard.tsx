@@ -37,9 +37,15 @@ const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
               )}
             </div>
             <div className='swantron-card-external'>
-              <span className='swantron-external-link'>
+              <a
+                href={post.link}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='swantron-external-link'
+                onClick={e => e.stopPropagation()}
+              >
                 📖 Read on swantron.com
-              </span>
+              </a>
             </div>
           </div>
         </Card>
