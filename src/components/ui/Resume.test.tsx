@@ -77,9 +77,9 @@ Google Cloud Professional Developer`;
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Professional Summary')).toBeInTheDocument();
-    expect(screen.getByText('Technical Skills')).toBeInTheDocument();
-    expect(screen.getByText('Professional Experience')).toBeInTheDocument();
+    expect(screen.getByText(/Summary/i)).toBeInTheDocument();
+    expect(screen.getByText(/Technical Skills/i)).toBeInTheDocument();
+    expect(screen.getByText(/Professional Experience/i)).toBeInTheDocument();
   });
 
   test('renders error state when API fails', async () => {
@@ -107,7 +107,7 @@ Google Cloud Professional Developer`;
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Refresh Content' })
+        screen.getByRole('button', { name: /Refresh resume content/i })
       ).toBeInTheDocument();
     });
   });
@@ -120,7 +120,7 @@ Google Cloud Professional Developer`;
 
     await waitFor(() => {
       const googleDocLink = screen.getByRole('link', {
-        name: 'View original Google Doc version',
+        name: /View original Google Doc/i,
       });
       expect(googleDocLink).toHaveAttribute(
         'href',
