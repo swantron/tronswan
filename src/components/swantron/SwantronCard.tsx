@@ -11,8 +11,8 @@ const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
 
   return (
     <div className='swantron-card-wrapper' data-testid='swantron-card'>
-      <Link to={`/swantron/${post.id}`} className='swantron-card-link'>
-        <Card hoverable className='swantron-card-inner'>
+      <Card hoverable className='swantron-card-inner'>
+        <Link to={`/swantron/${post.id}`} className='swantron-card-link'>
           {post.featuredImage && (
             <div className='swantron-card-image'>
               <img src={post.featuredImage} alt={post.title} loading='lazy' />
@@ -38,20 +38,20 @@ const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
                 </div>
               )}
             </div>
-            <div className='swantron-card-external'>
-              <a
-                href={post.link}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='swantron-external-link'
-                onClick={e => e.stopPropagation()}
-              >
-                📖 Read on swantron.com
-              </a>
-            </div>
           </div>
-        </Card>
-      </Link>
+        </Link>
+        <div className='swantron-card-external'>
+          <a
+            href={post.link}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='swantron-external-link'
+            onClick={e => e.stopPropagation()}
+          >
+            📖 Read on swantron.com
+          </a>
+        </div>
+      </Card>
     </div>
   );
 });

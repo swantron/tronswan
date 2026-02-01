@@ -74,14 +74,6 @@ describe('HealthPage', () => {
     );
   });
 
-  it('renders refresh button', () => {
-    renderWithHelmet(<HealthPage />);
-
-    const refreshButton = screen.getByTestId('refresh-button');
-    expect(refreshButton).toBeInTheDocument();
-    expect(refreshButton).toHaveTextContent('Refresh');
-  });
-
   it('shows last updated time', () => {
     renderWithHelmet(<HealthPage />);
 
@@ -97,22 +89,6 @@ describe('HealthPage', () => {
     expect(screen.getByText('Services & APIs')).toBeInTheDocument();
     expect(screen.getByText('Deployments')).toBeInTheDocument();
     expect(screen.getByText('Infrastructure')).toBeInTheDocument();
-  });
-
-  it('handles refresh button click', async () => {
-    renderWithHelmet(<HealthPage />);
-
-    const refreshButton = screen.getByTestId('refresh-button');
-
-    // Button should be clickable initially
-    expect(refreshButton).toBeInTheDocument();
-    expect(refreshButton).toHaveTextContent('Refresh');
-
-    // Click the button
-    fireEvent.click(refreshButton);
-
-    // Button should still be in the document after click
-    expect(refreshButton).toBeInTheDocument();
   });
 
   it('switches between tabs', () => {
@@ -192,20 +168,6 @@ describe('HealthPage', () => {
     await waitFor(() => {
       // The DigitalOceanStatus component should be rendered
       expect(screen.getByText('Infrastructure')).toHaveClass('active');
-    });
-  });
-
-  it('refresh button shows refreshing state', async () => {
-    renderWithHelmet(<HealthPage />);
-
-    const refreshButton = screen.getByTestId('refresh-button');
-    expect(refreshButton).not.toHaveClass('refreshing');
-
-    fireEvent.click(refreshButton);
-
-    // Button should show refreshing state
-    await waitFor(() => {
-      expect(refreshButton).toHaveTextContent('Refreshing...');
     });
   });
 });

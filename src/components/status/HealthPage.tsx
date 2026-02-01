@@ -79,16 +79,13 @@ function HealthPage() {
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<
     'services' | 'deployments' | 'infrastructure'
   >('services');
-  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
   const [countdown, setCountdown] = useState(30);
   const serviceHealthRef = useRef<ServiceHealthRef>(null);
 
   const refreshData = async () => {
-    setIsRefreshing(true);
     setLastUpdated(new Date());
     setCountdown(30);
 
@@ -96,8 +93,6 @@ function HealthPage() {
     if (serviceHealthRef.current) {
       await serviceHealthRef.current.checkAllServices();
     }
-
-    setIsRefreshing(false);
   };
 
   // Calculate overall status
@@ -197,9 +192,7 @@ function HealthPage() {
 
     // Auto-refresh interval with countdown
     const interval = setInterval(() => {
-      if (autoRefreshEnabled) {
-        refreshData();
-      }
+      refreshData();
     }, 30000);
 
     // Countdown timer
@@ -216,7 +209,7 @@ function HealthPage() {
       clearInterval(interval);
       clearInterval(countdownInterval);
     };
-  }, [autoRefreshEnabled]);
+  }, []);
 
   return (
     <div className='health-page'>
@@ -289,30 +282,9 @@ function HealthPage() {
         <IncidentHistory days={7} />
 
         <div className='health-controls'>
-          <button
-            className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
-            onClick={refreshData}
-            disabled={isRefreshing}
-            data-testid='refresh-button'
-          >
-            {isRefreshing ? 'Refreshing...' : 'Refresh'}
-          </button>
-          <button
-            className={`auto-refresh-toggle ${autoRefreshEnabled ? 'enabled' : 'disabled'}`}
-            onClick={() => setAutoRefreshEnabled(!autoRefreshEnabled)}
-            title={
-              autoRefreshEnabled
-                ? 'Disable auto-refresh'
-                : 'Enable auto-refresh'
-            }
-          >
-            {autoRefreshEnabled ? 'Pause' : 'Resume'}
-          </button>
           <span className='last-updated' data-testid='last-updated'>
             Last updated: {lastUpdated.toLocaleTimeString()}
-            {autoRefreshEnabled && (
-              <span className='countdown'> • Next refresh in {countdown}s</span>
-            )}
+            <span className='countdown'> • Next refresh in {countdown}s</span>
           </span>
         </div>
 

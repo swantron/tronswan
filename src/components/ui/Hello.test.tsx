@@ -54,10 +54,6 @@ describe('Hello Component', () => {
     );
   });
 
-
-
-
-
   test('renders resume link', () => {
     render(<Hello />);
     const resumeLink = screen.getByText('resume');
