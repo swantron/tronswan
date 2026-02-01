@@ -46,6 +46,7 @@ export default [
         HTMLVideoElement: 'readonly',
         HTMLFormElement: 'readonly',
         HTMLDivElement: 'readonly',
+        HTMLButtonElement: 'readonly',
       },
     },
     plugins: {

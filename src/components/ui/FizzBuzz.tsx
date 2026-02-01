@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import { logger } from '../../utils/logger';
+import { Card } from '../common/Card';
 
 import SEO from './SEO';
-import { Card } from '../common/Card';
 import '../../styles/FizzBuzz.css';
 
 interface FizzBuzzDisplayProps {

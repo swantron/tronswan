@@ -54,43 +54,9 @@ describe('Hello Component', () => {
     );
   });
 
-  test('renders personal website link', () => {
-    render(<Hello />);
-    const personalLink = screen.getByText('swantron');
-    expect(personalLink).toBeInTheDocument();
-    expect(personalLink.closest('a')).toHaveAttribute(
-      'href',
-      'https://swantron.com/'
-    );
-    expect(personalLink.closest('a')).toHaveAttribute('target', '_blank');
-    expect(personalLink.closest('a')).toHaveAttribute(
-      'rel',
-      'noopener noreferrer'
-    );
-    expect(personalLink.closest('a')).toHaveAttribute(
-      'aria-label',
-      "Joseph's blog"
-    );
-  });
 
-  test('renders recipe website link', () => {
-    render(<Hello />);
-    const recipeLink = screen.getByText('chomptron');
-    expect(recipeLink).toBeInTheDocument();
-    expect(recipeLink.closest('a')).toHaveAttribute(
-      'href',
-      'https://chomptron.com'
-    );
-    expect(recipeLink.closest('a')).toHaveAttribute('target', '_blank');
-    expect(recipeLink.closest('a')).toHaveAttribute(
-      'rel',
-      'noopener noreferrer'
-    );
-    expect(recipeLink.closest('a')).toHaveAttribute(
-      'aria-label',
-      'AI-powered recipe app'
-    );
-  });
+
+
 
   test('renders resume link', () => {
     render(<Hello />);
@@ -111,7 +77,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     const allLinks = screen.getAllByRole('link');
-    expect(allLinks).toHaveLength(5);
+    expect(allLinks).toHaveLength(3);
 
     // Check external links have proper attributes
     const externalLinks = allLinks.filter(
@@ -135,14 +101,10 @@ describe('Hello Component', () => {
 
     const linkedinLink = screen.getByText('linkedin').closest('a');
     const githubLink = screen.getByText('github').closest('a');
-    const personalLink = screen.getByText('swantron').closest('a');
-    const recipeLink = screen.getByText('chomptron').closest('a');
     const resumeLink = screen.getByText('resume').closest('a');
 
     expect(linkedinLink).toHaveClass('hello-link');
     expect(githubLink).toHaveClass('hello-link');
-    expect(personalLink).toHaveClass('hello-link');
-    expect(recipeLink).toHaveClass('hello-link');
     expect(resumeLink).toHaveClass('hello-link');
   });
 
@@ -171,9 +133,7 @@ describe('Hello Component', () => {
     // Check for text
     expect(screen.getByText(/Bozeman, Montana/)).toBeInTheDocument();
     expect(screen.getByText(/linkedin/)).toBeInTheDocument();
-    expect(screen.getByText(/swantron/)).toBeInTheDocument();
     expect(screen.getByText(/github/)).toBeInTheDocument();
-    expect(screen.getByText(/chomptron/)).toBeInTheDocument();
     expect(screen.getByText(/resume/)).toBeInTheDocument();
   });
 });

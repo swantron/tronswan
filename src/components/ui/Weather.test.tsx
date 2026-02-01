@@ -331,9 +331,11 @@ describe('Weather Component', () => {
     const celsiusButton = screen.getByText('°C');
     const kelvinButton = screen.getByText('K');
 
-    expect(fahrenheitButton).toHaveClass('active');
-    expect(celsiusButton).not.toHaveClass('active');
-    expect(kelvinButton).not.toHaveClass('active');
+    expect(fahrenheitButton).toHaveClass('btn-primary');
+    expect(celsiusButton).not.toHaveClass('btn-primary');
+    expect(celsiusButton).toHaveClass('btn-ghost');
+    expect(kelvinButton).not.toHaveClass('btn-primary');
+    expect(kelvinButton).toHaveClass('btn-ghost');
   });
 
   test('unit buttons are clickable', async () => {
@@ -356,9 +358,10 @@ describe('Weather Component', () => {
     expect(kelvinButton).toBeInTheDocument();
 
     // Buttons should have the correct classes
-    expect(fahrenheitButton).toHaveClass('unit-button');
-    expect(celsiusButton).toHaveClass('unit-button');
-    expect(kelvinButton).toHaveClass('unit-button');
+    // Buttons should have the correct classes
+    expect(fahrenheitButton).toHaveClass('btn');
+    expect(celsiusButton).toHaveClass('btn');
+    expect(kelvinButton).toHaveClass('btn');
   });
 
   test('switches to forecast view', async () => {
@@ -566,7 +569,8 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(celsiusButton).toHaveClass('active');
+      expect(celsiusButton).toHaveClass('btn-primary');
+      expect(celsiusButton).not.toHaveClass('btn-ghost');
     });
   });
 
@@ -585,7 +589,8 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(kelvinButton).toHaveClass('active');
+      expect(kelvinButton).toHaveClass('btn-primary');
+      expect(kelvinButton).not.toHaveClass('btn-ghost');
     });
   });
 

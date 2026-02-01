@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import { logger } from '../../utils/logger';
+import { Button } from '../common/Button';
+import { Card } from '../common/Card';
 
 import SEO from './SEO';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
+
 import '../../styles/MLB.css';
 
 interface SplitRecord {

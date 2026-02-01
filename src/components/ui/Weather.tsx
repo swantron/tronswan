@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
+import { Button } from '../common/Button';
+import { Card } from '../common/Card';
 
 import SEO from './SEO';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
+
 import '../../styles/Weather.css';
 
 interface WeatherData {
@@ -377,7 +378,7 @@ function Weather() {
       icon: dayItems[0].weather[0].icon,
       humidity: Math.round(
         dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
-        dayItems.length
+          dayItems.length
       ),
     }));
   };

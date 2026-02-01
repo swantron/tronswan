@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { swantronService } from '../../services/swantronService';
 import { Post } from '../../types';
 import { logger } from '../../utils/logger';
+import { Button } from '../common/Button';
 import SEO from '../ui/SEO';
 
 import SwantronCard from './SwantronCard';
-import { Button } from '../common/Button';
 import '../../styles/SwantronList.css';
 
 const SwantronList: React.FC = () => {

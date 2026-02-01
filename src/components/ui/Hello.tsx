@@ -1,7 +1,8 @@
 import React from 'react';
 
-import SEO from './SEO';
 import { Card } from '../common/Card';
+
+import SEO from './SEO';
 import '../../styles/Hello.css';
 
 function Hello() {
@@ -47,8 +48,6 @@ function Hello() {
             >
               github
             </a>
-
-
 
             <a className='hello-link' href='/resume' aria-label='Resume'>
               resume

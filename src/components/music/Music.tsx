@@ -10,12 +10,12 @@ import {
 } from '../../services/spotifyService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
+import { Button } from '../common/Button';
+import { Card } from '../common/Card';
 import SEO from '../ui/SEO';
 
 import MusicPlayer from './MusicPlayer';
 import PlaylistTracks from './PlaylistTracks';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
 import '../../styles/Music.css';
 
 const Music: React.FC = () => {
@@ -395,16 +395,16 @@ const Music: React.FC = () => {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             'Session Expired\n\n' +
-            'Your Spotify session has expired. Please refresh the page to log in again.'
+              'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           // Optionally redirect to re-authenticate
           window.location.reload();
         } else {
           alert(
             'Spotify Premium Required\n\n' +
-            'To play music directly on this website, you need a Spotify Premium account.\n\n' +
-            'Premium allows for web playback control. You can still browse your music and \n' +
-            'click the Spotify links to play songs in your Spotify app.'
+              'To play music directly on this website, you need a Spotify Premium account.\n\n' +
+              'Premium allows for web playback control. You can still browse your music and \n' +
+              'click the Spotify links to play songs in your Spotify app.'
           );
         }
         return;
@@ -457,12 +457,12 @@ const Music: React.FC = () => {
               : 'Unknown error occurred';
           alert(
             `Music Player Setup Failed\n\n` +
-            `${errorMessage}\n\n` +
-            `Please make sure:\n` +
-            `1. Spotify is open in another browser tab or app\n` +
-            `2. You're logged into the same Spotify account\n` +
-            `3. Your browser allows the Spotify player to load\n` +
-            `4. Try refreshing the page and trying again`
+              `${errorMessage}\n\n` +
+              `Please make sure:\n` +
+              `1. Spotify is open in another browser tab or app\n` +
+              `2. You're logged into the same Spotify account\n` +
+              `3. Your browser allows the Spotify player to load\n` +
+              `4. Try refreshing the page and trying again`
           );
           return;
         }
@@ -522,15 +522,15 @@ const Music: React.FC = () => {
         if (premiumCheck.error === 'Failed to refresh access token') {
           alert(
             'Session Expired\n\n' +
-            'Your Spotify session has expired. Please refresh the page to log in again.'
+              'Your Spotify session has expired. Please refresh the page to log in again.'
           );
           window.location.reload();
         } else {
           alert(
             'Spotify Premium Required\n\n' +
-            'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
-            'Premium allows for web playback control. You can still browse your playlists and \n' +
-            'click the Spotify links to open them in your Spotify app.'
+              'To play playlists directly on this website, you need a Spotify Premium account.\n\n' +
+              'Premium allows for web playback control. You can still browse your playlists and \n' +
+              'click the Spotify links to open them in your Spotify app.'
           );
         }
         return;
@@ -547,8 +547,8 @@ const Music: React.FC = () => {
           logger.error('Failed to initialize Spotify player');
           alert(
             'Music Player Setup Failed\n\n' +
-            'Failed to initialize music player.\n\n' +
-            'Please make sure you have Spotify Premium and Spotify is open.'
+              'Failed to initialize music player.\n\n' +
+              'Please make sure you have Spotify Premium and Spotify is open.'
           );
           return;
         }
@@ -948,7 +948,11 @@ const Music: React.FC = () => {
         {activeTab === 'recent' && (
           <div className='recent-tracks'>
             {recentlyPlayed.map((track, index) => (
-              <Card key={`${track.id}-${index}`} className='recent-track' hoverable>
+              <Card
+                key={`${track.id}-${index}`}
+                className='recent-track'
+                hoverable
+              >
                 {track.album.images[0] && (
                   <img
                     src={track.album.images[0].url}

@@ -25,7 +25,9 @@ const SwantronCard: React.FC<SwantronCardProps> = React.memo(({ post }) => {
               dangerouslySetInnerHTML={{ __html: post.excerpt }}
             />
             <div className='swantron-card-meta'>
-              <span className='swantron-card-date'>{formatDate(post.date)}</span>
+              <span className='swantron-card-date'>
+                {formatDate(post.date)}
+              </span>
               {post.categories.length > 0 && (
                 <div className='swantron-card-categories'>
                   {post.categories.map(category => (
