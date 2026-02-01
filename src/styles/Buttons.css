@@ -3,9 +3,9 @@
 
 /* Primary Button - Main action buttons */
 .btn-primary {
-  background-color: var(--accent-color, #f89859);
+  background-color: var(--accent-color, #6366f1);
   color: var(--primary-bg, #282c34);
-  border: 2px solid var(--accent-color, #f89859);
+  border: 2px solid var(--accent-color, #6366f1);
   padding: 0.75rem 1.5rem;
   border-radius: var(--border-radius, 10px);
   font-size: 1rem;
@@ -19,7 +19,7 @@
   background-color: #e6894a;
   border-color: #e6894a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary:disabled {
@@ -29,15 +29,15 @@
 }
 
 .btn-primary:focus {
-  outline: 2px solid var(--accent-color, #f89859);
+  outline: 2px solid var(--accent-color, #6366f1);
   outline-offset: 2px;
 }
 
 /* Secondary Button - Outline style */
 .btn-secondary {
   background-color: transparent;
-  color: var(--accent-color, #f89859);
-  border: 2px solid var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
+  border: 2px solid var(--accent-color, #6366f1);
   padding: 0.75rem 1.5rem;
   border-radius: var(--border-radius, 10px);
   font-size: 1rem;
@@ -47,7 +47,7 @@
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: rgba(248, 152, 89, 0.1);
+  background-color: rgba(99, 102, 241, 0.1);
   transform: translateY(-2px);
 }
 
@@ -57,7 +57,7 @@
 }
 
 .btn-secondary:focus {
-  outline: 2px solid var(--accent-color, #f89859);
+  outline: 2px solid var(--accent-color, #6366f1);
   outline-offset: 2px;
 }
 
@@ -66,23 +66,23 @@
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
-  border: 2px solid var(--accent-color, #f89859);
-  background: rgba(248, 152, 89, 0.05);
-  color: var(--accent-color, #f89859);
+  border: 2px solid var(--accent-color, #6366f1);
+  background: rgba(99, 102, 241, 0.05);
+  color: var(--accent-color, #6366f1);
   border-radius: var(--border-radius, 10px);
   cursor: pointer;
   transition: all var(--transition-speed, 0.3s) ease;
 }
 
 .btn-toggle:hover:not(:disabled) {
-  background: rgba(248, 152, 89, 0.15);
+  background: rgba(99, 102, 241, 0.15);
   transform: translateY(-2px);
 }
 
 .btn-toggle.active {
-  background: var(--accent-color, #f89859);
+  background: var(--accent-color, #6366f1);
   color: var(--primary-bg, #282c34);
-  box-shadow: 0 4px 15px rgba(248, 152, 89, 0.4);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
 .btn-toggle:disabled {
@@ -91,7 +91,7 @@
 }
 
 .btn-toggle:focus {
-  outline: 2px solid var(--accent-color, #f89859);
+  outline: 2px solid var(--accent-color, #6366f1);
   outline-offset: 2px;
 }
 

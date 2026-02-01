@@ -26,7 +26,7 @@
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   margin: 0 0 1.5rem;
-  background: linear-gradient(to right, #fff, var(--accent-color, #f89859));
+  background: linear-gradient(to right, #fff, var(--accent-color, #6366f1));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -57,9 +57,9 @@
 }
 
 .resume-contact-link:hover {
-  background: rgba(248, 152, 89, 0.1);
-  border-color: var(--accent-color, #f89859);
-  color: var(--accent-color, #f89859);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--accent-color, #6366f1);
+  color: var(--accent-color, #6366f1);
   transform: translateY(-2px);
 }
 
@@ -89,7 +89,7 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
   font-weight: 700;
   margin-bottom: 1.5rem;
   display: flex;
@@ -102,8 +102,8 @@
   flex: 1;
   height: 1px;
   background: linear-gradient(to right,
-      rgba(248, 152, 89, 0.3),
-      rgba(248, 152, 89, 0));
+      rgba(99, 102, 241, 0.3),
+      rgba(99, 102, 241, 0));
 }
 
 /* Summary Text */
@@ -138,10 +138,10 @@
 .skill-tag {
   padding: 0.3rem 0.75rem;
   background: transparent;
-  border: 1px solid rgba(248, 152, 89, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.2);
   border-radius: 6px;
   font-size: 0.8rem;
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
   font-weight: 500;
 }
 
@@ -182,7 +182,7 @@
 .role-dates {
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
 }
 
 .role-company-row {
@@ -222,7 +222,7 @@
   top: 0.6em;
   width: 6px;
   height: 6px;
-  background: var(--accent-color, #f89859);
+  background: var(--accent-color, #6366f1);
   border-radius: 50%;
   opacity: 0.7;
 }
@@ -270,7 +270,7 @@
 
 .cert-item::before {
   content: '✓';
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
   font-weight: bold;
 }
 
@@ -325,7 +325,7 @@
 }
 
 .doc-link {
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #6366f1);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -338,8 +338,8 @@
 .resume-refresh-btn {
   padding: 0.75rem 1.5rem;
   background: transparent;
-  border: 1px solid rgba(248, 152, 89, 0.3);
-  color: var(--accent-color, #f89859);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--accent-color, #6366f1);
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -347,8 +347,8 @@
 }
 
 .resume-refresh-btn:hover {
-  background: rgba(248, 152, 89, 0.1);
-  border-color: var(--accent-color, #f89859);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--accent-color, #6366f1);
 }
 
 /* Loading & Error */
@@ -364,8 +364,8 @@
 .loading-spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid rgba(248, 152, 89, 0.1);
-  border-left-color: var(--accent-color, #f89859);
+  border: 4px solid rgba(99, 102, 241, 0.1);
+  border-left-color: var(--accent-color, #6366f1);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1.5rem;
