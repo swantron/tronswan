@@ -208,10 +208,11 @@ describe('MLB Component', () => {
       expect(winCells.length).toBeGreaterThan(0);
       expect(screen.getByText('88')).toBeInTheDocument();
       expect(screen.getByText('104')).toBeInTheDocument();
-      // Check for losses
+      // Check for losses (use getAllByText for values that may appear in countdown timer)
       expect(screen.getByText('67')).toBeInTheDocument();
       expect(screen.getByText('74')).toBeInTheDocument();
-      expect(screen.getByText('58')).toBeInTheDocument();
+      const lossCells = screen.getAllByText('58');
+      expect(lossCells.length).toBeGreaterThan(0);
     });
   });
 
