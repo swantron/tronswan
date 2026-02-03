@@ -53,7 +53,10 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
   // Parse the content into structured sections
   const parseContent = (content: string) => {
-    const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+    const lines = content
+      .split('\n')
+      .map(l => l.trim())
+      .filter(Boolean);
     const sections: { [key: string]: string[] } = {};
     let currentSection = '';
     let currentContent: string[] = [];
@@ -208,13 +211,11 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                             {category.trim()}
                           </h3>
                           <div className='skill-tags'>
-                            {skills
-                              .split(',')
-                              .map((s, i) => (
-                                <span key={i} className='skill-tag'>
-                                  {s.trim()}
-                                </span>
-                              ))}
+                            {skills.split(',').map((s, i) => (
+                              <span key={i} className='skill-tag'>
+                                {s.trim()}
+                              </span>
+                            ))}
                           </div>
                         </div>
                       );
@@ -230,7 +231,10 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
             )}
 
             {sections['Education'] && (
-              <section className='resume-section' data-testid='resume-education'>
+              <section
+                className='resume-section'
+                data-testid='resume-education'
+              >
                 <h2 className='section-title'>Education</h2>
                 {sections['Education'].map((line, index) => (
                   <div key={index} className='education-item'>
@@ -268,66 +272,67 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
             {(sections['Professional Experience'] ||
               sections['Experience']) && (
-                <section
-                  className='resume-section'
-                  data-testid='resume-experience'
-                >
-                  <h2 className='section-title'>Professional Experience</h2>
-                  <div className='experience-timeline'>
-                    {(
-                      sections['Professional Experience'] ||
-                      sections['Experience']
-                    ).map((line, index) => {
-                      const isJobRole =
-                        line.includes('|') &&
-                        /Engineer|Developer|Manager|Director|Lead|Senior|Staff|Principal|Architect/i.test(
-                          line
-                        );
+              <section
+                className='resume-section'
+                data-testid='resume-experience'
+              >
+                <h2 className='section-title'>Professional Experience</h2>
+                <div className='experience-timeline'>
+                  {(
+                    sections['Professional Experience'] ||
+                    sections['Experience']
+                  ).map((line, index) => {
+                    const isJobRole =
+                      line.includes('|') &&
+                      /Engineer|Developer|Manager|Director|Lead|Senior|Staff|Principal|Architect/i.test(
+                        line
+                      );
 
-                      const isBulletPoint = /^\s*[*\-•◦▪▫]/.test(line);
+                    const isBulletPoint = /^\s*[*\-•◦▪▫]/.test(line);
 
-                      if (isJobRole) {
-                        // Attempt to split title, company, dates
-                        // Format: Title | Company | Location | Dates
-                        const parts = line.split('|').map(p => p.trim());
-                        return (
-                          <div key={index} className='experience-role-header'>
-                            <div className='role-title-row'>
-                              <h3 className='role-title'>{parts[0]}</h3>
-                              <span className='role-dates'>
-                                {parts[parts.length - 1]}
-                              </span>
-                            </div>
-                            <div className='role-company-row'>
-                              <span className='role-company'>{parts[1]}</span>
-                              {parts[2] && parts[2] !== parts[parts.length - 1] && (
+                    if (isJobRole) {
+                      // Attempt to split title, company, dates
+                      // Format: Title | Company | Location | Dates
+                      const parts = line.split('|').map(p => p.trim());
+                      return (
+                        <div key={index} className='experience-role-header'>
+                          <div className='role-title-row'>
+                            <h3 className='role-title'>{parts[0]}</h3>
+                            <span className='role-dates'>
+                              {parts[parts.length - 1]}
+                            </span>
+                          </div>
+                          <div className='role-company-row'>
+                            <span className='role-company'>{parts[1]}</span>
+                            {parts[2] &&
+                              parts[2] !== parts[parts.length - 1] && (
                                 <span className='role-location'>
                                   {parts[2]}
                                 </span>
                               )}
-                            </div>
                           </div>
-                        );
-                      } else if (isBulletPoint) {
-                        const cleanBullet = line
-                          .replace(/^\s*[*\-•◦▪▫]\s*/, '')
-                          .trim();
-                        return (
-                          <div key={index} className='experience-bullet-item'>
-                            <p>{cleanBullet}</p>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <p key={index} className='experience-text'>
-                            {line}
-                          </p>
-                        );
-                      }
-                    })}
-                  </div>
-                </section>
-              )}
+                        </div>
+                      );
+                    } else if (isBulletPoint) {
+                      const cleanBullet = line
+                        .replace(/^\s*[*\-•◦▪▫]\s*/, '')
+                        .trim();
+                      return (
+                        <div key={index} className='experience-bullet-item'>
+                          <p>{cleanBullet}</p>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <p key={index} className='experience-text'>
+                          {line}
+                        </p>
+                      );
+                    }
+                  })}
+                </div>
+              </section>
+            )}
 
             {(sections['Projects & Achievements'] || sections['Projects']) && (
               <section className='resume-section'>
