@@ -18,6 +18,7 @@ interface ServiceHealthProps {
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
+    mtServices: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
     weatherApi: 'healthy' | 'degraded' | 'down';
@@ -67,6 +68,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         url: 'https://jswan.dev/xrpc/_health',
         description: 'Bluesky PDS on DO',
         status: services.jswan,
+        lastChecked: new Date(),
+      },
+      {
+        name: 'mt.services',
+        url: 'https://mt.services',
+        description: 'Montana consulting / Firebase Hosting',
+        status: services.mtServices,
         lastChecked: new Date(),
       },
       {

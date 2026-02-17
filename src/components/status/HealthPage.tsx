@@ -41,6 +41,7 @@ interface HealthData {
     chomptron: 'healthy' | 'degraded' | 'down';
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
+    mtServices: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
     weatherApi: 'healthy' | 'degraded' | 'down';
@@ -72,6 +73,7 @@ function HealthPage() {
       chomptron: 'healthy',
       swantron: 'healthy',
       jswan: 'healthy',
+      mtServices: 'healthy',
       mlbApi: 'healthy',
       spotifyApi: 'healthy',
       weatherApi: 'healthy',
