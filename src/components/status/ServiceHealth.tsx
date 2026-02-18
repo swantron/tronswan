@@ -7,7 +7,10 @@ import React, {
   useRef,
 } from 'react';
 
-import { uptimeService } from '../../services/uptimeService';
+import {
+  fetchUptimeData,
+  getServiceUptime,
+} from '../../services/uptimeApiService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import '../../styles/ServiceHealth.css';
@@ -329,19 +332,25 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         serviceDataRef.current.map(service => checkServiceHealth(service))
       );
 
-      // Record uptime data and add uptime stats to each service
-      const servicesWithUptime = updatedServices.map(service => {
-        uptimeService.recordCheck({
-          serviceName: service.name,
-          timestamp: service.lastChecked,
-          status: service.status,
-          responseTime: service.responseTime,
-        });
+      // Map service names to Gist keys
+      const nameToKey: Record<string, string> = {
+        'tron swan dot com': 'tronswan',
+        'chomp tron dot com': 'chomptron',
+        'swan tron dot com': 'swantron',
+        'ATProto PDS': 'jswan',
+        'mt.services': 'mtServices',
+        'MLB Stats API': 'mlbApi',
+      };
 
-        const stats = uptimeService.getUptimeStats(service.name, 30);
+      // Fetch uptime data from Gist and merge with browser health checks
+      const uptimeData = await fetchUptimeData();
+      const servicesWithUptime = updatedServices.map(service => {
+        const key = nameToKey[service.name];
+        const uptime =
+          key && uptimeData ? getServiceUptime(uptimeData, key) : undefined;
         return {
           ...service,
-          uptime: stats.uptimePercentage,
+          uptime,
         };
       });
 

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { uptimeService, Incident } from '../../services/uptimeService';
+import {
+  fetchUptimeData,
+  getIncidents,
+  GistIncident,
+} from '../../services/uptimeApiService';
 import '../../styles/IncidentHistory.css';
 
 interface IncidentHistoryProps {
@@ -8,12 +12,15 @@ interface IncidentHistoryProps {
 }
 
 function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
-  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [incidents, setIncidents] = useState<GistIncident[]>([]);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const allIncidents = uptimeService.getAllIncidents(days);
-    setIncidents(allIncidents);
+    fetchUptimeData().then(data => {
+      if (data) {
+        setIncidents(getIncidents(data, days));
+      }
+    });
   }, [days]);
 
   const formatDuration = (ms: number) => {
@@ -85,46 +92,54 @@ function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
 
       {incidents.length > 0 && (
         <div className='incident-timeline'>
-          {(expanded ? incidents : incidents.slice(0, 3)).map(incident => (
-            <div
-              key={incident.id}
-              className={`incident-item ${incident.resolved ? 'resolved' : 'active'} status-${incident.status}`}
-            >
-              <div className='incident-icon'>
-                {incident.resolved ? '' : incident.status === 'down' ? '' : ''}
-              </div>
-              <div className='incident-details'>
-                <div className='incident-service'>{incident.serviceName}</div>
-                <div className='incident-status'>
-                  {incident.resolved && incident.endTime ? (
-                    <span className='status-resolved'>
-                      Resolved {formatTimestamp(incident.endTime)}
-                    </span>
-                  ) : (
-                    <span className='status-ongoing'>
-                      {incident.status === 'down' ? 'Down' : 'Degraded'} since{' '}
-                      {formatTimestamp(incident.startTime)}
-                    </span>
+          {(expanded ? incidents : incidents.slice(0, 3)).map(
+            (incident, index) => (
+              <div
+                key={`${incident.service}-${incident.startTime}-${index}`}
+                className={`incident-item ${incident.resolved ? 'resolved' : 'active'} status-${incident.status}`}
+              >
+                <div className='incident-icon'>
+                  {incident.resolved
+                    ? ''
+                    : incident.status === 'down'
+                      ? ''
+                      : ''}
+                </div>
+                <div className='incident-details'>
+                  <div className='incident-service'>{incident.service}</div>
+                  <div className='incident-status'>
+                    {incident.resolved && incident.endTime ? (
+                      <span className='status-resolved'>
+                        Resolved {formatTimestamp(new Date(incident.endTime))}
+                      </span>
+                    ) : (
+                      <span className='status-ongoing'>
+                        {incident.status === 'down' ? 'Down' : 'Degraded'} since{' '}
+                        {formatTimestamp(new Date(incident.startTime))}
+                      </span>
+                    )}
+                  </div>
+                  {incident.durationMs != null && (
+                    <div className='incident-duration'>
+                      Duration: {formatDuration(incident.durationMs)}
+                    </div>
+                  )}
+                  {!incident.resolved && (
+                    <div className='incident-duration'>
+                      Ongoing for:{' '}
+                      {formatDuration(
+                        Date.now() - new Date(incident.startTime).getTime()
+                      )}
+                    </div>
                   )}
                 </div>
-                {incident.duration !== undefined && (
-                  <div className='incident-duration'>
-                    Duration: {formatDuration(incident.duration)}
-                  </div>
-                )}
-                {!incident.resolved && (
-                  <div className='incident-duration'>
-                    Ongoing for:{' '}
-                    {formatDuration(Date.now() - incident.startTime.getTime())}
-                  </div>
-                )}
+                <div className='incident-timestamp'>
+                  {new Date(incident.startTime).toLocaleDateString()}{' '}
+                  {new Date(incident.startTime).toLocaleTimeString()}
+                </div>
               </div>
-              <div className='incident-timestamp'>
-                {incident.startTime.toLocaleDateString()}{' '}
-                {incident.startTime.toLocaleTimeString()}
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       )}
     </div>
