@@ -62,7 +62,7 @@ export function getServiceUptime(
   data: UptimeData,
   serviceKey: string
 ): number | undefined {
-  return data.services[serviceKey]?.uptimePercent;
+  return data?.services?.[serviceKey]?.uptimePercent;
 }
 
 export function getIncidents(

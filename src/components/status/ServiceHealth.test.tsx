@@ -21,6 +21,12 @@ vi.mock('../../utils/runtimeConfig', () => ({
   },
 }));
 
+// Mock uptimeApiService so fetchUptimeData doesn't interfere with fetch mocks
+vi.mock('../../services/uptimeApiService', () => ({
+  fetchUptimeData: vi.fn().mockResolvedValue(null),
+  getServiceUptime: vi.fn().mockReturnValue(undefined),
+}));
+
 // Mock fetch globally
 global.fetch = vi.fn();
 
