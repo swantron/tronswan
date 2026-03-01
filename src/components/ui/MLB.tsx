@@ -72,7 +72,7 @@ interface TeamRecord {
   divisionRank: string;
   leagueRank: string;
   sportRank: string;
-  streak: {
+  streak?: {
     streakType: string;
     streakNumber: number;
     streakCode: string;
@@ -522,12 +522,12 @@ function MLB() {
                       <td>{team.gamesBack}</td>
                       <td
                         className={
-                          team.streak.streakType === 'wins'
+                          team.streak?.streakType === 'wins'
                             ? 'win-streak'
                             : 'loss-streak'
                         }
                       >
-                        {team.streak.streakCode}
+                        {team.streak?.streakCode ?? '-'}
                       </td>
                       <td>{team.runsScored}</td>
                       <td>{team.runsAllowed}</td>

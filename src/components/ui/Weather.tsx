@@ -101,7 +101,8 @@ const convertTemperature = (
 
 function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // local constructor avoids UTC midnight shift
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
@@ -362,7 +363,7 @@ function Weather() {
   ): DailyForecast[] => {
     const grouped = forecastList.reduce(
       (acc, item) => {
-        const date = new Date(item.dt * 1000).toDateString();
+        const date = item.dt_txt.split(' ')[0]; // YYYY-MM-DD from API (UTC)
         if (!acc[date]) acc[date] = [];
         acc[date].push(item);
         return acc;
