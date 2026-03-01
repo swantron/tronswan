@@ -63,7 +63,7 @@ describe('App Component', () => {
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(9);
+    expect(navLinks).toHaveLength(10);
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe('App Component', () => {
       const weatherLink = screen.getByRole('link', { name: 'weathertron' });
       fireEvent.click(weatherLink);
       expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Weather', {
-        target: '/weather',
+        target: '/weathertron',
         timestamp: expect.any(String),
       });
     });
