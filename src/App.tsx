@@ -182,11 +182,11 @@ function Navigation() {
         swantron
       </Link>
       <Link
-        to='/weather'
-        className={`nav-link ${location.pathname === '/weather' ? 'active' : ''}`}
+        to='/weathertron'
+        className={`nav-link ${location.pathname === '/weathertron' ? 'active' : ''}`}
         onClick={() =>
           logger.info('Navigation clicked - Weather', {
-            target: '/weather',
+            target: '/weathertron',
             timestamp: new Date().toISOString(),
           })
         }
@@ -313,7 +313,7 @@ function App() {
                   <Route path='/wrenchtron' element={<Wrenchtron />} />
                   <Route path='/swantron' element={<SwantronList />} />
                   <Route path='/swantron/:id' element={<SwantronDetail />} />
-                  <Route path='/weather' element={<Weather />} />
+                  <Route path='/weathertron' element={<Weather />} />
                   <Route path='/hacking' element={<Hacking />} />
                   <Route path='/gangamstyle' element={<GangamStyle />} />
                   <Route path='/dealwithit' element={<DealWithIt />} />

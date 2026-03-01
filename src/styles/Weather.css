@@ -13,7 +13,14 @@
 
 .weather-title {
   /* Extends page-title */
+  margin-bottom: var(--space-4);
+}
+
+.weather-byline {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
   margin-bottom: var(--space-8);
+  line-height: 1.6;
 }
 
 /* Weather search styles */

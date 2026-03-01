@@ -833,13 +833,17 @@ function Weather() {
         title='Weather Station - Tron Swan'
         description='Check the current weather conditions anywhere in the world with our robot weather station featuring thermomotron, feelometer, baromotron, and humidotron readings.'
         keywords='weather, temperature, humidity, pressure, robot weather station, global weather'
-        url='/weather'
+        url='/weathertron'
       />
 
       <div className='weather-content'>
         <h1 className='page-title weather-title' data-testid='weather-title'>
           weathertron
         </h1>
+
+        <p className='weather-byline'>
+          Real-time conditions and 5-day forecast for anywhere in the world.
+        </p>
 
         <div className='weather-search'>
           <form onSubmit={handleCitySubmit} className='city-search-form'>
