@@ -3,7 +3,7 @@ export const testData = {
     base: 'https://tronswan.com',
     local: 'http://localhost:5173',
     home: '/',
-    weather: '/weather',
+    weather: '/weathertron',
     swantron: '/swantron',
     hacking: '/hacking',
     hello: '/hello',
@@ -31,7 +31,7 @@ export const testData = {
       links: [
         { text: 'tronswan', href: '/' },
         { text: 'swantron', href: '/swantron' },
-        { text: 'weathertron', href: '/weather' },
+        { text: 'weathertron', href: '/weathertron' },
         { text: 'chomptron', href: 'https://chomptron.com' },
         { text: 'hello', href: '/hello' },
         { text: 'health', href: '/status' },

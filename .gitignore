@@ -101,3 +101,9 @@ digitalocean_token
 # Playwright test results
 test-results/
 playwright-report/
+
+# Lint output
+lint_output.txt
+
+# Claude Code
+CLAUDE.md
