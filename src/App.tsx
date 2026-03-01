@@ -12,6 +12,7 @@ import HealthPage from './components/status/HealthPage';
 import SwantronDetail from './components/swantron/SwantronDetail';
 import SwantronList from './components/swantron/SwantronList';
 import Chomptron from './components/ui/Chomptron';
+import Wrenchtron from './components/ui/Wrenchtron';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import FizzBuzz from './components/ui/FizzBuzz';
 import Hello from './components/ui/Hello';
@@ -205,6 +206,18 @@ function Navigation() {
         chomptron
       </Link>
       <Link
+        to='/wrenchtron'
+        className={`nav-link ${location.pathname === '/wrenchtron' ? 'active' : ''}`}
+        onClick={() =>
+          logger.info('Navigation clicked - Wrenchtron', {
+            target: '/wrenchtron',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        wrenchtron
+      </Link>
+      <Link
         to='/music'
         className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
         onClick={() =>
@@ -297,6 +310,7 @@ function App() {
                     }
                   />
                   <Route path='/chomptron' element={<Chomptron />} />
+                  <Route path='/wrenchtron' element={<Wrenchtron />} />
                   <Route path='/swantron' element={<SwantronList />} />
                   <Route path='/swantron/:id' element={<SwantronDetail />} />
                   <Route path='/weather' element={<Weather />} />

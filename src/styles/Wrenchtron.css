@@ -1,0 +1,127 @@
+/* Wrenchtron showcase page */
+.wrenchtron-page {
+  padding: var(--space-4);
+  animation: fadeIn 0.8s ease-out;
+  color: var(--text-primary);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrenchtron-container {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.wrenchtron-card {
+  padding: var(--space-8);
+  border: none;
+  background: transparent;
+}
+
+.wrenchtron-header {
+  text-align: center;
+}
+
+.wrenchtron-description {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+/* CTA row */
+.wrenchtron-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.demo-button {
+  min-width: 160px;
+}
+
+.wrenchtron-external-link {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.wrenchtron-external-link:hover {
+  color: var(--text-primary);
+}
+
+/* Feature list */
+.wrenchtron-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-8) 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+}
+
+.feature-label {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.feature-detail {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Stack chips */
+.wrenchtron-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.stack-chip {
+  padding: 0.3rem 0.75rem;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--primary-color);
+  letter-spacing: 0.02em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wrenchtron-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .wrenchtron-cta {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .demo-button {
+    width: 100%;
+  }
+}
