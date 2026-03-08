@@ -5,12 +5,12 @@
 
 :root {
   /* Brand Colors - Cyan/TRON */
-  --primary-hue: 192;
-  /* Cyan Base */
-  --accent-hue: 192;
-  /* Cyan Accent */
+  --primary-hue: 160;
+  /* Emerald Base */
+  --accent-hue: 160;
+  /* Emerald Accent */
 
-  --bg-dark: #050a0f;
+  --bg-dark: #050f0a;
   --bg-card: rgba(255, 255, 255, 0.05);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
 
@@ -20,17 +20,17 @@
   --text-muted: #71717a;
 
   /* Accents */
-  --primary-color: #06b6d4;
-  /* Cyan */
-  --primary-hover: #0891b2;
+  --primary-color: #10b981;
+  /* Emerald */
+  --primary-hover: #059669;
 
-  --accent-color: #06b6d4;
-  /* Cyan - unified with primary */
-  --accent-hover: #0891b2;
-  --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  --accent-color: #10b981;
+  /* Emerald - unified with primary */
+  --accent-hover: #059669;
+  --accent-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
 
   /* Glassmorphism */
-  --glass-bg: rgba(5, 15, 25, 0.7);
+  --glass-bg: rgba(5, 15, 10, 0.7);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   --glass-blur: blur(12px);
