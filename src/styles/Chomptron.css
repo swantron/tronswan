@@ -64,7 +64,7 @@
   outline: none;
   border-color: var(--primary-color);
   background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
 }
 
 .widget-input::placeholder {
@@ -90,7 +90,7 @@
   /* Red background */
   border: 1px solid rgba(220, 38, 38, 0.5);
   border-radius: var(--radius-md);
-  color: #6366f1;
+  color: #06b6d4;
   text-align: left;
 }
 

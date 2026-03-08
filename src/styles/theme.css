@@ -4,13 +4,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
 
 :root {
-  /* Brand Colors - Vibrant & Modern */
-  --primary-hue: 250;
-  /* Deep Purple/Blue Base */
-  --accent-hue: 25;
-  /* Orange/Sunset Accent */
+  /* Brand Colors - Cyan/TRON */
+  --primary-hue: 192;
+  /* Cyan Base */
+  --accent-hue: 192;
+  /* Cyan Accent */
 
-  --bg-dark: #0f1115;
+  --bg-dark: #050a0f;
   --bg-card: rgba(255, 255, 255, 0.05);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
 
@@ -20,17 +20,17 @@
   --text-muted: #71717a;
 
   /* Accents */
-  --primary-color: #6366f1;
-  /* Indigo */
-  --primary-hover: #4f46e5;
+  --primary-color: #06b6d4;
+  /* Cyan */
+  --primary-hover: #0891b2;
 
-  --accent-color: #6366f1;
-  /* Indigo - unified with primary */
-  --accent-hover: #4f46e5;
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  --accent-color: #06b6d4;
+  /* Cyan - unified with primary */
+  --accent-hover: #0891b2;
+  --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
 
   /* Glassmorphism */
-  --glass-bg: rgba(20, 20, 25, 0.7);
+  --glass-bg: rgba(5, 15, 25, 0.7);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   --glass-blur: blur(12px);
