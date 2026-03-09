@@ -63,7 +63,7 @@ describe('App Component', () => {
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(10);
+    expect(navLinks).toHaveLength(9);
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
@@ -74,7 +74,6 @@ describe('App Component', () => {
     expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'status' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'shorts' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'music' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'mlb' })).toBeInTheDocument();
   });
@@ -202,16 +201,6 @@ describe('App Component', () => {
       fireEvent.click(statusLink);
       expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Status', {
         target: '/status',
-        timestamp: expect.any(String),
-      });
-    });
-
-    test('logs when shorts link is clicked', () => {
-      render(<App />);
-      const shortsLink = screen.getByRole('link', { name: 'shorts' });
-      fireEvent.click(shortsLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Shorts', {
-        target: '/shorts',
         timestamp: expect.any(String),
       });
     });

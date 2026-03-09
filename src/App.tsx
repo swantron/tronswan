@@ -254,18 +254,6 @@ function Navigation() {
         status
       </Link>
       <Link
-        to='/shorts'
-        className={`nav-link ${location.pathname === '/shorts' ? 'active' : ''}`}
-        onClick={() =>
-          logger.info('Navigation clicked - Shorts', {
-            target: '/shorts',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        shorts
-      </Link>
-      <Link
         to='/hello'
         className={`nav-link ${location.pathname === '/hello' ? 'active' : ''}`}
         onClick={() =>
