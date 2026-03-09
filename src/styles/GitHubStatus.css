@@ -4,7 +4,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   max-height: 500px;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid rgba(248, 152, 89, 0.1);
+  border: 3px solid rgba(16, 185, 129, 0.1);
   border-top: 3px solid var(--accent-color, #10b981);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -82,7 +82,7 @@
 .github-tabs {
   display: flex;
   background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .tab {
@@ -98,12 +98,12 @@
 }
 
 .tab:hover {
-  background: rgba(248, 152, 89, 0.2);
+  background: rgba(16, 185, 129, 0.2);
   color: #10b981;
 }
 
 .tab.active {
-  background: rgba(248, 152, 89, 0.3);
+  background: rgba(16, 185, 129, 0.3);
   color: #10b981;
   border-bottom: 2px solid #10b981;
 }
@@ -113,7 +113,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
-  border-bottom: 2px solid rgba(248, 152, 89, 0.2);
+  border-bottom: 2px solid rgba(16, 185, 129, 0.2);
 }
 
 .repo-tab {
@@ -130,7 +130,7 @@
 
 .repo-tab:hover {
   color: #10b981;
-  background: rgba(248, 152, 89, 0.1);
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .repo-tab.active {
@@ -178,7 +178,7 @@
 .actions-header {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid rgba(248, 152, 89, 0.3);
+  border-bottom: 2px solid rgba(16, 185, 129, 0.3);
 }
 
 .actions-header p {
@@ -195,7 +195,7 @@
 }
 
 .action-item {
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 12px;
   padding: 0;
   background: rgba(255, 255, 255, 0.05);
@@ -204,9 +204,9 @@
 }
 
 .action-item:hover {
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   transform: translateY(-2px);
-  border-color: rgba(248, 152, 89, 0.5);
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .action-header {
@@ -215,8 +215,8 @@
   align-items: center;
   margin-bottom: 0;
   padding: 1rem 1.5rem;
-  background: rgba(248, 152, 89, 0.1);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .action-header h4 {
@@ -277,7 +277,7 @@
   align-items: center;
   margin: 0;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   color: rgba(255, 255, 255, 0.9);
   transition: background 0.2s ease;
 }
@@ -287,7 +287,7 @@
 }
 
 .action-details p:hover {
-  background: rgba(248, 152, 89, 0.1);
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .action-details strong {
@@ -323,7 +323,7 @@
 .repos-header {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid rgba(248, 152, 89, 0.3);
+  border-bottom: 2px solid rgba(16, 185, 129, 0.3);
 }
 
 .repos-header p {
@@ -340,7 +340,7 @@
 }
 
 .repository-item {
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 12px;
   padding: 0;
   background: rgba(255, 255, 255, 0.05);
@@ -349,9 +349,9 @@
 }
 
 .repository-item:hover {
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   transform: translateY(-2px);
-  border-color: rgba(248, 152, 89, 0.5);
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .repo-header {
@@ -360,8 +360,8 @@
   align-items: center;
   margin-bottom: 0;
   padding: 1rem 1.5rem;
-  background: rgba(248, 152, 89, 0.1);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .repo-header h4 {
@@ -404,7 +404,7 @@
   align-items: center;
   margin: 0;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   color: rgba(255, 255, 255, 0.9);
   transition: background 0.2s ease;
 }
@@ -414,7 +414,7 @@
 }
 
 .repo-details p:hover {
-  background: rgba(248, 152, 89, 0.1);
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .repo-details strong {

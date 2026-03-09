@@ -117,7 +117,7 @@
 }
 
 .swantron-detail-body blockquote {
-  background-color: rgba(248, 152, 89, 0.1);
+  background-color: rgba(16, 185, 129, 0.1);
   border-left: 4px solid var(--accent-color);
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
@@ -144,9 +144,9 @@
   text-align: center;
   margin: 2rem 0;
   padding: 1.5rem;
-  background-color: rgba(248, 152, 89, 0.05);
+  background-color: rgba(16, 185, 129, 0.05);
   border-radius: var(--border-radius);
-  border: 1px solid rgba(248, 152, 89, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .swantron-external-button {
@@ -168,7 +168,7 @@
   background-color: #e6813f;
   border-color: #e6813f;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
 }
 
 .swantron-detail-footer {
@@ -185,13 +185,13 @@
 }
 
 .swantron-detail-tag {
-  background-color: rgba(248, 152, 89, 0.1);
+  background-color: rgba(16, 185, 129, 0.1);
   color: var(--accent-color);
   padding: 0.5rem 1rem;
   border-radius: 15px;
   font-size: 0.85rem;
   font-weight: 600;
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 /* Responsive adjustments */

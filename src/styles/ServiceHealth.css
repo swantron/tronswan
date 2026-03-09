@@ -26,9 +26,9 @@
 }
 
 .check-button {
-  background: var(--accent-color, #f89859);
+  background: var(--accent-color, #10b981);
   color: var(--primary-bg, #282c34);
-  border: 2px solid var(--accent-color, #f89859);
+  border: 2px solid var(--accent-color, #10b981);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: var(--font-base);
@@ -41,7 +41,7 @@
   background: #e6894a;
   border-color: #e6894a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .check-button:disabled {
@@ -72,7 +72,7 @@
 }
 
 .service-item {
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 12px;
   padding: 0;
   background: rgba(255, 255, 255, 0.05);
@@ -82,9 +82,9 @@
 }
 
 .service-item:hover {
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   transform: translateY(-2px);
-  border-color: rgba(248, 152, 89, 0.5);
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .service-item.status-healthy {
@@ -105,15 +105,15 @@
   align-items: center;
   margin-bottom: 0;
   padding: 1rem 1.5rem;
-  background: rgba(248, 152, 89, 0.1);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .service-name {
   margin: 0;
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #10b981);
   font-size: var(--font-lg);
   font-weight: 700;
 }
@@ -164,8 +164,8 @@
   margin: 0;
   padding: 12px 16px;
   line-height: 1.6;
-  background: rgba(248, 152, 89, 0.05);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  background: rgba(16, 185, 129, 0.05);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   font-style: italic;
   white-space: normal;
   word-wrap: break-word;
@@ -173,13 +173,13 @@
 
 .service-url {
   padding: 12px 16px;
-  background: rgba(248, 152, 89, 0.05);
-  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  background: rgba(16, 185, 129, 0.05);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   word-wrap: break-word;
 }
 
 .service-link {
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #10b981);
   text-decoration: none;
   font-weight: 500;
   transition: opacity 0.2s ease;
@@ -202,7 +202,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(248, 152, 89, 0.2);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
   transition: background 0.2s ease;
 }
 
@@ -211,7 +211,7 @@
 }
 
 .metric:hover {
-  background: rgba(248, 152, 89, 0.1);
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .metric-label {
@@ -228,12 +228,12 @@
 }
 
 .metric-highlight {
-  background: rgba(248, 152, 89, 0.08);
+  background: rgba(16, 185, 129, 0.08);
   font-weight: 700;
 }
 
 .metric-highlight .metric-label {
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #10b981);
   font-weight: 700;
 }
 
@@ -262,7 +262,7 @@
 
 .service-summary {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -270,7 +270,7 @@
 
 .service-summary h3 {
   margin: 0 0 1.5rem 0;
-  color: var(--accent-color, #f89859);
+  color: var(--accent-color, #10b981);
   font-size: var(--font-2xl);
   text-align: center;
   font-weight: bold;
@@ -289,14 +289,14 @@
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  border: 1px solid rgba(248, 152, 89, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   transition: all 0.3s ease;
 }
 
 .stat:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(248, 152, 89, 0.3);
-  border-color: rgba(248, 152, 89, 0.5);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .stat-number {
