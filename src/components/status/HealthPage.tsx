@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import digitalOceanService from '../../services/digitalOceanService';
-import type {
-  GitHubRepository,
-  GitHubWorkflowRun,
-  GitHubUser,
-} from '../../services/githubService';
+import type { GitHubData } from './GitHubStatus';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
@@ -18,16 +14,7 @@ import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
 import '../../styles/HealthPage.css';
 
 interface HealthData {
-  github: {
-    user: GitHubUser | null;
-    repositories: GitHubRepository[];
-    tronswanActions: GitHubWorkflowRun[];
-    chomptronActions: GitHubWorkflowRun[];
-    secureBaseImagesActions: GitHubWorkflowRun[];
-    readmeLintActions: GitHubWorkflowRun[];
-    loading: boolean;
-    error: string | null;
-  };
+  github: GitHubData;
   digitalocean: {
     app: unknown;
     droplets: unknown[];
@@ -53,10 +40,7 @@ function HealthPage() {
     github: {
       user: null,
       repositories: [],
-      tronswanActions: [],
-      chomptronActions: [],
-      secureBaseImagesActions: [],
-      readmeLintActions: [],
+      repoActions: {},
       loading: true,
       error: null,
     },
@@ -118,12 +102,11 @@ function HealthPage() {
 
   // Count deployment issues
   const getDeploymentStatus = () => {
-    const failedDeployments = [
-      ...healthData.github.tronswanActions,
-      ...healthData.github.chomptronActions,
-      ...healthData.github.secureBaseImagesActions,
-      ...healthData.github.readmeLintActions,
-    ].filter(run => run.conclusion === 'failure').length;
+    const failedDeployments = Object.values(
+      healthData.github.repoActions || {}
+    )
+      .flat()
+      .filter(run => run.conclusion === 'failure').length;
 
     return { failedDeployments };
   };
@@ -479,6 +462,14 @@ function HealthPage() {
               className='resource-link'
             >
               Cloud Run Metrics
+            </a>
+            <a
+              href='https://console.firebase.google.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='resource-link'
+            >
+              Firebase Console
             </a>
           </div>
         </div>

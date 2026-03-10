@@ -54,8 +54,7 @@ describe('GitHubStatus Component', () => {
     data: {
       user: null,
       repositories: [],
-      tronswanActions: [],
-      chomptronActions: [],
+      repoActions: {},
       loading: false,
       error: null,
     },
@@ -80,6 +79,11 @@ describe('GitHubStatus Component', () => {
         expect(githubService.getAllRepositories).toHaveBeenCalled();
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('tronswan');
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('chomptron');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('wrenchtron');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('swantron');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('mt');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('uptime-monitor');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('minifier-cli');
       });
     });
 
@@ -162,7 +166,7 @@ describe('GitHubStatus Component', () => {
           data={{
             ...defaultProps.data,
             repositories: mockRepositoryData,
-            tronswanActions: mockWorkflowRuns.workflow_runs,
+            repoActions: { tronswan: mockWorkflowRuns.workflow_runs },
           }}
         />
       );
@@ -207,7 +211,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            tronswanActions: mockWorkflowRuns.workflow_runs,
+            repoActions: { tronswan: mockWorkflowRuns.workflow_runs },
           }}
         />
       );
@@ -221,7 +225,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            tronswanActions: mockWorkflowRuns.workflow_runs,
+            repoActions: { tronswan: mockWorkflowRuns.workflow_runs },
           }}
         />
       );
@@ -236,7 +240,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            tronswanActions: mockWorkflowRuns.workflow_runs,
+            repoActions: { tronswan: mockWorkflowRuns.workflow_runs },
           }}
         />
       );
@@ -252,7 +256,7 @@ describe('GitHubStatus Component', () => {
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            tronswanActions: mockWorkflowRuns.workflow_runs,
+            repoActions: { tronswan: mockWorkflowRuns.workflow_runs },
           }}
         />
       );
@@ -358,14 +362,14 @@ describe('GitHubStatus Component', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles empty arrays', () => {
+    it('handles empty repoActions', () => {
       render(
         <GitHubStatus
           {...defaultProps}
           data={{
             ...defaultProps.data,
             repositories: [],
-            actions: [],
+            repoActions: {},
           }}
         />
       );
@@ -374,14 +378,14 @@ describe('GitHubStatus Component', () => {
       expect(screen.getByText('Repos (0)')).toBeInTheDocument();
     });
 
-    it('handles null arrays', () => {
+    it('handles missing repoActions gracefully', () => {
       render(
         <GitHubStatus
           {...defaultProps}
           data={{
             ...defaultProps.data,
-            repositories: null,
-            actions: null,
+            repositories: [],
+            repoActions: {},
           }}
         />
       );
