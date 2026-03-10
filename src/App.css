@@ -198,6 +198,13 @@ body {
 }
 
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+  .nav-link {
+    font-size: 0.85rem;
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
 @media (max-width: 768px) {
   .main-nav {
     border-radius: var(--radius-lg);
