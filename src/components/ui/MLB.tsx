@@ -172,7 +172,7 @@ function MLB() {
     team: TeamRecord,
     type: string
   ): SplitRecord | undefined => {
-    return team.records?.splitRecords.find(record => record.type === type);
+    return team.records?.splitRecords?.find(record => record.type === type);
   };
 
   const fetchStandings = async () => {
@@ -184,7 +184,7 @@ function MLB() {
     });
 
     try {
-      const url = 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104';
+      const url = 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&hydrate=record(overall,splitRecords)';
 
       const response = await logger.measureAsync(
         'mlb-standings-api-call',
@@ -559,6 +559,9 @@ function MLB() {
         <p className='section-subtitle'>
           Click on any team to expand and view detailed splits
         </p>
+        {getAllTeams().every(t => !t.records) ? (
+          <p className='section-subtitle'>Split record data is not yet available for this season.</p>
+        ) : null}
         <div className='team-stats-list'>
           {getAllTeams()
             .sort(
@@ -579,7 +582,7 @@ function MLB() {
               const vsRight = getSplitRecord(team, 'right');
               const extraInnings = getSplitRecord(team, 'extraInning');
               const oneRun = getSplitRecord(team, 'oneRun');
-              const expected = team.records?.expectedRecords.find(
+              const expected = team.records?.expectedRecords?.find(
                 r => r.type === 'xWinLoss'
               );
 
@@ -944,15 +947,15 @@ function MLB() {
         <h2 className='section-title'>League Rankings</h2>
         <p className='section-subtitle'>Top 10 teams in each category</p>
         <div className='rankings-grid'>
-          {renderRankingTable(rankings.byRecord, '🏆 Best Records', 'record')}
+          {renderRankingTable(rankings.byRecord, 'Best Records', 'record')}
           {renderRankingTable(
             rankings.byRunsScored,
-            '⚾ Most Runs Scored',
+            'Most Runs Scored',
             'runsScored'
           )}
           {renderRankingTable(
             rankings.byRunsAllowed,
-            '🛡️ Fewest Runs Allowed',
+            'Fewest Runs Allowed',
             'runsAllowed'
           )}
           {renderRankingTable(
@@ -967,7 +970,7 @@ function MLB() {
           )}
           {renderRankingTable(
             rankings.byHomeAdvantage,
-            '🏠 Best Home Field Advantage',
+            'Best Home Field Advantage',
             'homeAdv'
           )}
         </div>

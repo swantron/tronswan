@@ -449,7 +449,7 @@ describe('MLB Component', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104'
+        'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&hydrate=record(overall,splitRecords)'
       );
     });
   });

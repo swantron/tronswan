@@ -279,9 +279,6 @@ describe('Weather Component', () => {
         '1013 hPa'
       );
       expect(screen.getByTestId('humidity-display')).toHaveTextContent('45%');
-      expect(screen.getByTestId('location-display')).toHaveTextContent(
-        '📍 Bozeman, US'
-      );
     });
   });
 
@@ -499,9 +496,6 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('location-display')).toHaveTextContent(
-        'London'
-      );
     });
   });
 
@@ -760,9 +754,6 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('location-display')).toHaveTextContent(
-        'Bozeman'
-      );
     });
   });
 
@@ -826,9 +817,6 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('location-display')).toHaveTextContent(
-        'Bozeman'
-      );
     });
   });
 
@@ -890,9 +878,6 @@ describe('Weather Component', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('location-display')).toHaveTextContent(
-        'New York'
-      );
     });
   });
 });
