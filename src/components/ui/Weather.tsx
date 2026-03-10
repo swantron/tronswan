@@ -149,7 +149,7 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
               </span>
             </div>
             <div className='forecast-description'>{day.description}</div>
-            <div className='forecast-humidity'>{day.humidity}%</div>
+            <div className='forecast-humidity'>humidity {day.humidity}%</div>
           </Card>
         ))}
       </div>
@@ -206,7 +206,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
       {weather.weatherDescription && (
         <Card className='weather-item weather-description'>
           <p data-testid='weather-description-display'>
-            🌤️ {weather.weatherDescription}
+            {weather.weatherDescription}
           </p>
         </Card>
       )}
@@ -217,7 +217,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.temperature && (
           <Card className='weather-item'>
             <p data-testid='temperature-display'>
-              🌡️ {Math.round(convertTempForDisplay(weather.temperature))}
+              {Math.round(convertTempForDisplay(weather.temperature))}
               {getTemperatureUnit()}
             </p>
           </Card>
@@ -225,7 +225,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.feelsLike && (
           <Card className='weather-item'>
             <p data-testid='feels-like-display'>
-              🤔 Feels like{' '}
+              Feels like{' '}
               {Math.round(convertTempForDisplay(weather.feelsLike))}
               {getTemperatureUnit()}
             </p>
@@ -234,9 +234,9 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.tempMin && weather.tempMax && (
           <Card className='weather-item'>
             <p data-testid='temp-range-display'>
-              Range: {Math.round(convertTempForDisplay(weather.tempMin))}
-              {getTemperatureUnit()} -{' '}
-              {Math.round(convertTempForDisplay(weather.tempMax))}
+              ↑{Math.round(convertTempForDisplay(weather.tempMax))}
+              {getTemperatureUnit()}{' '}
+              ↓{Math.round(convertTempForDisplay(weather.tempMin))}
               {getTemperatureUnit()}
             </p>
           </Card>
@@ -273,7 +273,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.windSpeed && (
           <Card className='weather-item'>
             <p data-testid='wind-display'>
-              💨 Wind: {weather.windSpeed} mph{' '}
+              Wind: {weather.windSpeed} mph{' '}
               {weather.windDirection
                 ? getWindDirection(weather.windDirection)
                 : ''}
@@ -283,7 +283,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.visibility && (
           <Card className='weather-item'>
             <p data-testid='visibility-display'>
-              👁️ Visibility: {Math.round(weather.visibility / 1609.34)} miles
+              Visibility: {Math.round(weather.visibility / 1609.34)} miles
             </p>
           </Card>
         )}
@@ -296,29 +296,18 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
           {weather.sunrise && (
             <Card className='weather-item'>
               <p data-testid='sunrise-display'>
-                🌅 Sunrise: {formatTime(weather.sunrise)}
+                Sunrise: {formatTime(weather.sunrise)}
               </p>
             </Card>
           )}
           {weather.sunset && (
             <Card className='weather-item'>
               <p data-testid='sunset-display'>
-                🌇 Sunset: {formatTime(weather.sunset)}
+                Sunset: {formatTime(weather.sunset)}
               </p>
             </Card>
           )}
         </div>
-      )}
-
-      {/* Location */}
-      {weather.city && (
-        <Card className='weather-item weather-location'>
-          <p data-testid='location-display'>
-            📍 {weather.city}
-            {weather.state ? `, ${weather.state}` : ''}
-            {weather.country ? `, ${weather.country}` : ''}
-          </p>
-        </Card>
       )}
     </div>
   );
