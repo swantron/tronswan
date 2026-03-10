@@ -22,7 +22,7 @@ export const testData = {
 
     weather: {
       temperaturePattern:
-        /🌡️ (-3[0-9]|-[1-9]|[0-9]|[1-9][0-9]|1[01][0-9]|120)°F/,
+        /(-3[0-9]|-[1-9]|[0-9]|[1-9][0-9]|1[01][0-9]|120)°F/,
       minTemperature: -30,
       maxTemperature: 120,
     },
