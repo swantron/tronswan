@@ -316,6 +316,22 @@ function HealthPage() {
           >
             GCP Metrics →
           </a>
+          <a
+            href='https://console.firebase.google.com/u/0/project/wrenchtron-db057/overview'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='quick-action-link'
+          >
+            Firebase (wrenchtron) →
+          </a>
+          <a
+            href='https://console.firebase.google.com/u/0/project/mt-services-swantron/overview'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='quick-action-link'
+          >
+            Firebase (mt.services) →
+          </a>
         </div>
 
         {/* Tab Navigation */}
@@ -438,7 +454,7 @@ function HealthPage() {
 
         {/* Google Cloud Resources */}
         <div className='health-section google-resources-section'>
-          <h2>🔗 Google Cloud Resources</h2>
+          <h2>Google Cloud Resources</h2>
           <div className='google-resources-links'>
             <a
               href='https://aistudio.google.com/app/projects'
@@ -454,7 +470,7 @@ function HealthPage() {
               rel='noopener noreferrer'
               className='resource-link'
             >
-              🔨 Cloud Build
+              Cloud Build
             </a>
             <a
               href='https://console.cloud.google.com/run/detail/us-central1/chomptron/observability/metrics?project=chomptron'
