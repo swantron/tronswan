@@ -263,58 +263,11 @@ function HealthPage() {
           );
         })()}
 
-        {/* Incident History */}
-        <IncidentHistory days={7} />
-
         <div className='health-controls'>
           <span className='last-updated' data-testid='last-updated'>
             Last updated: {lastUpdated.toLocaleTimeString()}
             <span className='countdown'> • Next refresh in {countdown}s</span>
           </span>
-        </div>
-
-        {/* Quick Actions */}
-        <div className='quick-actions'>
-          <a
-            href='https://github.com/swantron/tronswan/actions'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='quick-action-link'
-          >
-            GitHub Actions →
-          </a>
-          <a
-            href='https://cloud.digitalocean.com/apps'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='quick-action-link'
-          >
-            DO Dashboard →
-          </a>
-          <a
-            href='https://console.cloud.google.com/run/detail/us-central1/chomptron/observability/metrics?project=chomptron'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='quick-action-link'
-          >
-            GCP Metrics →
-          </a>
-          <a
-            href='https://console.firebase.google.com/u/0/project/wrenchtron-db057/overview'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='quick-action-link'
-          >
-            Firebase (wrenchtron) →
-          </a>
-          <a
-            href='https://console.firebase.google.com/u/0/project/mt-services-swantron/overview'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='quick-action-link'
-          >
-            Firebase (mt.services) →
-          </a>
         </div>
 
         {/* Tab Navigation */}
@@ -473,6 +426,9 @@ function HealthPage() {
             </a>
           </div>
         </div>
+
+        {/* Incident History */}
+        <IncidentHistory days={7} />
       </div>
     </div>
   );
