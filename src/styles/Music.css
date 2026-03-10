@@ -162,14 +162,16 @@
 .artists-grid,
 .playlists-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 300px));
+  justify-content: center;
   gap: var(--space-6);
   width: 100%;
 }
 
 .recent-tracks {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 420px));
+  justify-content: center;
   gap: var(--space-4);
 }
 

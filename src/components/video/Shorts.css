@@ -23,7 +23,8 @@
 
 .shorts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 360px));
+  justify-content: center;
   gap: 2rem;
   padding: 0 1rem;
 }
