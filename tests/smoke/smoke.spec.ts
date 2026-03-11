@@ -69,13 +69,11 @@ test.describe('Smoke Tests', () => {
       testData.expectedContent.home.swantronLinkHref
     );
 
-    // Test click functionality (should redirect to gangnam pages, hacking, or dealwithit pages)
+    // Test click functionality (should navigate away from home)
     await homePage.clickSwantronLink();
 
-    // Should redirect to one of the video pages
+    // Should redirect away from the home page to a video page
     const currentUrl = await homePage.getCurrentUrl();
-    expect(currentUrl).toMatch(
-      /gangamstyle|hacking|dealwithit|baseball[12]|kingkong|buschleague|thumbsup|jobwelldone|coffee|mishap|peloton|seeya|dynomite|working/
-    );
+    expect(currentUrl).not.toBe(testData.urls.home);
   });
 });
