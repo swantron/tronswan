@@ -291,6 +291,7 @@
   border-radius: 8px;
   border: 1px solid rgba(16, 185, 129, 0.3);
   transition: all 0.3s ease;
+  min-width: 0;
 }
 
 .stat:hover {
@@ -311,6 +312,9 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .stat:nth-child(1) .stat-number {
