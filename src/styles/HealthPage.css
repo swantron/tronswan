@@ -108,6 +108,9 @@
   margin-bottom: 2rem;
   border: none;
   box-shadow: none;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .overall-status-card.status-healthy {
@@ -232,8 +235,17 @@
     font-size: 2rem;
   }
 
+  .overall-status-card {
+    padding: 1rem;
+  }
+
   .status-metrics {
     gap: 1rem;
+  }
+
+  .metric {
+    min-width: unset;
+    flex: 1 1 auto;
   }
 
   .metric-value {
