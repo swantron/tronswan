@@ -57,18 +57,6 @@ const SwantronList: React.FC = () => {
     fetchPosts();
   }, [page, searchQuery]);
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-
-    logger.info('Swantron search submitted', {
-      searchQuery,
-      currentPage: page,
-      timestamp: new Date().toISOString(),
-    });
-
-    setPage(1); // Reset to first page when searching
-  };
-
   return (
     <div className='swantron-page'>
       <SEO
@@ -92,26 +80,22 @@ const SwantronList: React.FC = () => {
               swantron.com ↗
             </a>
           </p>
-          <form onSubmit={handleSearch} className='swantron-search-form'>
-            <input
-              type='text'
-              value={searchQuery}
-              onChange={e => {
-                const value = e.target.value;
-                logger.debug('Swantron search input changed', {
-                  searchQuery: value,
-                  queryLength: value.length,
-                  timestamp: new Date().toISOString(),
-                });
-                setSearchQuery(value);
-              }}
-              placeholder='Search posts...'
-              className='swantron-search-input'
-            />
-            <Button type='submit' variant='primary'>
-              Search
-            </Button>
-          </form>
+          <input
+            type='text'
+            value={searchQuery}
+            onChange={e => {
+              const value = e.target.value;
+              logger.debug('Swantron search input changed', {
+                searchQuery: value,
+                queryLength: value.length,
+                timestamp: new Date().toISOString(),
+              });
+              setSearchQuery(value);
+              setPage(1);
+            }}
+            placeholder='Search posts...'
+            className='swantron-search-input'
+          />
         </div>
 
         {loading ? (

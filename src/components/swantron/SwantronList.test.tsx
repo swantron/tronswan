@@ -145,7 +145,6 @@ describe('SwantronList Component', () => {
     });
 
     expect(screen.getByPlaceholderText('Search posts...')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   test('handles search functionality', async () => {
@@ -162,10 +161,8 @@ describe('SwantronList Component', () => {
     });
 
     const searchInput = screen.getByPlaceholderText('Search posts...');
-    const searchButton = screen.getByRole('button', { name: 'Search' });
 
     fireEvent.change(searchInput, { target: { value: 'test query' } });
-    fireEvent.click(searchButton);
 
     await waitFor(() => {
       expect(swantronService.searchPosts as any).toHaveBeenCalledWith(
