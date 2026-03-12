@@ -16,7 +16,7 @@ export const getLoggingConfig = (): LoggerConfig => {
 };
 
 // Environment-specific configurations
-export const developmentConfig: LoggerConfig = {
+const developmentConfig: LoggerConfig = {
   level: LogLevel.DEBUG,
   enableConsole: true,
   enableProductionLogging: false,
@@ -27,7 +27,7 @@ export const developmentConfig: LoggerConfig = {
   logRetentionDays: 7,
 };
 
-export const productionConfig: LoggerConfig = {
+const productionConfig: LoggerConfig = {
   level: LogLevel.ERROR,
   enableConsole: false,
   enableProductionLogging: false,
@@ -38,7 +38,7 @@ export const productionConfig: LoggerConfig = {
   logRetentionDays: 30,
 };
 
-export const testConfig: LoggerConfig = {
+const testConfig: LoggerConfig = {
   level: LogLevel.ERROR,
   enableConsole: false,
   enableProductionLogging: false,

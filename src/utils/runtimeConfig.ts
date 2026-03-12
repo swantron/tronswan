@@ -113,27 +113,6 @@ class RuntimeConfigManager {
     return process.env[key] || '';
   }
 
-  /**
-   * Check if a configuration value is set
-   */
-  has<K extends keyof RuntimeConfig>(key: K): boolean {
-    const value = this.get(key);
-    return value !== '' && value !== undefined && value !== null;
-  }
-
-  /**
-   * Get all configuration values
-   */
-  getAll(): Partial<RuntimeConfig> {
-    return { ...this.config };
-  }
-
-  /**
-   * Check if configuration is initialized
-   */
-  isInitialized(): boolean {
-    return this.initialized;
-  }
 }
 
 // Export a singleton instance
