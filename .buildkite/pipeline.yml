@@ -1,0 +1,22 @@
+# Buildkite entry point for tronswan
+#
+# This file is intentionally minimal. Its only job is to run the pipeline
+# generator script, which inspects what changed in the commit and emits
+# the appropriate steps at runtime.
+#
+# This is the Buildkite dynamic pipeline pattern: instead of a static
+# list of steps that always runs everything, a script decides what to run
+# based on context (changed files, branch, environment, etc.) and uploads
+# the generated pipeline via `buildkite-agent pipeline upload`.
+#
+# At monorepo scale this is essential — running every test suite on every
+# commit across hundreds of packages is untenable. Dynamic generation
+# makes CI fast by default and exhaustive only when necessary.
+
+agents:
+  queue: gcp
+
+steps:
+  - label: ":pipeline: Generate Pipeline"
+    key: generate
+    command: .buildkite/generate-pipeline.sh | buildkite-agent pipeline upload
