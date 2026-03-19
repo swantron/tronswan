@@ -146,7 +146,7 @@ if [ "$CONFIG_CHANGED" = "true" ] || \
       yarn install --frozen-lockfile
       yarn build
     artifact_paths:
-      - "dist/**/*"
+      - "build/**/*"
 
 STEP
 fi
