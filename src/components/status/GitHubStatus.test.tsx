@@ -79,11 +79,17 @@ describe('GitHubStatus Component', () => {
         expect(githubService.getAllRepositories).toHaveBeenCalled();
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('tronswan');
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('chomptron');
-        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('wrenchtron');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith(
+          'wrenchtron'
+        );
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('swantron');
         expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('mt');
-        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('uptime-monitor');
-        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith('minifier-cli');
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith(
+          'uptime-monitor'
+        );
+        expect(githubService.getWorkflowRuns).toHaveBeenCalledWith(
+          'minifier-cli'
+        );
       });
     });
 

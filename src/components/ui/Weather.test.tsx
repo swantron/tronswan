@@ -495,8 +495,7 @@ describe('Weather Component', () => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   });
 
   test('displays all weather details when available', async () => {
@@ -753,8 +752,7 @@ describe('Weather Component', () => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   });
 
   test('handles city/state combo search', async () => {
@@ -816,8 +814,7 @@ describe('Weather Component', () => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   });
 
   test('handles zip code with country code', async () => {
@@ -877,7 +874,6 @@ describe('Weather Component', () => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   });
 });
