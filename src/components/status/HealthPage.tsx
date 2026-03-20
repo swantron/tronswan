@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import digitalOceanService from '../../services/digitalOceanService';
-import type { GitHubData } from './GitHubStatus';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
 
 import DigitalOceanStatus from './DigitalOceanStatus';
-import GitHubStatus from './GitHubStatus';
+import GitHubStatus, { type GitHubData } from './GitHubStatus';
 import IncidentHistory from './IncidentHistory';
 import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
 
@@ -102,9 +101,7 @@ function HealthPage() {
 
   // Count deployment issues
   const getDeploymentStatus = () => {
-    const failedDeployments = Object.values(
-      healthData.github.repoActions || {}
-    )
+    const failedDeployments = Object.values(healthData.github.repoActions || {})
       .flat()
       .filter(run => run.conclusion === 'failure').length;
 

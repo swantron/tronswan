@@ -112,7 +112,6 @@ class RuntimeConfigManager {
     }
     return process.env[key] || '';
   }
-
 }
 
 // Export a singleton instance

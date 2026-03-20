@@ -85,6 +85,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
       onKeyDown={handleKeyDown}
       role='button'
       tabIndex={0}
+      aria-label='Close video modal'
       data-testid={`${testId}-modal-overlay`}
     >
       <div

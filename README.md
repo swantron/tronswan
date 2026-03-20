@@ -381,6 +381,53 @@ For detailed environment variable setup, see [Environment Configuration](docs/EN
 
 The project includes utility scripts for development and testing. All scripts are defined in `package.json` and can be run with `yarn <script-name>`.
 
+## Buildkite Pipeline
+
+This repo includes a **dynamic Buildkite pipeline** at `.buildkite/pipeline.yml` that runs on a self-hosted GCP agent provisioned by [buildkite-gcp-agent](https://github.com/swantron/buildkite-gcp-agent).
+
+### How dynamic generation works
+
+Rather than a static list of steps that always runs everything, `.buildkite/generate-pipeline.sh` inspects which files changed and emits only the relevant steps at runtime:
+
+```
+Push / PR
+  └── :pipeline: Generate Pipeline
+        └── generate-pipeline.sh | buildkite-agent pipeline upload
+              └── Emits steps based on git diff:
+                    ├── src/** changed     → Lint + Type-check (Tier 1, always fast)
+                    ├── components/hooks/  → Unit tests + coverage annotation (Tier 2)
+                    │   services/utils
+                    ├── config/deps or     → Build (Tier 3)
+                    │   push to main
+                    └── Always             → Annotate result
+```
+
+### Why dynamic over static
+
+In a monorepo with many packages, running every test suite on every commit is slow and expensive. Dynamic generation makes CI fast by default (touch a component → only lint + unit tests fire) and exhaustive only when necessary (touch `package.json` → full suite including build).
+
+This is the same pattern used in large-scale monorepo CI — the generator script is the only file that needs to grow as the repo adds more packages or test types.
+
+### Step tiers
+
+| Tier | Steps | Triggers |
+|------|-------|---------|
+| 1 | Lint, Type-check | Any `src/` change |
+| 2 | Unit tests + coverage | `components/`, `hooks/`, `services/`, `utils/` |
+| 3 | Build | Config/dependency changes or push to `main` |
+| — | Annotate | Always |
+
+E2E tests are intentionally omitted — Playwright runs against the live DigitalOcean deployment and is owned by the GHA `deploy-and-validate` workflow. Running E2E here would require production access, which we deliberately keep in GHA as a security boundary.
+
+### Agent targeting
+
+All generated steps explicitly target the `gcp` queue:
+
+```yaml
+agents:
+  queue: gcp
+```
+
 ## License
 
 This project is licensed under the MIT License.

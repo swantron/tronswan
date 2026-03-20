@@ -184,7 +184,8 @@ function MLB() {
     });
 
     try {
-      const url = 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&hydrate=record(overall,splitRecords)';
+      const url =
+        'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&hydrate=record(overall,splitRecords)';
 
       const response = await logger.measureAsync(
         'mlb-standings-api-call',
@@ -560,7 +561,9 @@ function MLB() {
           Click on any team to expand and view detailed splits
         </p>
         {getAllTeams().every(t => !t.records) ? (
-          <p className='section-subtitle'>Split record data is not yet available for this season.</p>
+          <p className='section-subtitle'>
+            Split record data is not yet available for this season.
+          </p>
         ) : null}
         <div className='team-stats-list'>
           {getAllTeams()

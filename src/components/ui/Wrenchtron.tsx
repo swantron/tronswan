@@ -11,11 +11,13 @@ import '../../styles/Wrenchtron.css';
 const FEATURES = [
   {
     label: 'Mixed-fleet tracking',
-    detail: 'Cars, motorcycles, ATVs, mowers, boats, snowblowers — each type gets appropriate fields and service intervals.',
+    detail:
+      'Cars, motorcycles, ATVs, mowers, boats, snowblowers — each type gets appropriate fields and service intervals.',
   },
   {
     label: 'Smart scheduling',
-    detail: 'Mileage-based, time-based, seasonal, and calendar-month intervals. Composite "whichever comes first" also supported.',
+    detail:
+      'Mileage-based, time-based, seasonal, and calendar-month intervals. Composite "whichever comes first" also supported.',
   },
   {
     label: 'NHTSA recall integration',
@@ -23,7 +25,8 @@ const FEATURES = [
   },
   {
     label: 'Offline-capable PWA',
-    detail: 'Installable on iOS and Android. Firestore persistence via IndexedDB keeps data available without a connection.',
+    detail:
+      'Installable on iOS and Android. Firestore persistence via IndexedDB keeps data available without a connection.',
   },
 ];
 
@@ -64,9 +67,9 @@ const Wrenchtron: React.FC = () => {
             <h1 className='page-title'>wrenchtron</h1>
 
             <p className='wrenchtron-description'>
-              Vehicle maintenance tracker for mixed fleets. Logs service history,
-              calculates what&apos;s due next, and surfaces NHTSA safety recalls
-              automatically.
+              Vehicle maintenance tracker for mixed fleets. Logs service
+              history, calculates what&apos;s due next, and surfaces NHTSA
+              safety recalls automatically.
             </p>
 
             <div className='wrenchtron-cta'>
