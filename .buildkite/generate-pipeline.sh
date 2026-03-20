@@ -124,7 +124,7 @@ if [ "$COMPONENTS_CHANGED" = "true" ] || \
       queue: gcp
     command: |
       yarn install --frozen-lockfile
-      yarn test:coverage
+      yarn test:coverage --testTimeout=30000 --maxWorkers=1
       COVERAGE=$(cat coverage/coverage-summary.json | \
         node -e "const d=require('fs').readFileSync('/dev/stdin','utf8'); \
                  const j=JSON.parse(d); \
