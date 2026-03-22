@@ -419,6 +419,10 @@ This is the same pattern used in large-scale monorepo CI — the generator scrip
 
 E2E tests are intentionally omitted — Playwright runs against the live DigitalOcean deployment and is owned by the GHA `deploy-and-validate` workflow. Running E2E here would require production access, which we deliberately keep in GHA as a security boundary.
 
+### Pipeline setup
+
+Connect the repo via Buildkite → New Pipeline → point at `github.com/swantron/tronswan`. Buildkite reads `.buildkite/pipeline.yml` automatically, which runs the generator script on each push.
+
 ### Agent targeting
 
 All generated steps explicitly target the `gcp` queue:
