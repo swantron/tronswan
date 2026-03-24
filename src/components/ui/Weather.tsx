@@ -359,17 +359,19 @@ function Weather() {
       {} as Record<string, ForecastItem[]>
     );
 
-    return Object.values(grouped).slice(0, 5).map(dayItems => ({
-      date: dayItems[0].dt_txt.split(' ')[0],
-      high: Math.max(...dayItems.map(item => item.main.temp)),
-      low: Math.min(...dayItems.map(item => item.main.temp)),
-      description: dayItems[0].weather[0].description,
-      icon: dayItems[0].weather[0].icon,
-      humidity: Math.round(
-        dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
-          dayItems.length
-      ),
-    }));
+    return Object.values(grouped)
+      .slice(0, 5)
+      .map(dayItems => ({
+        date: dayItems[0].dt_txt.split(' ')[0],
+        high: Math.max(...dayItems.map(item => item.main.temp)),
+        low: Math.min(...dayItems.map(item => item.main.temp)),
+        description: dayItems[0].weather[0].description,
+        icon: dayItems[0].weather[0].icon,
+        humidity: Math.round(
+          dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
+            dayItems.length
+        ),
+      }));
   };
 
   /**

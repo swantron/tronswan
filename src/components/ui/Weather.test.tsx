@@ -47,7 +47,9 @@ describe('Weather Component', () => {
       if (url.includes('geo/1.0/reverse')) {
         return Promise.resolve({
           ok: true,
-          json: async () => [{ name: 'Bozeman', state: 'Montana', country: 'US' }],
+          json: async () => [
+            { name: 'Bozeman', state: 'Montana', country: 'US' },
+          ],
         });
       } else if (url.includes('/weather?')) {
         // Current weather API
@@ -500,7 +502,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
   });
 
   test('displays all weather details when available', async () => {
@@ -756,7 +757,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
   });
 
   test('handles city/state combo search', async () => {
@@ -817,7 +817,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
   });
 
   test('handles zip code with country code', async () => {
@@ -876,6 +875,5 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
   });
 });

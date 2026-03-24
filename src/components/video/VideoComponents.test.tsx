@@ -6,7 +6,12 @@ import { describe, it, expect } from 'vitest';
 import Baseball2 from './Baseball2';
 import BuschLeague from './BuschLeague';
 import Coffee from './Coffee';
+import DealWithFont from './DealWithFont';
+import DealWithIt from './DealWithIt';
+import DealWithWord from './DealWithWord';
 import Dynomite from './Dynomite';
+import GangamStyle from './GangamStyle';
+import Hacking from './Hacking';
 import JobWellDone from './JobWellDone';
 import KingKong from './KingKong';
 import Mishap from './Mishap';
@@ -14,11 +19,6 @@ import Peloton from './Peloton';
 import Seeya from './Seeya';
 import ThumbsUp from './ThumbsUp';
 import Working from './Working';
-import DealWithFont from './DealWithFont';
-import DealWithIt from './DealWithIt';
-import DealWithWord from './DealWithWord';
-import GangamStyle from './GangamStyle';
-import Hacking from './Hacking';
 import Wrigley from './Wrigley';
 
 // Standard video components: title (h2), video attrs + src, container
@@ -219,9 +219,7 @@ simpleVideoComponents.forEach(({ name, Component, titlePattern, testId }) => {
 
     it('renders video element', () => {
       render(<Component />);
-      expect(
-        screen.getByTestId(`${testId}-modal-video`)
-      ).toBeInTheDocument();
+      expect(screen.getByTestId(`${testId}-modal-video`)).toBeInTheDocument();
     });
 
     it('renders video with correct attributes', () => {
