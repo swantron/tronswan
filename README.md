@@ -54,7 +54,7 @@ building / deploying / learning
   - MLB Stats API (baseball standings)
   - Google Docs API (resume content)
 - **Package Manager**: Yarn
-- **CI/CD**: GitHub Actions with Playwright testing
+- **CI/CD**: Buildkite (dynamic pipeline, GCP agents) + GitHub Actions (deploy gating, Playwright E2E)
 
 ## Getting Started
 
