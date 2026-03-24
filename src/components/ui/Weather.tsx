@@ -359,7 +359,7 @@ function Weather() {
       {} as Record<string, ForecastItem[]>
     );
 
-    return Object.values(grouped).map(dayItems => ({
+    return Object.values(grouped).slice(0, 5).map(dayItems => ({
       date: dayItems[0].dt_txt.split(' ')[0],
       high: Math.max(...dayItems.map(item => item.main.temp)),
       low: Math.min(...dayItems.map(item => item.main.temp)),
