@@ -217,8 +217,7 @@ const GitHubStatus: React.FC<GitHubStatusProps> = ({ data, onDataChange }) => {
                       </div>
                       <div className='action-details'>
                         <p>
-                          <strong>Branch:</strong>{' '}
-                          {action.head_branch || 'N/A'}
+                          <strong>Branch:</strong> {action.head_branch || 'N/A'}
                         </p>
                         <p>
                           <strong>Commit:</strong>{' '}

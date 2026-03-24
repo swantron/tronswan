@@ -225,8 +225,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
         {weather.feelsLike && (
           <Card className='weather-item'>
             <p data-testid='feels-like-display'>
-              Feels like{' '}
-              {Math.round(convertTempForDisplay(weather.feelsLike))}
+              Feels like {Math.round(convertTempForDisplay(weather.feelsLike))}
               {getTemperatureUnit()}
             </p>
           </Card>
@@ -235,8 +234,8 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
           <Card className='weather-item'>
             <p data-testid='temp-range-display'>
               ↑{Math.round(convertTempForDisplay(weather.tempMax))}
-              {getTemperatureUnit()}{' '}
-              ↓{Math.round(convertTempForDisplay(weather.tempMin))}
+              {getTemperatureUnit()} ↓
+              {Math.round(convertTempForDisplay(weather.tempMin))}
               {getTemperatureUnit()}
             </p>
           </Card>
