@@ -92,6 +92,8 @@ if [ "$SRC_CHANGED" = "true" ] || [ "$CONFIG_CHANGED" = "true" ]; then
     key: lint
     agents:
       queue: gcp
+    env:
+      YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
       yarn install --frozen-lockfile
       yarn lint
@@ -100,6 +102,8 @@ if [ "$SRC_CHANGED" = "true" ] || [ "$CONFIG_CHANGED" = "true" ]; then
     key: type-check
     agents:
       queue: gcp
+    env:
+      YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
       yarn install --frozen-lockfile
       yarn type-check
@@ -122,6 +126,8 @@ if [ "$COMPONENTS_CHANGED" = "true" ] || \
     key: unit-tests
     agents:
       queue: gcp
+    env:
+      YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
       yarn install --frozen-lockfile
       yarn test:coverage --testTimeout=30000 --maxWorkers=1
@@ -149,6 +155,8 @@ if [ "$CONFIG_CHANGED" = "true" ] || \
     key: build
     agents:
       queue: gcp
+    env:
+      YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
       yarn install --frozen-lockfile
       yarn build

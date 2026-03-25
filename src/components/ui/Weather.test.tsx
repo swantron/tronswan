@@ -44,7 +44,14 @@ describe('Weather Component', () => {
     (global.fetch as any).mockClear();
     // Mock both current weather and forecast API calls
     (global.fetch as any).mockImplementation(url => {
-      if (url.includes('/weather?')) {
+      if (url.includes('geo/1.0/reverse')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => [
+            { name: 'Bozeman', state: 'Montana', country: 'US' },
+          ],
+        });
+      } else if (url.includes('/weather?')) {
         // Current weather API
         return Promise.resolve({
           ok: true,
@@ -55,6 +62,7 @@ describe('Weather Component', () => {
               pressure: 1013,
               humidity: 45,
             },
+            coord: { lat: 45.68, lon: -111.04 },
             name: 'Bozeman',
             sys: { country: 'US' },
           }),
@@ -494,8 +502,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
-    await waitFor(() => {});
   });
 
   test('displays all weather details when available', async () => {
@@ -751,8 +757,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
-    await waitFor(() => {});
   });
 
   test('handles city/state combo search', async () => {
@@ -813,8 +817,6 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
-    await waitFor(() => {});
   });
 
   test('handles zip code with country code', async () => {
@@ -873,7 +875,5 @@ describe('Weather Component', () => {
     await act(async () => {
       fireEvent.click(searchButton);
     });
-
-    await waitFor(() => {});
   });
 });

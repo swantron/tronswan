@@ -20,21 +20,17 @@ building / deploying / learning
 
 ## Features
 
-- 🦢 **Personal Blog Integration** - Fetches posts from Hugo static site API (swantron.com)
-- 🍳 **AI Recipe App** - chomptron.com - AI-powered recipe discovery using Gemini on GCP
-- 🌡️ **Weather Station** - Real-time weather data for Bozeman, MT
-- 🎵 **Spotify Music Player** - Full-featured Spotify integration with top tracks, artists, playlists, liked songs, and music playback (Premium required)
-- ⚾ **MLB Standings** - Comprehensive MLB statistics with standings, team stats, playoff race, and rankings
-- 📄 **Dynamic Resume** - Resume content dynamically loaded from Google Docs API ([see Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md))
-- 🎬 **Video Shorts Gallery** - Collection of video shorts with modal player
-- 🎮 **Interactive Games** - FizzBuzz calculator and fun components
-- 📊 **Health Monitoring** - Real-time service health and deployment status ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
-- 🔍 **SEO Optimization** - Comprehensive SEO with react-helmet-async for meta tags, Open Graph, and Twitter cards
-- 📝 **Structured Logging** - Advanced logging system with performance tracking ([see Logging Guide](docs/LOGGING_GUIDE.md))
-- 📱 **Responsive Design** - Works on all devices
-- ⚡ **Fast Performance** - Optimized with modern React patterns
-- 🧪 **High Test Coverage** - 93.98% test coverage with Vitest and Playwright E2E tests
-- 🚀 **Automated Deployment** - CI/CD pipeline with post-deployment verification ([see CI/CD Setup](docs/CI_SETUP.md))
+- 🍳 **Chomptron** — AI-powered recipe generator; enter ingredients and get recipes via Google Gemini. Connects to [chomptron.com](https://chomptron.com)
+- 🔧 **Wrenchtron** — Vehicle maintenance tracker for mixed fleets (cars, motorcycles, ATVs, boats, and more). Smart mileage/time/seasonal scheduling, NHTSA recall lookup, offline-capable PWA. Lives at [wrenchtron.com](https://wrenchtron.com)
+- 🦢 **Swantron** — Personal blog feed from [swantron.com](https://swantron.com) with search and pagination
+- 🎵 **Spotify Music Player** — Full Spotify integration: top tracks, artists, playlists, liked songs, recently played, and playback control (Premium required)
+- ⚾ **MLB** — Live standings, detailed team stat splits (home/away, day/night, vs handedness, surface), playoff race with elimination numbers, and top-10 rankings by multiple metrics
+- 🌡️ **Weathertron** — Real-time weather and 5-day forecast for any city worldwide. Autocomplete city search, °F/°C/K toggle, wind, visibility, and sun times
+- 📄 **Resume** — Resume content dynamically loaded from Google Docs API ([see Google Docs Setup](docs/GOOGLE_DOCS_SETUP.md))
+- 🎬 **Shorts** — Gallery of 18 video shorts with modal player
+- 📊 **Status** — Service health dashboard with live checks for all APIs (Chomptron, Swantron, MLB, Spotify, Weather, and more), GitHub Actions deployment status, and DigitalOcean infrastructure monitoring ([see Health Page Guide](docs/HEALTH_PAGE_README.md))
+- 🎮 **FizzBuzz** — Classic FizzBuzz sequence generator at `/trontronbuzztron`
+- 🏠 **Home** — Hub page; clicking the logo navigates to a random video short
 
 ## Tech Stack
 
@@ -435,3 +431,4 @@ agents:
 ## License
 
 This project is licensed under the MIT License.
+
