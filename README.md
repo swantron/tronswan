@@ -56,7 +56,7 @@ building / deploying / learning
 
 ### Prerequisites
 
-- Node.js (v20 or higher)
+- Node.js (v22 or higher)
 - Yarn package manager
 - Git
 
