@@ -35,10 +35,6 @@ export interface SwantronCardProps {
   post: Post;
 }
 
-export interface SwantronListProps {
-  // This component doesn't take props, but we'll define it for consistency
-}
-
 // Service Types
 export interface SwantronService {
   getPosts(page?: number, perPage?: number): Promise<SwantronServiceResponse>;

@@ -8,26 +8,6 @@
   overflow: hidden;
 }
 
-/* Removed gradient overlay to match standard background */
-
-.gangnam-content {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.gangnam-title {
-  font-size: clamp(1.5rem, 5vw, 3rem);
-  margin-bottom: 2rem;
-  color: var(--accent-color);
-  font-family: inherit;
-  text-align: center;
-  text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-  font-weight: bold;
-}
-
 .video-container {
   margin: 2rem 0;
   border: 1px solid rgba(16, 185, 129, 0.2);
@@ -36,16 +16,6 @@
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-}
-
-/* Removed animated border glow to match standard styling */
-
-.gangnam-video {
-  width: 100%;
-  max-width: 800px;
-  height: auto;
-  border-radius: calc(var(--border-radius) - 2px);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 
 .video-fallback {
@@ -74,61 +44,9 @@
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.7);
 }
 
-/* Removed animations to match standard styling */
-
-.video-actions {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.random-button {
-  background: linear-gradient(
-    135deg,
-    var(--accent-color),
-    rgba(16, 185, 129, 0.8)
-  );
-  color: var(--primary-text);
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-  font-family: inherit;
-}
-
-.random-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.9),
-    var(--accent-color)
-  );
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.random-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .gangnam-container {
     padding: 1rem;
-  }
-
-  .gangnam-video {
-    max-width: 100%;
-  }
-
-  .random-button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
   }
 }
