@@ -794,6 +794,7 @@ function MLB() {
               {teams.map(team => {
                 const isInPlayoff =
                   team.divisionChamp ||
+                  team.divisionRank === '1' ||
                   team.wildCardLeader ||
                   (team.wildCardRank && parseInt(team.wildCardRank) <= 3);
                 const isOnBubble =
@@ -823,7 +824,7 @@ function MLB() {
                       <span
                         className={`status-badge ${isInPlayoff ? 'in' : isOnBubble ? 'bubble' : 'out'}`}
                       >
-                        {team.divisionChamp
+                        {team.divisionChamp || team.divisionRank === '1'
                           ? 'DIV'
                           : team.wildCardLeader
                             ? 'WC1'
