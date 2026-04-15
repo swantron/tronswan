@@ -797,10 +797,10 @@ function MLB() {
                   team.divisionRank === '1' ||
                   team.wildCardLeader ||
                   (team.wildCardRank && parseInt(team.wildCardRank) <= 3);
-                const isOnBubble =
-                  team.wildCardRank &&
-                  parseInt(team.wildCardRank) > 3 &&
-                  parseInt(team.wildCardRank) <= 6;
+                const isEliminated =
+                  team.eliminationNumber === 'E' ||
+                  team.wildCardEliminationNumber === 'E';
+                const isOnBubble = !isInPlayoff && !isEliminated;
 
                 return (
                   <tr
