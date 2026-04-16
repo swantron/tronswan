@@ -105,6 +105,55 @@ interface StandingsData {
   records: DivisionStanding[];
 }
 
+interface LinescoreInning {
+  num: number;
+  ordinalNum: string;
+  home: { runs?: number; hits?: number; errors?: number };
+  away: { runs?: number; hits?: number; errors?: number };
+}
+
+interface Linescore {
+  currentInning?: number;
+  currentInningOrdinal?: string;
+  inningHalf?: string;
+  outs?: number;
+  balls?: number;
+  strikes?: number;
+  innings: LinescoreInning[];
+  teams: {
+    home: { runs: number; hits: number; errors: number };
+    away: { runs: number; hits: number; errors: number };
+  };
+}
+
+interface GameTeam {
+  team: { id: number; name: string; abbreviation?: string };
+  score?: number;
+  isWinner?: boolean;
+}
+
+interface Game {
+  gamePk: number;
+  gameDate: string;
+  status: {
+    abstractGameState: string;
+    detailedState: string;
+  };
+  teams: {
+    home: GameTeam;
+    away: GameTeam;
+  };
+  linescore?: Linescore;
+  venue?: { name: string };
+}
+
+interface ScheduleData {
+  dates: Array<{
+    date: string;
+    games: Game[];
+  }>;
+}
+
 function MLB() {
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
@@ -120,9 +169,13 @@ function MLB() {
     'all'
   );
   const [viewMode, setViewMode] = useState<
-    'standings' | 'teamStats' | 'playoff' | 'rankings'
+    'standings' | 'teamStats' | 'playoff' | 'rankings' | 'scoreboard' | 'splits'
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
+
+  const [games, setGames] = useState<Game[]>([]);
+  const [loadingGames, setLoadingGames] = useState(false);
+  const [gamesError, setGamesError] = useState('');
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -220,6 +273,25 @@ function MLB() {
     }
   };
 
+  const fetchGames = async () => {
+    setLoadingGames(true);
+    setGamesError('');
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore,team`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch games');
+      const data: ScheduleData = await response.json();
+      setGames(data.dates[0]?.games ?? []);
+    } catch (error) {
+      setGamesError(
+        error instanceof Error ? error.message : 'Failed to fetch games'
+      );
+    } finally {
+      setLoadingGames(false);
+    }
+  };
+
   useEffect(() => {
     logger.info('MLB component initialized', {
       timestamp: new Date().toISOString(),
@@ -228,6 +300,13 @@ function MLB() {
 
     fetchStandings();
   }, []);
+
+  useEffect(() => {
+    if (viewMode !== 'scoreboard') return;
+    fetchGames();
+    const interval = setInterval(fetchGames, 30000);
+    return () => clearInterval(interval);
+  }, [viewMode]);
 
   const filteredStandings = standings.filter(division => {
     if (selectedLeague === 'all') return true;
@@ -395,6 +474,36 @@ function MLB() {
           >
             Rankings
           </Button>
+          <Button
+            variant={viewMode === 'scoreboard' ? 'primary' : 'ghost'}
+            className={viewMode === 'scoreboard' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'scoreboard',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('scoreboard');
+            }}
+            disabled={loading}
+          >
+            Scoreboard
+          </Button>
+          <Button
+            variant={viewMode === 'splits' ? 'primary' : 'ghost'}
+            className={viewMode === 'splits' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'splits',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('splits');
+            }}
+            disabled={loading}
+          >
+            Split Heatmap
+          </Button>
         </div>
 
         {/* League Filter (only for standings view) */}
@@ -463,6 +572,8 @@ function MLB() {
             {viewMode === 'teamStats' && renderTeamStats()}
             {viewMode === 'playoff' && renderPlayoffRace()}
             {viewMode === 'rankings' && renderRankings()}
+            {viewMode === 'scoreboard' && renderScoreboard()}
+            {viewMode === 'splits' && renderSplitHeatmap()}
           </>
         )}
 
@@ -874,6 +985,291 @@ function MLB() {
         </div>
         {renderPlayoffTable(alTeams, 'American League')}
         {renderPlayoffTable(nlTeams, 'National League')}
+      </div>
+    );
+  }
+
+  function renderScoreboard() {
+    const teamAbbr = (g: GameTeam) =>
+      g.team.abbreviation ?? g.team.name.split(' ').pop()!.substring(0, 3).toUpperCase();
+
+    const renderGame = (game: Game) => {
+      const isLive = game.status.abstractGameState === 'Live';
+      const isFinal = game.status.abstractGameState === 'Final';
+      const innings = game.linescore?.innings ?? [];
+      const maxInning = Math.max(9, innings.length);
+      const awayTotals = game.linescore?.teams.away;
+      const homeTotals = game.linescore?.teams.home;
+      const awayScore = game.teams.away.score;
+      const homeScore = game.teams.home.score;
+      const awayLeading =
+        awayScore !== undefined && homeScore !== undefined && awayScore > homeScore;
+      const homeLeading =
+        homeScore !== undefined && awayScore !== undefined && homeScore > awayScore;
+
+      return (
+        <Card
+          key={game.gamePk}
+          className={`game-card ${isLive ? 'game-card-live' : ''}`}
+        >
+          <div className='game-header'>
+            {isLive ? (
+              <span className='game-status-live'>
+                <span className='live-dot' />
+                {game.linescore?.inningHalf === 'Top' ? '▲' : '▼'}{' '}
+                {game.linescore?.currentInningOrdinal}
+              </span>
+            ) : isFinal ? (
+              <span className='game-status-final'>FINAL</span>
+            ) : (
+              <span className='game-status-scheduled'>
+                {new Date(game.gameDate).toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                })}
+              </span>
+            )}
+            {isLive && (
+              <span className='game-count'>
+                {game.linescore?.balls ?? 0}-{game.linescore?.strikes ?? 0} |{' '}
+                {game.linescore?.outs ?? 0} out
+              </span>
+            )}
+          </div>
+
+          <div className='game-teams'>
+            <div className={`game-team ${game.teams.away.isWinner ? 'game-team-winner' : ''}`}>
+              <span className='game-team-name'>{game.teams.away.team.name}</span>
+              {(isLive || isFinal) && (
+                <span className={`game-score ${awayLeading ? 'game-score-leading' : ''}`}>
+                  {awayScore ?? '-'}
+                </span>
+              )}
+            </div>
+            <div className={`game-team ${game.teams.home.isWinner ? 'game-team-winner' : ''}`}>
+              <span className='game-team-name'>{game.teams.home.team.name}</span>
+              {(isLive || isFinal) && (
+                <span className={`game-score ${homeLeading ? 'game-score-leading' : ''}`}>
+                  {homeScore ?? '-'}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {(isLive || isFinal) && innings.length > 0 && (
+            <div className='linescore-wrap'>
+              <table className='linescore-table'>
+                <thead>
+                  <tr>
+                    <th className='linescore-team-col' />
+                    {Array.from({ length: maxInning }, (_, i) => (
+                      <th key={i + 1} className='linescore-inning-col'>
+                        {i + 1}
+                      </th>
+                    ))}
+                    <th className='linescore-sep' />
+                    <th className='linescore-total-col'>R</th>
+                    <th className='linescore-total-col'>H</th>
+                    <th className='linescore-total-col'>E</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(['away', 'home'] as const).map(side => {
+                    const totals = side === 'away' ? awayTotals : homeTotals;
+                    const teamSide = side === 'away' ? game.teams.away : game.teams.home;
+                    return (
+                      <tr key={side}>
+                        <td className='linescore-team-col'>{teamAbbr(teamSide)}</td>
+                        {Array.from({ length: maxInning }, (_, i) => {
+                          const inning = innings.find(inn => inn.num === i + 1);
+                          const runs = inning?.[side]?.runs;
+                          return (
+                            <td key={i + 1} className='linescore-inning-col'>
+                              {runs !== undefined ? runs : ''}
+                            </td>
+                          );
+                        })}
+                        <td className='linescore-sep' />
+                        <td className='linescore-total-col'>{totals?.runs ?? '-'}</td>
+                        <td className='linescore-total-col'>{totals?.hits ?? '-'}</td>
+                        <td className='linescore-total-col'>{totals?.errors ?? '-'}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
+      );
+    };
+
+    if (loadingGames && games.length === 0) {
+      return <div className='loading-spinner' aria-label='Loading games' />;
+    }
+
+    if (gamesError) {
+      return (
+        <Card className='error-card'>
+          <div className='error-message'>{gamesError}</div>
+        </Card>
+      );
+    }
+
+    const liveGames = games.filter(g => g.status.abstractGameState === 'Live');
+    const finalGames = games.filter(g => g.status.abstractGameState === 'Final');
+    const scheduledGames = games.filter(
+      g => g.status.abstractGameState === 'Preview'
+    );
+
+    return (
+      <div className='scoreboard-container'>
+        <div className='scoreboard-header'>
+          <h2 className='section-title'>Today's Games</h2>
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={fetchGames}
+            disabled={loadingGames}
+          >
+            {loadingGames ? '…' : '↻'} Refresh
+          </Button>
+        </div>
+
+        {games.length === 0 && (
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              No games scheduled for today.
+            </p>
+          </Card>
+        )}
+
+        {liveGames.length > 0 && (
+          <div className='scoreboard-section'>
+            <h3 className='scoreboard-section-title'>
+              <span className='live-dot' /> Live
+            </h3>
+            <div className='games-grid'>{liveGames.map(renderGame)}</div>
+          </div>
+        )}
+
+        {finalGames.length > 0 && (
+          <div className='scoreboard-section'>
+            <h3 className='scoreboard-section-title'>Final</h3>
+            <div className='games-grid'>{finalGames.map(renderGame)}</div>
+          </div>
+        )}
+
+        {scheduledGames.length > 0 && (
+          <div className='scoreboard-section'>
+            <h3 className='scoreboard-section-title'>Upcoming</h3>
+            <div className='games-grid'>{scheduledGames.map(renderGame)}</div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderSplitHeatmap() {
+    const splitCategories = [
+      { key: 'home', label: 'Home' },
+      { key: 'away', label: 'Away' },
+      { key: 'day', label: 'Day' },
+      { key: 'night', label: 'Night' },
+      { key: 'grass', label: 'Grass' },
+      { key: 'turf', label: 'Turf' },
+      { key: 'left', label: 'vs L' },
+      { key: 'right', label: 'vs R' },
+      { key: 'lastTen', label: 'L10' },
+      { key: 'extraInning', label: 'X-Inn' },
+      { key: 'oneRun', label: '1-Run' },
+    ];
+
+    const getHeatStyle = (pct: string | undefined): React.CSSProperties => {
+      if (!pct)
+        return { background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)' };
+      const val = parseFloat(pct);
+      if (val >= 0.5) {
+        const intensity = Math.min((val - 0.5) * 2, 1);
+        return {
+          background: `rgba(16, 185, 129, ${0.1 + intensity * 0.35})`,
+          color: val >= 0.6 ? '#10b981' : 'var(--text-secondary)',
+        };
+      }
+      const intensity = Math.min((0.5 - val) * 2, 1);
+      return {
+        background: `rgba(239, 68, 68, ${0.1 + intensity * 0.35})`,
+        color: val <= 0.4 ? '#ef4444' : 'var(--text-secondary)',
+      };
+    };
+
+    const allTeams = getAllTeams().sort(
+      (a, b) =>
+        parseFloat(b.winningPercentage) - parseFloat(a.winningPercentage)
+    );
+
+    const noSplitData = allTeams.every(
+      t => !t.records?.splitRecords?.length
+    );
+
+    return (
+      <div className='splits-container'>
+        <h2 className='section-title'>Split Performance Heatmap</h2>
+        <p className='section-subtitle'>
+          Win % by situation — green is strong, red is weak
+        </p>
+        {noSplitData ? (
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              Split record data is not yet available for this season.
+            </p>
+          </Card>
+        ) : (
+          <Card className='splits-card'>
+            <div className='heatmap-scroll'>
+              <table className='heatmap-table'>
+                <thead>
+                  <tr>
+                    <th className='heatmap-team-col'>Team</th>
+                    <th className='heatmap-record-col'>W-L</th>
+                    {splitCategories.map(cat => (
+                      <th key={cat.key} className='heatmap-split-col'>
+                        {cat.label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {allTeams.map(team => (
+                    <tr key={team.team.id} className='heatmap-row'>
+                      <td className='heatmap-team-name'>{team.team.name}</td>
+                      <td className='heatmap-record'>
+                        {team.wins}-{team.losses}
+                      </td>
+                      {splitCategories.map(cat => {
+                        const split = getSplitRecord(team, cat.key);
+                        return (
+                          <td
+                            key={cat.key}
+                            className='heatmap-cell'
+                            style={getHeatStyle(split?.pct)}
+                            title={
+                              split
+                                ? `${split.wins}-${split.losses} (${split.pct})`
+                                : 'N/A'
+                            }
+                          >
+                            {split ? `${split.wins}-${split.losses}` : '—'}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
       </div>
     );
   }

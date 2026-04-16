@@ -508,3 +508,267 @@
   font-weight: 700;
   color: var(--primary-color);
 }
+
+/* Scoreboard View */
+.scoreboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.scoreboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.scoreboard-header .section-title {
+  margin-bottom: 0;
+}
+
+.scoreboard-section {
+  margin-bottom: var(--space-8);
+}
+
+.scoreboard-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+
+.game-card {
+  padding: var(--space-4) !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.game-card-live {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.08);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.game-status-live {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--success-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.game-status-final {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.game-status-scheduled {
+  color: var(--text-secondary);
+}
+
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success-color);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+.game-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.game-teams {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--space-3) 0;
+}
+
+.game-team {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-team-winner .game-team-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.game-team-name {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.game-score {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 28px;
+  text-align: right;
+}
+
+.game-score-leading {
+  color: var(--text-primary);
+}
+
+/* Linescore */
+.linescore-wrap {
+  overflow-x: auto;
+}
+
+.linescore-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+}
+
+.linescore-table th,
+.linescore-table td {
+  text-align: center;
+  padding: var(--space-1);
+  min-width: 20px;
+}
+
+.linescore-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.linescore-team-col {
+  text-align: left !important;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-right: var(--space-2) !important;
+  white-space: nowrap;
+}
+
+.linescore-inning-col {
+  color: var(--text-secondary);
+}
+
+.linescore-sep {
+  width: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.linescore-total-col {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Split Heatmap View */
+.splits-container {
+  text-align: center;
+}
+
+.splits-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.heatmap-scroll {
+  overflow-x: auto;
+}
+
+.heatmap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.heatmap-table th {
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.heatmap-table td {
+  padding: var(--space-2) var(--space-2);
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.heatmap-team-col {
+  text-align: left !important;
+  min-width: 160px;
+}
+
+.heatmap-record-col {
+  min-width: 60px;
+}
+
+.heatmap-split-col {
+  min-width: 58px;
+}
+
+.heatmap-row:hover td {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.heatmap-team-name {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  padding-left: var(--space-4) !important;
+}
+
+.heatmap-record {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.heatmap-cell {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: filter var(--transition-fast);
+  cursor: default;
+}
+
+.heatmap-row:hover .heatmap-cell {
+  filter: brightness(1.2);
+}
