@@ -1091,7 +1091,9 @@ function MLB() {
             <div
               className={`game-team ${awayWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
             >
-              <span className='game-team-name'>{game.teams.away.team.name}</span>
+              <span className='game-team-name'>
+                {game.teams.away.team.name}
+              </span>
               <span
                 className={`game-score ${awayLeading ? 'game-score-leading' : awayWins ? 'game-score-winner' : ''}`}
               >
@@ -1101,7 +1103,9 @@ function MLB() {
             <div
               className={`game-team ${homeWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
             >
-              <span className='game-team-name'>{game.teams.home.team.name}</span>
+              <span className='game-team-name'>
+                {game.teams.home.team.name}
+              </span>
               <span
                 className={`game-score ${homeLeading ? 'game-score-leading' : homeWins ? 'game-score-winner' : ''}`}
               >
@@ -1169,7 +1173,8 @@ function MLB() {
     };
 
     const currentGames = scheduleByDate[selectedDate] ?? [];
-    const isLoading = loadingSchedule && Object.keys(scheduleByDate).length === 0;
+    const isLoading =
+      loadingSchedule && Object.keys(scheduleByDate).length === 0;
 
     const liveGames = currentGames.filter(
       g => g.status.abstractGameState === 'Live'
@@ -1245,7 +1250,9 @@ function MLB() {
                     <h3 className='scoreboard-section-title'>
                       <span className='live-dot' /> Live
                     </h3>
-                    <div className='games-grid'>{liveGames.map(renderGame)}</div>
+                    <div className='games-grid'>
+                      {liveGames.map(renderGame)}
+                    </div>
                   </div>
                 )}
                 {finalGames.length > 0 && (
@@ -1302,7 +1309,10 @@ function MLB() {
 
     const getHeatStyle = (pct: string | undefined): React.CSSProperties => {
       if (!pct)
-        return { background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)' };
+        return {
+          background: 'rgba(255,255,255,0.03)',
+          color: 'var(--text-muted)',
+        };
       const val = parseFloat(pct);
       if (val >= 0.5) {
         const intensity = Math.min((val - 0.5) * 2, 1);
@@ -1323,9 +1333,7 @@ function MLB() {
         parseFloat(b.winningPercentage) - parseFloat(a.winningPercentage)
     );
 
-    const noSplitData = allTeams.every(
-      t => !t.records?.splitRecords?.length
-    );
+    const noSplitData = allTeams.every(t => !t.records?.splitRecords?.length);
 
     return (
       <div className='splits-container'>

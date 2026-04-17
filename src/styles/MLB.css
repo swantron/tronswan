@@ -594,14 +594,16 @@
 }
 
 .games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-4);
 }
 
 /* Game card */
 .game-card {
+  flex: 0 0 340px;
+  max-width: 100%;
   padding: var(--space-4) !important;
   display: flex;
   flex-direction: column;
@@ -771,6 +773,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-3);
 }
 
