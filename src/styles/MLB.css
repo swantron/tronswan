@@ -515,15 +515,66 @@
   margin: 0 auto;
 }
 
-.scoreboard-header {
+/* Date navigation pills */
+.scoreboard-date-nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: var(--space-2);
   margin-bottom: var(--space-6);
 }
 
-.scoreboard-header .section-title {
-  margin-bottom: 0;
+.date-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+  min-width: 110px;
+}
+
+.date-pill:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+}
+
+.date-pill-active {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: var(--primary-color);
+}
+
+.date-pill-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.date-pill-date {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.scoreboard-day-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.refresh-btn {
+  font-size: 1rem;
 }
 
 .scoreboard-section {
@@ -531,12 +582,12 @@
 }
 
 .scoreboard-section-title {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-4);
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -544,10 +595,11 @@
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-4);
 }
 
+/* Game card */
 .game-card {
   padding: var(--space-4) !important;
   display: flex;
@@ -557,15 +609,16 @@
 
 .game-card-live {
   border-color: rgba(16, 185, 129, 0.3) !important;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.07);
 }
 
 .game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
+  min-height: 20px;
 }
 
 .game-status-live {
@@ -573,18 +626,20 @@
   align-items: center;
   gap: var(--space-2);
   color: var(--success-color);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .game-status-final {
   color: var(--text-muted);
-  text-transform: uppercase;
   letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.72rem;
 }
 
 .game-status-scheduled {
   color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .live-dot {
@@ -599,15 +654,16 @@
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.75); }
+  50% { opacity: 0.4; transform: scale(0.7); }
 }
 
 .game-count {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
 }
 
+/* Teams + scores */
 .game-teams {
   display: flex;
   flex-direction: column;
@@ -621,6 +677,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-2);
+}
+
+.game-team-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex: 1;
 }
 
 .game-team-winner .game-team-name {
@@ -628,23 +692,27 @@
   color: var(--text-primary);
 }
 
-.game-team-name {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  font-weight: 500;
+.game-team-loser .game-team-name {
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
 .game-score {
   font-family: var(--font-mono);
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--text-secondary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-muted);
   min-width: 28px;
   text-align: right;
 }
 
-.game-score-leading {
+.game-score-winner {
   color: var(--text-primary);
+  font-weight: 800;
+}
+
+.game-score-leading {
+  color: var(--success-color);
 }
 
 /* Linescore */
@@ -655,21 +723,22 @@
 .linescore-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-family: var(--font-mono);
 }
 
 .linescore-table th,
 .linescore-table td {
   text-align: center;
-  padding: var(--space-1);
-  min-width: 20px;
+  padding: 2px 3px;
+  min-width: 18px;
 }
 
 .linescore-table th {
   color: var(--text-muted);
   font-weight: 600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.68rem;
 }
 
 .linescore-team-col {
@@ -685,13 +754,56 @@
 }
 
 .linescore-sep {
-  width: 8px;
+  width: 6px;
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .linescore-total-col {
   font-weight: 700;
   color: var(--text-primary);
+}
+
+/* Off-day teams */
+.off-day-section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.off-day-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+.off-day-teams {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.off-day-chip {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 3px var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .scoreboard-date-nav {
+    gap: var(--space-1);
+  }
+  .date-pill {
+    min-width: 90px;
+    padding: var(--space-2) var(--space-3);
+  }
 }
 
 /* Split Heatmap View */

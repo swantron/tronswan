@@ -173,9 +173,15 @@ function MLB() {
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
 
-  const [games, setGames] = useState<Game[]>([]);
-  const [loadingGames, setLoadingGames] = useState(false);
-  const [gamesError, setGamesError] = useState('');
+  const [scheduleByDate, setScheduleByDate] = useState<Record<string, Game[]>>(
+    {}
+  );
+  const [loadingSchedule, setLoadingSchedule] = useState(false);
+  const [scheduleError, setScheduleError] = useState('');
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  });
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -273,22 +279,33 @@ function MLB() {
     }
   };
 
-  const fetchGames = async () => {
-    setLoadingGames(true);
-    setGamesError('');
+  const localDateStr = (offsetDays: number): string => {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+
+  const fetchSchedule = async () => {
+    setLoadingSchedule(true);
+    setScheduleError('');
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore,team`;
+      const start = localDateStr(-1);
+      const end = localDateStr(1);
+      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=${start}&endDate=${end}&hydrate=linescore,team`;
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch games');
+      if (!response.ok) throw new Error('Failed to fetch schedule');
       const data: ScheduleData = await response.json();
-      setGames(data.dates[0]?.games ?? []);
+      const byDate: Record<string, Game[]> = {};
+      for (const entry of data.dates) {
+        byDate[entry.date] = entry.games;
+      }
+      setScheduleByDate(byDate);
     } catch (error) {
-      setGamesError(
-        error instanceof Error ? error.message : 'Failed to fetch games'
+      setScheduleError(
+        error instanceof Error ? error.message : 'Failed to fetch schedule'
       );
     } finally {
-      setLoadingGames(false);
+      setLoadingSchedule(false);
     }
   };
 
@@ -303,10 +320,14 @@ function MLB() {
 
   useEffect(() => {
     if (viewMode !== 'scoreboard') return;
-    fetchGames();
-    const interval = setInterval(fetchGames, 30000);
+    fetchSchedule();
+    // Only poll for live updates; yesterday and tomorrow don't change
+    const todayStr = localDateStr(0);
+    const interval = setInterval(() => {
+      if (selectedDate === todayStr) fetchSchedule();
+    }, 30000);
     return () => clearInterval(interval);
-  }, [viewMode]);
+  }, [viewMode, selectedDate]);
 
   const filteredStandings = standings.filter(division => {
     if (selectedLeague === 'all') return true;
@@ -990,73 +1011,107 @@ function MLB() {
   }
 
   function renderScoreboard() {
+    const todayStr = localDateStr(0);
+    const dateNav = [
+      { date: localDateStr(-1), label: 'Yesterday' },
+      { date: todayStr, label: 'Today' },
+      { date: localDateStr(1), label: 'Tomorrow' },
+    ];
+
+    const formatDateHeading = (dateStr: string): string => {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+      });
+    };
+
     const teamAbbr = (g: GameTeam) =>
-      g.team.abbreviation ?? g.team.name.split(' ').pop()!.substring(0, 3).toUpperCase();
+      g.team.abbreviation ??
+      g.team.name.split(' ').pop()!.substring(0, 3).toUpperCase();
 
     const renderGame = (game: Game) => {
       const isLive = game.status.abstractGameState === 'Live';
       const isFinal = game.status.abstractGameState === 'Final';
+      const hasScore = isLive || isFinal;
       const innings = game.linescore?.innings ?? [];
       const maxInning = Math.max(9, innings.length);
       const awayTotals = game.linescore?.teams.away;
       const homeTotals = game.linescore?.teams.home;
       const awayScore = game.teams.away.score;
       const homeScore = game.teams.home.score;
+      const awayWins = isFinal && game.teams.away.isWinner;
+      const homeWins = isFinal && game.teams.home.isWinner;
       const awayLeading =
-        awayScore !== undefined && homeScore !== undefined && awayScore > homeScore;
+        isLive &&
+        awayScore !== undefined &&
+        homeScore !== undefined &&
+        awayScore > homeScore;
       const homeLeading =
-        homeScore !== undefined && awayScore !== undefined && homeScore > awayScore;
+        isLive &&
+        homeScore !== undefined &&
+        awayScore !== undefined &&
+        homeScore > awayScore;
 
       return (
         <Card
           key={game.gamePk}
           className={`game-card ${isLive ? 'game-card-live' : ''}`}
         >
+          {/* Status bar */}
           <div className='game-header'>
             {isLive ? (
-              <span className='game-status-live'>
-                <span className='live-dot' />
-                {game.linescore?.inningHalf === 'Top' ? '▲' : '▼'}{' '}
-                {game.linescore?.currentInningOrdinal}
-              </span>
+              <>
+                <span className='game-status-live'>
+                  <span className='live-dot' />
+                  {game.linescore?.inningHalf === 'Top' ? '▲' : '▼'}{' '}
+                  {game.linescore?.currentInningOrdinal}
+                </span>
+                <span className='game-count'>
+                  {game.linescore?.balls ?? 0}-{game.linescore?.strikes ?? 0} ·{' '}
+                  {game.linescore?.outs ?? 0} out
+                </span>
+              </>
             ) : isFinal ? (
-              <span className='game-status-final'>FINAL</span>
+              <span className='game-status-final'>Final</span>
             ) : (
               <span className='game-status-scheduled'>
                 {new Date(game.gameDate).toLocaleTimeString('en-US', {
                   hour: 'numeric',
                   minute: '2-digit',
+                  timeZoneName: 'short',
                 })}
               </span>
             )}
-            {isLive && (
-              <span className='game-count'>
-                {game.linescore?.balls ?? 0}-{game.linescore?.strikes ?? 0} |{' '}
-                {game.linescore?.outs ?? 0} out
-              </span>
-            )}
           </div>
 
+          {/* Teams + scores — always rendered, score shown as -- when not started */}
           <div className='game-teams'>
-            <div className={`game-team ${game.teams.away.isWinner ? 'game-team-winner' : ''}`}>
+            <div
+              className={`game-team ${awayWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
+            >
               <span className='game-team-name'>{game.teams.away.team.name}</span>
-              {(isLive || isFinal) && (
-                <span className={`game-score ${awayLeading ? 'game-score-leading' : ''}`}>
-                  {awayScore ?? '-'}
-                </span>
-              )}
+              <span
+                className={`game-score ${awayLeading ? 'game-score-leading' : awayWins ? 'game-score-winner' : ''}`}
+              >
+                {hasScore ? (awayScore ?? '-') : '--'}
+              </span>
             </div>
-            <div className={`game-team ${game.teams.home.isWinner ? 'game-team-winner' : ''}`}>
+            <div
+              className={`game-team ${homeWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
+            >
               <span className='game-team-name'>{game.teams.home.team.name}</span>
-              {(isLive || isFinal) && (
-                <span className={`game-score ${homeLeading ? 'game-score-leading' : ''}`}>
-                  {homeScore ?? '-'}
-                </span>
-              )}
+              <span
+                className={`game-score ${homeLeading ? 'game-score-leading' : homeWins ? 'game-score-winner' : ''}`}
+              >
+                {hasScore ? (homeScore ?? '-') : '--'}
+              </span>
             </div>
           </div>
 
-          {(isLive || isFinal) && innings.length > 0 && (
+          {/* Linescore — only for live/final games with inning data */}
+          {hasScore && innings.length > 0 && (
             <div className='linescore-wrap'>
               <table className='linescore-table'>
                 <thead>
@@ -1076,10 +1131,13 @@ function MLB() {
                 <tbody>
                   {(['away', 'home'] as const).map(side => {
                     const totals = side === 'away' ? awayTotals : homeTotals;
-                    const teamSide = side === 'away' ? game.teams.away : game.teams.home;
+                    const teamSide =
+                      side === 'away' ? game.teams.away : game.teams.home;
                     return (
                       <tr key={side}>
-                        <td className='linescore-team-col'>{teamAbbr(teamSide)}</td>
+                        <td className='linescore-team-col'>
+                          {teamAbbr(teamSide)}
+                        </td>
                         {Array.from({ length: maxInning }, (_, i) => {
                           const inning = innings.find(inn => inn.num === i + 1);
                           const runs = inning?.[side]?.runs;
@@ -1090,9 +1148,15 @@ function MLB() {
                           );
                         })}
                         <td className='linescore-sep' />
-                        <td className='linescore-total-col'>{totals?.runs ?? '-'}</td>
-                        <td className='linescore-total-col'>{totals?.hits ?? '-'}</td>
-                        <td className='linescore-total-col'>{totals?.errors ?? '-'}</td>
+                        <td className='linescore-total-col'>
+                          {totals?.runs ?? '-'}
+                        </td>
+                        <td className='linescore-total-col'>
+                          {totals?.hits ?? '-'}
+                        </td>
+                        <td className='linescore-total-col'>
+                          {totals?.errors ?? '-'}
+                        </td>
                       </tr>
                     );
                   })}
@@ -1104,67 +1168,118 @@ function MLB() {
       );
     };
 
-    if (loadingGames && games.length === 0) {
-      return <div className='loading-spinner' aria-label='Loading games' />;
-    }
+    const currentGames = scheduleByDate[selectedDate] ?? [];
+    const isLoading = loadingSchedule && Object.keys(scheduleByDate).length === 0;
 
-    if (gamesError) {
-      return (
-        <Card className='error-card'>
-          <div className='error-message'>{gamesError}</div>
-        </Card>
-      );
-    }
-
-    const liveGames = games.filter(g => g.status.abstractGameState === 'Live');
-    const finalGames = games.filter(g => g.status.abstractGameState === 'Final');
-    const scheduledGames = games.filter(
+    const liveGames = currentGames.filter(
+      g => g.status.abstractGameState === 'Live'
+    );
+    const finalGames = currentGames.filter(
+      g => g.status.abstractGameState === 'Final'
+    );
+    const scheduledGames = currentGames.filter(
       g => g.status.abstractGameState === 'Preview'
     );
 
+    // Teams not playing this day
+    const playingIds = new Set(
+      currentGames.flatMap(g => [g.teams.home.team.id, g.teams.away.team.id])
+    );
+    const offTeams = getAllTeams().filter(t => !playingIds.has(t.team.id));
+
     return (
       <div className='scoreboard-container'>
-        <div className='scoreboard-header'>
-          <h2 className='section-title'>Today's Games</h2>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={fetchGames}
-            disabled={loadingGames}
-          >
-            {loadingGames ? '…' : '↻'} Refresh
-          </Button>
+        {/* Date navigation */}
+        <div className='scoreboard-date-nav'>
+          {dateNav.map(({ date, label }) => (
+            <button
+              key={date}
+              className={`date-pill ${selectedDate === date ? 'date-pill-active' : ''}`}
+              onClick={() => setSelectedDate(date)}
+            >
+              <span className='date-pill-label'>{label}</span>
+              <span className='date-pill-date'>
+                {formatDateHeading(date).split(',')[0]}
+              </span>
+            </button>
+          ))}
         </div>
 
-        {games.length === 0 && (
-          <Card>
-            <p className='section-subtitle' style={{ margin: 0 }}>
-              No games scheduled for today.
-            </p>
+        <div className='scoreboard-day-heading'>
+          {formatDateHeading(selectedDate)}
+          {selectedDate === todayStr && (
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={fetchSchedule}
+              disabled={loadingSchedule}
+              className='refresh-btn'
+            >
+              {loadingSchedule ? '…' : '↻'}
+            </Button>
+          )}
+        </div>
+
+        {isLoading && (
+          <div className='loading-spinner' aria-label='Loading schedule' />
+        )}
+
+        {scheduleError && (
+          <Card className='error-card'>
+            <div className='error-message'>{scheduleError}</div>
           </Card>
         )}
 
-        {liveGames.length > 0 && (
-          <div className='scoreboard-section'>
-            <h3 className='scoreboard-section-title'>
-              <span className='live-dot' /> Live
-            </h3>
-            <div className='games-grid'>{liveGames.map(renderGame)}</div>
-          </div>
-        )}
+        {!isLoading && !scheduleError && (
+          <>
+            {currentGames.length === 0 ? (
+              <Card>
+                <p className='section-subtitle' style={{ margin: 0 }}>
+                  No games scheduled.
+                </p>
+              </Card>
+            ) : (
+              <>
+                {liveGames.length > 0 && (
+                  <div className='scoreboard-section'>
+                    <h3 className='scoreboard-section-title'>
+                      <span className='live-dot' /> Live
+                    </h3>
+                    <div className='games-grid'>{liveGames.map(renderGame)}</div>
+                  </div>
+                )}
+                {finalGames.length > 0 && (
+                  <div className='scoreboard-section'>
+                    <h3 className='scoreboard-section-title'>Final</h3>
+                    <div className='games-grid'>
+                      {finalGames.map(renderGame)}
+                    </div>
+                  </div>
+                )}
+                {scheduledGames.length > 0 && (
+                  <div className='scoreboard-section'>
+                    <h3 className='scoreboard-section-title'>Upcoming</h3>
+                    <div className='games-grid'>
+                      {scheduledGames.map(renderGame)}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
-        {finalGames.length > 0 && (
-          <div className='scoreboard-section'>
-            <h3 className='scoreboard-section-title'>Final</h3>
-            <div className='games-grid'>{finalGames.map(renderGame)}</div>
-          </div>
-        )}
-
-        {scheduledGames.length > 0 && (
-          <div className='scoreboard-section'>
-            <h3 className='scoreboard-section-title'>Upcoming</h3>
-            <div className='games-grid'>{scheduledGames.map(renderGame)}</div>
-          </div>
+            {offTeams.length > 0 && (
+              <div className='off-day-section'>
+                <span className='off-day-label'>Off today</span>
+                <div className='off-day-teams'>
+                  {offTeams.map(t => (
+                    <span key={t.team.id} className='off-day-chip'>
+                      {t.team.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     );
