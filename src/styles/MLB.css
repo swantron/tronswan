@@ -165,6 +165,14 @@
 
 /* Buttons handled by Button component, but specific overrides if needed */
 
+/* Team logos */
+.team-logo {
+  display: inline-block;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
 /* Standings View */
 .divisions-container {
   display: grid;
@@ -501,6 +509,9 @@
 .ranking-team {
   flex: 1;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .ranking-stat {
@@ -678,16 +689,25 @@
 
 .game-team {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: var(--space-2);
+}
+
+.game-team-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
 }
 
 .game-team-name {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-muted);
-  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .game-team-winner .game-team-name {
@@ -869,6 +889,9 @@
   color: var(--text-primary);
   white-space: nowrap;
   padding-left: var(--space-4) !important;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .heatmap-record {

@@ -381,6 +381,19 @@ function MLB() {
     };
   };
 
+  const renderTeamLogo = (teamId: number, size = 20) => (
+    <img
+      src={`https://www.mlbstatic.com/team-logos/${teamId}.svg`}
+      alt=''
+      width={size}
+      height={size}
+      className='team-logo'
+      onError={e => {
+        e.currentTarget.style.display = 'none';
+      }}
+    />
+  );
+
   return (
     <div className='mlb-page'>
       <SEO
@@ -642,6 +655,7 @@ function MLB() {
                       className={team.clinchIndicator ? 'clinched' : ''}
                     >
                       <td className='team-name text-left'>
+                        {renderTeamLogo(team.team.id)}
                         {team.clinchIndicator && (
                           <span className='clinch-indicator' title='Clinched'>
                             {team.clinchIndicator}
@@ -740,6 +754,7 @@ function MLB() {
                   >
                     <div className='team-stats-rank'>#{index + 1}</div>
                     <div className='team-stats-name'>
+                      {renderTeamLogo(team.team.id, 22)}
                       {team.team.name}
                       {team.clinchIndicator && (
                         <span className='clinch-badge'>
@@ -940,6 +955,7 @@ function MLB() {
                     className={`${team.clinchIndicator ? 'clinched' : ''} ${isInPlayoff ? 'in-playoff' : isOnBubble ? 'on-bubble' : ''}`}
                   >
                     <td className='team-name text-left'>
+                      {renderTeamLogo(team.team.id)}
                       {team.clinchIndicator && (
                         <span className='clinch-indicator' title='Clinched'>
                           {team.clinchIndicator}
@@ -1091,8 +1107,11 @@ function MLB() {
             <div
               className={`game-team ${awayWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
             >
-              <span className='game-team-name'>
-                {game.teams.away.team.name}
+              <span className='game-team-identity'>
+                {renderTeamLogo(game.teams.away.team.id, 24)}
+                <span className='game-team-name'>
+                  {game.teams.away.team.name}
+                </span>
               </span>
               <span
                 className={`game-score ${awayLeading ? 'game-score-leading' : awayWins ? 'game-score-winner' : ''}`}
@@ -1103,8 +1122,11 @@ function MLB() {
             <div
               className={`game-team ${homeWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
             >
-              <span className='game-team-name'>
-                {game.teams.home.team.name}
+              <span className='game-team-identity'>
+                {renderTeamLogo(game.teams.home.team.id, 24)}
+                <span className='game-team-name'>
+                  {game.teams.home.team.name}
+                </span>
               </span>
               <span
                 className={`game-score ${homeLeading ? 'game-score-leading' : homeWins ? 'game-score-winner' : ''}`}
@@ -1365,7 +1387,10 @@ function MLB() {
                 <tbody>
                   {allTeams.map(team => (
                     <tr key={team.team.id} className='heatmap-row'>
-                      <td className='heatmap-team-name'>{team.team.name}</td>
+                      <td className='heatmap-team-name'>
+                        {renderTeamLogo(team.team.id, 16)}
+                        {team.team.name}
+                      </td>
                       <td className='heatmap-record'>
                         {team.wins}-{team.losses}
                       </td>
@@ -1452,7 +1477,10 @@ function MLB() {
             return (
               <div key={team.team.id} className='ranking-item'>
                 <span className='ranking-position'>#{idx + 1}</span>
-                <span className='ranking-team'>{team.team.name}</span>
+                <span className='ranking-team'>
+                  {renderTeamLogo(team.team.id, 18)}
+                  {team.team.name}
+                </span>
                 <span
                   className={`ranking-stat ${statType === 'runDiff' && team.runDifferential >= 0 ? 'positive-diff' : statType === 'runDiff' ? 'negative-diff' : ''}`}
                 >
