@@ -369,15 +369,15 @@ function MLB() {
         'homeRuns',
         'battingAverage',
         'onBasePlusSlugging',
-        'rbi',
+        'runsBattedIn',
         'hits',
         'stolenBases',
         'walks',
         'wins',
-        'era',
+        'earnedRunAverage',
         'strikeouts',
         'saves',
-        'whip',
+        'walksAndHitsPerInningPitched',
       ].join(',');
       const url = `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${categories}&sportId=1&season=${season}&limit=10`;
       const response = await fetch(url);
@@ -1512,23 +1512,27 @@ function MLB() {
       { key: 'homeRuns', label: 'Home Runs', abbr: 'HR' },
       { key: 'battingAverage', label: 'Batting Average', abbr: 'AVG' },
       { key: 'onBasePlusSlugging', label: 'OPS', abbr: 'OPS' },
-      { key: 'rbi', label: 'RBI', abbr: 'RBI' },
+      { key: 'runsBattedIn', label: 'RBI', abbr: 'RBI' },
       { key: 'hits', label: 'Hits', abbr: 'H' },
       { key: 'stolenBases', label: 'Stolen Bases', abbr: 'SB' },
       { key: 'walks', label: 'Walks', abbr: 'BB' },
     ];
     const pitchingCategories = [
       { key: 'wins', label: 'Wins', abbr: 'W' },
-      { key: 'era', label: 'ERA', abbr: 'ERA' },
+      { key: 'earnedRunAverage', label: 'ERA', abbr: 'ERA' },
       { key: 'strikeouts', label: 'Strikeouts', abbr: 'K' },
       { key: 'saves', label: 'Saves', abbr: 'SV' },
-      { key: 'whip', label: 'WHIP', abbr: 'WHIP' },
+      { key: 'walksAndHitsPerInningPitched', label: 'WHIP', abbr: 'WHIP' },
     ];
     const activeCategories =
       leaderGroup === 'hitting' ? hittingCategories : pitchingCategories;
 
     const formatValue = (key: string, value: string) => {
-      if (key === 'battingAverage' || key === 'onBasePlusSlugging') {
+      if (
+        key === 'battingAverage' ||
+        key === 'onBasePlusSlugging' ||
+        key === 'walksAndHitsPerInningPitched'
+      ) {
         return value.startsWith('0.') ? value.slice(1) : value;
       }
       return value;
