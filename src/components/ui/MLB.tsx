@@ -209,6 +209,7 @@ function MLB() {
   const [leaderGroup, setLeaderGroup] = useState<'hitting' | 'pitching'>(
     'hitting'
   );
+  const [leaderTeamFilter, setLeaderTeamFilter] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -1545,6 +1546,12 @@ function MLB() {
       return 'var(--text-muted)';
     };
 
+    const allTeams = Array.from(
+      new Map(
+        leaders.flatMap(cat => cat.leaders).map(e => [e.team.id, e.team])
+      ).values()
+    ).sort((a, b) => a.name.localeCompare(b.name));
+
     if (loadingLeaders && leaders.length === 0) {
       return <div className='loading-spinner' aria-label='Loading leaders' />;
     }
@@ -1564,21 +1571,40 @@ function MLB() {
           Top 10 individual performers — {new Date().getFullYear()} season
         </p>
 
-        <div className='leaders-group-toggle'>
-          <Button
-            variant={leaderGroup === 'hitting' ? 'secondary' : 'ghost'}
-            size='sm'
-            onClick={() => setLeaderGroup('hitting')}
+        <div className='leaders-controls'>
+          <div className='leaders-group-toggle'>
+            <Button
+              variant={leaderGroup === 'hitting' ? 'secondary' : 'ghost'}
+              size='sm'
+              onClick={() => setLeaderGroup('hitting')}
+            >
+              Hitting
+            </Button>
+            <Button
+              variant={leaderGroup === 'pitching' ? 'secondary' : 'ghost'}
+              size='sm'
+              onClick={() => setLeaderGroup('pitching')}
+            >
+              Pitching
+            </Button>
+          </div>
+
+          <select
+            className='leaders-team-select'
+            value={leaderTeamFilter ?? ''}
+            onChange={e =>
+              setLeaderTeamFilter(
+                e.target.value === '' ? null : Number(e.target.value)
+              )
+            }
           >
-            Hitting
-          </Button>
-          <Button
-            variant={leaderGroup === 'pitching' ? 'secondary' : 'ghost'}
-            size='sm'
-            onClick={() => setLeaderGroup('pitching')}
-          >
-            Pitching
-          </Button>
+            <option value=''>All Teams</option>
+            {allTeams.map(t => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className='leaders-grid'>
@@ -1586,6 +1612,11 @@ function MLB() {
             const categoryData = leaders.find(
               l => l.leaderCategory === cat.key
             );
+            const entries = leaderTeamFilter
+              ? (categoryData?.leaders.filter(
+                  e => e.team.id === leaderTeamFilter
+                ) ?? [])
+              : (categoryData?.leaders ?? []);
             return (
               <Card key={cat.key} className='leader-card'>
                 <div className='leader-card-header'>
@@ -1593,26 +1624,32 @@ function MLB() {
                   <span className='leader-card-abbr'>{cat.abbr}</span>
                 </div>
                 <div className='leader-list'>
-                  {categoryData?.leaders.map(entry => (
-                    <div key={entry.person.id} className='leader-row'>
-                      <span
-                        className='leader-rank'
-                        style={{ color: rankColor(entry.rank) }}
-                      >
-                        {entry.rank}
-                      </span>
-                      {renderTeamLogo(entry.team.id, 18)}
-                      <span className='leader-name'>
-                        {entry.person.fullName}
-                      </span>
-                      <span className='leader-team'>
-                        {entry.team.name.split(' ').pop()}
-                      </span>
-                      <span className='leader-value'>
-                        {formatValue(cat.key, entry.value)}
-                      </span>
-                    </div>
-                  )) ?? <p className='leader-empty'>No data available</p>}
+                  {entries.length > 0 ? (
+                    entries.map(entry => (
+                      <div key={entry.person.id} className='leader-row'>
+                        <span
+                          className='leader-rank'
+                          style={{ color: rankColor(entry.rank) }}
+                        >
+                          {entry.rank}
+                        </span>
+                        {renderTeamLogo(entry.team.id, 18)}
+                        <span className='leader-name'>
+                          {entry.person.fullName}
+                        </span>
+                        <span className='leader-team'>
+                          {entry.team.name.split(' ').pop()}
+                        </span>
+                        <span className='leader-value'>
+                          {formatValue(cat.key, entry.value)}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className='leader-empty'>
+                      {leaderTeamFilter ? 'Not in top 10' : 'No data available'}
+                    </p>
+                  )}
                 </div>
               </Card>
             );
