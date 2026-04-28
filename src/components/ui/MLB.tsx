@@ -210,6 +210,7 @@ function MLB() {
     'hitting'
   );
   const [leaderTeamFilter, setLeaderTeamFilter] = useState<number | null>(null);
+  const [leaderTeamSearch, setLeaderTeamSearch] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -1552,6 +1553,11 @@ function MLB() {
       ).values()
     ).sort((a, b) => a.name.localeCompare(b.name));
 
+    const selectedTeamName =
+      leaderTeamFilter != null
+        ? (allTeams.find(t => t.id === leaderTeamFilter)?.name ?? '')
+        : '';
+
     if (loadingLeaders && leaders.length === 0) {
       return <div className='loading-spinner' aria-label='Loading leaders' />;
     }
@@ -1589,22 +1595,65 @@ function MLB() {
             </Button>
           </div>
 
-          <select
-            className='leaders-team-select'
-            value={leaderTeamFilter ?? ''}
-            onChange={e =>
-              setLeaderTeamFilter(
-                e.target.value === '' ? null : Number(e.target.value)
-              )
-            }
-          >
-            <option value=''>All Teams</option>
-            {allTeams.map(t => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+          <div className='leaders-team-search'>
+            {leaderTeamFilter != null ? (
+              <div className='leaders-team-chip'>
+                {renderTeamLogo(leaderTeamFilter, 16)}
+                <span>{selectedTeamName}</span>
+                <button
+                  className='leaders-team-chip-clear'
+                  onClick={() => {
+                    setLeaderTeamFilter(null);
+                    setLeaderTeamSearch('');
+                  }}
+                  aria-label='Clear team filter'
+                >
+                  ×
+                </button>
+              </div>
+            ) : (
+              <>
+                <input
+                  className='leaders-team-input'
+                  type='text'
+                  placeholder='Filter by team…'
+                  value={leaderTeamSearch}
+                  onChange={e => setLeaderTeamSearch(e.target.value)}
+                />
+                {leaderTeamSearch.trim().length > 0 && (
+                  <ul className='leaders-team-suggestions'>
+                    {allTeams
+                      .filter(t =>
+                        t.name
+                          .toLowerCase()
+                          .includes(leaderTeamSearch.toLowerCase().trim())
+                      )
+                      .map(t => (
+                        <li
+                          key={t.id}
+                          role='option'
+                          aria-selected={leaderTeamFilter === t.id}
+                          className='leaders-team-suggestion'
+                          onClick={() => {
+                            setLeaderTeamFilter(t.id);
+                            setLeaderTeamSearch('');
+                          }}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              setLeaderTeamFilter(t.id);
+                              setLeaderTeamSearch('');
+                            }
+                          }}
+                        >
+                          {renderTeamLogo(t.id, 16)}
+                          {t.name}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         <div className='leaders-grid'>
