@@ -130,6 +130,24 @@ interface GameTeam {
   team: { id: number; name: string; abbreviation?: string };
   score?: number;
   isWinner?: boolean;
+  probablePitcher?: { id: number; fullName: string };
+}
+
+interface LeaderEntry {
+  rank: number;
+  value: string;
+  person: { id: number; fullName: string };
+  team: { id: number; name: string };
+  league?: { id: number; name: string };
+}
+
+interface LeaderCategory {
+  leaderCategory: string;
+  leaders: LeaderEntry[];
+}
+
+interface LeadersData {
+  leagueLeaders: LeaderCategory[];
 }
 
 interface Game {
@@ -169,7 +187,13 @@ function MLB() {
     'all'
   );
   const [viewMode, setViewMode] = useState<
-    'standings' | 'teamStats' | 'playoff' | 'rankings' | 'scoreboard' | 'splits'
+    | 'standings'
+    | 'teamStats'
+    | 'playoff'
+    | 'rankings'
+    | 'scoreboard'
+    | 'splits'
+    | 'leaders'
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
 
@@ -178,6 +202,13 @@ function MLB() {
   );
   const [loadingSchedule, setLoadingSchedule] = useState(false);
   const [scheduleError, setScheduleError] = useState('');
+
+  const [leaders, setLeaders] = useState<LeaderCategory[]>([]);
+  const [loadingLeaders, setLoadingLeaders] = useState(false);
+  const [leadersError, setLeadersError] = useState('');
+  const [leaderGroup, setLeaderGroup] = useState<'hitting' | 'pitching'>(
+    'hitting'
+  );
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -291,7 +322,7 @@ function MLB() {
     try {
       const start = localDateStr(-1);
       const end = localDateStr(1);
-      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=${start}&endDate=${end}&hydrate=linescore,team`;
+      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=${start}&endDate=${end}&hydrate=linescore,team,probablePitcher`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch schedule');
       const data: ScheduleData = await response.json();
@@ -328,6 +359,45 @@ function MLB() {
     }, 30000);
     return () => clearInterval(interval);
   }, [viewMode, selectedDate]);
+
+  const fetchLeaders = async () => {
+    setLoadingLeaders(true);
+    setLeadersError('');
+    try {
+      const season = new Date().getFullYear();
+      const categories = [
+        'homeRuns',
+        'battingAverage',
+        'onBasePlusSlugging',
+        'rbi',
+        'hits',
+        'stolenBases',
+        'walks',
+        'wins',
+        'era',
+        'strikeouts',
+        'saves',
+        'whip',
+      ].join(',');
+      const url = `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${categories}&sportId=1&season=${season}&limit=10`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch leaders');
+      const data: LeadersData = await response.json();
+      setLeaders(data.leagueLeaders);
+    } catch (error) {
+      setLeadersError(
+        error instanceof Error ? error.message : 'Failed to fetch leaders'
+      );
+    } finally {
+      setLoadingLeaders(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'leaders') return;
+    if (leaders.length > 0) return;
+    fetchLeaders();
+  }, [viewMode, leaders.length]);
 
   const filteredStandings = standings.filter(division => {
     if (selectedLeague === 'all') return true;
@@ -538,6 +608,21 @@ function MLB() {
           >
             Split Heatmap
           </Button>
+          <Button
+            variant={viewMode === 'leaders' ? 'primary' : 'ghost'}
+            className={viewMode === 'leaders' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'leaders',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('leaders');
+            }}
+            disabled={loading}
+          >
+            Leaders
+          </Button>
         </div>
 
         {/* League Filter (only for standings view) */}
@@ -608,6 +693,7 @@ function MLB() {
             {viewMode === 'rankings' && renderRankings()}
             {viewMode === 'scoreboard' && renderScoreboard()}
             {viewMode === 'splits' && renderSplitHeatmap()}
+            {viewMode === 'leaders' && renderLeaders()}
           </>
         )}
 
@@ -1104,36 +1190,35 @@ function MLB() {
 
           {/* Teams + scores — always rendered, score shown as -- when not started */}
           <div className='game-teams'>
-            <div
-              className={`game-team ${awayWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
-            >
-              <span className='game-team-identity'>
-                {renderTeamLogo(game.teams.away.team.id, 24)}
-                <span className='game-team-name'>
-                  {game.teams.away.team.name}
-                </span>
-              </span>
-              <span
-                className={`game-score ${awayLeading ? 'game-score-leading' : awayWins ? 'game-score-winner' : ''}`}
-              >
-                {hasScore ? (awayScore ?? '-') : '--'}
-              </span>
-            </div>
-            <div
-              className={`game-team ${homeWins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
-            >
-              <span className='game-team-identity'>
-                {renderTeamLogo(game.teams.home.team.id, 24)}
-                <span className='game-team-name'>
-                  {game.teams.home.team.name}
-                </span>
-              </span>
-              <span
-                className={`game-score ${homeLeading ? 'game-score-leading' : homeWins ? 'game-score-winner' : ''}`}
-              >
-                {hasScore ? (homeScore ?? '-') : '--'}
-              </span>
-            </div>
+            {(['away', 'home'] as const).map(side => {
+              const t = game.teams[side];
+              const wins = side === 'away' ? awayWins : homeWins;
+              const leading = side === 'away' ? awayLeading : homeLeading;
+              const score = side === 'away' ? awayScore : homeScore;
+              return (
+                <div
+                  key={side}
+                  className={`game-team ${wins ? 'game-team-winner' : isFinal ? 'game-team-loser' : ''}`}
+                >
+                  <span className='game-team-identity'>
+                    {renderTeamLogo(t.team.id, 24)}
+                    <span className='game-team-info'>
+                      <span className='game-team-name'>{t.team.name}</span>
+                      {t.probablePitcher && (
+                        <span className='game-pitcher'>
+                          {t.probablePitcher.fullName}
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                  <span
+                    className={`game-score ${leading ? 'game-score-leading' : wins ? 'game-score-winner' : ''}`}
+                  >
+                    {hasScore ? (score ?? '-') : '--'}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           {/* Linescore — only for live/final games with inning data */}
@@ -1418,6 +1503,117 @@ function MLB() {
             </div>
           </Card>
         )}
+      </div>
+    );
+  }
+
+  function renderLeaders() {
+    const hittingCategories = [
+      { key: 'homeRuns', label: 'Home Runs', abbr: 'HR' },
+      { key: 'battingAverage', label: 'Batting Average', abbr: 'AVG' },
+      { key: 'onBasePlusSlugging', label: 'OPS', abbr: 'OPS' },
+      { key: 'rbi', label: 'RBI', abbr: 'RBI' },
+      { key: 'hits', label: 'Hits', abbr: 'H' },
+      { key: 'stolenBases', label: 'Stolen Bases', abbr: 'SB' },
+      { key: 'walks', label: 'Walks', abbr: 'BB' },
+    ];
+    const pitchingCategories = [
+      { key: 'wins', label: 'Wins', abbr: 'W' },
+      { key: 'era', label: 'ERA', abbr: 'ERA' },
+      { key: 'strikeouts', label: 'Strikeouts', abbr: 'K' },
+      { key: 'saves', label: 'Saves', abbr: 'SV' },
+      { key: 'whip', label: 'WHIP', abbr: 'WHIP' },
+    ];
+    const activeCategories =
+      leaderGroup === 'hitting' ? hittingCategories : pitchingCategories;
+
+    const formatValue = (key: string, value: string) => {
+      if (key === 'battingAverage' || key === 'onBasePlusSlugging') {
+        return value.startsWith('0.') ? value.slice(1) : value;
+      }
+      return value;
+    };
+
+    const rankColor = (rank: number) => {
+      if (rank === 1) return '#f59e0b';
+      if (rank === 2) return '#a1a1aa';
+      if (rank === 3) return '#cd7f32';
+      return 'var(--text-muted)';
+    };
+
+    if (loadingLeaders && leaders.length === 0) {
+      return <div className='loading-spinner' aria-label='Loading leaders' />;
+    }
+
+    if (leadersError) {
+      return (
+        <Card className='error-card'>
+          <div className='error-message'>{leadersError}</div>
+        </Card>
+      );
+    }
+
+    return (
+      <div className='leaders-container'>
+        <h2 className='section-title'>League Leaders</h2>
+        <p className='section-subtitle'>
+          Top 10 individual performers — {new Date().getFullYear()} season
+        </p>
+
+        <div className='leaders-group-toggle'>
+          <Button
+            variant={leaderGroup === 'hitting' ? 'secondary' : 'ghost'}
+            size='sm'
+            onClick={() => setLeaderGroup('hitting')}
+          >
+            Hitting
+          </Button>
+          <Button
+            variant={leaderGroup === 'pitching' ? 'secondary' : 'ghost'}
+            size='sm'
+            onClick={() => setLeaderGroup('pitching')}
+          >
+            Pitching
+          </Button>
+        </div>
+
+        <div className='leaders-grid'>
+          {activeCategories.map(cat => {
+            const categoryData = leaders.find(
+              l => l.leaderCategory === cat.key
+            );
+            return (
+              <Card key={cat.key} className='leader-card'>
+                <div className='leader-card-header'>
+                  <h3 className='leader-card-title'>{cat.label}</h3>
+                  <span className='leader-card-abbr'>{cat.abbr}</span>
+                </div>
+                <div className='leader-list'>
+                  {categoryData?.leaders.map(entry => (
+                    <div key={entry.person.id} className='leader-row'>
+                      <span
+                        className='leader-rank'
+                        style={{ color: rankColor(entry.rank) }}
+                      >
+                        {entry.rank}
+                      </span>
+                      {renderTeamLogo(entry.team.id, 18)}
+                      <span className='leader-name'>
+                        {entry.person.fullName}
+                      </span>
+                      <span className='leader-team'>
+                        {entry.team.name.split(' ').pop()}
+                      </span>
+                      <span className='leader-value'>
+                        {formatValue(cat.key, entry.value)}
+                      </span>
+                    </div>
+                  )) ?? <p className='leader-empty'>No data available</p>}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     );
   }
