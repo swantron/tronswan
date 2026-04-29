@@ -52,6 +52,16 @@ function Hello() {
             <a className='hello-link' href='/resume' aria-label='Resume'>
               resume
             </a>
+
+            <a
+              className='hello-link'
+              href='https://swantron.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label="Joseph's blog"
+            >
+              blog
+            </a>
           </div>
         </Card>
 

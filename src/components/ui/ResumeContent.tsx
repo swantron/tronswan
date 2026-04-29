@@ -11,6 +11,148 @@ interface ResumeContentProps {
   onRefresh: () => void;
 }
 
+// ── Parsers ───────────────────────────────────────────────────────────────────
+
+const stripBullet = (line: string) =>
+  line.replace(/^\s*[*\-•◦▪▫]\s*/, '').trim();
+
+/** Splits contact lines that use " | " as a separator (e.g. "linkedin | github.com/…") */
+const flattenContactLines = (lines: string[]): string[] =>
+  lines.flatMap(line =>
+    line.includes('|')
+      ? line
+          .split('|')
+          .map(s => s.trim())
+          .filter(Boolean)
+      : [line]
+  );
+
+type ExperienceJob = {
+  parts: string[]; // [title, company, location, dates]
+  bullets: string[];
+};
+
+const parseJobs = (lines: string[]): ExperienceJob[] => {
+  const jobs: ExperienceJob[] = [];
+  let current: ExperienceJob | null = null;
+
+  for (const line of lines) {
+    const isHeader =
+      line.includes('|') &&
+      /Engineer|Developer|Manager|Director|Lead|Senior|Staff|Principal|Architect|Applications/i.test(
+        line
+      );
+
+    if (isHeader) {
+      if (current) jobs.push(current);
+      current = { parts: line.split('|').map(p => p.trim()), bullets: [] };
+    } else if (current) {
+      const b = stripBullet(line);
+      if (b) current.bullets.push(b);
+    }
+  }
+  if (current) jobs.push(current);
+  return jobs;
+};
+
+type SkillGroup = {
+  category: string;
+  items: { key: string; values: string[] }[];
+};
+
+const parseSkillGroups = (lines: string[]): SkillGroup[] => {
+  const groups: SkillGroup[] = [];
+  let current: SkillGroup | null = null;
+
+  for (const line of lines) {
+    const clean = stripBullet(line);
+    if (!clean) continue;
+
+    if (clean.includes(':')) {
+      const idx = clean.indexOf(':');
+      const key = clean.slice(0, idx).trim();
+      const values = clean
+        .slice(idx + 1)
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
+      if (!current) current = { category: '', items: [] };
+      current.items.push({ key, values });
+    } else {
+      if (current) groups.push(current);
+      current = { category: clean, items: [] };
+    }
+  }
+  if (current) groups.push(current);
+  return groups;
+};
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+/** Bolds the "Label:" prefix in bullet points that use it */
+const BulletText: React.FC<{ text: string }> = ({ text }) => {
+  const match = text.match(/^([^:]{3,60}):\s+(.+)$/s);
+  if (match) {
+    return (
+      <>
+        <strong className='bullet-label'>{match[1]}:</strong> {match[2]}
+      </>
+    );
+  }
+  return <>{text}</>;
+};
+
+const ContactBadge: React.FC<{ text: string }> = ({ text }) => {
+  const lc = text.toLowerCase();
+
+  if (lc === 'linkedin' || lc.includes('linkedin.com')) {
+    return (
+      <a
+        href='https://www.linkedin.com/in/joseph-swanson-11092758/'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='resume-contact-link'
+      >
+        LinkedIn
+      </a>
+    );
+  }
+  if (lc.includes('github')) {
+    return (
+      <a
+        href='https://github.com/swantron'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='resume-contact-link'
+      >
+        GitHub
+      </a>
+    );
+  }
+  if (lc.includes('tronswan.com')) {
+    return (
+      <a
+        href='https://tronswan.com'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='resume-contact-link'
+      >
+        tronswan.com
+      </a>
+    );
+  }
+  if (text.includes('@')) {
+    return (
+      <a href={`mailto:${text}`} className='resume-contact-link'>
+        {text}
+      </a>
+    );
+  }
+  return <span className='resume-contact-item'>{text}</span>;
+};
+
+// ── Main component ────────────────────────────────────────────────────────────
+
 const ResumeContent: React.FC<ResumeContentProps> = ({
   content,
   loading,
@@ -42,7 +184,7 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
           <div className='resume-error'>
             <h2>Error Loading Resume</h2>
             <p>{error}</p>
-            <button onClick={onRefresh} className='refresh-button'>
+            <button onClick={onRefresh} className='resume-refresh-btn'>
               Try Again
             </button>
           </div>
@@ -51,77 +193,88 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
     );
   }
 
-  // Parse the content into structured sections
-  const parseContent = (content: string) => {
-    const lines = content
-      .split('\n')
-      .map(l => l.trim())
-      .filter(Boolean);
-    const sections: { [key: string]: string[] } = {};
-    let currentSection = '';
-    let currentContent: string[] = [];
-    let isFirstSection = true;
+  // ── Parse sections ──────────────────────────────────────────────────────────
 
-    // Common section headers in resumes
-    const sectionHeaders = [
-      'Professional Summary',
-      'Summary',
-      'Technical Skills',
-      'Professional Experience',
-      'Experience',
-      'Education',
-      'Projects & Achievements',
-      'Projects',
-      'Certifications',
-      'Contact Information',
-      'Contact',
-    ];
+  const lines = content
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean);
+  const sections: Record<string, string[]> = {};
+  let currentSection = '';
+  let currentContent: string[] = [];
+  let isFirstSection = true;
 
-    lines.forEach(line => {
-      // Skip Google Docs artifacts and unwanted separators
-      if (
-        /^Tab \d+$/i.test(line) ||
-        /^Sheet \d+$/i.test(line) ||
-        /^_+$/.test(line) ||
-        /^-+$/.test(line) ||
-        /^[*]+$/.test(line)
-      ) {
-        return;
-      }
+  const sectionHeaders = [
+    'Professional Summary',
+    'Summary',
+    'Technical Skills',
+    'Professional Experience',
+    'Experience',
+    'Education',
+    'Projects & Achievements',
+    'Projects',
+    'Certifications',
+    'Contact Information',
+    'Contact',
+  ];
 
-      // Check if this is a section header (case-insensitive fuzzy match)
-      const matchedHeader = sectionHeaders.find(
-        h => line.toLowerCase() === h.toLowerCase()
-      );
+  for (const line of lines) {
+    if (
+      /^Tab \d+$/i.test(line) ||
+      /^Sheet \d+$/i.test(line) ||
+      /^_+$/.test(line) ||
+      /^-+$/.test(line) ||
+      /^[*]+$/.test(line)
+    )
+      continue;
 
-      if (matchedHeader) {
-        // Save previous section
-        if (currentSection && currentContent.length > 0) {
-          sections[currentSection] = [...currentContent];
-        }
-
-        // Start new section
-        currentSection = matchedHeader;
-        currentContent = [];
-        isFirstSection = false;
-      } else {
-        // If this is the first section and it doesn't have a header, treat it as Contact Information
-        if (isFirstSection && !currentSection) {
-          currentSection = 'Contact Information';
-        }
-        currentContent.push(line);
-      }
-    });
-
-    // Save the last section
-    if (currentSection && currentContent.length > 0) {
-      sections[currentSection] = currentContent;
+    const matched = sectionHeaders.find(
+      h => line.toLowerCase() === h.toLowerCase()
+    );
+    if (matched) {
+      if (currentSection && currentContent.length > 0)
+        sections[currentSection] = [...currentContent];
+      currentSection = matched;
+      currentContent = [];
+      isFirstSection = false;
+    } else {
+      if (isFirstSection && !currentSection)
+        currentSection = 'Contact Information';
+      currentContent.push(line);
     }
+  }
+  if (currentSection && currentContent.length > 0)
+    sections[currentSection] = currentContent;
 
-    return sections;
-  };
+  // Contact
+  const contactRaw = sections['Contact Information'] ?? [];
+  const name = contactRaw[0] ?? 'Joseph Swanson';
+  const contactItems = flattenContactLines(contactRaw.slice(1));
 
-  const sections = parseContent(content);
+  // Summary — first line may be a "|"-delimited tagline
+  const summaryLines =
+    sections['Summary'] ?? sections['Professional Summary'] ?? [];
+  const firstSummaryLine = summaryLines[0] ?? '';
+  const hasTagline = firstSummaryLine.includes('|');
+  const tagline = hasTagline
+    ? firstSummaryLine.replace(/\|/g, '·').replace(/\s*·\s*/g, ' · ')
+    : null;
+  const summaryBody = hasTagline
+    ? summaryLines.slice(1).join(' ')
+    : summaryLines.join(' ');
+
+  // Experience
+  const expLines =
+    sections['Professional Experience'] ?? sections['Experience'] ?? [];
+  const jobs = parseJobs(expLines);
+
+  // Skills
+  const skillGroups = parseSkillGroups(sections['Technical Skills'] ?? []);
+
+  // Education
+  const educationLines = sections['Education'] ?? [];
+
+  // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
     <div className='resume-container'>
@@ -131,229 +284,157 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
         keywords='Joseph Swanson, resume, software engineer, Demandbase, DevX, CI/CD, React, TypeScript, Montana'
         url='/resume'
       />
+
       <div className='resume-content' data-testid='resume-content'>
+        {/* ── Header ──────────────────────────────────────────────────────── */}
         <header className='resume-header'>
-          <h1 className='resume-name page-title' data-testid='resume-name'>
-            {sections['Contact Information']?.[0] || 'Joseph Swanson'}
+          <h1 className='resume-name' data-testid='resume-name'>
+            {name}
           </h1>
+          {tagline && <p className='resume-tagline'>{tagline}</p>}
           <div className='resume-contact'>
-            {sections['Contact Information']?.slice(1).map((line, index) => {
-              const parseContactLine = (text: string) => {
-                // Better link detection
-                if (text.toLowerCase().includes('linkedin')) {
-                  return (
-                    <a
-                      key={index}
-                      href='https://www.linkedin.com/in/joseph-swanson-11092758/'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='resume-contact-link'
-                    >
-                      <span className='icon'>🔗</span> LinkedIn
-                    </a>
-                  );
-                }
-                if (text.toLowerCase().includes('tronswan.com')) {
-                  return (
-                    <a
-                      key={index}
-                      href='https://tronswan.com'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='resume-contact-link'
-                    >
-                      <span className='icon'>🌐</span> tronswan.com
-                    </a>
-                  );
-                }
-                if (text.includes('@')) {
-                  return (
-                    <span key={index} className='resume-contact-item'>
-                      <span className='icon'>📧</span> {text}
-                    </span>
-                  );
-                }
-                // Handle location or phone
-                if (/\d{3}-\d{3}-\d{4}/.test(text)) {
-                  return (
-                    <span key={index} className='resume-contact-item'>
-                      <span className='icon'>📱</span> {text}
-                    </span>
-                  );
-                }
-                return (
-                  <span key={index} className='resume-contact-item'>
-                    {text}
-                  </span>
-                );
-              };
-              return parseContactLine(line);
-            })}
+            {contactItems.map((item, i) => (
+              <ContactBadge key={i} text={item} />
+            ))}
           </div>
         </header>
 
+        {/* ── Two-column body ─────────────────────────────────────────────── */}
         <div className='resume-main-grid'>
-          <div className='resume-sidebar'>
-            {sections['Technical Skills'] && (
+          {/* Sidebar */}
+          <aside className='resume-sidebar'>
+            {skillGroups.length > 0 && (
               <section className='resume-section' data-testid='resume-skills'>
-                <h2 className='section-title'>Technical Skills</h2>
+                <h2 className='resume-section-title'>Technical Skills</h2>
                 <div className='skills-container'>
-                  {sections['Technical Skills'].map((skillLine, index) => {
-                    const cleanSkill = skillLine
-                      .replace(/^\s*[*\-•◦▪▫]\s*/, '')
-                      .trim();
-                    const [category, skills] = cleanSkill.split(':');
-
-                    if (category && skills) {
-                      return (
-                        <div key={index} className='skill-group'>
-                          <h3 className='skill-category-title'>
-                            {category.trim()}
-                          </h3>
+                  {skillGroups.map((group, gi) => (
+                    <div key={gi} className='skill-group'>
+                      {group.category && (
+                        <h3 className='skill-category'>{group.category}</h3>
+                      )}
+                      {group.items.map((item, ii) => (
+                        <div key={ii} className='skill-row'>
+                          <span className='skill-key'>{item.key}</span>
                           <div className='skill-tags'>
-                            {skills.split(',').map((s, i) => (
-                              <span key={i} className='skill-tag'>
-                                {s.trim()}
+                            {item.values.map((v, vi) => (
+                              <span key={vi} className='skill-tag'>
+                                {v}
                               </span>
                             ))}
                           </div>
                         </div>
-                      );
-                    }
-                    return (
-                      <div key={index} className='skill-tag solo'>
-                        {cleanSkill}
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {sections['Education'] && (
-              <section
-                className='resume-section'
-                data-testid='resume-education'
-              >
-                <h2 className='section-title'>Education</h2>
-                {sections['Education'].map((line, index) => (
-                  <div key={index} className='education-item'>
-                    <p>{line}</p>
-                  </div>
-                ))}
-              </section>
-            )}
-
-            {sections['Certifications'] && (
-              <section className='resume-section'>
-                <h2 className='section-title'>Certifications</h2>
-                <ul className='cert-list'>
-                  {sections['Certifications'].map((cert, index) => (
-                    <li key={index} className='cert-item'>
-                      {cert.replace(/^\s*[*\-•◦▪▫]\s*/, '').trim()}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </div>
-
-          <div className='resume-body'>
-            {(sections['Summary'] || sections['Professional Summary']) && (
-              <section className='resume-section' data-testid='resume-summary'>
-                <h2 className='section-title'>Summary</h2>
-                <p className='summary-text'>
-                  {(
-                    sections['Summary'] || sections['Professional Summary']
-                  ).join(' ')}
-                </p>
-              </section>
-            )}
-
-            {(sections['Professional Experience'] ||
-              sections['Experience']) && (
-              <section
-                className='resume-section'
-                data-testid='resume-experience'
-              >
-                <h2 className='section-title'>Professional Experience</h2>
-                <div className='experience-timeline'>
-                  {(
-                    sections['Professional Experience'] ||
-                    sections['Experience']
-                  ).map((line, index) => {
-                    const isJobRole =
-                      line.includes('|') &&
-                      /Engineer|Developer|Manager|Director|Lead|Senior|Staff|Principal|Architect/i.test(
-                        line
-                      );
-
-                    const isBulletPoint = /^\s*[*\-•◦▪▫]/.test(line);
-
-                    if (isJobRole) {
-                      // Attempt to split title, company, dates
-                      // Format: Title | Company | Location | Dates
-                      const parts = line.split('|').map(p => p.trim());
-                      return (
-                        <div key={index} className='experience-role-header'>
-                          <div className='role-title-row'>
-                            <h3 className='role-title'>{parts[0]}</h3>
-                            <span className='role-dates'>
-                              {parts[parts.length - 1]}
-                            </span>
-                          </div>
-                          <div className='role-company-row'>
-                            <span className='role-company'>{parts[1]}</span>
-                            {parts[2] &&
-                              parts[2] !== parts[parts.length - 1] && (
-                                <span className='role-location'>
-                                  {parts[2]}
-                                </span>
-                              )}
-                          </div>
-                        </div>
-                      );
-                    } else if (isBulletPoint) {
-                      const cleanBullet = line
-                        .replace(/^\s*[*\-•◦▪▫]\s*/, '')
-                        .trim();
-                      return (
-                        <div key={index} className='experience-bullet-item'>
-                          <p>{cleanBullet}</p>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <p key={index} className='experience-text'>
-                          {line}
-                        </p>
-                      );
-                    }
-                  })}
-                </div>
-              </section>
-            )}
-
-            {(sections['Projects & Achievements'] || sections['Projects']) && (
-              <section className='resume-section'>
-                <h2 className='section-title'>Projects & Achievements</h2>
-                <div className='projects-list'>
-                  {(
-                    sections['Projects & Achievements'] || sections['Projects']
-                  ).map((item, index) => (
-                    <div key={index} className='project-item'>
-                      <p>{item.replace(/^\s*[*\-•◦▪▫]\s*/, '').trim()}</p>
+                      ))}
                     </div>
                   ))}
                 </div>
               </section>
             )}
-          </div>
+
+            {educationLines.length > 0 && (
+              <section
+                className='resume-section'
+                data-testid='resume-education'
+              >
+                <h2 className='resume-section-title'>Education</h2>
+                {educationLines.map((line, i) => {
+                  if (line.includes('|')) {
+                    const parts = line.split('|').map(p => p.trim());
+                    return (
+                      <div key={i} className='edu-entry'>
+                        <div className='edu-degree'>{parts[0]}</div>
+                        <div className='edu-institution'>{parts[1]}</div>
+                        {parts[2] && <div className='edu-year'>{parts[2]}</div>}
+                      </div>
+                    );
+                  }
+                  if (line.includes(':')) {
+                    const idx = line.indexOf(':');
+                    const k = line.slice(0, idx).trim();
+                    const v = line.slice(idx + 1).trim();
+                    return (
+                      <p key={i} className='edu-detail'>
+                        <span className='edu-detail-key'>{k}:</span> {v}
+                      </p>
+                    );
+                  }
+                  return (
+                    <p key={i} className='edu-detail'>
+                      {line}
+                    </p>
+                  );
+                })}
+              </section>
+            )}
+          </aside>
+
+          {/* Main column */}
+          <main className='resume-body'>
+            {summaryBody && (
+              <section className='resume-section' data-testid='resume-summary'>
+                <h2 className='resume-section-title'>Summary</h2>
+                <p className='summary-text'>{summaryBody}</p>
+              </section>
+            )}
+
+            {expLines.length > 0 && (
+              <section
+                className='resume-section'
+                data-testid='resume-experience'
+              >
+                <h2 className='resume-section-title'>
+                  Professional Experience
+                </h2>
+                {jobs.length > 0 ? (
+                  <div className='experience-list'>
+                    {jobs.map((job, ji) => {
+                      const [title, company, location, dates] = job.parts;
+                      return (
+                        <article key={ji} className='job-card'>
+                          <div className='job-header'>
+                            <div className='job-title-row'>
+                              <h3 className='job-title'>{title}</h3>
+                              <span className='job-dates'>{dates}</span>
+                            </div>
+                            <div className='job-meta'>
+                              <span className='job-company'>{company}</span>
+                              {location && location !== dates && (
+                                <span className='job-location'>{location}</span>
+                              )}
+                            </div>
+                          </div>
+                          {job.bullets.length > 0 && (
+                            <ul className='job-bullets'>
+                              {job.bullets.map((b, bi) => (
+                                <li key={bi} className='job-bullet'>
+                                  <BulletText text={b} />
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </article>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className='experience-list'>
+                    {expLines.map((line, i) => (
+                      <p key={i} className='job-bullet'>
+                        {stripBullet(line)}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </section>
+            )}
+          </main>
         </div>
 
+        {/* ── Footer ──────────────────────────────────────────────────────── */}
         <footer className='resume-footer'>
-          <div className='footer-info'>
-            <p>Last updated: {lastUpdated?.toLocaleDateString() || 'Recent'}</p>
+          <div className='footer-meta'>
+            <p className='footer-updated'>
+              Last updated: {lastUpdated?.toLocaleDateString() || 'Recent'}
+            </p>
             <a
               href='https://docs.google.com/document/d/1zeZ_mN27_KVgUuOovUn4nHb_w8CDRUBrj5xOiIVTz8M/edit?usp=sharing'
               target='_blank'
@@ -363,13 +444,22 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
               View original Google Doc
             </a>
           </div>
-          <button
-            onClick={onRefresh}
-            className='resume-refresh-btn'
-            aria-label='Refresh resume content'
-          >
-            Refresh Content
-          </button>
+          <div className='footer-actions'>
+            <button
+              onClick={() => window.print()}
+              className='resume-print-btn'
+              aria-label='Print resume'
+            >
+              Print / Save PDF
+            </button>
+            <button
+              onClick={onRefresh}
+              className='resume-refresh-btn'
+              aria-label='Refresh resume content'
+            >
+              Refresh
+            </button>
+          </div>
         </footer>
       </div>
     </div>
