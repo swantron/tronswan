@@ -172,6 +172,25 @@ interface ScheduleData {
   }>;
 }
 
+interface PlayerStatSplit {
+  rank: number;
+  player: { id: number; fullName: string };
+  team: { id: number; name: string };
+  position?: { abbreviation: string };
+  stat: Record<string, string | number>;
+}
+
+interface Transaction {
+  id: number;
+  date: string;
+  typeCode: string;
+  typeDesc: string;
+  description: string;
+  person?: { id: number; fullName: string };
+  fromTeam?: { id: number; name: string };
+  toTeam?: { id: number; name: string };
+}
+
 function MLB() {
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
@@ -194,6 +213,10 @@ function MLB() {
     | 'scoreboard'
     | 'splits'
     | 'leaders'
+    | 'playerStats'
+    | 'transactions'
+    | 'powerRankings'
+    | 'trends'
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
 
@@ -211,6 +234,22 @@ function MLB() {
   );
   const [leaderTeamFilter, setLeaderTeamFilter] = useState<number | null>(null);
   const [leaderTeamSearch, setLeaderTeamSearch] = useState('');
+
+  const [playerStats, setPlayerStats] = useState<PlayerStatSplit[]>([]);
+  const [loadingPlayerStats, setLoadingPlayerStats] = useState(false);
+  const [playerStatsError, setPlayerStatsError] = useState('');
+  const [playerStatsGroup, setPlayerStatsGroup] = useState<
+    'hitting' | 'pitching'
+  >('hitting');
+  const [playerStatsSortKey, setPlayerStatsSortKey] = useState('ops');
+  const [playerStatsSortDir, setPlayerStatsSortDir] = useState<'asc' | 'desc'>(
+    'desc'
+  );
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  const [transactionsError, setTransactionsError] = useState('');
+  const [txnTypeFilter, setTxnTypeFilter] = useState<string>('all');
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -400,6 +439,63 @@ function MLB() {
     if (leaders.length > 0) return;
     fetchLeaders();
   }, [viewMode, leaders.length]);
+
+  const fetchPlayerStats = async (
+    group: 'hitting' | 'pitching',
+    sortStat: string,
+    order: 'asc' | 'desc'
+  ) => {
+    setLoadingPlayerStats(true);
+    setPlayerStatsError('');
+    try {
+      const season = new Date().getFullYear();
+      const url = `https://statsapi.mlb.com/api/v1/stats?stats=season&group=${group}&sportId=1&season=${season}&playerPool=Qualified&limit=100&sortStat=${sortStat}&order=${order}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch player stats');
+      const data = await response.json();
+      setPlayerStats(data.stats?.[0]?.splits ?? []);
+    } catch (error) {
+      setPlayerStatsError(
+        error instanceof Error ? error.message : 'Failed to fetch player stats'
+      );
+    } finally {
+      setLoadingPlayerStats(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'playerStats') return;
+    fetchPlayerStats(playerStatsGroup, playerStatsSortKey, playerStatsSortDir);
+  }, [viewMode, playerStatsGroup, playerStatsSortKey, playerStatsSortDir]);
+
+  const fetchTransactions = async () => {
+    setLoadingTransactions(true);
+    setTransactionsError('');
+    try {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(start.getDate() - 7);
+      const fmt = (d: Date) =>
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const url = `https://statsapi.mlb.com/api/v1/transactions?sportId=1&startDate=${fmt(start)}&endDate=${fmt(end)}&limit=200`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch transactions');
+      const data = await response.json();
+      setTransactions(data.transactions ?? []);
+    } catch (error) {
+      setTransactionsError(
+        error instanceof Error ? error.message : 'Failed to fetch transactions'
+      );
+    } finally {
+      setLoadingTransactions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'transactions') return;
+    if (transactions.length > 0) return;
+    fetchTransactions();
+  }, [viewMode, transactions.length]);
 
   const filteredStandings = standings.filter(division => {
     if (selectedLeague === 'all') return true;
@@ -625,6 +721,66 @@ function MLB() {
           >
             Leaders
           </Button>
+          <Button
+            variant={viewMode === 'playerStats' ? 'primary' : 'ghost'}
+            className={viewMode === 'playerStats' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'playerStats',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('playerStats');
+            }}
+            disabled={loading}
+          >
+            Player Stats
+          </Button>
+          <Button
+            variant={viewMode === 'transactions' ? 'primary' : 'ghost'}
+            className={viewMode === 'transactions' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'transactions',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('transactions');
+            }}
+            disabled={loading}
+          >
+            Roster Moves
+          </Button>
+          <Button
+            variant={viewMode === 'powerRankings' ? 'primary' : 'ghost'}
+            className={viewMode === 'powerRankings' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'powerRankings',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('powerRankings');
+            }}
+            disabled={loading}
+          >
+            Power Rankings
+          </Button>
+          <Button
+            variant={viewMode === 'trends' ? 'primary' : 'ghost'}
+            className={viewMode === 'trends' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'trends',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('trends');
+            }}
+            disabled={loading}
+          >
+            Team Trends
+          </Button>
         </div>
 
         {/* League Filter (only for standings view) */}
@@ -696,6 +852,10 @@ function MLB() {
             {viewMode === 'scoreboard' && renderScoreboard()}
             {viewMode === 'splits' && renderSplitHeatmap()}
             {viewMode === 'leaders' && renderLeaders()}
+            {viewMode === 'playerStats' && renderPlayerStats()}
+            {viewMode === 'transactions' && renderTransactions()}
+            {viewMode === 'powerRankings' && renderPowerRankings()}
+            {viewMode === 'trends' && renderTeamTrends()}
           </>
         )}
 
@@ -1810,6 +1970,414 @@ function MLB() {
             'Best Home Field Advantage',
             'homeAdv'
           )}
+        </div>
+      </div>
+    );
+  }
+
+  function renderPlayerStats() {
+    const hittingCols = [
+      { key: 'avg', label: 'AVG', asc: false },
+      { key: 'ops', label: 'OPS', asc: false },
+      { key: 'obp', label: 'OBP', asc: false },
+      { key: 'slg', label: 'SLG', asc: false },
+      { key: 'homeRuns', label: 'HR', asc: false },
+      { key: 'rbi', label: 'RBI', asc: false },
+      { key: 'hits', label: 'H', asc: false },
+      { key: 'stolenBases', label: 'SB', asc: false },
+      { key: 'strikeOuts', label: 'K', asc: true },
+      { key: 'baseOnBalls', label: 'BB', asc: false },
+    ];
+    const pitchingCols = [
+      { key: 'era', label: 'ERA', asc: true },
+      { key: 'whip', label: 'WHIP', asc: true },
+      { key: 'wins', label: 'W', asc: false },
+      { key: 'strikeOuts', label: 'K', asc: false },
+      { key: 'inningsPitched', label: 'IP', asc: false },
+      { key: 'strikeoutsPer9Inn', label: 'K/9', asc: false },
+      { key: 'walksPer9Inn', label: 'BB/9', asc: true },
+      { key: 'hitsPer9Inn', label: 'H/9', asc: true },
+      { key: 'saves', label: 'SV', asc: false },
+      { key: 'holds', label: 'HLD', asc: false },
+    ];
+    const cols = playerStatsGroup === 'hitting' ? hittingCols : pitchingCols;
+
+    const handleSort = (key: string, defaultAsc: boolean) => {
+      if (playerStatsSortKey === key) {
+        setPlayerStatsSortDir(d => (d === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setPlayerStatsSortKey(key);
+        setPlayerStatsSortDir(defaultAsc ? 'asc' : 'desc');
+      }
+    };
+
+    const fmtStat = (key: string, val: string | number | undefined) => {
+      if (val === undefined || val === null) return '—';
+      const s = String(val);
+      if (key === 'avg' || key === 'obp' || key === 'slg' || key === 'ops') {
+        return s.startsWith('0.') ? s.slice(1) : s;
+      }
+      if (key === 'whip') return s.startsWith('0.') ? s.slice(1) : s;
+      if (key === 'inningsPitched') return s;
+      return s;
+    };
+
+    return (
+      <div className='player-stats-container'>
+        <h2 className='section-title'>Player Stats</h2>
+        <p className='section-subtitle'>
+          Qualified players — {new Date().getFullYear()} season
+        </p>
+
+        <div className='player-stats-controls'>
+          <div className='leaders-group-toggle'>
+            <Button
+              variant={playerStatsGroup === 'hitting' ? 'secondary' : 'ghost'}
+              size='sm'
+              onClick={() => {
+                setPlayerStatsGroup('hitting');
+                setPlayerStatsSortKey('ops');
+                setPlayerStatsSortDir('desc');
+              }}
+            >
+              Hitting
+            </Button>
+            <Button
+              variant={playerStatsGroup === 'pitching' ? 'secondary' : 'ghost'}
+              size='sm'
+              onClick={() => {
+                setPlayerStatsGroup('pitching');
+                setPlayerStatsSortKey('era');
+                setPlayerStatsSortDir('asc');
+              }}
+            >
+              Pitching
+            </Button>
+          </div>
+        </div>
+
+        {loadingPlayerStats ? (
+          <div className='loading-spinner' aria-label='Loading player stats' />
+        ) : playerStatsError ? (
+          <Card className='error-card'>
+            <div className='error-message'>{playerStatsError}</div>
+          </Card>
+        ) : (
+          <div className='player-stats-table-wrap'>
+            <table className='player-stats-table'>
+              <thead>
+                <tr>
+                  <th className='ps-rank'>#</th>
+                  <th className='ps-player'>Player</th>
+                  <th className='ps-team'>Team</th>
+                  {playerStatsGroup === 'hitting' && (
+                    <th className='ps-pos'>POS</th>
+                  )}
+                  {cols.map(col => (
+                    <th
+                      key={col.key}
+                      className={`ps-stat ${playerStatsSortKey === col.key ? 'ps-sorted' : ''}`}
+                      onClick={() => handleSort(col.key, col.asc)}
+                    >
+                      {col.label}
+                      {playerStatsSortKey === col.key && (
+                        <span className='ps-sort-arrow'>
+                          {playerStatsSortDir === 'asc' ? ' ↑' : ' ↓'}
+                        </span>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {playerStats.map((row, i) => (
+                  <tr key={row.player.id} className='ps-row'>
+                    <td className='ps-rank'>{i + 1}</td>
+                    <td className='ps-player'>
+                      {renderTeamLogo(row.team.id, 16)}
+                      <span>{row.player.fullName}</span>
+                    </td>
+                    <td className='ps-team'>
+                      {row.team.name.split(' ').pop()}
+                    </td>
+                    {playerStatsGroup === 'hitting' && (
+                      <td className='ps-pos'>
+                        {row.position?.abbreviation ?? '—'}
+                      </td>
+                    )}
+                    {cols.map(col => (
+                      <td
+                        key={col.key}
+                        className={`ps-stat ${playerStatsSortKey === col.key ? 'ps-sorted' : ''}`}
+                      >
+                        {fmtStat(
+                          col.key,
+                          row.stat[col.key] as string | number | undefined
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderTransactions() {
+    const typeLabels: Record<string, string> = {
+      all: 'All',
+      'Status Change': 'IL / Activation',
+      Selected: 'Called Up',
+      Optioned: 'Optioned',
+      'Designated for Assignment': 'DFA',
+      'Signed as Free Agent': 'Signed',
+      Assigned: 'Assigned',
+      Outrighted: 'Outrighted',
+    };
+
+    const txnTypes = [
+      'all',
+      'Status Change',
+      'Selected',
+      'Optioned',
+      'Designated for Assignment',
+      'Signed as Free Agent',
+    ];
+
+    const filtered =
+      txnTypeFilter === 'all'
+        ? transactions
+        : transactions.filter(t => t.typeDesc === txnTypeFilter);
+
+    const txnIcon = (typeDesc: string) => {
+      if (typeDesc === 'Status Change') return '🏥';
+      if (typeDesc === 'Selected') return '⬆️';
+      if (typeDesc === 'Optioned') return '⬇️';
+      if (typeDesc === 'Designated for Assignment') return '✂️';
+      if (typeDesc === 'Signed as Free Agent') return '📝';
+      if (typeDesc === 'Assigned') return '↩️';
+      return '•';
+    };
+
+    const groupByDate = (txns: Transaction[]) => {
+      const groups: Record<string, Transaction[]> = {};
+      for (const t of txns) {
+        if (!groups[t.date]) groups[t.date] = [];
+        groups[t.date].push(t);
+      }
+      return Object.entries(groups).sort(([a], [b]) => b.localeCompare(a));
+    };
+
+    return (
+      <div className='txn-container'>
+        <h2 className='section-title'>Roster Moves</h2>
+        <p className='section-subtitle'>Last 7 days of MLB transactions</p>
+
+        <div className='txn-filters'>
+          {txnTypes.map(type => (
+            <Button
+              key={type}
+              variant={txnTypeFilter === type ? 'secondary' : 'ghost'}
+              size='sm'
+              onClick={() => setTxnTypeFilter(type)}
+            >
+              {typeLabels[type] ?? type}
+            </Button>
+          ))}
+        </div>
+
+        {loadingTransactions ? (
+          <div className='loading-spinner' aria-label='Loading transactions' />
+        ) : transactionsError ? (
+          <Card className='error-card'>
+            <div className='error-message'>{transactionsError}</div>
+          </Card>
+        ) : (
+          <div className='txn-list'>
+            {groupByDate(filtered).map(([date, txns]) => (
+              <div key={date} className='txn-date-group'>
+                <div className='txn-date-label'>
+                  {new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </div>
+                {txns.map(t => (
+                  <div key={t.id} className='txn-row'>
+                    <span className='txn-icon'>{txnIcon(t.typeDesc)}</span>
+                    <span className='txn-desc'>{t.description}</span>
+                    {t.toTeam && (
+                      <span className='txn-team-logo'>
+                        {renderTeamLogo(t.toTeam.id, 16)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <p className='txn-empty'>No transactions found.</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderPowerRankings() {
+    const allTeams = getAllTeams();
+
+    const score = (t: TeamRecord) => {
+      const wpct = parseFloat(t.winningPercentage) || 0;
+      const rdNorm = Math.min(1, Math.max(-1, (t.runDifferential ?? 0) / 150));
+      const lastTenRecord = t.records?.overallRecords?.find(
+        r => r.type === 'lastTen'
+      );
+      const lastTenWpct = lastTenRecord
+        ? lastTenRecord.wins / (lastTenRecord.wins + lastTenRecord.losses || 1)
+        : wpct;
+      return wpct * 0.5 + ((rdNorm + 1) / 2) * 0.3 + lastTenWpct * 0.2;
+    };
+
+    const ranked = [...allTeams]
+      .map(t => ({ team: t, score: score(t) }))
+      .sort((a, b) => b.score - a.score);
+
+    const lastTenStr = (t: TeamRecord) => {
+      const r = t.records?.overallRecords?.find(r => r.type === 'lastTen');
+      return r ? `${r.wins}-${r.losses}` : '—';
+    };
+
+    const tierLabel = (i: number) => {
+      if (i < 5) return { label: 'Elite', cls: 'tier-elite' };
+      if (i < 12) return { label: 'Contender', cls: 'tier-contender' };
+      if (i < 20) return { label: 'Fringe', cls: 'tier-fringe' };
+      return { label: 'Rebuilding', cls: 'tier-rebuilding' };
+    };
+
+    return (
+      <div className='power-rankings-container'>
+        <h2 className='section-title'>Power Rankings</h2>
+        <p className='section-subtitle'>
+          Composite score: 50% win%, 30% run differential, 20% last-10
+        </p>
+
+        <div className='power-rankings-list'>
+          {ranked.map(({ team: t }, i) => {
+            const tier = tierLabel(i);
+            const rd = t.runDifferential ?? 0;
+            return (
+              <div key={t.team.id} className='pr-row'>
+                <span className='pr-rank'>{i + 1}</span>
+                <span className='pr-logo'>{renderTeamLogo(t.team.id, 28)}</span>
+                <span className='pr-name'>{t.team.name}</span>
+                <span className={`pr-tier ${tier.cls}`}>{tier.label}</span>
+                <span className='pr-record'>
+                  {t.wins}–{t.losses}
+                </span>
+                <span className='pr-last10'>{lastTenStr(t)}</span>
+                <span
+                  className={`pr-rd ${rd > 0 ? 'pr-rd-pos' : rd < 0 ? 'pr-rd-neg' : ''}`}
+                >
+                  {rd > 0 ? '+' : ''}
+                  {rd}
+                </span>
+                <div className='pr-bar-wrap'>
+                  <div
+                    className='pr-bar'
+                    style={{ width: `${Math.round(score(t) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  function renderTeamTrends() {
+    const allTeams = getAllTeams();
+
+    const byRunsScored = [...allTeams].sort(
+      (a, b) => (b.runsScored ?? 0) - (a.runsScored ?? 0)
+    );
+    const byRunsAllowed = [...allTeams].sort(
+      (a, b) => (a.runsAllowed ?? 0) - (b.runsAllowed ?? 0)
+    );
+    const byRunDiff = [...allTeams].sort(
+      (a, b) => (b.runDifferential ?? 0) - (a.runDifferential ?? 0)
+    );
+    const byWinPct = [...allTeams].sort(
+      (a, b) =>
+        parseFloat(b.winningPercentage) - parseFloat(a.winningPercentage)
+    );
+
+    const trendTable = (
+      title: string,
+      teams: TeamRecord[],
+      valueKey: keyof TeamRecord,
+      positive: boolean
+    ) => (
+      <Card className='trends-card'>
+        <h3 className='trends-card-title'>{title}</h3>
+        <div className='trends-list'>
+          {teams.slice(0, 10).map((t, i) => {
+            const val = t[valueKey] as number;
+            const max = Math.abs((teams[0][valueKey] as number) || 1);
+            const pct = Math.min(100, (Math.abs(val) / max) * 100);
+            return (
+              <div key={t.team.id} className='trends-row'>
+                <span className='trends-rank'>{i + 1}</span>
+                {renderTeamLogo(t.team.id, 18)}
+                <span className='trends-name'>
+                  {t.team.name.split(' ').pop()}
+                </span>
+                <div className='trends-bar-wrap'>
+                  <div
+                    className={`trends-bar ${positive ? 'trends-bar-pos' : 'trends-bar-neg'}`}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+                <span className='trends-value'>
+                  {valueKey === 'winningPercentage'
+                    ? `.${String(Math.round(parseFloat(String(val)) * 1000)).padStart(3, '0')}`
+                    : val > 0 && valueKey === 'runDifferential'
+                      ? `+${val}`
+                      : val}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+    );
+
+    return (
+      <div className='trends-container'>
+        <h2 className='section-title'>Team Trends</h2>
+        <p className='section-subtitle'>
+          League-wide team performance — {new Date().getFullYear()} season
+        </p>
+        <div className='trends-grid'>
+          {trendTable('Most Runs Scored', byRunsScored, 'runsScored', true)}
+          {trendTable(
+            'Fewest Runs Allowed',
+            byRunsAllowed,
+            'runsAllowed',
+            false
+          )}
+          {trendTable(
+            'Best Run Differential',
+            byRunDiff,
+            'runDifferential',
+            true
+          )}
+          {trendTable('Best Win %', byWinPct, 'winningPercentage', true)}
         </div>
       </div>
     );
