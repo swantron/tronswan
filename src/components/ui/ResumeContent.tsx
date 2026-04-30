@@ -313,16 +313,12 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                         <h3 className='skill-category'>{group.category}</h3>
                       )}
                       {group.items.map((item, ii) => (
-                        <div key={ii} className='skill-row'>
-                          <span className='skill-key'>{item.key}</span>
-                          <div className='skill-tags'>
-                            {item.values.map((v, vi) => (
-                              <span key={vi} className='skill-tag'>
-                                {v}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
+                        <p key={ii} className='skill-row'>
+                          <span className='skill-key'>{item.key}: </span>
+                          <span className='skill-values'>
+                            {item.values.join(', ')}
+                          </span>
+                        </p>
                       ))}
                     </div>
                   ))}

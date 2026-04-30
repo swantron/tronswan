@@ -140,32 +140,18 @@
 }
 
 .skill-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  margin: 0 0 0.3rem;
 }
 
 .skill-key {
-  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-secondary, #a1a1aa);
-}
-
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-}
-
-.skill-tag {
-  padding: 0.18rem 0.55rem;
-  background: rgba(16, 185, 129, 0.07);
-  border: 1px solid rgba(16, 185, 129, 0.18);
-  border-radius: 4px;
-  font-size: 0.72rem;
   color: var(--accent-color, #10b981);
-  font-weight: 500;
-  white-space: nowrap;
+}
+
+.skill-values {
+  color: var(--text-muted, #71717a);
 }
 
 /* Education */
