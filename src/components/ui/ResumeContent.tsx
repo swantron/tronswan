@@ -28,9 +28,38 @@ const flattenContactLines = (lines: string[]): string[] =>
   );
 
 type ExperienceJob = {
-  parts: string[]; // [title, company, location, dates]
+  parts: string[];
   bullets: string[];
 };
+
+type Project = {
+  name: string;
+  url: string | null;
+  description: string;
+};
+
+/** Parses "Name (url): description" or "Name: description" project lines */
+const parseProjects = (lines: string[]): Project[] =>
+  lines.map(line => {
+    const clean = stripBullet(line);
+    // "Name (url): description"
+    const withUrl = clean.match(/^(.+?)\s+\(([^)]+)\):\s+(.+)$/s);
+    if (withUrl) {
+      const urlRaw = withUrl[2].trim();
+      const url = urlRaw.startsWith('http') ? urlRaw : `https://${urlRaw}`;
+      return { name: withUrl[1].trim(), url, description: withUrl[3].trim() };
+    }
+    // "Name: description"
+    const simple = clean.match(/^([^:]{1,60}):\s+(.+)$/s);
+    if (simple) {
+      return {
+        name: simple[1].trim(),
+        url: null,
+        description: simple[2].trim(),
+      };
+    }
+    return { name: clean, url: null, description: '' };
+  });
 
 const parseJobs = (lines: string[]): ExperienceJob[] => {
   const jobs: ExperienceJob[] = [];
@@ -211,6 +240,7 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
     'Professional Experience',
     'Experience',
     'Education',
+    'Selected Projects',
     'Projects & Achievements',
     'Projects',
     'Certifications',
@@ -270,6 +300,14 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
   // Skills
   const skillGroups = parseSkillGroups(sections['Technical Skills'] ?? []);
+
+  // Projects
+  const projectLines =
+    sections['Selected Projects'] ??
+    sections['Projects & Achievements'] ??
+    sections['Projects'] ??
+    [];
+  const projects = parseProjects(projectLines);
 
   // Education
   const educationLines = sections['Education'] ?? [];
@@ -339,7 +377,11 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                       <div key={i} className='edu-entry'>
                         <div className='edu-degree'>{parts[0]}</div>
                         <div className='edu-institution'>{parts[1]}</div>
-                        {parts[2] && <div className='edu-year'>{parts[2]}</div>}
+                        {parts.slice(2).map((p, pi) => (
+                          <div key={pi} className='edu-detail'>
+                            {p}
+                          </div>
+                        ))}
                       </div>
                     );
                   }
@@ -383,7 +425,11 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                 {jobs.length > 0 ? (
                   <div className='experience-list'>
                     {jobs.map((job, ji) => {
-                      const [title, company, location, dates] = job.parts;
+                      const title = job.parts[0];
+                      const company = job.parts[1];
+                      const dates = job.parts[job.parts.length - 1];
+                      const location =
+                        job.parts.length >= 4 ? job.parts[2] : null;
                       return (
                         <article key={ji} className='job-card'>
                           <div className='job-header'>
@@ -393,7 +439,7 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                             </div>
                             <div className='job-meta'>
                               <span className='job-company'>{company}</span>
-                              {location && location !== dates && (
+                              {location && (
                                 <span className='job-location'>{location}</span>
                               )}
                             </div>
@@ -420,6 +466,34 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
                     ))}
                   </div>
                 )}
+              </section>
+            )}
+
+            {projects.length > 0 && (
+              <section className='resume-section'>
+                <h2 className='resume-section-title'>Selected Projects</h2>
+                <div className='projects-list'>
+                  {projects.map((p, pi) => (
+                    <div key={pi} className='project-card'>
+                      <div className='project-header'>
+                        <span className='project-name'>{p.name}</span>
+                        {p.url && (
+                          <a
+                            href={p.url}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='project-url'
+                          >
+                            {p.url.replace('https://', '')}
+                          </a>
+                        )}
+                      </div>
+                      {p.description && (
+                        <p className='project-desc'>{p.description}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </section>
             )}
           </main>
