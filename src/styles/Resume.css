@@ -506,29 +506,58 @@
     color: #333;
   }
 
+  /* Single-column flow: summary → experience → projects → skills → education */
   .resume-main-grid {
+    display: flex;
+    flex-direction: column;
     border-top-color: #ddd;
+    gap: 0;
+  }
+
+  .resume-body {
+    order: 1;
+    padding: 1rem 0 0;
   }
 
   .resume-sidebar {
-    border-right-color: #ddd;
+    order: 2;
+    border-right: none;
+    border-top: 1px solid #ddd;
+    padding: 1rem 0 0;
+  }
+
+  .job-card {
+    border-left-color: #2d6a4f;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .project-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .resume-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .job-card {
     border-left-color: #2d6a4f;
   }
 
-  .skill-tag {
-    border-color: #ccc;
-    color: #2d6a4f;
-    background: #f0faf6;
-  }
-
   .summary-text,
   .job-bullet,
   .job-company,
-  .edu-institution {
+  .edu-institution,
+  .skill-values,
+  .project-desc {
     color: #444;
+  }
+
+  .skill-key,
+  .project-url {
+    color: #2d6a4f;
   }
 
   .resume-footer,
