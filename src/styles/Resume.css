@@ -467,6 +467,15 @@
 /* ── Print ───────────────────────────────────────────────────────────────── */
 
 @media print {
+  @page {
+    margin: 0.75in;
+  }
+
+  .main-nav,
+  .nav-link {
+    display: none !important;
+  }
+
   .resume-container {
     padding: 0;
     background: #fff;
