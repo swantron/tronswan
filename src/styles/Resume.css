@@ -468,12 +468,17 @@
 
 @media print {
   @page {
-    margin: 0.75in;
+    size: auto;
+    margin: 0mm;
   }
 
   .main-nav,
   .nav-link {
     display: none !important;
+  }
+
+  body {
+    padding: 0.6in 0.75in;
   }
 
   .resume-container {
