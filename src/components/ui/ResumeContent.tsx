@@ -518,7 +518,8 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
             <button
               onClick={() => window.print()}
               className='resume-print-btn'
-              aria-label='Print resume'
+              aria-label='Print resume — uncheck Headers and footers in the print dialog for a clean PDF'
+              title='Tip: uncheck "Headers and footers" in the print dialog to hide page numbers and URL'
             >
               Print / Save PDF
             </button>
