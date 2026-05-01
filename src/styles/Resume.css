@@ -79,18 +79,6 @@
   margin-top: 1rem;
 }
 
-/* Main body is first in DOM but sits in column 2 visually */
-.resume-body {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-/* Sidebar is second in DOM but sits in column 1 visually */
-.resume-sidebar {
-  grid-column: 1;
-  grid-row: 1;
-}
-
 /* ── Section common ──────────────────────────────────────────────────────── */
 
 .resume-section {
@@ -489,10 +477,6 @@
     display: none !important;
   }
 
-  body {
-    padding: 0.6in 0.75in;
-  }
-
   .resume-container {
     padding: 0;
     background: #fff;
@@ -518,9 +502,8 @@
     color: #333;
   }
 
-  /* Single-column: DOM order is body-first, sidebar-second */
   .resume-main-grid {
-    display: block;
+    display: block !important;
     border-top-color: #ddd;
   }
 

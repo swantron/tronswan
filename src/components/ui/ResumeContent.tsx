@@ -339,7 +339,73 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
 
         {/* ── Two-column body ─────────────────────────────────────────────── */}
         <div className='resume-main-grid'>
-          {/* Main column — comes first in DOM so print flows correctly */}
+          {/* Sidebar — first in DOM; CSS grid places it in column 1 visually */}
+          <aside className='resume-sidebar'>
+            {skillGroups.length > 0 && (
+              <section className='resume-section' data-testid='resume-skills'>
+                <h2 className='resume-section-title'>Technical Skills</h2>
+                <div className='skills-container'>
+                  {skillGroups.map((group, gi) => (
+                    <div key={gi} className='skill-group'>
+                      {group.category && (
+                        <h3 className='skill-category'>{group.category}</h3>
+                      )}
+                      {group.items.map((item, ii) => (
+                        <p key={ii} className='skill-row'>
+                          <span className='skill-key'>{item.key}: </span>
+                          <span className='skill-values'>
+                            {item.values.join(', ')}
+                          </span>
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {educationLines.length > 0 && (
+              <section
+                className='resume-section'
+                data-testid='resume-education'
+              >
+                <h2 className='resume-section-title'>Education</h2>
+                {educationLines.map((line, i) => {
+                  if (line.includes('|')) {
+                    const parts = line.split('|').map(p => p.trim());
+                    return (
+                      <div key={i} className='edu-entry'>
+                        <div className='edu-degree'>{parts[0]}</div>
+                        <div className='edu-institution'>{parts[1]}</div>
+                        {parts.slice(2).map((p, pi) => (
+                          <div key={pi} className='edu-detail'>
+                            {p}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  if (line.includes(':')) {
+                    const idx = line.indexOf(':');
+                    const k = line.slice(0, idx).trim();
+                    const v = line.slice(idx + 1).trim();
+                    return (
+                      <p key={i} className='edu-detail'>
+                        <span className='edu-detail-key'>{k}:</span> {v}
+                      </p>
+                    );
+                  }
+                  return (
+                    <p key={i} className='edu-detail'>
+                      {line}
+                    </p>
+                  );
+                })}
+              </section>
+            )}
+          </aside>
+
+          {/* Main column — second in DOM; CSS grid places it in column 2 visually */}
           <main className='resume-body'>
             {summaryBody && (
               <section className='resume-section' data-testid='resume-summary'>
@@ -431,72 +497,6 @@ const ResumeContent: React.FC<ResumeContentProps> = ({
               </section>
             )}
           </main>
-
-          {/* Sidebar — after main in DOM so print flows body-first */}
-          <aside className='resume-sidebar'>
-            {skillGroups.length > 0 && (
-              <section className='resume-section' data-testid='resume-skills'>
-                <h2 className='resume-section-title'>Technical Skills</h2>
-                <div className='skills-container'>
-                  {skillGroups.map((group, gi) => (
-                    <div key={gi} className='skill-group'>
-                      {group.category && (
-                        <h3 className='skill-category'>{group.category}</h3>
-                      )}
-                      {group.items.map((item, ii) => (
-                        <p key={ii} className='skill-row'>
-                          <span className='skill-key'>{item.key}: </span>
-                          <span className='skill-values'>
-                            {item.values.join(', ')}
-                          </span>
-                        </p>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {educationLines.length > 0 && (
-              <section
-                className='resume-section'
-                data-testid='resume-education'
-              >
-                <h2 className='resume-section-title'>Education</h2>
-                {educationLines.map((line, i) => {
-                  if (line.includes('|')) {
-                    const parts = line.split('|').map(p => p.trim());
-                    return (
-                      <div key={i} className='edu-entry'>
-                        <div className='edu-degree'>{parts[0]}</div>
-                        <div className='edu-institution'>{parts[1]}</div>
-                        {parts.slice(2).map((p, pi) => (
-                          <div key={pi} className='edu-detail'>
-                            {p}
-                          </div>
-                        ))}
-                      </div>
-                    );
-                  }
-                  if (line.includes(':')) {
-                    const idx = line.indexOf(':');
-                    const k = line.slice(0, idx).trim();
-                    const v = line.slice(idx + 1).trim();
-                    return (
-                      <p key={i} className='edu-detail'>
-                        <span className='edu-detail-key'>{k}:</span> {v}
-                      </p>
-                    );
-                  }
-                  return (
-                    <p key={i} className='edu-detail'>
-                      {line}
-                    </p>
-                  );
-                })}
-              </section>
-            )}
-          </aside>
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────────────── */}
