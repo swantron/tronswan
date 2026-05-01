@@ -477,10 +477,21 @@
     display: none !important;
   }
 
+  body,
+  .App,
+  .App-container,
+  .App-header {
+    background: #fff !important;
+    background-color: #fff !important;
+    text-align: left !important;
+    color: #111;
+  }
+
   .resume-container {
     padding: 0;
     background: #fff;
     color: #111;
+    text-align: left;
   }
 
   .resume-name {
