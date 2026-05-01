@@ -472,6 +472,18 @@
     margin: 0.4in 0.5in;
   }
 
+  /* Override CSS variables so every element using them gets print-safe colors */
+  :root {
+    --text-primary: #111;
+    --text-secondary: #444;
+    --text-muted: #666;
+    --accent-color: #2d6a4f;
+    --bg-dark: #fff;
+    --glass-bg: #fff;
+    --bg-card: #fff;
+    --glass-border: 1px solid #eee;
+  }
+
   .main-nav,
   .nav-link {
     display: none !important;
@@ -494,17 +506,11 @@
     text-align: left;
   }
 
+  /* Name gradient → plain dark text */
   .resume-name {
     background: none;
     -webkit-text-fill-color: #111;
     color: #111;
-  }
-
-  .resume-tagline,
-  .resume-section-title,
-  .bullet-label,
-  .job-dates {
-    color: #2d6a4f;
   }
 
   .resume-contact-link,
@@ -542,24 +548,6 @@
   .resume-section {
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  .job-card {
-    border-left-color: #2d6a4f;
-  }
-
-  .summary-text,
-  .job-bullet,
-  .job-company,
-  .edu-institution,
-  .skill-values,
-  .project-desc {
-    color: #444;
-  }
-
-  .skill-key,
-  .project-url {
-    color: #2d6a4f;
   }
 
   .resume-footer,
