@@ -242,6 +242,7 @@ interface ArsenalPitcher {
   id: number;
   fullName: string;
   teamName: string;
+  teamId: number;
 }
 
 interface GameRecap {
@@ -331,6 +332,10 @@ function MLB() {
   const [arsenalTeamSearch, setArsenalTeamSearch] = useState('');
   const [recapsTeamFilter, setRecapsTeamFilter] = useState<number | null>(null);
   const [recapsTeamSearch, setRecapsTeamSearch] = useState('');
+  const [playerStatsTeamFilter, setPlayerStatsTeamFilter] = useState<number | null>(null);
+  const [playerStatsTeamSearch, setPlayerStatsTeamSearch] = useState('');
+  const [txnTeamFilter, setTxnTeamFilter] = useState<number | null>(null);
+  const [txnTeamSearch, setTxnTeamSearch] = useState('');
 
   // Boxscore state
   const [boxscoreGamePk, setBoxscoreGamePk] = useState<number | null>(null);
@@ -706,11 +711,12 @@ function MLB() {
       const splits = data.stats?.[0]?.splits ?? [];
       const pitchers: ArsenalPitcher[] = splits.map((s: {
         player: { id: number; fullName: string };
-        team: { name: string };
+        team: { id: number; name: string };
       }) => ({
         id: s.player.id,
         fullName: s.player.fullName,
         teamName: s.team.name,
+        teamId: s.team.id,
       }));
       setArsenalPitchers(pitchers);
       if (pitchers.length > 0 && !arsenalPlayerId) {
@@ -2393,6 +2399,10 @@ function MLB() {
       return s;
     };
 
+    const visiblePlayerStats = playerStatsTeamFilter
+      ? playerStats.filter(row => row.team.id === playerStatsTeamFilter)
+      : playerStats;
+
     return (
       <div className='player-stats-container'>
         <h2 className='section-title'>Player Stats</h2>
@@ -2425,6 +2435,12 @@ function MLB() {
               Pitching
             </Button>
           </div>
+          {renderTeamFilter(
+            playerStatsTeamFilter,
+            playerStatsTeamSearch,
+            setPlayerStatsTeamFilter,
+            setPlayerStatsTeamSearch
+          )}
         </div>
 
         {loadingPlayerStats ? (
@@ -2432,6 +2448,12 @@ function MLB() {
         ) : playerStatsError ? (
           <Card className='error-card'>
             <div className='error-message'>{playerStatsError}</div>
+          </Card>
+        ) : visiblePlayerStats.length === 0 && playerStatsTeamFilter ? (
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              No qualified players found for this team.
+            </p>
           </Card>
         ) : (
           <div className='player-stats-table-wrap'>
@@ -2461,7 +2483,7 @@ function MLB() {
                 </tr>
               </thead>
               <tbody>
-                {playerStats.map((row, i) => (
+                {visiblePlayerStats.map((row, i) => (
                   <tr key={row.player.id} className='ps-row'>
                     <td className='ps-rank'>{i + 1}</td>
                     <td className='ps-player'>
@@ -2518,10 +2540,18 @@ function MLB() {
       'Signed as Free Agent',
     ];
 
-    const filtered =
+    const typeFiltered =
       txnTypeFilter === 'all'
         ? transactions
         : transactions.filter(t => t.typeDesc === txnTypeFilter);
+
+    const filtered = txnTeamFilter
+      ? typeFiltered.filter(
+          t =>
+            t.fromTeam?.id === txnTeamFilter ||
+            t.toTeam?.id === txnTeamFilter
+        )
+      : typeFiltered;
 
     const txnIcon = (typeDesc: string) => {
       if (typeDesc === 'Status Change') return '🏥';
@@ -2558,6 +2588,12 @@ function MLB() {
               {typeLabels[type] ?? type}
             </Button>
           ))}
+          {renderTeamFilter(
+            txnTeamFilter,
+            txnTeamSearch,
+            setTxnTeamFilter,
+            setTxnTeamSearch
+          )}
         </div>
 
         {loadingTransactions ? (
@@ -2565,6 +2601,12 @@ function MLB() {
         ) : transactionsError ? (
           <Card className='error-card'>
             <div className='error-message'>{transactionsError}</div>
+          </Card>
+        ) : filtered.length === 0 ? (
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              {txnTeamFilter ? 'No transactions found for this team.' : 'No transactions found.'}
+            </p>
           </Card>
         ) : (
           <div className='txn-list'>
@@ -2998,12 +3040,8 @@ function MLB() {
       KN: '#a1a1aa', // Knuckleball: gray
     };
 
-    const selectedTeamName = arsenalTeamFilter != null
-      ? (getAllTeams().find(t => t.team.id === arsenalTeamFilter)?.team.name ?? '')
-      : '';
-
     const visiblePitchers = arsenalTeamFilter
-      ? arsenalPitchers.filter(p => p.teamName === selectedTeamName)
+      ? arsenalPitchers.filter(p => p.teamId === arsenalTeamFilter)
       : arsenalPitchers;
 
     return (
@@ -3036,14 +3074,7 @@ function MLB() {
                   setArsenalPlayerName(p.fullName);
                 }}
               >
-                {renderTeamLogo(
-                  // find team id from standings
-                  (() => {
-                    const team = getAllTeams().find(t => t.team.name === p.teamName);
-                    return team?.team.id ?? 0;
-                  })(),
-                  14
-                )}
+                {renderTeamLogo(p.teamId, 14)}
                 <span>{p.fullName.split(' ').pop()}</span>
               </button>
             ))}
