@@ -1816,6 +1816,13 @@
   gap: 1.5rem;
 }
 
+.recaps-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .recaps-date-picker {
   display: flex;
   gap: 0.5rem;

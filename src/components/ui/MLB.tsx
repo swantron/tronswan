@@ -324,6 +324,14 @@ function MLB() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   });
 
+  // Team filter state for views that support it
+  const [boxscoreTeamFilter, setBoxscoreTeamFilter] = useState<number | null>(null);
+  const [boxscoreTeamSearch, setBoxscoreTeamSearch] = useState('');
+  const [arsenalTeamFilter, setArsenalTeamFilter] = useState<number | null>(null);
+  const [arsenalTeamSearch, setArsenalTeamSearch] = useState('');
+  const [recapsTeamFilter, setRecapsTeamFilter] = useState<number | null>(null);
+  const [recapsTeamSearch, setRecapsTeamSearch] = useState('');
+
   // Boxscore state
   const [boxscoreGamePk, setBoxscoreGamePk] = useState<number | null>(null);
   const [boxscoreData, setBoxscoreData] = useState<BoxscoreData | null>(null);
@@ -2745,6 +2753,76 @@ function MLB() {
       </div>
     );
   }
+  function renderTeamFilter(
+    teamFilter: number | null,
+    teamSearch: string,
+    onFilter: (id: number | null) => void,
+    onSearch: (s: string) => void
+  ) {
+    const allTeams = getAllTeams()
+      .map(t => t.team)
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const selectedTeamName = teamFilter != null
+      ? (allTeams.find(t => t.id === teamFilter)?.name ?? '')
+      : '';
+
+    return (
+      <div className='leaders-team-search'>
+        {teamFilter != null ? (
+          <div className='leaders-team-chip'>
+            {renderTeamLogo(teamFilter, 16)}
+            <span>{selectedTeamName}</span>
+            <button
+              className='leaders-team-chip-clear'
+              onClick={() => { onFilter(null); onSearch(''); }}
+              aria-label='Clear team filter'
+            >
+              ×
+            </button>
+          </div>
+        ) : (
+          <>
+            <input
+              className='leaders-team-input'
+              type='text'
+              placeholder='Filter by team…'
+              value={teamSearch}
+              onChange={e => onSearch(e.target.value)}
+            />
+            {teamSearch.trim().length > 0 && (
+              <ul className='leaders-team-suggestions'>
+                {allTeams
+                  .filter(t =>
+                    t.name.toLowerCase().includes(teamSearch.toLowerCase().trim())
+                  )
+                  .map(t => (
+                    <li
+                      key={t.id}
+                      role='option'
+                      aria-selected={teamFilter === t.id}
+                      className='leaders-team-suggestion'
+                      onClick={() => { onFilter(t.id); onSearch(''); }}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          onFilter(t.id);
+                          onSearch('');
+                        }
+                      }}
+                      tabIndex={0}
+                    >
+                      {renderTeamLogo(t.id, 16)}
+                      {t.name}
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </>
+        )}
+      </div>
+    );
+  }
+
   function renderBoxscore() {
     const todayStr = localDateStr(0);
     const games = scheduleByDate[todayStr] ?? scheduleByDate[localDateStr(-1)] ?? [];
@@ -2835,18 +2913,38 @@ function MLB() {
       );
     };
 
+    const visibleGames = boxscoreTeamFilter
+      ? selectable.filter(
+          g =>
+            g.teams.away.team.id === boxscoreTeamFilter ||
+            g.teams.home.team.id === boxscoreTeamFilter
+        )
+      : selectable;
+
     return (
       <div className='boxscore-container'>
         <h2 className='section-title'>Boxscore</h2>
-        <p className='section-subtitle'>Select a game to view the full batting and pitching lines</p>
+        <div className='leaders-controls'>
+          <p className='section-subtitle' style={{ margin: 0 }}>
+            Select a game to view the full batting and pitching lines
+          </p>
+          {renderTeamFilter(
+            boxscoreTeamFilter,
+            boxscoreTeamSearch,
+            id => { setBoxscoreTeamFilter(id); setBoxscoreGamePk(null); setBoxscoreData(null); },
+            setBoxscoreTeamSearch
+          )}
+        </div>
 
         {loadingSchedule ? (
           <div className='loading-spinner' aria-label='Loading games' />
-        ) : selectable.length === 0 ? (
-          <Card><p className='section-subtitle' style={{ margin: 0 }}>No completed games today.</p></Card>
+        ) : visibleGames.length === 0 ? (
+          <Card><p className='section-subtitle' style={{ margin: 0 }}>
+            {boxscoreTeamFilter ? 'No games found for this team today.' : 'No completed games today.'}
+          </p></Card>
         ) : (
           <div className='boxscore-game-picker'>
-            {selectable.map(g => {
+            {visibleGames.map(g => {
               const isSelected = g.gamePk === boxscoreGamePk;
               const away = g.teams.away;
               const home = g.teams.home;
@@ -2900,18 +2998,36 @@ function MLB() {
       KN: '#a1a1aa', // Knuckleball: gray
     };
 
+    const selectedTeamName = arsenalTeamFilter != null
+      ? (getAllTeams().find(t => t.team.id === arsenalTeamFilter)?.team.name ?? '')
+      : '';
+
+    const visiblePitchers = arsenalTeamFilter
+      ? arsenalPitchers.filter(p => p.teamName === selectedTeamName)
+      : arsenalPitchers;
+
     return (
       <div className='arsenal-container'>
         <h2 className='section-title'>Pitch Arsenal</h2>
-        <p className='section-subtitle'>
-          Pitch mix, usage rate, and average velocity for qualified starters
-        </p>
+        <div className='leaders-controls'>
+          <p className='section-subtitle' style={{ margin: 0 }}>
+            Pitch mix, usage rate, and average velocity for qualified starters
+          </p>
+          {renderTeamFilter(
+            arsenalTeamFilter,
+            arsenalTeamSearch,
+            id => { setArsenalTeamFilter(id); setArsenalPlayerId(null); setArsenalData([]); },
+            setArsenalTeamSearch
+          )}
+        </div>
 
         {loadingArsenalPitchers ? (
           <div className='loading-spinner' aria-label='Loading pitchers' />
+        ) : visiblePitchers.length === 0 && arsenalTeamFilter ? (
+          <Card><p className='section-subtitle' style={{ margin: 0 }}>No qualified pitchers found for this team.</p></Card>
         ) : (
           <div className='arsenal-pitcher-grid'>
-            {arsenalPitchers.map(p => (
+            {visiblePitchers.map(p => (
               <button
                 key={p.id}
                 className={`arsenal-pitcher-chip ${arsenalPlayerId === p.id ? 'selected' : ''}`}
@@ -2985,10 +3101,19 @@ function MLB() {
     const todayStr = localDateStr(0);
     const yesterdayStr = localDateStr(-1);
 
+    const visibleRecaps = recapsTeamFilter
+      ? recaps.filter(
+          r =>
+            r.awayTeamId === recapsTeamFilter ||
+            r.homeTeamId === recapsTeamFilter
+        )
+      : recaps;
+
     return (
       <div className='recaps-container'>
         <h2 className='section-title'>Game Recaps</h2>
-        <div className='recaps-date-picker'>
+        <div className='recaps-controls'>
+          <div className='recaps-date-picker'>
           <button
             className={`recaps-date-btn ${recapsDate === yesterdayStr ? 'active' : ''}`}
             onClick={() => setRecapsDate(yesterdayStr)}
@@ -3001,17 +3126,26 @@ function MLB() {
           >
             Today
           </button>
+          </div>
+          {renderTeamFilter(
+            recapsTeamFilter,
+            recapsTeamSearch,
+            setRecapsTeamFilter,
+            setRecapsTeamSearch
+          )}
         </div>
 
         {loadingRecaps ? (
           <div className='loading-spinner' aria-label='Loading recaps' />
         ) : recapsError ? (
           <Card className='error-card'><div className='error-message'>{recapsError}</div></Card>
-        ) : recaps.length === 0 ? (
-          <Card><p className='section-subtitle' style={{ margin: 0 }}>No recaps available for this date.</p></Card>
+        ) : visibleRecaps.length === 0 ? (
+          <Card><p className='section-subtitle' style={{ margin: 0 }}>
+            {recapsTeamFilter ? 'No recaps found for this team.' : 'No recaps available for this date.'}
+          </p></Card>
         ) : (
           <div className='recaps-grid'>
-            {recaps.map(recap => (
+            {visibleRecaps.map(recap => (
               <Card key={recap.gamePk} className='recap-card'>
                 {recap.imageUrl && (
                   <div className='recap-img-wrap'>
