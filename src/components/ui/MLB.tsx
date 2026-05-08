@@ -191,6 +191,72 @@ interface Transaction {
   toTeam?: { id: number; name: string };
 }
 
+interface BoxscoreBatter {
+  personId: number;
+  fullName: string;
+  position: string;
+  ab: number;
+  r: number;
+  h: number;
+  rbi: number;
+  bb: number;
+  k: number;
+  lob: number;
+  avg: string;
+}
+
+interface BoxscorePitcher {
+  personId: number;
+  fullName: string;
+  ip: string;
+  h: number;
+  r: number;
+  er: number;
+  bb: number;
+  k: number;
+  era: string;
+  note: string;
+}
+
+interface BoxscoreTeamData {
+  team: { id: number; name: string };
+  batters: BoxscoreBatter[];
+  pitchers: BoxscorePitcher[];
+  totals: { ab: number; r: number; h: number; rbi: number; bb: number; k: number; lob: number };
+}
+
+interface BoxscoreData {
+  away: BoxscoreTeamData;
+  home: BoxscoreTeamData;
+}
+
+interface PitchArsenalEntry {
+  code: string;
+  description: string;
+  percentage: number;
+  averageSpeed: number;
+  count: number;
+}
+
+interface ArsenalPitcher {
+  id: number;
+  fullName: string;
+  teamName: string;
+}
+
+interface GameRecap {
+  gamePk: number;
+  awayTeam: string;
+  awayTeamId: number;
+  homeTeam: string;
+  homeTeamId: number;
+  awayScore: number;
+  homeScore: number;
+  headline: string;
+  blurb: string;
+  imageUrl: string;
+}
+
 function MLB() {
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
@@ -217,6 +283,9 @@ function MLB() {
     | 'transactions'
     | 'powerRankings'
     | 'trends'
+    | 'boxscore'
+    | 'arsenal'
+    | 'recaps'
   >('standings');
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
 
@@ -252,6 +321,31 @@ function MLB() {
   const [txnTypeFilter, setTxnTypeFilter] = useState<string>('all');
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  });
+
+  // Boxscore state
+  const [boxscoreGamePk, setBoxscoreGamePk] = useState<number | null>(null);
+  const [boxscoreData, setBoxscoreData] = useState<BoxscoreData | null>(null);
+  const [loadingBoxscore, setLoadingBoxscore] = useState(false);
+  const [boxscoreError, setBoxscoreError] = useState('');
+
+  // Pitch Arsenal state
+  const [arsenalPitchers, setArsenalPitchers] = useState<ArsenalPitcher[]>([]);
+  const [loadingArsenalPitchers, setLoadingArsenalPitchers] = useState(false);
+  const [arsenalPlayerId, setArsenalPlayerId] = useState<number | null>(null);
+  const [arsenalPlayerName, setArsenalPlayerName] = useState('');
+  const [arsenalData, setArsenalData] = useState<PitchArsenalEntry[]>([]);
+  const [loadingArsenal, setLoadingArsenal] = useState(false);
+  const [arsenalError, setArsenalError] = useState('');
+
+  // Game Recaps state
+  const [recaps, setRecaps] = useState<GameRecap[]>([]);
+  const [loadingRecaps, setLoadingRecaps] = useState(false);
+  const [recapsError, setRecapsError] = useState('');
+  const [recapsDate, setRecapsDate] = useState<string>(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   });
 
@@ -496,6 +590,227 @@ function MLB() {
     if (transactions.length > 0) return;
     fetchTransactions();
   }, [viewMode, transactions.length]);
+
+  const fetchBoxscore = async (gamePk: number) => {
+    setLoadingBoxscore(true);
+    setBoxscoreError('');
+    setBoxscoreData(null);
+    try {
+      const response = await fetch(`https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`);
+      if (!response.ok) throw new Error('Failed to fetch boxscore');
+      const raw = await response.json();
+
+      const parseTeam = (side: 'away' | 'home'): BoxscoreTeamData => {
+        const t = raw.teams[side];
+        const players = t.players as Record<string, {
+          person: { id: number; fullName: string };
+          position?: { abbreviation: string };
+          stats: {
+            batting?: Record<string, number | string>;
+            pitching?: Record<string, number | string>;
+          };
+          gameStatus?: { isOnBench?: boolean };
+          battingOrder?: string;
+          pitchingNotes?: string;
+        }>;
+
+        const batterIds: number[] = t.batters ?? [];
+        const pitcherIds: number[] = t.pitchers ?? [];
+
+        const batters: BoxscoreBatter[] = batterIds
+          .map(id => players[`ID${id}`])
+          .filter(p => p && p.stats?.batting && !p.gameStatus?.isOnBench)
+          .map(p => {
+            const s = p.stats.batting!;
+            return {
+              personId: p.person.id,
+              fullName: p.person.fullName,
+              position: p.position?.abbreviation ?? '—',
+              ab: Number(s.atBats ?? 0),
+              r: Number(s.runs ?? 0),
+              h: Number(s.hits ?? 0),
+              rbi: Number(s.rbi ?? 0),
+              bb: Number(s.baseOnBalls ?? 0),
+              k: Number(s.strikeOuts ?? 0),
+              lob: Number(s.leftOnBase ?? 0),
+              avg: String(s.avg ?? '.000'),
+            };
+          });
+
+        const pitchers: BoxscorePitcher[] = pitcherIds
+          .map(id => players[`ID${id}`])
+          .filter(p => p && p.stats?.pitching)
+          .map(p => {
+            const s = p.stats.pitching!;
+            return {
+              personId: p.person.id,
+              fullName: p.person.fullName,
+              ip: String(s.inningsPitched ?? '0.0'),
+              h: Number(s.hits ?? 0),
+              r: Number(s.runs ?? 0),
+              er: Number(s.earnedRuns ?? 0),
+              bb: Number(s.baseOnBalls ?? 0),
+              k: Number(s.strikeOuts ?? 0),
+              era: String(s.era ?? '-.--'),
+              note: p.pitchingNotes ?? '',
+            };
+          });
+
+        const ts = t.teamStats?.batting ?? {};
+        return {
+          team: { id: t.team.id, name: t.team.name },
+          batters,
+          pitchers,
+          totals: {
+            ab: Number(ts.atBats ?? 0),
+            r: Number(ts.runs ?? 0),
+            h: Number(ts.hits ?? 0),
+            rbi: Number(ts.rbi ?? 0),
+            bb: Number(ts.baseOnBalls ?? 0),
+            k: Number(ts.strikeOuts ?? 0),
+            lob: Number(ts.leftOnBase ?? 0),
+          },
+        };
+      };
+
+      setBoxscoreData({ away: parseTeam('away'), home: parseTeam('home') });
+    } catch (error) {
+      setBoxscoreError(error instanceof Error ? error.message : 'Failed to fetch boxscore');
+    } finally {
+      setLoadingBoxscore(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'boxscore') return;
+    // Reuse schedule data; fetch if not loaded
+    if (Object.keys(scheduleByDate).length === 0) fetchSchedule();
+  }, [viewMode]);
+
+  const fetchArsenalPitchers = async () => {
+    setLoadingArsenalPitchers(true);
+    try {
+      const season = new Date().getFullYear();
+      const url = `https://statsapi.mlb.com/api/v1/stats?stats=season&group=pitching&sportId=1&season=${season}&playerPool=Qualified&limit=40&sortStat=strikeOuts&order=desc`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch pitchers');
+      const data = await response.json();
+      const splits = data.stats?.[0]?.splits ?? [];
+      const pitchers: ArsenalPitcher[] = splits.map((s: {
+        player: { id: number; fullName: string };
+        team: { name: string };
+      }) => ({
+        id: s.player.id,
+        fullName: s.player.fullName,
+        teamName: s.team.name,
+      }));
+      setArsenalPitchers(pitchers);
+      if (pitchers.length > 0 && !arsenalPlayerId) {
+        setArsenalPlayerId(pitchers[0].id);
+        setArsenalPlayerName(pitchers[0].fullName);
+      }
+    } catch {
+      // silently fail — UI will show empty list
+    } finally {
+      setLoadingArsenalPitchers(false);
+    }
+  };
+
+  const fetchArsenal = async (playerId: number) => {
+    setLoadingArsenal(true);
+    setArsenalError('');
+    setArsenalData([]);
+    try {
+      const season = new Date().getFullYear();
+      const url = `https://statsapi.mlb.com/api/v1/people/${playerId}/stats?stats=pitchArsenal&season=${season}&group=pitching`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch arsenal');
+      const data = await response.json();
+      const splits = data.stats?.[0]?.splits ?? [];
+      const entries: PitchArsenalEntry[] = splits.map((s: {
+        stat: {
+          type: { code: string; description: string };
+          percentage: number;
+          averageSpeed: number;
+          count: number;
+        };
+      }) => ({
+        code: s.stat.type.code,
+        description: s.stat.type.description,
+        percentage: s.stat.percentage,
+        averageSpeed: s.stat.averageSpeed,
+        count: s.stat.count,
+      })).sort((a: PitchArsenalEntry, b: PitchArsenalEntry) => b.percentage - a.percentage);
+      setArsenalData(entries);
+    } catch (error) {
+      setArsenalError(error instanceof Error ? error.message : 'Failed to fetch arsenal');
+    } finally {
+      setLoadingArsenal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'arsenal') return;
+    if (arsenalPitchers.length === 0) fetchArsenalPitchers();
+  }, [viewMode]);
+
+  useEffect(() => {
+    if (viewMode !== 'arsenal' || !arsenalPlayerId) return;
+    fetchArsenal(arsenalPlayerId);
+  }, [viewMode, arsenalPlayerId]);
+
+  const fetchRecaps = async (date: string) => {
+    setLoadingRecaps(true);
+    setRecapsError('');
+    setRecaps([]);
+    try {
+      const schedRes = await fetch(
+        `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}&hydrate=linescore`
+      );
+      if (!schedRes.ok) throw new Error('Failed to fetch schedule');
+      const schedData: ScheduleData = await schedRes.json();
+      const games = schedData.dates?.[0]?.games ?? [];
+      const finished = games.filter(g => g.status.abstractGameState === 'Final');
+
+      const results = await Promise.all(
+        finished.map(async g => {
+          try {
+            const contentRes = await fetch(`https://statsapi.mlb.com/api/v1/game/${g.gamePk}/content`);
+            if (!contentRes.ok) return null;
+            const content = await contentRes.json();
+            const recap = content?.editorial?.recap?.mlb;
+            if (!recap) return null;
+            const cuts = recap.image?.cuts ?? [];
+            const img = (cuts.find((c: { width: number; src: string }) => c.width === 640) ?? cuts[0])?.src ?? '';
+            return {
+              gamePk: g.gamePk,
+              awayTeam: g.teams.away.team.name,
+              awayTeamId: g.teams.away.team.id,
+              homeTeam: g.teams.home.team.name,
+              homeTeamId: g.teams.home.team.id,
+              awayScore: g.teams.away.score ?? 0,
+              homeScore: g.teams.home.score ?? 0,
+              headline: recap.headline ?? '',
+              blurb: recap.blurb ?? '',
+              imageUrl: img,
+            } as GameRecap;
+          } catch {
+            return null;
+          }
+        })
+      );
+      setRecaps(results.filter((r): r is GameRecap => r !== null));
+    } catch (error) {
+      setRecapsError(error instanceof Error ? error.message : 'Failed to fetch recaps');
+    } finally {
+      setLoadingRecaps(false);
+    }
+  };
+
+  useEffect(() => {
+    if (viewMode !== 'recaps') return;
+    fetchRecaps(recapsDate);
+  }, [viewMode, recapsDate]);
 
   const filteredStandings = standings.filter(division => {
     if (selectedLeague === 'all') return true;
@@ -781,6 +1096,51 @@ function MLB() {
           >
             Team Trends
           </Button>
+          <Button
+            variant={viewMode === 'boxscore' ? 'primary' : 'ghost'}
+            className={viewMode === 'boxscore' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'boxscore',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('boxscore');
+            }}
+            disabled={loading}
+          >
+            Boxscore
+          </Button>
+          <Button
+            variant={viewMode === 'arsenal' ? 'primary' : 'ghost'}
+            className={viewMode === 'arsenal' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'arsenal',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('arsenal');
+            }}
+            disabled={loading}
+          >
+            Pitch Arsenal
+          </Button>
+          <Button
+            variant={viewMode === 'recaps' ? 'primary' : 'ghost'}
+            className={viewMode === 'recaps' ? 'active' : ''}
+            onClick={() => {
+              logger.info('View mode changed', {
+                from: viewMode,
+                to: 'recaps',
+                timestamp: new Date().toISOString(),
+              });
+              setViewMode('recaps');
+            }}
+            disabled={loading}
+          >
+            Game Recaps
+          </Button>
         </div>
 
         {/* League Filter (only for standings view) */}
@@ -856,6 +1216,9 @@ function MLB() {
             {viewMode === 'transactions' && renderTransactions()}
             {viewMode === 'powerRankings' && renderPowerRankings()}
             {viewMode === 'trends' && renderTeamTrends()}
+            {viewMode === 'boxscore' && renderBoxscore()}
+            {viewMode === 'arsenal' && renderPitchArsenal()}
+            {viewMode === 'recaps' && renderGameRecaps()}
           </>
         )}
 
@@ -2379,6 +2742,302 @@ function MLB() {
           )}
           {trendTable('Best Win %', byWinPct, 'winningPercentage', true)}
         </div>
+      </div>
+    );
+  }
+  function renderBoxscore() {
+    const todayStr = localDateStr(0);
+    const games = scheduleByDate[todayStr] ?? scheduleByDate[localDateStr(-1)] ?? [];
+    const finished = games.filter(g => g.status.abstractGameState === 'Final');
+    const inProgress = games.filter(g => g.status.abstractGameState === 'Live');
+    const selectable = [...inProgress, ...finished];
+
+    const BatterRow = ({ b, isTotal = false }: { b: BoxscoreBatter; isTotal?: boolean }) => (
+      <tr className={isTotal ? 'boxscore-totals-row' : 'boxscore-batter-row'}>
+        <td className='bs-player'>{isTotal ? 'Totals' : `${b.fullName} ${b.position}`}</td>
+        <td>{b.ab}</td>
+        <td>{b.r}</td>
+        <td>{b.h}</td>
+        <td>{b.rbi}</td>
+        <td>{b.bb}</td>
+        <td>{b.k}</td>
+        <td>{b.lob}</td>
+        {!isTotal && <td className='bs-avg'>{b.avg}</td>}
+        {isTotal && <td />}
+      </tr>
+    );
+
+    const PitcherRow = ({ p }: { p: BoxscorePitcher }) => (
+      <tr className='boxscore-pitcher-row'>
+        <td className='bs-player'>
+          {p.fullName}
+          {p.note && <span className='bs-pitcher-note'> {p.note}</span>}
+        </td>
+        <td>{p.ip}</td>
+        <td>{p.h}</td>
+        <td>{p.r}</td>
+        <td>{p.er}</td>
+        <td>{p.bb}</td>
+        <td>{p.k}</td>
+        <td className='bs-era'>{p.era}</td>
+      </tr>
+    );
+
+    const TeamBox = ({ side }: { side: 'away' | 'home' }) => {
+      const d = boxscoreData![side];
+      return (
+        <div className='boxscore-team-section'>
+          <div className='boxscore-team-header'>
+            {renderTeamLogo(d.team.id, 22)}
+            <span className='boxscore-team-name'>{d.team.name}</span>
+          </div>
+          <div className='boxscore-table-wrap'>
+            <table className='boxscore-table'>
+              <thead>
+                <tr>
+                  <th className='bs-player'>Batting</th>
+                  <th>AB</th>
+                  <th>R</th>
+                  <th>H</th>
+                  <th>RBI</th>
+                  <th>BB</th>
+                  <th>K</th>
+                  <th>LOB</th>
+                  <th>AVG</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.batters.map(b => <BatterRow key={b.personId} b={b} />)}
+                <BatterRow b={{ ...d.totals, personId: -1, fullName: '', position: '', avg: '' }} isTotal />
+              </tbody>
+            </table>
+          </div>
+          <div className='boxscore-table-wrap' style={{ marginTop: '1rem' }}>
+            <table className='boxscore-table'>
+              <thead>
+                <tr>
+                  <th className='bs-player'>Pitching</th>
+                  <th>IP</th>
+                  <th>H</th>
+                  <th>R</th>
+                  <th>ER</th>
+                  <th>BB</th>
+                  <th>K</th>
+                  <th>ERA</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.pitchers.map(p => <PitcherRow key={p.personId} p={p} />)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
+    return (
+      <div className='boxscore-container'>
+        <h2 className='section-title'>Boxscore</h2>
+        <p className='section-subtitle'>Select a game to view the full batting and pitching lines</p>
+
+        {loadingSchedule ? (
+          <div className='loading-spinner' aria-label='Loading games' />
+        ) : selectable.length === 0 ? (
+          <Card><p className='section-subtitle' style={{ margin: 0 }}>No completed games today.</p></Card>
+        ) : (
+          <div className='boxscore-game-picker'>
+            {selectable.map(g => {
+              const isSelected = g.gamePk === boxscoreGamePk;
+              const away = g.teams.away;
+              const home = g.teams.home;
+              return (
+                <button
+                  key={g.gamePk}
+                  className={`boxscore-game-chip ${isSelected ? 'selected' : ''}`}
+                  onClick={() => {
+                    setBoxscoreGamePk(g.gamePk);
+                    fetchBoxscore(g.gamePk);
+                  }}
+                >
+                  {renderTeamLogo(away.team.id, 16)}
+                  <span>{away.score ?? '—'}</span>
+                  <span className='bs-at'>@</span>
+                  {renderTeamLogo(home.team.id, 16)}
+                  <span>{home.score ?? '—'}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {loadingBoxscore && (
+          <div className='loading-spinner' aria-label='Loading boxscore' />
+        )}
+        {boxscoreError && (
+          <Card className='error-card'><div className='error-message'>{boxscoreError}</div></Card>
+        )}
+        {boxscoreData && !loadingBoxscore && (
+          <div className='boxscore-content'>
+            <TeamBox side='away' />
+            <TeamBox side='home' />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderPitchArsenal() {
+    const pitchColors: Record<string, string> = {
+      FF: '#ef4444', // Four-seam: red
+      SI: '#f97316', // Sinker: orange
+      FC: '#eab308', // Cutter: yellow
+      SL: '#22c55e', // Slider: green
+      SW: '#10b981', // Sweeper: emerald
+      CU: '#3b82f6', // Curve: blue
+      KC: '#8b5cf6', // Knuckle-curve: purple
+      CH: '#ec4899', // Changeup: pink
+      FS: '#06b6d4', // Splitter: cyan
+      KN: '#a1a1aa', // Knuckleball: gray
+    };
+
+    return (
+      <div className='arsenal-container'>
+        <h2 className='section-title'>Pitch Arsenal</h2>
+        <p className='section-subtitle'>
+          Pitch mix, usage rate, and average velocity for qualified starters
+        </p>
+
+        {loadingArsenalPitchers ? (
+          <div className='loading-spinner' aria-label='Loading pitchers' />
+        ) : (
+          <div className='arsenal-pitcher-grid'>
+            {arsenalPitchers.map(p => (
+              <button
+                key={p.id}
+                className={`arsenal-pitcher-chip ${arsenalPlayerId === p.id ? 'selected' : ''}`}
+                onClick={() => {
+                  setArsenalPlayerId(p.id);
+                  setArsenalPlayerName(p.fullName);
+                }}
+              >
+                {renderTeamLogo(
+                  // find team id from standings
+                  (() => {
+                    const team = getAllTeams().find(t => t.team.name === p.teamName);
+                    return team?.team.id ?? 0;
+                  })(),
+                  14
+                )}
+                <span>{p.fullName.split(' ').pop()}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {arsenalPlayerId && (
+          <div className='arsenal-detail'>
+            {loadingArsenal ? (
+              <div className='loading-spinner' aria-label='Loading arsenal' />
+            ) : arsenalError ? (
+              <Card className='error-card'><div className='error-message'>{arsenalError}</div></Card>
+            ) : arsenalData.length === 0 ? (
+              <Card><p className='section-subtitle' style={{ margin: 0 }}>No pitch arsenal data available.</p></Card>
+            ) : (
+              <Card className='arsenal-card'>
+                <h3 className='arsenal-pitcher-title'>{arsenalPlayerName}</h3>
+                <div className='arsenal-pitches'>
+                  {arsenalData.map(pitch => {
+                    const color = pitchColors[pitch.code] ?? '#a1a1aa';
+                    const pct = Math.round(pitch.percentage * 100);
+                    return (
+                      <div key={pitch.code} className='arsenal-pitch-row'>
+                        <div className='arsenal-pitch-label'>
+                          <span className='arsenal-pitch-dot' style={{ background: color }} />
+                          <span className='arsenal-pitch-name'>{pitch.description}</span>
+                          <span className='arsenal-pitch-code'>({pitch.code})</span>
+                        </div>
+                        <div className='arsenal-pitch-bar-wrap'>
+                          <div
+                            className='arsenal-pitch-bar'
+                            style={{ width: `${pct}%`, background: color }}
+                          />
+                        </div>
+                        <div className='arsenal-pitch-stats'>
+                          <span className='arsenal-pitch-pct'>{pct}%</span>
+                          <span className='arsenal-pitch-velo'>
+                            {pitch.averageSpeed.toFixed(1)} mph
+                          </span>
+                          <span className='arsenal-pitch-count'>{pitch.count} pitches</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderGameRecaps() {
+    const todayStr = localDateStr(0);
+    const yesterdayStr = localDateStr(-1);
+
+    return (
+      <div className='recaps-container'>
+        <h2 className='section-title'>Game Recaps</h2>
+        <div className='recaps-date-picker'>
+          <button
+            className={`recaps-date-btn ${recapsDate === yesterdayStr ? 'active' : ''}`}
+            onClick={() => setRecapsDate(yesterdayStr)}
+          >
+            Yesterday
+          </button>
+          <button
+            className={`recaps-date-btn ${recapsDate === todayStr ? 'active' : ''}`}
+            onClick={() => setRecapsDate(todayStr)}
+          >
+            Today
+          </button>
+        </div>
+
+        {loadingRecaps ? (
+          <div className='loading-spinner' aria-label='Loading recaps' />
+        ) : recapsError ? (
+          <Card className='error-card'><div className='error-message'>{recapsError}</div></Card>
+        ) : recaps.length === 0 ? (
+          <Card><p className='section-subtitle' style={{ margin: 0 }}>No recaps available for this date.</p></Card>
+        ) : (
+          <div className='recaps-grid'>
+            {recaps.map(recap => (
+              <Card key={recap.gamePk} className='recap-card'>
+                {recap.imageUrl && (
+                  <div className='recap-img-wrap'>
+                    <img
+                      src={recap.imageUrl}
+                      alt={recap.headline}
+                      className='recap-img'
+                      loading='lazy'
+                    />
+                    <div className='recap-score-badge'>
+                      {renderTeamLogo(recap.awayTeamId, 18)}
+                      <span className='recap-score'>{recap.awayScore}</span>
+                      <span className='recap-at'>@</span>
+                      {renderTeamLogo(recap.homeTeamId, 18)}
+                      <span className='recap-score'>{recap.homeScore}</span>
+                    </div>
+                  </div>
+                )}
+                <div className='recap-body'>
+                  <h3 className='recap-headline'>{recap.headline}</h3>
+                  <p className='recap-blurb'>{recap.blurb}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
