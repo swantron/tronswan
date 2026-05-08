@@ -622,9 +622,12 @@ function MLB() {
             batting?: Record<string, number | string>;
             pitching?: Record<string, number | string>;
           };
+          seasonStats?: {
+            batting?: Record<string, number | string>;
+            pitching?: Record<string, number | string>;
+          };
           gameStatus?: { isOnBench?: boolean };
           battingOrder?: string;
-          pitchingNotes?: string;
         }>;
 
         const batterIds: number[] = t.batters ?? [];
@@ -635,6 +638,7 @@ function MLB() {
           .filter(p => p && p.stats?.batting && !p.gameStatus?.isOnBench)
           .map(p => {
             const s = p.stats.batting!;
+            const ss = p.seasonStats?.batting ?? {};
             return {
               personId: p.person.id,
               fullName: p.person.fullName,
@@ -646,7 +650,7 @@ function MLB() {
               bb: Number(s.baseOnBalls ?? 0),
               k: Number(s.strikeOuts ?? 0),
               lob: Number(s.leftOnBase ?? 0),
-              avg: String(s.avg ?? '.000'),
+              avg: String(ss.avg ?? '—'),
             };
           });
 
@@ -655,6 +659,7 @@ function MLB() {
           .filter(p => p && p.stats?.pitching)
           .map(p => {
             const s = p.stats.pitching!;
+            const ss = p.seasonStats?.pitching ?? {};
             return {
               personId: p.person.id,
               fullName: p.person.fullName,
@@ -664,8 +669,8 @@ function MLB() {
               er: Number(s.earnedRuns ?? 0),
               bb: Number(s.baseOnBalls ?? 0),
               k: Number(s.strikeOuts ?? 0),
-              era: String(s.era ?? '-.--'),
-              note: p.pitchingNotes ?? '',
+              era: String(ss.era ?? '-.--'),
+              note: String(s.note ?? ''),
             };
           });
 
