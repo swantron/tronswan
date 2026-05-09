@@ -76,6 +76,12 @@
   min-width: 180px;
 }
 
+.widget-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .widget-hint {
   font-size: 0.9rem;
   color: var(--text-muted);

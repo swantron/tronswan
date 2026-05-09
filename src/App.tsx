@@ -160,6 +160,7 @@ function Navigation() {
       <Link
         to='/'
         className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+        aria-current={location.pathname === '/' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Home', {
             target: '/',
@@ -172,6 +173,7 @@ function Navigation() {
       <Link
         to='/swantron'
         className={`nav-link ${location.pathname.startsWith('/swantron') ? 'active' : ''}`}
+        aria-current={location.pathname.startsWith('/swantron') ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Swantron', {
             target: '/swantron',
@@ -184,6 +186,7 @@ function Navigation() {
       <Link
         to='/weathertron'
         className={`nav-link ${location.pathname === '/weathertron' ? 'active' : ''}`}
+        aria-current={location.pathname === '/weathertron' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Weather', {
             target: '/weathertron',
@@ -196,6 +199,7 @@ function Navigation() {
       <Link
         to='/chomptron'
         className={`nav-link ${location.pathname === '/chomptron' ? 'active' : ''}`}
+        aria-current={location.pathname === '/chomptron' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Chomptron', {
             target: '/chomptron',
@@ -208,6 +212,7 @@ function Navigation() {
       <Link
         to='/wrenchtron'
         className={`nav-link ${location.pathname === '/wrenchtron' ? 'active' : ''}`}
+        aria-current={location.pathname === '/wrenchtron' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Wrenchtron', {
             target: '/wrenchtron',
@@ -220,6 +225,7 @@ function Navigation() {
       <Link
         to='/music'
         className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
+        aria-current={location.pathname === '/music' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Music', {
             target: '/music',
@@ -232,6 +238,7 @@ function Navigation() {
       <Link
         to='/mlb'
         className={`nav-link ${location.pathname === '/mlb' ? 'active' : ''}`}
+        aria-current={location.pathname === '/mlb' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - MLB', {
             target: '/mlb',
@@ -244,6 +251,7 @@ function Navigation() {
       <Link
         to='/status'
         className={`nav-link ${location.pathname === '/status' ? 'active' : ''}`}
+        aria-current={location.pathname === '/status' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Status', {
             target: '/status',
@@ -256,6 +264,7 @@ function Navigation() {
       <Link
         to='/hello'
         className={`nav-link ${location.pathname === '/hello' ? 'active' : ''}`}
+        aria-current={location.pathname === '/hello' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Hello', {
             target: '/hello',

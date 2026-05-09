@@ -2593,6 +2593,7 @@ function MLB() {
               {typeLabels[type] ?? type}
             </Button>
           ))}
+          <span className='txn-filter-sep' aria-hidden='true' />
           {renderTeamFilter(
             txnTeamFilter,
             txnTeamSearch,
