@@ -202,10 +202,11 @@ export class SpotifyPlaybackService {
               : fallbackError,
           timestamp: new Date().toISOString(),
         });
-        throw new Error(
-          'Spotify Web Playback SDK failed to load. Please refresh the page and try again.',
-          { cause: fallbackError }
-        );
+        throw fallbackError instanceof Error
+          ? fallbackError
+          : new Error(
+              'Spotify Web Playback SDK failed to load. Please refresh the page and try again.'
+            );
       }
     }
   }
