@@ -63,7 +63,7 @@ COMPONENTS_CHANGED=$(has_changes "^src/components/")
 SERVICES_CHANGED=$(has_changes "^src/services/")
 HOOKS_CHANGED=$(has_changes "^src/hooks/")
 UTILS_CHANGED=$(has_changes "^src/utils/")
-CONFIG_CHANGED=$(has_changes "^(vite\.config|tsconfig|package\.json|yarn\.lock)")
+CONFIG_CHANGED=$(has_changes "^(vite\.config|tsconfig|package\.json|yarn\.lock|\.buildkite/)")
 
 # If we can't detect changes (e.g. initial commit), run everything
 if [ -z "$CHANGED" ]; then
@@ -131,12 +131,9 @@ if [ "$COMPONENTS_CHANGED" = "true" ] || \
     command: |
       yarn install --frozen-lockfile
       yarn test:coverage --testTimeout=30000 --maxWorkers=1
-      COVERAGE=$(cat coverage/coverage-summary.json | \
-        node -e "const d=require('fs').readFileSync('/dev/stdin','utf8'); \
-                 const j=JSON.parse(d); \
-                 console.log(j.total.lines.pct + '%')")
+      COVERAGE=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
       buildkite-agent annotate \
-        "**Coverage: ${COVERAGE}** (lines) :bar_chart:" \
+        "**Coverage: ${COVERAGE}%** (lines) :bar_chart:" \
         --style "info" --context "coverage"
     artifact_paths:
       - "coverage/**/*"
