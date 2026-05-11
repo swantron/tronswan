@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { logger } from '../../utils/logger';
 import { Button } from '../common/Button';
@@ -478,7 +478,7 @@ function MLB() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   };
 
-  const fetchSchedule = async () => {
+  const fetchSchedule = useCallback(async () => {
     setLoadingSchedule(true);
     setScheduleError('');
     try {
@@ -500,7 +500,7 @@ function MLB() {
     } finally {
       setLoadingSchedule(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     logger.info('MLB component initialized', {
@@ -520,7 +520,7 @@ function MLB() {
       if (selectedDate === todayStr) fetchSchedule();
     }, 30000);
     return () => clearInterval(interval);
-  }, [viewMode, selectedDate]);
+  }, [viewMode, selectedDate, fetchSchedule]);
 
   const fetchLeaders = async () => {
     setLoadingLeaders(true);
@@ -656,7 +656,7 @@ function MLB() {
           .map(id => players[`ID${id}`])
           .filter(p => p && p.stats?.batting && !p.gameStatus?.isOnBench)
           .map(p => {
-            const s = p.stats.batting!;
+            const s = p.stats.batting ?? {};
             const ss = p.seasonStats?.batting ?? {};
             return {
               personId: p.person.id,
@@ -677,7 +677,7 @@ function MLB() {
           .map(id => players[`ID${id}`])
           .filter(p => p && p.stats?.pitching)
           .map(p => {
-            const s = p.stats.pitching!;
+            const s = p.stats.pitching ?? {};
             const ss = p.seasonStats?.pitching ?? {};
             return {
               personId: p.person.id,
@@ -724,9 +724,9 @@ function MLB() {
     if (viewMode !== 'boxscore') return;
     // Reuse schedule data; fetch if not loaded
     if (Object.keys(scheduleByDate).length === 0) fetchSchedule();
-  }, [viewMode]);
+  }, [viewMode, scheduleByDate, fetchSchedule]);
 
-  const fetchArsenalPitchers = async () => {
+  const fetchArsenalPitchers = useCallback(async () => {
     setLoadingArsenalPitchers(true);
     try {
       const season = new Date().getFullYear();
@@ -756,7 +756,7 @@ function MLB() {
     } finally {
       setLoadingArsenalPitchers(false);
     }
-  };
+  }, [arsenalPlayerId]);
 
   const fetchArsenal = async (playerId: number) => {
     setLoadingArsenal(true);
@@ -803,7 +803,7 @@ function MLB() {
   useEffect(() => {
     if (viewMode !== 'arsenal') return;
     if (arsenalPitchers.length === 0) fetchArsenalPitchers();
-  }, [viewMode]);
+  }, [viewMode, arsenalPitchers.length, fetchArsenalPitchers]);
 
   useEffect(() => {
     if (viewMode !== 'arsenal' || !arsenalPlayerId) return;
@@ -1718,7 +1718,9 @@ function MLB() {
 
     const teamAbbr = (g: GameTeam) =>
       g.team.abbreviation ??
-      g.team.name.split(' ').pop()!.substring(0, 3).toUpperCase();
+      (g.team.name.split(' ').pop() ?? g.team.name)
+        .substring(0, 3)
+        .toUpperCase();
 
     const renderGame = (game: Game) => {
       const isLive = game.status.abstractGameState === 'Live';
@@ -2972,7 +2974,8 @@ function MLB() {
     );
 
     const TeamBox = ({ side }: { side: 'away' | 'home' }) => {
-      const d = boxscoreData![side];
+      if (!boxscoreData) return null;
+      const d = boxscoreData[side];
       return (
         <div className='boxscore-team-section'>
           <div className='boxscore-team-header'>
