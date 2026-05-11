@@ -173,7 +173,9 @@ function Navigation() {
       <Link
         to='/swantron'
         className={`nav-link ${location.pathname.startsWith('/swantron') ? 'active' : ''}`}
-        aria-current={location.pathname.startsWith('/swantron') ? 'page' : undefined}
+        aria-current={
+          location.pathname.startsWith('/swantron') ? 'page' : undefined
+        }
         onClick={() =>
           logger.info('Navigation clicked - Swantron', {
             target: '/swantron',

@@ -222,7 +222,15 @@ interface BoxscoreTeamData {
   team: { id: number; name: string };
   batters: BoxscoreBatter[];
   pitchers: BoxscorePitcher[];
-  totals: { ab: number; r: number; h: number; rbi: number; bb: number; k: number; lob: number };
+  totals: {
+    ab: number;
+    r: number;
+    h: number;
+    rbi: number;
+    bb: number;
+    k: number;
+    lob: number;
+  };
 }
 
 interface BoxscoreData {
@@ -326,13 +334,19 @@ function MLB() {
   });
 
   // Team filter state for views that support it
-  const [boxscoreTeamFilter, setBoxscoreTeamFilter] = useState<number | null>(null);
+  const [boxscoreTeamFilter, setBoxscoreTeamFilter] = useState<number | null>(
+    null
+  );
   const [boxscoreTeamSearch, setBoxscoreTeamSearch] = useState('');
-  const [arsenalTeamFilter, setArsenalTeamFilter] = useState<number | null>(null);
+  const [arsenalTeamFilter, setArsenalTeamFilter] = useState<number | null>(
+    null
+  );
   const [arsenalTeamSearch, setArsenalTeamSearch] = useState('');
   const [recapsTeamFilter, setRecapsTeamFilter] = useState<number | null>(null);
   const [recapsTeamSearch, setRecapsTeamSearch] = useState('');
-  const [playerStatsTeamFilter, setPlayerStatsTeamFilter] = useState<number | null>(null);
+  const [playerStatsTeamFilter, setPlayerStatsTeamFilter] = useState<
+    number | null
+  >(null);
   const [playerStatsTeamSearch, setPlayerStatsTeamSearch] = useState('');
   const [txnTeamFilter, setTxnTeamFilter] = useState<number | null>(null);
   const [txnTeamSearch, setTxnTeamSearch] = useState('');
@@ -609,26 +623,31 @@ function MLB() {
     setBoxscoreError('');
     setBoxscoreData(null);
     try {
-      const response = await fetch(`https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`);
+      const response = await fetch(
+        `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`
+      );
       if (!response.ok) throw new Error('Failed to fetch boxscore');
       const raw = await response.json();
 
       const parseTeam = (side: 'away' | 'home'): BoxscoreTeamData => {
         const t = raw.teams[side];
-        const players = t.players as Record<string, {
-          person: { id: number; fullName: string };
-          position?: { abbreviation: string };
-          stats: {
-            batting?: Record<string, number | string>;
-            pitching?: Record<string, number | string>;
-          };
-          seasonStats?: {
-            batting?: Record<string, number | string>;
-            pitching?: Record<string, number | string>;
-          };
-          gameStatus?: { isOnBench?: boolean };
-          battingOrder?: string;
-        }>;
+        const players = t.players as Record<
+          string,
+          {
+            person: { id: number; fullName: string };
+            position?: { abbreviation: string };
+            stats: {
+              batting?: Record<string, number | string>;
+              pitching?: Record<string, number | string>;
+            };
+            seasonStats?: {
+              batting?: Record<string, number | string>;
+              pitching?: Record<string, number | string>;
+            };
+            gameStatus?: { isOnBench?: boolean };
+            battingOrder?: string;
+          }
+        >;
 
         const batterIds: number[] = t.batters ?? [];
         const pitcherIds: number[] = t.pitchers ?? [];
@@ -693,7 +712,9 @@ function MLB() {
 
       setBoxscoreData({ away: parseTeam('away'), home: parseTeam('home') });
     } catch (error) {
-      setBoxscoreError(error instanceof Error ? error.message : 'Failed to fetch boxscore');
+      setBoxscoreError(
+        error instanceof Error ? error.message : 'Failed to fetch boxscore'
+      );
     } finally {
       setLoadingBoxscore(false);
     }
@@ -714,15 +735,17 @@ function MLB() {
       if (!response.ok) throw new Error('Failed to fetch pitchers');
       const data = await response.json();
       const splits = data.stats?.[0]?.splits ?? [];
-      const pitchers: ArsenalPitcher[] = splits.map((s: {
-        player: { id: number; fullName: string };
-        team: { id: number; name: string };
-      }) => ({
-        id: s.player.id,
-        fullName: s.player.fullName,
-        teamName: s.team.name,
-        teamId: s.team.id,
-      }));
+      const pitchers: ArsenalPitcher[] = splits.map(
+        (s: {
+          player: { id: number; fullName: string };
+          team: { id: number; name: string };
+        }) => ({
+          id: s.player.id,
+          fullName: s.player.fullName,
+          teamName: s.team.name,
+          teamId: s.team.id,
+        })
+      );
       setArsenalPitchers(pitchers);
       if (pitchers.length > 0 && !arsenalPlayerId) {
         setArsenalPlayerId(pitchers[0].id);
@@ -746,23 +769,32 @@ function MLB() {
       if (!response.ok) throw new Error('Failed to fetch arsenal');
       const data = await response.json();
       const splits = data.stats?.[0]?.splits ?? [];
-      const entries: PitchArsenalEntry[] = splits.map((s: {
-        stat: {
-          type: { code: string; description: string };
-          percentage: number;
-          averageSpeed: number;
-          count: number;
-        };
-      }) => ({
-        code: s.stat.type.code,
-        description: s.stat.type.description,
-        percentage: s.stat.percentage,
-        averageSpeed: s.stat.averageSpeed,
-        count: s.stat.count,
-      })).sort((a: PitchArsenalEntry, b: PitchArsenalEntry) => b.percentage - a.percentage);
+      const entries: PitchArsenalEntry[] = splits
+        .map(
+          (s: {
+            stat: {
+              type: { code: string; description: string };
+              percentage: number;
+              averageSpeed: number;
+              count: number;
+            };
+          }) => ({
+            code: s.stat.type.code,
+            description: s.stat.type.description,
+            percentage: s.stat.percentage,
+            averageSpeed: s.stat.averageSpeed,
+            count: s.stat.count,
+          })
+        )
+        .sort(
+          (a: PitchArsenalEntry, b: PitchArsenalEntry) =>
+            b.percentage - a.percentage
+        );
       setArsenalData(entries);
     } catch (error) {
-      setArsenalError(error instanceof Error ? error.message : 'Failed to fetch arsenal');
+      setArsenalError(
+        error instanceof Error ? error.message : 'Failed to fetch arsenal'
+      );
     } finally {
       setLoadingArsenal(false);
     }
@@ -789,18 +821,27 @@ function MLB() {
       if (!schedRes.ok) throw new Error('Failed to fetch schedule');
       const schedData: ScheduleData = await schedRes.json();
       const games = schedData.dates?.[0]?.games ?? [];
-      const finished = games.filter(g => g.status.abstractGameState === 'Final');
+      const finished = games.filter(
+        g => g.status.abstractGameState === 'Final'
+      );
 
       const results = await Promise.all(
         finished.map(async g => {
           try {
-            const contentRes = await fetch(`https://statsapi.mlb.com/api/v1/game/${g.gamePk}/content`);
+            const contentRes = await fetch(
+              `https://statsapi.mlb.com/api/v1/game/${g.gamePk}/content`
+            );
             if (!contentRes.ok) return null;
             const content = await contentRes.json();
             const recap = content?.editorial?.recap?.mlb;
             if (!recap) return null;
             const cuts = recap.image?.cuts ?? [];
-            const img = (cuts.find((c: { width: number; src: string }) => c.width === 640) ?? cuts[0])?.src ?? '';
+            const img =
+              (
+                cuts.find(
+                  (c: { width: number; src: string }) => c.width === 640
+                ) ?? cuts[0]
+              )?.src ?? '';
             return {
               gamePk: g.gamePk,
               awayTeam: g.teams.away.team.name,
@@ -820,7 +861,9 @@ function MLB() {
       );
       setRecaps(results.filter((r): r is GameRecap => r !== null));
     } catch (error) {
-      setRecapsError(error instanceof Error ? error.message : 'Failed to fetch recaps');
+      setRecapsError(
+        error instanceof Error ? error.message : 'Failed to fetch recaps'
+      );
     } finally {
       setLoadingRecaps(false);
     }
@@ -2553,8 +2596,7 @@ function MLB() {
     const filtered = txnTeamFilter
       ? typeFiltered.filter(
           t =>
-            t.fromTeam?.id === txnTeamFilter ||
-            t.toTeam?.id === txnTeamFilter
+            t.fromTeam?.id === txnTeamFilter || t.toTeam?.id === txnTeamFilter
         )
       : typeFiltered;
 
@@ -2611,7 +2653,9 @@ function MLB() {
         ) : filtered.length === 0 ? (
           <Card>
             <p className='section-subtitle' style={{ margin: 0 }}>
-              {txnTeamFilter ? 'No transactions found for this team.' : 'No transactions found.'}
+              {txnTeamFilter
+                ? 'No transactions found for this team.'
+                : 'No transactions found.'}
             </p>
           </Card>
         ) : (
@@ -2811,9 +2855,10 @@ function MLB() {
       .map(t => t.team)
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    const selectedTeamName = teamFilter != null
-      ? (allTeams.find(t => t.id === teamFilter)?.name ?? '')
-      : '';
+    const selectedTeamName =
+      teamFilter != null
+        ? (allTeams.find(t => t.id === teamFilter)?.name ?? '')
+        : '';
 
     return (
       <div className='leaders-team-search'>
@@ -2823,7 +2868,10 @@ function MLB() {
             <span>{selectedTeamName}</span>
             <button
               className='leaders-team-chip-clear'
-              onClick={() => { onFilter(null); onSearch(''); }}
+              onClick={() => {
+                onFilter(null);
+                onSearch('');
+              }}
               aria-label='Clear team filter'
             >
               ×
@@ -2842,7 +2890,9 @@ function MLB() {
               <ul className='leaders-team-suggestions'>
                 {allTeams
                   .filter(t =>
-                    t.name.toLowerCase().includes(teamSearch.toLowerCase().trim())
+                    t.name
+                      .toLowerCase()
+                      .includes(teamSearch.toLowerCase().trim())
                   )
                   .map(t => (
                     <li
@@ -2850,7 +2900,10 @@ function MLB() {
                       role='option'
                       aria-selected={teamFilter === t.id}
                       className='leaders-team-suggestion'
-                      onClick={() => { onFilter(t.id); onSearch(''); }}
+                      onClick={() => {
+                        onFilter(t.id);
+                        onSearch('');
+                      }}
                       onKeyDown={e => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           onFilter(t.id);
@@ -2873,14 +2926,23 @@ function MLB() {
 
   function renderBoxscore() {
     const todayStr = localDateStr(0);
-    const games = scheduleByDate[todayStr] ?? scheduleByDate[localDateStr(-1)] ?? [];
+    const games =
+      scheduleByDate[todayStr] ?? scheduleByDate[localDateStr(-1)] ?? [];
     const finished = games.filter(g => g.status.abstractGameState === 'Final');
     const inProgress = games.filter(g => g.status.abstractGameState === 'Live');
     const selectable = [...inProgress, ...finished];
 
-    const BatterRow = ({ b, isTotal = false }: { b: BoxscoreBatter; isTotal?: boolean }) => (
+    const BatterRow = ({
+      b,
+      isTotal = false,
+    }: {
+      b: BoxscoreBatter;
+      isTotal?: boolean;
+    }) => (
       <tr className={isTotal ? 'boxscore-totals-row' : 'boxscore-batter-row'}>
-        <td className='bs-player'>{isTotal ? 'Totals' : `${b.fullName} ${b.position}`}</td>
+        <td className='bs-player'>
+          {isTotal ? 'Totals' : `${b.fullName} ${b.position}`}
+        </td>
         <td>{b.ab}</td>
         <td>{b.r}</td>
         <td>{b.h}</td>
@@ -2933,8 +2995,19 @@ function MLB() {
                 </tr>
               </thead>
               <tbody>
-                {d.batters.map(b => <BatterRow key={b.personId} b={b} />)}
-                <BatterRow b={{ ...d.totals, personId: -1, fullName: '', position: '', avg: '' }} isTotal />
+                {d.batters.map(b => (
+                  <BatterRow key={b.personId} b={b} />
+                ))}
+                <BatterRow
+                  b={{
+                    ...d.totals,
+                    personId: -1,
+                    fullName: '',
+                    position: '',
+                    avg: '',
+                  }}
+                  isTotal
+                />
               </tbody>
             </table>
           </div>
@@ -2953,7 +3026,9 @@ function MLB() {
                 </tr>
               </thead>
               <tbody>
-                {d.pitchers.map(p => <PitcherRow key={p.personId} p={p} />)}
+                {d.pitchers.map(p => (
+                  <PitcherRow key={p.personId} p={p} />
+                ))}
               </tbody>
             </table>
           </div>
@@ -2979,7 +3054,11 @@ function MLB() {
           {renderTeamFilter(
             boxscoreTeamFilter,
             boxscoreTeamSearch,
-            id => { setBoxscoreTeamFilter(id); setBoxscoreGamePk(null); setBoxscoreData(null); },
+            id => {
+              setBoxscoreTeamFilter(id);
+              setBoxscoreGamePk(null);
+              setBoxscoreData(null);
+            },
             setBoxscoreTeamSearch
           )}
         </div>
@@ -2987,9 +3066,13 @@ function MLB() {
         {loadingSchedule ? (
           <div className='loading-spinner' aria-label='Loading games' />
         ) : visibleGames.length === 0 ? (
-          <Card><p className='section-subtitle' style={{ margin: 0 }}>
-            {boxscoreTeamFilter ? 'No games found for this team today.' : 'No completed games today.'}
-          </p></Card>
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              {boxscoreTeamFilter
+                ? 'No games found for this team today.'
+                : 'No completed games today.'}
+            </p>
+          </Card>
         ) : (
           <div className='boxscore-game-picker'>
             {visibleGames.map(g => {
@@ -3020,7 +3103,9 @@ function MLB() {
           <div className='loading-spinner' aria-label='Loading boxscore' />
         )}
         {boxscoreError && (
-          <Card className='error-card'><div className='error-message'>{boxscoreError}</div></Card>
+          <Card className='error-card'>
+            <div className='error-message'>{boxscoreError}</div>
+          </Card>
         )}
         {boxscoreData && !loadingBoxscore && (
           <div className='boxscore-content'>
@@ -3060,7 +3145,11 @@ function MLB() {
           {renderTeamFilter(
             arsenalTeamFilter,
             arsenalTeamSearch,
-            id => { setArsenalTeamFilter(id); setArsenalPlayerId(null); setArsenalData([]); },
+            id => {
+              setArsenalTeamFilter(id);
+              setArsenalPlayerId(null);
+              setArsenalData([]);
+            },
             setArsenalTeamSearch
           )}
         </div>
@@ -3068,7 +3157,11 @@ function MLB() {
         {loadingArsenalPitchers ? (
           <div className='loading-spinner' aria-label='Loading pitchers' />
         ) : visiblePitchers.length === 0 && arsenalTeamFilter ? (
-          <Card><p className='section-subtitle' style={{ margin: 0 }}>No qualified pitchers found for this team.</p></Card>
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              No qualified pitchers found for this team.
+            </p>
+          </Card>
         ) : (
           <div className='arsenal-pitcher-grid'>
             {visiblePitchers.map(p => (
@@ -3092,9 +3185,15 @@ function MLB() {
             {loadingArsenal ? (
               <div className='loading-spinner' aria-label='Loading arsenal' />
             ) : arsenalError ? (
-              <Card className='error-card'><div className='error-message'>{arsenalError}</div></Card>
+              <Card className='error-card'>
+                <div className='error-message'>{arsenalError}</div>
+              </Card>
             ) : arsenalData.length === 0 ? (
-              <Card><p className='section-subtitle' style={{ margin: 0 }}>No pitch arsenal data available.</p></Card>
+              <Card>
+                <p className='section-subtitle' style={{ margin: 0 }}>
+                  No pitch arsenal data available.
+                </p>
+              </Card>
             ) : (
               <Card className='arsenal-card'>
                 <h3 className='arsenal-pitcher-title'>{arsenalPlayerName}</h3>
@@ -3105,9 +3204,16 @@ function MLB() {
                     return (
                       <div key={pitch.code} className='arsenal-pitch-row'>
                         <div className='arsenal-pitch-label'>
-                          <span className='arsenal-pitch-dot' style={{ background: color }} />
-                          <span className='arsenal-pitch-name'>{pitch.description}</span>
-                          <span className='arsenal-pitch-code'>({pitch.code})</span>
+                          <span
+                            className='arsenal-pitch-dot'
+                            style={{ background: color }}
+                          />
+                          <span className='arsenal-pitch-name'>
+                            {pitch.description}
+                          </span>
+                          <span className='arsenal-pitch-code'>
+                            ({pitch.code})
+                          </span>
                         </div>
                         <div className='arsenal-pitch-bar-wrap'>
                           <div
@@ -3120,7 +3226,9 @@ function MLB() {
                           <span className='arsenal-pitch-velo'>
                             {pitch.averageSpeed.toFixed(1)} mph
                           </span>
-                          <span className='arsenal-pitch-count'>{pitch.count} pitches</span>
+                          <span className='arsenal-pitch-count'>
+                            {pitch.count} pitches
+                          </span>
                         </div>
                       </div>
                     );
@@ -3151,18 +3259,18 @@ function MLB() {
         <h2 className='section-title'>Game Recaps</h2>
         <div className='recaps-controls'>
           <div className='recaps-date-picker'>
-          <button
-            className={`recaps-date-btn ${recapsDate === yesterdayStr ? 'active' : ''}`}
-            onClick={() => setRecapsDate(yesterdayStr)}
-          >
-            Yesterday
-          </button>
-          <button
-            className={`recaps-date-btn ${recapsDate === todayStr ? 'active' : ''}`}
-            onClick={() => setRecapsDate(todayStr)}
-          >
-            Today
-          </button>
+            <button
+              className={`recaps-date-btn ${recapsDate === yesterdayStr ? 'active' : ''}`}
+              onClick={() => setRecapsDate(yesterdayStr)}
+            >
+              Yesterday
+            </button>
+            <button
+              className={`recaps-date-btn ${recapsDate === todayStr ? 'active' : ''}`}
+              onClick={() => setRecapsDate(todayStr)}
+            >
+              Today
+            </button>
           </div>
           {renderTeamFilter(
             recapsTeamFilter,
@@ -3175,11 +3283,17 @@ function MLB() {
         {loadingRecaps ? (
           <div className='loading-spinner' aria-label='Loading recaps' />
         ) : recapsError ? (
-          <Card className='error-card'><div className='error-message'>{recapsError}</div></Card>
+          <Card className='error-card'>
+            <div className='error-message'>{recapsError}</div>
+          </Card>
         ) : visibleRecaps.length === 0 ? (
-          <Card><p className='section-subtitle' style={{ margin: 0 }}>
-            {recapsTeamFilter ? 'No recaps found for this team.' : 'No recaps available for this date.'}
-          </p></Card>
+          <Card>
+            <p className='section-subtitle' style={{ margin: 0 }}>
+              {recapsTeamFilter
+                ? 'No recaps found for this team.'
+                : 'No recaps available for this date.'}
+            </p>
+          </Card>
         ) : (
           <div className='recaps-grid'>
             {visibleRecaps.map(recap => (
