@@ -219,6 +219,111 @@
   margin-top: var(--space-2);
 }
 
+.forecast-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+  text-align: center;
+}
+
+.forecast-day {
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.forecast-day-selected {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25) !important;
+}
+
+.forecast-chevron {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+/* Detail panel */
+.forecast-detail-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.forecast-detail-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.forecast-slots {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-2);
+}
+
+.forecast-slots::-webkit-scrollbar {
+  display: none;
+}
+
+.forecast-slot {
+  flex: 0 0 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-2);
+  gap: var(--space-1);
+}
+
+.forecast-slot-time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.forecast-slot-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.forecast-slot-temp {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.forecast-slot-feels {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.forecast-slot-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  line-height: 1.3;
+}
+
+.forecast-slot-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--space-1);
+  font-size: 0.7rem;
+  color: #6ee7b7;
+}
+
 /* Weather display styles */
 .weather-container {
   display: flex;

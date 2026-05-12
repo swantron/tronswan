@@ -41,6 +41,10 @@ interface ForecastItem {
     description: string;
     icon: string;
   }>;
+  wind?: {
+    speed: number;
+    deg: number;
+  };
   dt_txt: string;
 }
 
@@ -51,6 +55,8 @@ interface DailyForecast {
   description: string;
   icon: string;
   humidity: number;
+  pressure: number;
+  items: ForecastItem[];
 }
 
 interface WeatherDisplayProps {
@@ -100,14 +106,26 @@ const convertTemperature = (
 };
 
 function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
+
   const formatDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // local constructor avoids UTC midnight shift
+    const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  const formatSlotTime = (dtTxt: string) => {
+    const [, time] = dtTxt.split(' ');
+    const [hourStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
+    if (hour === 0) return '12 AM';
+    if (hour < 12) return `${hour} AM`;
+    if (hour === 12) return '12 PM';
+    return `${hour - 12} PM`;
   };
 
   const getTemperatureUnit = () => {
@@ -123,36 +141,118 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
     return temp;
   };
 
+  const getWindDirection = (degrees: number) => {
+    const directions = [
+      'N',
+      'NNE',
+      'NE',
+      'ENE',
+      'E',
+      'ESE',
+      'SE',
+      'SSE',
+      'S',
+      'SSW',
+      'SW',
+      'WSW',
+      'W',
+      'WNW',
+      'NW',
+      'NNW',
+    ];
+    return directions[Math.round(degrees / 22.5) % 16];
+  };
+
+  const selectedDay =
+    selectedDayIndex !== null ? forecast[selectedDayIndex] : null;
+
   return (
     <div className='forecast-container'>
       <h3 className='forecast-title'>5-Day Forecast</h3>
+      <p className='forecast-hint'>tap a day for the hourly breakdown</p>
       <div className='forecast-grid'>
-        {forecast.map((day, index) => (
-          <Card key={index} className='forecast-day' hoverable>
-            <div className='forecast-date'>{formatDate(day.date)}</div>
-            <div className='forecast-icon'>
-              <img
-                src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
-                alt={day.description}
-                width='50'
-                height='50'
-              />
-            </div>
-            <div className='forecast-temps'>
-              <span className='forecast-high'>
-                {Math.round(convertTempForDisplay(day.high))}
-                {getTemperatureUnit()}
-              </span>
-              <span className='forecast-low'>
-                {Math.round(convertTempForDisplay(day.low))}
-                {getTemperatureUnit()}
-              </span>
-            </div>
-            <div className='forecast-description'>{day.description}</div>
-            <div className='forecast-humidity'>humidity {day.humidity}%</div>
-          </Card>
-        ))}
+        {forecast.map((day, index) => {
+          const isSelected = index === selectedDayIndex;
+          return (
+            <Card
+              key={index}
+              className={`forecast-day${isSelected ? ' forecast-day-selected' : ''}`}
+              hoverable
+              onClick={() => setSelectedDayIndex(isSelected ? null : index)}
+            >
+              <div className='forecast-date'>{formatDate(day.date)}</div>
+              <div className='forecast-icon'>
+                <img
+                  src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
+                  alt={day.description}
+                  width='50'
+                  height='50'
+                />
+              </div>
+              <div className='forecast-temps'>
+                <span className='forecast-high'>
+                  {Math.round(convertTempForDisplay(day.high))}
+                  {getTemperatureUnit()}
+                </span>
+                <span className='forecast-low'>
+                  {Math.round(convertTempForDisplay(day.low))}
+                  {getTemperatureUnit()}
+                </span>
+              </div>
+              <div className='forecast-description'>{day.description}</div>
+              <div className='forecast-humidity'>humidity {day.humidity}%</div>
+              <div className='forecast-chevron'>{isSelected ? '▲' : '▼'}</div>
+            </Card>
+          );
+        })}
       </div>
+
+      {selectedDay && (
+        <div className='forecast-detail-panel'>
+          <h4 className='forecast-detail-title'>
+            {formatDate(selectedDay.date)} — hourly
+          </h4>
+          <div className='forecast-slots'>
+            {selectedDay.items.map(slot => (
+              <div key={slot.dt} className='forecast-slot'>
+                <div className='forecast-slot-time'>
+                  {formatSlotTime(slot.dt_txt)}
+                </div>
+                <img
+                  src={`https://openweathermap.org/img/wn/${slot.weather[0].icon}.png`}
+                  alt={slot.weather[0].description}
+                  width='40'
+                  height='40'
+                  className='forecast-slot-icon'
+                />
+                <div className='forecast-slot-temp'>
+                  {Math.round(convertTempForDisplay(slot.main.temp))}
+                  {getTemperatureUnit()}
+                </div>
+                <div className='forecast-slot-feels'>
+                  feels{' '}
+                  {Math.round(convertTempForDisplay(slot.main.feels_like))}
+                  {getTemperatureUnit()}
+                </div>
+                <div className='forecast-slot-desc'>
+                  {slot.weather[0].description}
+                </div>
+                <div className='forecast-slot-meta'>
+                  <span>{slot.main.humidity}% hum</span>
+                  {slot.wind && (
+                    <span>
+                      {Math.round(slot.wind.speed)}{' '}
+                      {temperatureUnit === 'metric' ? 'm/s' : 'mph'}{' '}
+                      {getWindDirection(slot.wind.deg)}
+                    </span>
+                  )}
+                  <span>{slot.main.pressure} hPa</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -371,6 +471,11 @@ function Weather() {
           dayItems.reduce((sum, item) => sum + item.main.humidity, 0) /
             dayItems.length
         ),
+        pressure: Math.round(
+          dayItems.reduce((sum, item) => sum + item.main.pressure, 0) /
+            dayItems.length
+        ),
+        items: dayItems,
       }));
   };
 
