@@ -252,7 +252,7 @@
   padding: var(--space-5);
   margin-bottom: var(--space-8);
   animation: fadeIn 0.2s ease-out;
-  text-align: left;
+  text-align: center;
 }
 
 .forecast-detail-title {
@@ -264,18 +264,25 @@
   margin-bottom: var(--space-4);
 }
 
+/* Scroll wrapper: overflow lives here so the inner row can center with margin auto */
+.forecast-slots-wrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-2);
+}
+
+.forecast-slots-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+/* Inner row: fit-content + auto margins = centered when it fits, left-scrollable when it overflows */
 .forecast-slots {
   display: flex;
   flex-wrap: nowrap;
   gap: var(--space-3);
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: var(--space-2);
+  width: fit-content;
+  margin: 0 auto;
   align-items: stretch;
-}
-
-.forecast-slots::-webkit-scrollbar {
-  display: none;
 }
 
 .forecast-slot {

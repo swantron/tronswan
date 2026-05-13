@@ -212,45 +212,47 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
           <h4 className='forecast-detail-title'>
             {formatDate(selectedDay.date)} — hourly
           </h4>
-          <div className='forecast-slots'>
-            {selectedDay.items.map(slot => (
-              <div key={slot.dt} className='forecast-slot'>
-                <div className='forecast-slot-time'>
-                  {formatSlotTime(slot.dt_txt)}
+          <div className='forecast-slots-wrap'>
+            <div className='forecast-slots'>
+              {selectedDay.items.map(slot => (
+                <div key={slot.dt} className='forecast-slot'>
+                  <div className='forecast-slot-time'>
+                    {formatSlotTime(slot.dt_txt)}
+                  </div>
+                  <img
+                    src={`https://openweathermap.org/img/wn/${slot.weather[0].icon}.png`}
+                    alt={slot.weather[0].description}
+                    width='40'
+                    height='40'
+                    className='forecast-slot-icon'
+                  />
+                  <div className='forecast-slot-temp'>
+                    {Math.round(convertTempForDisplay(slot.main.temp))}
+                    {getTemperatureUnit()}
+                  </div>
+                  <div className='forecast-slot-feels'>
+                    feels{' '}
+                    {Math.round(convertTempForDisplay(slot.main.feels_like))}
+                    {getTemperatureUnit()}
+                  </div>
+                  <div className='forecast-slot-desc'>
+                    {slot.weather[0].description}
+                  </div>
+                  <hr className='forecast-slot-divider' />
+                  <div className='forecast-slot-meta'>
+                    <span>{slot.main.humidity}% humidity</span>
+                    {slot.wind && (
+                      <span>
+                        {Math.round(slot.wind.speed)}{' '}
+                        {temperatureUnit === 'metric' ? 'm/s' : 'mph'}{' '}
+                        {getWindDirection(slot.wind.deg)}
+                      </span>
+                    )}
+                    <span>{slot.main.pressure} hPa</span>
+                  </div>
                 </div>
-                <img
-                  src={`https://openweathermap.org/img/wn/${slot.weather[0].icon}.png`}
-                  alt={slot.weather[0].description}
-                  width='40'
-                  height='40'
-                  className='forecast-slot-icon'
-                />
-                <div className='forecast-slot-temp'>
-                  {Math.round(convertTempForDisplay(slot.main.temp))}
-                  {getTemperatureUnit()}
-                </div>
-                <div className='forecast-slot-feels'>
-                  feels{' '}
-                  {Math.round(convertTempForDisplay(slot.main.feels_like))}
-                  {getTemperatureUnit()}
-                </div>
-                <div className='forecast-slot-desc'>
-                  {slot.weather[0].description}
-                </div>
-                <hr className='forecast-slot-divider' />
-                <div className='forecast-slot-meta'>
-                  <span>{slot.main.humidity}% humidity</span>
-                  {slot.wind && (
-                    <span>
-                      {Math.round(slot.wind.speed)}{' '}
-                      {temperatureUnit === 'metric' ? 'm/s' : 'mph'}{' '}
-                      {getWindDirection(slot.wind.deg)}
-                    </span>
-                  )}
-                  <span>{slot.main.pressure} hPa</span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
