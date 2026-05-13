@@ -237,8 +237,9 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
                 <div className='forecast-slot-desc'>
                   {slot.weather[0].description}
                 </div>
+                <hr className='forecast-slot-divider' />
                 <div className='forecast-slot-meta'>
-                  <span>{slot.main.humidity}% hum</span>
+                  <span>{slot.main.humidity}% humidity</span>
                   {slot.wind && (
                     <span>
                       {Math.round(slot.wind.speed)}{' '}

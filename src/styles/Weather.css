@@ -249,25 +249,29 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  padding: var(--space-5);
   margin-bottom: var(--space-8);
   animation: fadeIn 0.2s ease-out;
+  text-align: left;
 }
 
 .forecast-detail-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--primary-color);
-  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin-bottom: var(--space-4);
 }
 
 .forecast-slots {
   display: flex;
+  flex-wrap: nowrap;
   gap: var(--space-3);
   overflow-x: auto;
   scrollbar-width: none;
   padding-bottom: var(--space-2);
+  align-items: stretch;
 }
 
 .forecast-slots::-webkit-scrollbar {
@@ -275,7 +279,7 @@
 }
 
 .forecast-slot {
-  flex: 0 0 110px;
+  flex: 0 0 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -284,13 +288,15 @@
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-2);
-  gap: var(--space-1);
+  gap: 4px;
 }
 
 .forecast-slot-time {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .forecast-slot-icon {
@@ -298,30 +304,39 @@
 }
 
 .forecast-slot-temp {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .forecast-slot-feels {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
 .forecast-slot-desc {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-secondary);
   text-transform: capitalize;
   line-height: 1.3;
+  flex: 1;
+}
+
+.forecast-slot-divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 2px 0;
 }
 
 .forecast-slot-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: var(--space-1);
-  font-size: 0.7rem;
+  gap: 3px;
+  font-size: 0.68rem;
   color: #6ee7b7;
+  width: 100%;
+  align-items: center;
 }
 
 /* Weather display styles */
