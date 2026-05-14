@@ -244,19 +244,15 @@
   margin-top: var(--space-2);
 }
 
-/* Detail panel — width fits the slot row, centered under the grid */
+/* Detail panel — consistent full width, slots centered inside */
 .forecast-detail-panel {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  margin: 0 auto var(--space-8);
+  margin-bottom: var(--space-8);
   animation: fadeIn 0.2s ease-out;
   text-align: center;
-  /* Panel shrinks to fit the slot row on desktop, full-width on mobile */
-  width: fit-content;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .forecast-detail-title {
