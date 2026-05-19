@@ -35,6 +35,8 @@ const defaultServices = {
   chomptron: 'healthy' as const,
   swantron: 'healthy' as const,
   jswan: 'healthy' as const,
+  mtServices: 'healthy' as const,
+  wrenchtron: 'healthy' as const,
   mlbApi: 'healthy' as const,
   spotifyApi: 'healthy' as const,
   weatherApi: 'healthy' as const,
@@ -57,6 +59,8 @@ describe('ServiceHealth Component', () => {
     expect(screen.getByText('chomp tron dot com')).toBeInTheDocument();
     expect(screen.getByText('swan tron dot com')).toBeInTheDocument();
     expect(screen.getByText('ATProto PDS')).toBeInTheDocument();
+    expect(screen.getByText('mt.services')).toBeInTheDocument();
+    expect(screen.getByText('wrench tron dot com')).toBeInTheDocument();
     expect(screen.getByText('MLB Stats API')).toBeInTheDocument();
     expect(screen.getByText('Spotify API')).toBeInTheDocument();
     expect(screen.getByText('OpenWeatherMap API')).toBeInTheDocument();

@@ -22,6 +22,7 @@ interface ServiceHealthProps {
     swantron: 'healthy' | 'degraded' | 'down';
     jswan: 'healthy' | 'degraded' | 'down';
     mtServices: 'healthy' | 'degraded' | 'down';
+    wrenchtron: 'healthy' | 'degraded' | 'down';
     mlbApi: 'healthy' | 'degraded' | 'down';
     spotifyApi: 'healthy' | 'degraded' | 'down';
     weatherApi: 'healthy' | 'degraded' | 'down';
@@ -78,6 +79,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         url: 'https://mt.services',
         description: 'Montana consulting / Firebase Hosting',
         status: services.mtServices,
+        lastChecked: new Date(),
+      },
+      {
+        name: 'wrench tron dot com',
+        url: 'https://wrenchtron.com',
+        description: 'auto maintenance tracker / DO',
+        status: services.wrenchtron,
         lastChecked: new Date(),
       },
       {
@@ -339,6 +347,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         'swan tron dot com': 'swantron',
         'ATProto PDS': 'jswan',
         'mt.services': 'mtServices',
+        'wrench tron dot com': 'wrenchtron',
         'MLB Stats API': 'mlbApi',
       };
 
