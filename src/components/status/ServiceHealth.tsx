@@ -417,13 +417,13 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
     const getStatusIcon = (status: 'healthy' | 'degraded' | 'down') => {
       switch (status) {
         case 'healthy':
-          return '';
+          return '✓';
         case 'degraded':
-          return '';
+          return '⚠';
         case 'down':
-          return '';
+          return '✕';
         default:
-          return '';
+          return '?';
       }
     };
 

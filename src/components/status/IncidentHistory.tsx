@@ -100,10 +100,10 @@ function IncidentHistory({ days = 7 }: IncidentHistoryProps) {
               >
                 <div className='incident-icon'>
                   {incident.resolved
-                    ? ''
+                    ? '✓'
                     : incident.status === 'down'
-                      ? ''
-                      : ''}
+                      ? '✕'
+                      : '⚠'}
                 </div>
                 <div className='incident-details'>
                   <div className='incident-service'>{incident.service}</div>

@@ -205,6 +205,18 @@ body {
   }
 }
 
+@media (max-width: 900px) {
+  .main-nav {
+    gap: 2px;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+}
+
 @media (max-width: 768px) {
   .main-nav {
     border-radius: var(--radius-lg);
