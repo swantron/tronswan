@@ -111,10 +111,14 @@ body {
 }
 
 /* Logo styles */
+.logo-link {
+  display: inline-block;
+  cursor: pointer;
+}
+
 .App-logo {
   height: 40vmin;
   max-height: 320px;
-  pointer-events: none;
   transition: transform var(--transition-normal);
   filter: drop-shadow(0 0 40px rgba(16, 185, 129, 0.3));
 }

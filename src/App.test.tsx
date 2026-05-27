@@ -63,7 +63,7 @@ describe('App Component', () => {
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(9);
+    expect(navLinks).toHaveLength(8);
 
     // Check specific navigation text
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
@@ -72,7 +72,6 @@ describe('App Component', () => {
       screen.getByRole('link', { name: 'weathertron' })
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'hello' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'status' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'music' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'mlb' })).toBeInTheDocument();
@@ -91,7 +90,10 @@ describe('App Component', () => {
     const swantronLink = screen.getByTestId('swantron-link');
     expect(swantronLink).toBeInTheDocument();
     expect(swantronLink.tagName).toBe('A');
-    expect(swantronLink).toHaveTextContent('tron swan dot com');
+
+    const projectsLink = screen.getByTestId('projects-link');
+    expect(projectsLink).toBeInTheDocument();
+    expect(projectsLink).toHaveTextContent('projects by swantron');
   });
 
   // Test to check if the home container is rendered.
@@ -205,15 +207,6 @@ describe('App Component', () => {
       });
     });
 
-    test('logs when hello link is clicked', () => {
-      render(<App />);
-      const helloLink = screen.getByRole('link', { name: 'hello' });
-      fireEvent.click(helloLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Hello', {
-        target: '/hello',
-        timestamp: expect.any(String),
-      });
-    });
   });
 
   // Test handleSwantronClick function

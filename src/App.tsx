@@ -125,27 +125,30 @@ function Home() {
       <h1 className='App-title' data-testid='app-title'>
         tronswan
       </h1>
-      <img
-        src={logo}
-        className='App-logo'
-        alt='logo'
-        data-testid='app-logo'
-        fetchPriority='high'
-        loading='eager'
-      />
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a
+        href='#'
+        onClick={handleSwantronClick}
+        data-testid='swantron-link'
+        role='button'
+        aria-label='Navigate to random video'
+        className='logo-link'
+      >
+        <img
+          src={logo}
+          className='App-logo'
+          alt='logo'
+          data-testid='app-logo'
+          fetchPriority='high'
+          loading='eager'
+        />
+      </a>
 
       <div className='home-description'>
         <h2 className='swantron-link'>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a
-            href='#'
-            onClick={handleSwantronClick}
-            data-testid='swantron-link'
-            role='button'
-            aria-label='Navigate to random video'
-          >
-            tron swan dot com
-          </a>
+          <Link to='/hello' data-testid='projects-link'>
+            projects by swantron
+          </Link>
         </h2>
       </div>
     </div>
@@ -262,19 +265,6 @@ function Navigation() {
         }
       >
         status
-      </Link>
-      <Link
-        to='/hello'
-        className={`nav-link ${location.pathname === '/hello' ? 'active' : ''}`}
-        aria-current={location.pathname === '/hello' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Hello', {
-            target: '/hello',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        hello
       </Link>
     </nav>
   );
