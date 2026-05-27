@@ -11,6 +11,10 @@ export class HomePage extends BasePage {
     return this.page.locator('[data-testid="swantron-link"]');
   }
 
+  get projectsLink() {
+    return this.page.locator('[data-testid="projects-link"]');
+  }
+
   get homeDescription() {
     return this.page.locator('.home-description');
   }

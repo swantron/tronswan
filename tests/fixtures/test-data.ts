@@ -16,8 +16,9 @@ export const testData = {
   expectedContent: {
     home: {
       title: 'tronswan',
-      swantronLinkText: 'tron swan dot com',
       swantronLinkHref: '#',
+      projectsLinkText: 'projects by swantron',
+      projectsLinkHref: '/hello',
     },
 
     weather: {
@@ -33,7 +34,6 @@ export const testData = {
         { text: 'swantron', href: '/swantron' },
         { text: 'weathertron', href: '/weathertron' },
         { text: 'chomptron', href: 'https://chomptron.com' },
-        { text: 'hello', href: '/hello' },
         { text: 'health', href: '/status' },
       ],
     },

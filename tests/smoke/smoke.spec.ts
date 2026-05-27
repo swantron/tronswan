@@ -26,14 +26,17 @@ test.describe('Smoke Tests', () => {
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
 
-    // Verify swantron link
+    // Logo easter egg link
     await expect(homePage.swantronLink).toBeVisible();
-    await expect(homePage.swantronLink).toHaveText(
-      testData.expectedContent.home.swantronLinkText
-    );
     await expect(homePage.swantronLink).toHaveAttribute(
       'href',
       testData.expectedContent.home.swantronLinkHref
+    );
+
+    // Projects CTA link
+    await expect(homePage.projectsLink).toBeVisible();
+    await expect(homePage.projectsLink).toHaveText(
+      testData.expectedContent.home.projectsLinkText
     );
   });
 
@@ -59,11 +62,8 @@ test.describe('Smoke Tests', () => {
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
 
-    // Verify swantron link
+    // Verify logo easter egg link
     await expect(homePage.swantronLink).toBeVisible();
-    await expect(homePage.swantronLink).toHaveText(
-      testData.expectedContent.home.swantronLinkText
-    );
     await expect(homePage.swantronLink).toHaveAttribute(
       'href',
       testData.expectedContent.home.swantronLinkHref
