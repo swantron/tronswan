@@ -14,6 +14,7 @@ import SwantronList from './components/swantron/SwantronList';
 import Chomptron from './components/ui/Chomptron';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import FizzBuzz from './components/ui/FizzBuzz';
+import Footer from './components/ui/Footer';
 import Hello from './components/ui/Hello';
 import MLB from './components/ui/MLB';
 import PageTransition from './components/ui/PageTransition';
@@ -21,6 +22,7 @@ import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
 import StudyGuide from './components/ui/StudyGuide';
 import Weather from './components/ui/Weather';
+import Work from './components/ui/Work';
 import Wrenchtron from './components/ui/Wrenchtron';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
@@ -123,8 +125,11 @@ function Home() {
   return (
     <div className='home-container'>
       <h1 className='App-title' data-testid='app-title'>
-        tronswan
+        tron swan dot com
       </h1>
+      <p className='App-tagline' data-testid='app-tagline'>
+        projects &amp; experiments by joseph swanson — staff software engineer
+      </p>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a
         href='#'
@@ -144,12 +149,10 @@ function Home() {
         />
       </a>
 
-      <div className='home-description'>
-        <h2 className='swantron-link'>
-          <Link to='/hello' data-testid='projects-link'>
-            projects by swantron
-          </Link>
-        </h2>
+      <div className='home-cta-row'>
+        <Link to='/work' className='projects-cta' data-testid='projects-link'>
+          projects by swantron →
+        </Link>
       </div>
     </div>
   );
@@ -157,13 +160,25 @@ function Home() {
 
 function Navigation() {
   const location = useLocation();
+  const path = location.pathname;
+
+  const isWorkActive =
+    path === '/work' ||
+    path === '/weathertron' ||
+    path === '/chomptron' ||
+    path === '/wrenchtron' ||
+    path === '/music' ||
+    path.startsWith('/music/') ||
+    path === '/mlb';
+  const isAboutActive = path === '/hello' || path === '/resume';
+  const isBlogActive = path.startsWith('/swantron');
 
   return (
     <nav className='main-nav'>
       <Link
         to='/'
-        className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-        aria-current={location.pathname === '/' ? 'page' : undefined}
+        className={`nav-link ${path === '/' ? 'active' : ''}`}
+        aria-current={path === '/' ? 'page' : undefined}
         onClick={() =>
           logger.info('Navigation clicked - Home', {
             target: '/',
@@ -174,97 +189,43 @@ function Navigation() {
         home
       </Link>
       <Link
-        to='/swantron'
-        className={`nav-link ${location.pathname.startsWith('/swantron') ? 'active' : ''}`}
-        aria-current={
-          location.pathname.startsWith('/swantron') ? 'page' : undefined
-        }
+        to='/work'
+        className={`nav-link ${isWorkActive ? 'active' : ''}`}
+        aria-current={isWorkActive ? 'page' : undefined}
         onClick={() =>
-          logger.info('Navigation clicked - Swantron', {
+          logger.info('Navigation clicked - Work', {
+            target: '/work',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        work
+      </Link>
+      <Link
+        to='/hello'
+        className={`nav-link ${isAboutActive ? 'active' : ''}`}
+        aria-current={isAboutActive ? 'page' : undefined}
+        onClick={() =>
+          logger.info('Navigation clicked - About', {
+            target: '/hello',
+            timestamp: new Date().toISOString(),
+          })
+        }
+      >
+        about
+      </Link>
+      <Link
+        to='/swantron'
+        className={`nav-link ${isBlogActive ? 'active' : ''}`}
+        aria-current={isBlogActive ? 'page' : undefined}
+        onClick={() =>
+          logger.info('Navigation clicked - Blog', {
             target: '/swantron',
             timestamp: new Date().toISOString(),
           })
         }
       >
-        swantron
-      </Link>
-      <Link
-        to='/weathertron'
-        className={`nav-link ${location.pathname === '/weathertron' ? 'active' : ''}`}
-        aria-current={location.pathname === '/weathertron' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Weather', {
-            target: '/weathertron',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        weathertron
-      </Link>
-      <Link
-        to='/chomptron'
-        className={`nav-link ${location.pathname === '/chomptron' ? 'active' : ''}`}
-        aria-current={location.pathname === '/chomptron' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Chomptron', {
-            target: '/chomptron',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        chomptron
-      </Link>
-      <Link
-        to='/wrenchtron'
-        className={`nav-link ${location.pathname === '/wrenchtron' ? 'active' : ''}`}
-        aria-current={location.pathname === '/wrenchtron' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Wrenchtron', {
-            target: '/wrenchtron',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        wrenchtron
-      </Link>
-      <Link
-        to='/music'
-        className={`nav-link ${location.pathname === '/music' ? 'active' : ''}`}
-        aria-current={location.pathname === '/music' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Music', {
-            target: '/music',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        music
-      </Link>
-      <Link
-        to='/mlb'
-        className={`nav-link ${location.pathname === '/mlb' ? 'active' : ''}`}
-        aria-current={location.pathname === '/mlb' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - MLB', {
-            target: '/mlb',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        mlb
-      </Link>
-      <Link
-        to='/status'
-        className={`nav-link ${location.pathname === '/status' ? 'active' : ''}`}
-        aria-current={location.pathname === '/status' ? 'page' : undefined}
-        onClick={() =>
-          logger.info('Navigation clicked - Status', {
-            target: '/status',
-            timestamp: new Date().toISOString(),
-          })
-        }
-      >
-        status
+        blog
       </Link>
     </nav>
   );
@@ -298,6 +259,7 @@ function App() {
                       </>
                     }
                   />
+                  <Route path='/work' element={<Work />} />
                   <Route path='/chomptron' element={<Chomptron />} />
                   <Route path='/wrenchtron' element={<Wrenchtron />} />
                   <Route path='/swantron' element={<SwantronList />} />
@@ -333,6 +295,7 @@ function App() {
               </PageTransition>
             </ErrorBoundary>
           </div>
+          <Footer />
         </header>
       </div>
     </Router>

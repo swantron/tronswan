@@ -59,22 +59,38 @@ describe('App Component', () => {
   // Test to check if the navigation links are rendered.
   test('renders navigation links', () => {
     render(<App />);
-    // Test navigation links specifically - only the nav bar links, not the swantron link
     const navLinks = screen
       .getAllByRole('link')
       .filter(link => link.closest('nav'));
-    expect(navLinks).toHaveLength(8);
+    expect(navLinks).toHaveLength(4);
 
-    // Check specific navigation text
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'swantron' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'weathertron' })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'chomptron' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'status' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'music' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'mlb' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'work' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'about' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'blog' })).toBeInTheDocument();
+  });
+
+  // Footer should render the status link and a github link.
+  test('renders footer with status and github links', () => {
+    render(<App />);
+    const footer = screen.getByTestId('app-footer');
+    expect(footer).toBeInTheDocument();
+
+    const statusLink = screen.getByTestId('footer-status-link');
+    expect(statusLink).toBeInTheDocument();
+    expect(statusLink).toHaveAttribute('href', '/status');
+
+    const githubLink = screen.getByTestId('footer-github-link');
+    expect(githubLink).toBeInTheDocument();
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/swantron');
+  });
+
+  // Home should render the new tagline.
+  test('renders home tagline', () => {
+    render(<App />);
+    const tagline = screen.getByTestId('app-tagline');
+    expect(tagline).toBeInTheDocument();
+    expect(tagline).toHaveTextContent(/joseph swanson/i);
   });
 
   // Test to check if the home page content is rendered by default.
@@ -82,7 +98,7 @@ describe('App Component', () => {
     render(<App />);
     const titleElement = screen.getByTestId('app-title');
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveTextContent('tronswan');
+    expect(titleElement).toHaveTextContent('tron swan dot com');
 
     const logoElement = screen.getByTestId('app-logo');
     expect(logoElement).toBeInTheDocument();
@@ -141,72 +157,45 @@ describe('App Component', () => {
       });
     });
 
-    test('logs when swantron link is clicked', () => {
+    test('logs when work link is clicked', () => {
       render(<App />);
-      const swantronLink = screen.getByRole('link', { name: 'swantron' });
-      fireEvent.click(swantronLink);
-      expect(logger.info).toHaveBeenCalledWith(
-        'Navigation clicked - Swantron',
-        {
-          target: '/swantron',
-          timestamp: expect.any(String),
-        }
-      );
-    });
-
-    test('logs when music link is clicked', () => {
-      render(<App />);
-      const musicLink = screen.getByRole('link', { name: 'music' });
-      fireEvent.click(musicLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Music', {
-        target: '/music',
+      const workLink = screen.getByRole('link', { name: 'work' });
+      fireEvent.click(workLink);
+      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Work', {
+        target: '/work',
         timestamp: expect.any(String),
       });
     });
 
-    test('logs when mlb link is clicked', () => {
+    test('logs when about link is clicked', () => {
       render(<App />);
-      const mlbLink = screen.getByRole('link', { name: 'mlb' });
-      fireEvent.click(mlbLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - MLB', {
-        target: '/mlb',
+      const aboutLink = screen.getByRole('link', { name: 'about' });
+      fireEvent.click(aboutLink);
+      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - About', {
+        target: '/hello',
         timestamp: expect.any(String),
       });
     });
 
-    test('logs when weather link is clicked', () => {
+    test('logs when blog link is clicked', () => {
       render(<App />);
-      const weatherLink = screen.getByRole('link', { name: 'weathertron' });
-      fireEvent.click(weatherLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Weather', {
-        target: '/weathertron',
+      const blogLink = screen.getByRole('link', { name: 'blog' });
+      fireEvent.click(blogLink);
+      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Blog', {
+        target: '/swantron',
         timestamp: expect.any(String),
       });
     });
 
-    test('logs when chomptron link is clicked', () => {
+    test('logs when footer status link is clicked', () => {
       render(<App />);
-      const chomptronLink = screen.getByRole('link', { name: 'chomptron' });
-      fireEvent.click(chomptronLink);
-      expect(logger.info).toHaveBeenCalledWith(
-        'Navigation clicked - Chomptron',
-        {
-          target: '/chomptron',
-          timestamp: expect.any(String),
-        }
-      );
-    });
-
-    test('logs when status link is clicked', () => {
-      render(<App />);
-      const statusLink = screen.getByRole('link', { name: 'status' });
+      const statusLink = screen.getByTestId('footer-status-link');
       fireEvent.click(statusLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Status', {
+      expect(logger.info).toHaveBeenCalledWith('Footer clicked - Status', {
         target: '/status',
         timestamp: expect.any(String),
       });
     });
-
   });
 
   // Test handleSwantronClick function
