@@ -161,10 +161,13 @@ describe('App Component', () => {
       render(<App />);
       const projectsNavLink = screen.getByRole('link', { name: 'projects' });
       fireEvent.click(projectsNavLink);
-      expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Work', {
-        target: '/work',
-        timestamp: expect.any(String),
-      });
+      expect(logger.info).toHaveBeenCalledWith(
+        'Navigation clicked - Projects',
+        {
+          target: '/projects',
+          timestamp: expect.any(String),
+        }
+      );
     });
 
     test('logs when about link is clicked', () => {

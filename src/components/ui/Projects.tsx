@@ -6,7 +6,7 @@ import { Card } from '../common/Card';
 
 import SEO from './SEO';
 
-import '../../styles/Work.css';
+import '../../styles/Projects.css';
 
 interface Project {
   slug: string;
@@ -70,46 +70,46 @@ const PROJECTS: Project[] = [
   },
 ];
 
-function Work() {
+function Projects() {
   React.useEffect(() => {
-    logger.info('Work page loaded', {
+    logger.info('Projects page loaded', {
       timestamp: new Date().toISOString(),
     });
   }, []);
 
   return (
-    <div className='work-page'>
+    <div className='projects-page'>
       <SEO
-        title='Work - Projects | Tron Swan'
+        title='Projects - Projects | Tron Swan'
         description='Personal projects by Joseph Swanson — Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
         keywords='Joseph Swanson, projects, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
-        url='/work'
+        url='/projects'
       />
 
-      <div className='work-content'>
-        <h1 className='page-title' data-testid='work-title'>
+      <div className='projects-content'>
+        <h1 className='page-title' data-testid='projects-title'>
           projects
         </h1>
-        <p className='work-subtitle'>some things i&apos;ve built</p>
+        <p className='projects-subtitle'>some things i&apos;ve built</p>
 
-        <div className='work-grid' data-testid='work-grid'>
+        <div className='projects-grid' data-testid='projects-grid'>
           {PROJECTS.map(p => (
-            <Card key={p.slug} className='work-card' hoverable>
-              <div className='work-card-inner'>
-                <h2 className='work-card-title'>{p.title}</h2>
-                <p className='work-card-tagline'>{p.tagline}</p>
-                <div className='work-card-tags'>
+            <Card key={p.slug} className='projects-card' hoverable>
+              <div className='projects-card-inner'>
+                <h2 className='projects-card-title'>{p.title}</h2>
+                <p className='projects-card-tagline'>{p.tagline}</p>
+                <div className='projects-card-tags'>
                   {p.tags.map(t => (
-                    <span key={t} className='work-card-tag'>
+                    <span key={t} className='projects-card-tag'>
                       {t}
                     </span>
                   ))}
                 </div>
-                <div className='work-card-links'>
+                <div className='projects-card-links'>
                   <Link
                     to={p.internalPath}
-                    className='work-card-link primary'
-                    data-testid={`work-card-link-${p.slug}`}
+                    className='projects-card-link primary'
+                    data-testid={`projects-card-link-${p.slug}`}
                   >
                     explore →
                   </Link>
@@ -118,7 +118,7 @@ function Work() {
                       href={p.externalUrl}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='work-card-link secondary'
+                      className='projects-card-link secondary'
                     >
                       live site ↗
                     </a>
@@ -129,16 +129,16 @@ function Work() {
           ))}
         </div>
 
-        <div className='work-professional'>
-          <h2 className='work-section-title'>professional</h2>
-          <p className='work-professional-text'>
+        <div className='projects-professional'>
+          <h2 className='projects-section-title'>professional</h2>
+          <p className='projects-professional-text'>
             Staff Software Engineer @ Demandbase — DevX, CI/CD, IaC, AI tooling,
             React. For the full story:{' '}
             <a
               href='https://www.linkedin.com/in/joseph-swanson-11092758/'
               target='_blank'
               rel='noopener noreferrer'
-              className='work-inline-link'
+              className='projects-inline-link'
             >
               LinkedIn
             </a>
@@ -147,12 +147,12 @@ function Work() {
               href='https://github.com/swantron'
               target='_blank'
               rel='noopener noreferrer'
-              className='work-inline-link'
+              className='projects-inline-link'
             >
               GitHub
             </a>
             , or{' '}
-            <Link to='/resume' className='work-inline-link'>
+            <Link to='/resume' className='projects-inline-link'>
               résumé
             </Link>
             .
@@ -163,4 +163,4 @@ function Work() {
   );
 }
 
-export default Work;
+export default Projects;

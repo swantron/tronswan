@@ -3,7 +3,7 @@ export const testData = {
     base: 'https://tronswan.com',
     local: 'http://localhost:5173',
     home: '/',
-    work: '/work',
+    projects: '/projects',
     weather: '/weathertron',
     swantron: '/swantron',
     hacking: '/hacking',
@@ -19,7 +19,7 @@ export const testData = {
       title: 'tron swan dot com',
       swantronLinkHref: '#',
       projectsLinkText: 'projects',
-      projectsLinkHref: '/work',
+      projectsLinkHref: '/projects',
     },
 
     weather: {
@@ -32,7 +32,7 @@ export const testData = {
     navigation: {
       links: [
         { text: 'home', href: '/' },
-        { text: 'projects', href: '/work' },
+        { text: 'projects', href: '/projects' },
         { text: 'about', href: '/hello' },
         { text: 'blog', href: '/swantron' },
       ],

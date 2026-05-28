@@ -18,11 +18,11 @@ import Footer from './components/ui/Footer';
 import Hello from './components/ui/Hello';
 import MLB from './components/ui/MLB';
 import PageTransition from './components/ui/PageTransition';
+import Projects from './components/ui/Projects';
 import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
 import StudyGuide from './components/ui/StudyGuide';
 import Weather from './components/ui/Weather';
-import Work from './components/ui/Work';
 import Wrenchtron from './components/ui/Wrenchtron';
 import Baseball2 from './components/video/Baseball2';
 import BuschLeague from './components/video/BuschLeague';
@@ -150,7 +150,11 @@ function Home() {
       </a>
 
       <div className='home-cta-row'>
-        <Link to='/work' className='projects-cta' data-testid='projects-link'>
+        <Link
+          to='/projects'
+          className='projects-cta'
+          data-testid='projects-link'
+        >
           projects →
         </Link>
       </div>
@@ -162,8 +166,8 @@ function Navigation() {
   const location = useLocation();
   const path = location.pathname;
 
-  const isWorkActive =
-    path === '/work' ||
+  const isProjectsActive =
+    path === '/projects' ||
     path === '/weathertron' ||
     path === '/chomptron' ||
     path === '/wrenchtron' ||
@@ -189,12 +193,12 @@ function Navigation() {
         home
       </Link>
       <Link
-        to='/work'
-        className={`nav-link ${isWorkActive ? 'active' : ''}`}
-        aria-current={isWorkActive ? 'page' : undefined}
+        to='/projects'
+        className={`nav-link ${isProjectsActive ? 'active' : ''}`}
+        aria-current={isProjectsActive ? 'page' : undefined}
         onClick={() =>
-          logger.info('Navigation clicked - Work', {
-            target: '/work',
+          logger.info('Navigation clicked - Projects', {
+            target: '/projects',
             timestamp: new Date().toISOString(),
           })
         }
@@ -259,7 +263,7 @@ function App() {
                       </>
                     }
                   />
-                  <Route path='/work' element={<Work />} />
+                  <Route path='/projects' element={<Projects />} />
                   <Route path='/chomptron' element={<Chomptron />} />
                   <Route path='/wrenchtron' element={<Wrenchtron />} />
                   <Route path='/swantron' element={<SwantronList />} />

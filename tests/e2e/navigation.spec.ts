@@ -14,7 +14,7 @@ test.describe('Navigation E2E Tests', () => {
     // Walk the new top-level nav: projects + blog (both internal pages with
     // recognizable content). about/home are covered implicitly.
     const navTargets = [
-      { name: 'projects' as const, expectedUrl: testData.urls.work },
+      { name: 'projects' as const, expectedUrl: testData.urls.projects },
       { name: 'blog' as const, expectedUrl: testData.urls.swantron },
     ];
 
@@ -25,7 +25,7 @@ test.describe('Navigation E2E Tests', () => {
       expect(currentUrl).toContain(expectedUrl);
 
       if (name === 'projects') {
-        await expect(page.locator('[data-testid="work-title"]')).toBeVisible();
+        await expect(page.locator('[data-testid="projects-title"]')).toBeVisible();
       } else if (name === 'blog') {
         const swantronPage = new SwantronPage(page);
         await expect(swantronPage.swantronList).toBeVisible();
@@ -60,6 +60,6 @@ test.describe('Navigation E2E Tests', () => {
     await homePage.waitForLoad();
 
     // Should be at work again
-    await expect(page.locator('[data-testid="work-title"]')).toBeVisible();
+    await expect(page.locator('[data-testid="projects-title"]')).toBeVisible();
   });
 });
