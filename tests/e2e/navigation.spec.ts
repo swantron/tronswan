@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../page-objects/HomePage';
-import { WeatherPage } from '../page-objects/WeatherPage';
 import { SwantronPage } from '../page-objects/SwantronPage';
 import { testData } from '../fixtures/test-data';
 
@@ -12,43 +11,30 @@ test.describe('Navigation E2E Tests', () => {
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
 
-    // Test navigation to each page
-    const pages = [
-      {
-        name: 'weather',
-        pageClass: WeatherPage,
-        expectedUrl: testData.urls.weather,
-      },
-      {
-        name: 'swantron',
-        pageClass: SwantronPage,
-        expectedUrl: testData.urls.swantron,
-      },
+    // Walk the new top-level nav: projects + blog (both internal pages with
+    // recognizable content). about/home are covered implicitly.
+    const navTargets = [
+      { name: 'projects' as const, expectedUrl: testData.urls.work },
+      { name: 'blog' as const, expectedUrl: testData.urls.swantron },
     ];
 
-    for (const { name, pageClass, expectedUrl } of pages) {
-      // Navigate to page
-      await homePage.clickNavLink(name as any);
+    for (const { name, expectedUrl } of navTargets) {
+      await homePage.clickNavLink(name);
 
-      // Verify we're on the correct page
       const currentUrl = await homePage.getCurrentUrl();
       expect(currentUrl).toContain(expectedUrl);
 
-      // Verify page-specific content loads
-      const pageInstance = new pageClass(page);
-      if (name === 'weather') {
-        await expect(pageInstance.temperatureDisplay).toBeVisible();
-      } else if (name === 'swantron') {
-        await expect(pageInstance.swantronList).toBeVisible();
+      if (name === 'projects') {
+        await expect(page.locator('[data-testid="work-title"]')).toBeVisible();
+      } else if (name === 'blog') {
+        const swantronPage = new SwantronPage(page);
+        await expect(swantronPage.swantronList).toBeVisible();
       }
 
-      // Navigate back to home
       await homePage.clickNavLink('home');
       await homePage.waitForLoad();
     }
   });
-
-  // External swantron link test removed due to waitForLoad method issues
 
   test('Browser back/forward navigation works', async ({ page }) => {
     const homePage = new HomePage(page);
@@ -57,8 +43,8 @@ test.describe('Navigation E2E Tests', () => {
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
 
-    // Navigate to weather
-    await homePage.clickNavLink('weather');
+    // Navigate to projects
+    await homePage.clickNavLink('projects');
     await homePage.waitForLoad();
 
     // Go back
@@ -73,10 +59,7 @@ test.describe('Navigation E2E Tests', () => {
     await page.goForward();
     await homePage.waitForLoad();
 
-    // Should be at weather again
-    const weatherPage = new WeatherPage(page);
-    await expect(weatherPage.temperatureDisplay).toBeVisible();
+    // Should be at work again
+    await expect(page.locator('[data-testid="work-title"]')).toBeVisible();
   });
-
-  // Direct URL navigation test removed due to missing test IDs
 });

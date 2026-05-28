@@ -151,7 +151,7 @@ function Home() {
 
       <div className='home-cta-row'>
         <Link to='/work' className='projects-cta' data-testid='projects-link'>
-          projects by swantron →
+          projects →
         </Link>
       </div>
     </div>
@@ -199,7 +199,7 @@ function Navigation() {
           })
         }
       >
-        work
+        projects
       </Link>
       <Link
         to='/hello'

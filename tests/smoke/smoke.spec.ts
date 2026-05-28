@@ -33,10 +33,15 @@ test.describe('Smoke Tests', () => {
       testData.expectedContent.home.swantronLinkHref
     );
 
-    // Projects CTA link
+    // Projects CTA link — substring match so the trailing arrow glyph doesn't
+    // tie this assertion to a UI flourish.
     await expect(homePage.projectsLink).toBeVisible();
-    await expect(homePage.projectsLink).toHaveText(
+    await expect(homePage.projectsLink).toContainText(
       testData.expectedContent.home.projectsLinkText
+    );
+    await expect(homePage.projectsLink).toHaveAttribute(
+      'href',
+      testData.expectedContent.home.projectsLinkHref
     );
   });
 

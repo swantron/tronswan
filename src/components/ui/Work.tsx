@@ -88,9 +88,9 @@ function Work() {
 
       <div className='work-content'>
         <h1 className='page-title' data-testid='work-title'>
-          work
+          projects
         </h1>
-        <p className='work-subtitle'>things i&apos;ve built</p>
+        <p className='work-subtitle'>some things i&apos;ve built</p>
 
         <div className='work-grid' data-testid='work-grid'>
           {PROJECTS.map(p => (

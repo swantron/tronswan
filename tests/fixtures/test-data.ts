@@ -18,7 +18,7 @@ export const testData = {
     home: {
       title: 'tron swan dot com',
       swantronLinkHref: '#',
-      projectsLinkText: 'projects by swantron',
+      projectsLinkText: 'projects',
       projectsLinkHref: '/work',
     },
 
@@ -32,7 +32,7 @@ export const testData = {
     navigation: {
       links: [
         { text: 'home', href: '/' },
-        { text: 'work', href: '/work' },
+        { text: 'projects', href: '/work' },
         { text: 'about', href: '/hello' },
         { text: 'blog', href: '/swantron' },
       ],

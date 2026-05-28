@@ -10,15 +10,11 @@ test.describe('Accessibility Regression Tests', () => {
     await homePage.goto(testData.urls.home);
     await homePage.waitForLoad();
 
-    // Check for proper heading hierarchy
+    // Home should have a single h1 (the brand title). The page has no h2;
+    // the primary CTA is a styled link rather than a heading.
     const h1 = page.locator('h1');
-    const h2 = page.locator('h2');
-
     await expect(h1).toHaveCount(1);
     await expect(h1).toHaveText(testData.expectedContent.home.title);
-
-    // Check that h2 exists (for swantron link)
-    await expect(h2).toHaveCount(1);
   });
 
   test('All images have alt text', async ({ page }) => {

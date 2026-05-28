@@ -65,7 +65,7 @@ describe('App Component', () => {
     expect(navLinks).toHaveLength(4);
 
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'work' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'projects' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'about' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'blog' })).toBeInTheDocument();
   });
@@ -109,7 +109,7 @@ describe('App Component', () => {
 
     const projectsLink = screen.getByTestId('projects-link');
     expect(projectsLink).toBeInTheDocument();
-    expect(projectsLink).toHaveTextContent('projects by swantron');
+    expect(projectsLink).toHaveTextContent('projects');
   });
 
   // Test to check if the home container is rendered.
@@ -157,10 +157,10 @@ describe('App Component', () => {
       });
     });
 
-    test('logs when work link is clicked', () => {
+    test('logs when projects link is clicked', () => {
       render(<App />);
-      const workLink = screen.getByRole('link', { name: 'work' });
-      fireEvent.click(workLink);
+      const projectsNavLink = screen.getByRole('link', { name: 'projects' });
+      fireEvent.click(projectsNavLink);
       expect(logger.info).toHaveBeenCalledWith('Navigation clicked - Work', {
         target: '/work',
         timestamp: expect.any(String),

@@ -16,7 +16,7 @@ export class HomePage extends BasePage {
   }
 
   get homeDescription() {
-    return this.page.locator('.home-description');
+    return this.page.locator('.home-cta-row');
   }
 
   // Home page specific actions

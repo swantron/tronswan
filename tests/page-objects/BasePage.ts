@@ -36,18 +36,12 @@ export class BasePage {
   // Navigation menu
   get navLinks() {
     return {
-      home: this.page.locator('a.nav-link').filter({ hasText: 'Home' }),
-      chomptron: this.page
+      home: this.page.locator('a.nav-link').filter({ hasText: 'home' }),
+      projects: this.page
         .locator('a.nav-link')
-        .filter({ hasText: 'chomptron' }),
-      swantron: this.page.locator('a.nav-link').filter({ hasText: 'swantron' }),
-      music: this.page.locator('a.nav-link').filter({ hasText: 'music' }),
-      mlb: this.page.locator('a.nav-link').filter({ hasText: 'mlb' }),
-      weather: this.page
-        .locator('a.nav-link')
-        .filter({ hasText: 'weathertron' }),
-      hello: this.page.locator('a.nav-link').filter({ hasText: 'hello' }),
-      health: this.page.locator('a.nav-link').filter({ hasText: 'health' }),
+        .filter({ hasText: 'projects' }),
+      about: this.page.locator('a.nav-link').filter({ hasText: 'about' }),
+      blog: this.page.locator('a.nav-link').filter({ hasText: 'blog' }),
     };
   }
 
