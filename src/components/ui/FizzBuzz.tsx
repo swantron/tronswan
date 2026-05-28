@@ -75,7 +75,7 @@ function FizzBuzz() {
           trontronbuzztron
         </h1>
         <p className='fizzbuzz-subtitle'>
-          🤖 robot-powered FizzBuzz sequence generator
+          🤖 robot-powered fizzbuzz sequence generator
         </p>
 
         <Card className='fizzbuzz-card'>

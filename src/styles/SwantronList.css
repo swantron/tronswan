@@ -17,9 +17,10 @@
 
 .swantron-byline {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--primary-color);
   margin-bottom: var(--space-6);
   line-height: 1.6;
+  text-transform: lowercase;
 }
 
 .swantron-site-link {

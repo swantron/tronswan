@@ -941,7 +941,7 @@ function Weather() {
         </h1>
 
         <p className='weather-byline'>
-          Real-time conditions and 5-day forecast for anywhere in the world.
+          real-time conditions and 5-day forecast for anywhere in the world
         </p>
 
         <div className='weather-search'>

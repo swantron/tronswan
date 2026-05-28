@@ -29,6 +29,7 @@
   margin-bottom: var(--space-8);
   font-weight: 300;
   letter-spacing: 2px;
+  text-transform: lowercase;
 }
 
 .hello-card {

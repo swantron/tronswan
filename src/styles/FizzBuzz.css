@@ -25,9 +25,10 @@
 }
 
 .fizzbuzz-subtitle {
-  color: var(--text-secondary);
+  color: var(--primary-color);
   font-size: 1.1rem;
   margin-bottom: var(--space-8);
+  text-transform: lowercase;
 }
 
 .fizzbuzz-card {

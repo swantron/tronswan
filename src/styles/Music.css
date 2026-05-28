@@ -85,8 +85,9 @@
 
 .user-subtitle {
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--primary-color);
   font-weight: 500;
+  text-transform: lowercase;
 }
 
 .music-controls {

@@ -34,9 +34,10 @@
 .resume-tagline {
   font-size: 1rem;
   font-weight: 500;
-  color: var(--text-muted, #71717a);
+  color: var(--primary-color);
   letter-spacing: 0.03em;
   margin: 0 0 1.5rem;
+  text-transform: lowercase;
 }
 
 .resume-contact {

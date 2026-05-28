@@ -24,7 +24,7 @@ describe('FizzBuzz Component', () => {
   test('renders subtitle', () => {
     render(<FizzBuzz />);
     expect(
-      screen.getByText('🤖 robot-powered FizzBuzz sequence generator')
+      screen.getByText('🤖 robot-powered fizzbuzz sequence generator')
     ).toBeInTheDocument();
   });
 

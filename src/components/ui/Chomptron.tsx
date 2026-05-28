@@ -111,8 +111,8 @@ const Chomptron: React.FC = () => {
             <h1 className='page-title'>chomptron</h1>
 
             <p className='chomptron-description'>
-              AI-powered recipe generator using Google Gemini. Enter ingredients
-              and get instant recipes.
+              ai-powered recipe generator using google gemini — type
+              ingredients, get a recipe
             </p>
 
             <form onSubmit={handleGenerate} className='chomptron-widget'>

@@ -67,9 +67,8 @@ const Wrenchtron: React.FC = () => {
             <h1 className='page-title'>wrenchtron</h1>
 
             <p className='wrenchtron-description'>
-              Vehicle maintenance tracker for mixed fleets. Logs service
-              history, calculates what&apos;s due next, and surfaces NHTSA
-              safety recalls automatically.
+              vehicle maintenance tracker for mixed fleets — service history,
+              what&apos;s due next, and nhtsa safety recalls
             </p>
 
             <div className='wrenchtron-cta'>
