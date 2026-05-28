@@ -125,6 +125,7 @@ function Home() {
       <h1 className='App-title' data-testid='app-title'>
         tronswan
       </h1>
+      <p className='App-subtitle'>personal projects &amp; tools</p>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a
         href='#'
