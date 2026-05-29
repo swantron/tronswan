@@ -27,12 +27,12 @@ describe('Hello Component', () => {
   test('renders description section', () => {
     render(<Hello />);
     expect(
-      screen.getByText('Staff Software Engineer @ Demandbase')
+      screen.getByText('staff software engineer @ demandbase')
     ).toBeInTheDocument();
     expect(
-      screen.getByText('DevX · CI/CD · AI · IaC · React')
+      screen.getByText('devx · ci/cd · ai · iac · react')
     ).toBeInTheDocument();
-    expect(screen.getByText('Bozeman, Montana')).toBeInTheDocument();
+    expect(screen.getByText('bozeman, montana')).toBeInTheDocument();
   });
 
   test('renders LinkedIn link', () => {
@@ -127,7 +127,7 @@ describe('Hello Component', () => {
     render(<Hello />);
 
     // Check for text
-    expect(screen.getByText(/Bozeman, Montana/)).toBeInTheDocument();
+    expect(screen.getByText(/bozeman, montana/)).toBeInTheDocument();
     expect(screen.getByText(/linkedin/)).toBeInTheDocument();
     expect(screen.getByText(/github/)).toBeInTheDocument();
     expect(screen.getByText(/resume/)).toBeInTheDocument();

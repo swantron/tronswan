@@ -10,21 +10,21 @@ import '../../styles/Wrenchtron.css';
 
 const FEATURES = [
   {
-    label: 'Mixed-fleet tracking',
+    label: 'mixed-fleet tracking',
     detail:
       'Cars, motorcycles, ATVs, mowers, boats, snowblowers — each type gets appropriate fields and service intervals.',
   },
   {
-    label: 'Smart scheduling',
+    label: 'smart scheduling',
     detail:
       'Mileage-based, time-based, seasonal, and calendar-month intervals. Composite "whichever comes first" also supported.',
   },
   {
-    label: 'NHTSA recall integration',
+    label: 'nhtsa recall integration',
     detail: 'Automatic open-recall lookup by VIN on every vehicle detail page.',
   },
   {
-    label: 'Offline-capable PWA',
+    label: 'offline-capable pwa',
     detail:
       'Installable on iOS and Android. Firestore persistence via IndexedDB keeps data available without a connection.',
   },
@@ -78,7 +78,7 @@ const Wrenchtron: React.FC = () => {
                 className='demo-button'
                 data-testid='demo-button'
               >
-                Try Demo →
+                try demo →
               </Button>
               <a
                 href='https://wrenchtron.com'

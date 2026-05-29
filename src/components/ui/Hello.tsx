@@ -23,9 +23,9 @@ function Hello() {
 
         <Card className='hello-card'>
           <div className='hello-description'>
-            <p>Staff Software Engineer @ Demandbase</p>
-            <p>DevX · CI/CD · AI · IaC · React</p>
-            <p>Bozeman, Montana</p>
+            <p>staff software engineer @ demandbase</p>
+            <p>devx · ci/cd · ai · iac · react</p>
+            <p>bozeman, montana</p>
           </div>
 
           <div className='hello-links'>

@@ -80,7 +80,7 @@ function Projects() {
   return (
     <div className='projects-page'>
       <SEO
-        title='Projects - Projects | Tron Swan'
+        title='Projects | Tron Swan'
         description='Personal projects by Joseph Swanson — Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
         keywords='Joseph Swanson, projects, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
         url='/projects'
@@ -132,15 +132,15 @@ function Projects() {
         <div className='projects-professional'>
           <h2 className='projects-section-title'>professional</h2>
           <p className='projects-professional-text'>
-            Staff Software Engineer @ Demandbase — DevX, CI/CD, IaC, AI tooling,
-            React. For the full story:{' '}
+            staff software engineer @ demandbase — devx, ci/cd, iac, ai tooling,
+            react. for the full story:{' '}
             <a
               href='https://www.linkedin.com/in/joseph-swanson-11092758/'
               target='_blank'
               rel='noopener noreferrer'
               className='projects-inline-link'
             >
-              LinkedIn
+              linkedin
             </a>
             ,{' '}
             <a
@@ -149,7 +149,7 @@ function Projects() {
               rel='noopener noreferrer'
               className='projects-inline-link'
             >
-              GitHub
+              github
             </a>
             , or{' '}
             <Link to='/resume' className='projects-inline-link'>

@@ -131,7 +131,7 @@ const Chomptron: React.FC = () => {
                   disabled={!ingredients.trim()}
                   data-testid='generate-button'
                 >
-                  Generate Recipe ✨
+                  generate recipe ✨
                 </Button>
               </div>
               <p className='widget-hint'>

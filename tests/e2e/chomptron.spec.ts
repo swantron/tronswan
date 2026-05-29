@@ -105,7 +105,7 @@ test.describe('Chomptron Widget E2E Tests', () => {
 
     // Verify description text
     await expect(
-      page.locator('text=AI-powered recipe generator using Google Gemini')
+      page.locator('text=ai-powered recipe generator using google gemini')
     ).toBeVisible();
 
     // Verify hint text

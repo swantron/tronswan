@@ -128,7 +128,7 @@ function Home() {
         tron swan dot com
       </h1>
       <p className='App-tagline' data-testid='app-tagline'>
-        projects &amp; experiments by joseph swanson — staff software engineer
+        projects &amp; experiments by joseph swanson
       </p>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a
