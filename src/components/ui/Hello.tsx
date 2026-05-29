@@ -36,7 +36,7 @@ function Hello() {
               rel='noopener noreferrer'
               aria-label="Joseph Swanson's LinkedIn"
             >
-              linkedin
+              linkedin ↗
             </a>
 
             <a
@@ -46,7 +46,7 @@ function Hello() {
               rel='noopener noreferrer'
               aria-label="Joseph's GitHub"
             >
-              github
+              github ↗
             </a>
 
             <a className='hello-link' href='/resume' aria-label='Resume'>
@@ -60,7 +60,7 @@ function Hello() {
               rel='noopener noreferrer'
               aria-label="Joseph's blog"
             >
-              blog
+              blog ↗
             </a>
           </div>
         </Card>

@@ -37,7 +37,7 @@ describe('Hello Component', () => {
 
   test('renders LinkedIn link', () => {
     render(<Hello />);
-    const linkedinLink = screen.getByText('linkedin');
+    const linkedinLink = screen.getByText(/^linkedin/);
     expect(linkedinLink).toBeInTheDocument();
     expect(linkedinLink.closest('a')).toHaveAttribute(
       'href',
@@ -95,8 +95,8 @@ describe('Hello Component', () => {
   test('links have correct CSS classes', () => {
     render(<Hello />);
 
-    const linkedinLink = screen.getByText('linkedin').closest('a');
-    const githubLink = screen.getByText('github').closest('a');
+    const linkedinLink = screen.getByText(/^linkedin/).closest('a');
+    const githubLink = screen.getByText(/^github/).closest('a');
     const resumeLink = screen.getByText('resume').closest('a');
 
     expect(linkedinLink).toHaveClass('hello-link');

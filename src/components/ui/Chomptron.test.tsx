@@ -64,7 +64,7 @@ describe('Chomptron Component', () => {
 
   test('renders external link to chomptron.com', () => {
     renderWithRouter(<Chomptron />);
-    const externalLink = screen.getByText('chomptron.com');
+    const externalLink = screen.getByText(/^chomptron\.com/);
     expect(externalLink).toBeInTheDocument();
     expect(externalLink.closest('a')).toHaveAttribute(
       'href',

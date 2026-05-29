@@ -140,7 +140,7 @@ function Projects() {
               rel='noopener noreferrer'
               className='projects-inline-link'
             >
-              linkedin
+              linkedin ↗
             </a>
             ,{' '}
             <a
@@ -149,7 +149,7 @@ function Projects() {
               rel='noopener noreferrer'
               className='projects-inline-link'
             >
-              github
+              github ↗
             </a>
             , or{' '}
             <Link to='/resume' className='projects-inline-link'>

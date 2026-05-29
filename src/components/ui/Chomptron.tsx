@@ -183,7 +183,7 @@ const Chomptron: React.FC = () => {
                 rel='noopener noreferrer'
                 className='chomptron-external-link'
               >
-                chomptron.com
+                chomptron.com ↗
               </a>{' '}
               for the full experience with recipe history, favorites, and more.
             </p>
