@@ -150,10 +150,6 @@ function Home() {
         />
       </a>
 
-      <p className='logo-hint' data-testid='logo-hint'>
-        ↑ click the robot for chaos
-      </p>
-
       <div className='home-cta-row'>
         <Link
           to='/projects'

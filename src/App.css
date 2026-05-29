@@ -116,20 +116,9 @@ body {
 }
 
 .home-cta-row {
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
   display: flex;
   justify-content: center;
-}
-
-.logo-hint {
-  margin-top: var(--space-4);
-  margin-bottom: 0;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  opacity: 0.6;
-  letter-spacing: 0.05em;
-  text-transform: lowercase;
-  text-align: center;
 }
 
 /* Logo styles */
