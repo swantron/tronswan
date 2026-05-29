@@ -19,11 +19,11 @@ function Hello() {
         <h1 className='page-title hello-title' data-testid='hello-title'>
           hello
         </h1>
-        <p className='hello-subtitle'>joseph swanson</p>
+        <p className='hello-subtitle'>staff software engineer @ demandbase</p>
 
         <Card className='hello-card'>
           <div className='hello-description'>
-            <p>staff software engineer @ demandbase</p>
+            <p>joseph swanson</p>
             <p>devx · ci/cd · ai · iac · react</p>
             <p>bozeman, montana</p>
           </div>

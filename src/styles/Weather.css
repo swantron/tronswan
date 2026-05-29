@@ -399,7 +399,7 @@
   text-align: center;
   color: var(--text-secondary);
   font-size: 1.1rem;
-  text-transform: uppercase;
+  text-transform: lowercase;
   letter-spacing: 0.05em;
   margin-top: var(--space-4);
   margin-bottom: var(--space-2);

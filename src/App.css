@@ -116,9 +116,20 @@ body {
 }
 
 .home-cta-row {
-  margin-top: var(--space-8);
+  margin-top: var(--space-6);
   display: flex;
   justify-content: center;
+}
+
+.logo-hint {
+  margin-top: var(--space-4);
+  margin-bottom: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  text-align: center;
 }
 
 /* Logo styles */
@@ -159,6 +170,7 @@ body {
   text-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
   text-transform: lowercase;
   text-align: center;
+  text-wrap: balance;
 }
 
 /* Primary CTA — projects button */

@@ -22,7 +22,7 @@ const PROJECTS: Project[] = [
     slug: 'wrenchtron',
     title: 'wrenchtron',
     tagline:
-      'Vehicle maintenance tracker for mixed fleets. NHTSA recall lookup, mileage and time-based service intervals, offline-capable PWA.',
+      'vehicle maintenance tracker for mixed fleets. nhtsa recall lookup, mileage and time-based service intervals, offline-capable pwa.',
     internalPath: '/wrenchtron',
     externalUrl: 'https://wrenchtron.com',
     tags: ['Next.js', 'Firebase', 'PWA', 'TypeScript'],
@@ -31,16 +31,25 @@ const PROJECTS: Project[] = [
     slug: 'chomptron',
     title: 'chomptron',
     tagline:
-      'AI recipe generator powered by Google Gemini. Type ingredients, get a recipe.',
+      'ai recipe generator powered by google gemini. type ingredients, get a recipe.',
     internalPath: '/chomptron',
     externalUrl: 'https://chomptron.com',
     tags: ['React', 'Gemini API', 'GCP'],
   },
   {
+    slug: 'swantron',
+    title: 'og blog',
+    tagline:
+      'wordpress blog reader fetching posts from swantron.com — tech, projects, and life.',
+    internalPath: '/swantron',
+    externalUrl: 'https://swantron.com',
+    tags: ['React', 'WordPress REST'],
+  },
+  {
     slug: 'weathertron',
     title: 'weathertron',
     tagline:
-      'Forecast and current conditions dashboard built on the OpenWeather API.',
+      'forecast and current conditions dashboard built on the openweather api.',
     internalPath: '/weathertron',
     tags: ['React', 'OpenWeather API'],
   },
@@ -48,25 +57,16 @@ const PROJECTS: Project[] = [
     slug: 'music',
     title: 'music',
     tagline:
-      'Spotify listening stats — top tracks, top artists, recently played, playlists.',
+      'spotify listening stats — top tracks, top artists, recently played, playlists.',
     internalPath: '/music',
     tags: ['React', 'Spotify API', 'OAuth'],
   },
   {
     slug: 'mlb',
     title: 'mlb',
-    tagline: 'Live standings and team records pulled from the MLB Stats API.',
+    tagline: 'live standings and team records pulled from the mlb stats api.',
     internalPath: '/mlb',
     tags: ['React', 'MLB Stats API'],
-  },
-  {
-    slug: 'swantron',
-    title: 'og blog',
-    tagline:
-      'WordPress blog reader fetching posts from swantron.com — tech, projects, and life.',
-    internalPath: '/swantron',
-    externalUrl: 'https://swantron.com',
-    tags: ['React', 'WordPress REST'],
   },
 ];
 

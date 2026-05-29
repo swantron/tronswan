@@ -136,7 +136,8 @@ function Home() {
         onClick={handleSwantronClick}
         data-testid='swantron-link'
         role='button'
-        aria-label='Navigate to random video'
+        aria-label='Click the robot for a random video'
+        title='click the robot for chaos'
         className='logo-link'
       >
         <img
@@ -148,6 +149,10 @@ function Home() {
           loading='eager'
         />
       </a>
+
+      <p className='logo-hint' data-testid='logo-hint'>
+        ↑ click the robot for chaos
+      </p>
 
       <div className='home-cta-row'>
         <Link

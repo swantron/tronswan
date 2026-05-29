@@ -316,7 +316,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
 
       {/* Temperature Section */}
       <div className='weather-section'>
-        <h3>Temperature</h3>
+        <h3>temperature</h3>
         {weather.temperature && (
           <Card className='weather-item'>
             <p data-testid='temperature-display'>
@@ -347,7 +347,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
 
       {/* Atmospheric Conditions */}
       <div className='weather-section'>
-        <h3>Atmospheric Conditions</h3>
+        <h3>atmospheric conditions</h3>
         {weather.pressure && (
           <Card className='weather-item'>
             <p data-testid='pressure-display'>
@@ -371,7 +371,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
 
       {/* Wind & Visibility */}
       <div className='weather-section'>
-        <h3>Wind & Visibility</h3>
+        <h3>wind & visibility</h3>
         {weather.windSpeed && (
           <Card className='weather-item'>
             <p data-testid='wind-display'>
@@ -394,7 +394,7 @@ function WeatherDisplay({ weather, temperatureUnit }: WeatherDisplayProps) {
       {/* Sun Times */}
       {(weather.sunrise || weather.sunset) && (
         <div className='weather-section'>
-          <h3>Sun Times</h3>
+          <h3>sun times</h3>
           {weather.sunrise && (
             <Card className='weather-item'>
               <p data-testid='sunrise-display'>

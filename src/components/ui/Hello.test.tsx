@@ -21,14 +21,14 @@ describe('Hello Component', () => {
 
   test('renders subtitle', () => {
     render(<Hello />);
-    expect(screen.getByText('joseph swanson')).toBeInTheDocument();
+    expect(
+      screen.getByText('staff software engineer @ demandbase')
+    ).toBeInTheDocument();
   });
 
   test('renders description section', () => {
     render(<Hello />);
-    expect(
-      screen.getByText('staff software engineer @ demandbase')
-    ).toBeInTheDocument();
+    expect(screen.getByText('joseph swanson')).toBeInTheDocument();
     expect(
       screen.getByText('devx · ci/cd · ai · iac · react')
     ).toBeInTheDocument();

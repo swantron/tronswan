@@ -86,7 +86,7 @@
 .building-learning-text {
   font-size: 0.9rem;
   color: var(--text-muted);
-  text-transform: uppercase;
+  text-transform: lowercase;
   letter-spacing: 2px;
   opacity: 0.7;
 }

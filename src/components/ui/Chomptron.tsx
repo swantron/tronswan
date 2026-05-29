@@ -135,7 +135,7 @@ const Chomptron: React.FC = () => {
                 </Button>
               </div>
               <p className='widget-hint'>
-                Opens chomptron.com with your ingredients pre-filled
+                opens chomptron.com with your ingredients pre-filled
               </p>
             </form>
 
@@ -176,7 +176,7 @@ const Chomptron: React.FC = () => {
             )}
 
             <p>
-              Visit{' '}
+              visit{' '}
               <a
                 href='https://chomptron.com'
                 target='_blank'

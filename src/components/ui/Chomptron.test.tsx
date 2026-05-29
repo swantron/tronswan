@@ -86,7 +86,7 @@ describe('Chomptron Component', () => {
 
   test('renders descriptive text about chomptron', () => {
     renderWithRouter(<Chomptron />);
-    expect(screen.getByText(/Visit/)).toBeInTheDocument();
+    expect(screen.getByText(/visit/)).toBeInTheDocument();
     expect(
       screen.getByText(
         /for the full experience with recipe history, favorites, and more/
