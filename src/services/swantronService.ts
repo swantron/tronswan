@@ -18,6 +18,17 @@ const extractImageFromContent = (content: string): string | null => {
   return imgMatch ? imgMatch[1] : null;
 };
 
+// Rewrite site-relative src/href ("/uploads/...") to absolute swantron.com URLs
+// so embedded media and inline links work when this content is rendered on
+// tronswan.com instead of swantron.com.
+const rewriteRelativeUrls = (html: string, apiUrl: string): string => {
+  if (!html) return html;
+  return html.replace(
+    /(\s(?:src|href|poster))="\/(?!\/)([^"]*)"/g,
+    (_, attr, path) => `${attr}="${apiUrl}/${path}"`
+  );
+};
+
 // Hugo JSON API response types
 interface HugoPost {
   id: number;
@@ -77,22 +88,28 @@ const fetchAllPosts = async (): Promise<HugoPost[]> => {
 
 // Helper to convert Hugo post to Post format
 const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
+  const apiUrl = getSwantronApiUrl();
+
+  // Rewrite relative URLs in HTML so videos/images/links resolve to
+  // swantron.com rather than tronswan.com.
+  const content = rewriteRelativeUrls(hugoPost.content, apiUrl);
+  const excerpt = rewriteRelativeUrls(hugoPost.excerpt, apiUrl);
+
   // If featuredImage is relative, make it absolute
   let featuredImage = hugoPost.featuredImage;
   if (featuredImage && !featuredImage.startsWith('http')) {
-    const apiUrl = getSwantronApiUrl();
     featuredImage = `${apiUrl}${featuredImage}`;
   }
   // Fallback to extracting from content if no featured image
   if (!featuredImage) {
-    featuredImage = extractImageFromContent(hugoPost.content);
+    featuredImage = extractImageFromContent(content);
   }
 
   return {
     id: hugoPost.id,
     title: hugoPost.title,
-    excerpt: hugoPost.excerpt,
-    content: hugoPost.content,
+    excerpt,
+    content,
     date: hugoPost.date,
     featuredImage,
     categories: hugoPost.categories || [],

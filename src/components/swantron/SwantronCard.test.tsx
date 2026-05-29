@@ -44,7 +44,7 @@ describe('SwantronCard Component', () => {
     expect(screen.getByText('December 25, 2023')).toBeInTheDocument();
     expect(screen.getByText('Technology')).toBeInTheDocument();
     expect(screen.getByText('Life')).toBeInTheDocument();
-    expect(screen.getByText('📖 Read on swantron.com')).toBeInTheDocument();
+    expect(screen.getByText('read on swantron.com ↗')).toBeInTheDocument();
   });
 
   test('renders featured image when available', () => {
@@ -98,7 +98,7 @@ describe('SwantronCard Component', () => {
     renderWithRouter(<SwantronCard post={mockPost} />);
 
     const externalLink = screen
-      .getByText('📖 Read on swantron.com')
+      .getByText('read on swantron.com ↗')
       .closest('a');
     expect(externalLink).toHaveAttribute('href', 'https://swantron.com/post/1');
     expect(externalLink).toHaveAttribute('target', '_blank');
@@ -234,7 +234,7 @@ describe('SwantronCard Component', () => {
     renderWithRouter(<SwantronCard post={mockPost} />);
 
     const externalLink = screen
-      .getByText('📖 Read on swantron.com')
+      .getByText('read on swantron.com ↗')
       .closest('a');
     expect(externalLink).toBeInTheDocument();
 

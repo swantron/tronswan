@@ -226,7 +226,7 @@ describe('SwantronDetail Component', () => {
       expect(screen.getByTestId('swantron-detail')).toBeInTheDocument();
     });
 
-    const externalLink = screen.getByText('📖 Read original on swantron.com');
+    const externalLink = screen.getByText('read original on swantron.com ↗');
     expect(externalLink).toHaveAttribute('href', 'https://swantron.com/post/1');
     expect(externalLink).toHaveAttribute('target', '_blank');
     expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
