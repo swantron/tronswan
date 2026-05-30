@@ -140,6 +140,14 @@
   padding-left: 2rem;
 }
 
+.swantron-detail-body ul {
+  list-style: disc;
+}
+
+.swantron-detail-body ol {
+  list-style: decimal;
+}
+
 .swantron-detail-body li {
   margin: 0.5rem 0;
 }
