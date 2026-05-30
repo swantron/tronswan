@@ -29,6 +29,47 @@ const rewriteRelativeUrls = (html: string, apiUrl: string): string => {
   );
 };
 
+// Content enhancements for embedded media:
+//   1. If the post content opens with a single <p><img></p> that's the same
+//      image as the article's featured image (hero), strip it — we already
+//      show that image at the top of the detail page, so rendering it again
+//      inline is a duplicate.
+//   2. For every <video> tag, ensure preload="auto" + playsinline are set so
+//      browsers fetch metadata eagerly and iOS plays inline. Inject the
+//      featured image as poster= when missing — otherwise the player shows
+//      a black rectangle until the user hits play (the recording's first
+//      frame is often black).
+const enhanceMediaInContent = (
+  html: string,
+  posterUrl: string | null
+): string => {
+  if (!html) return html;
+  let out = html;
+
+  if (posterUrl) {
+    const leadImgRegex = /<p>\s*<img([^>]*)>\s*<\/p>\s*/i;
+    const match = out.match(leadImgRegex);
+    if (match) {
+      const srcMatch = /\ssrc="([^"]+)"/i.exec(match[1]);
+      if (srcMatch && srcMatch[1] === posterUrl) {
+        out = out.replace(match[0], '');
+      }
+    }
+  }
+
+  out = out.replace(/<video(\s[^>]*?)?>/gi, (_full, rawAttrs) => {
+    let attrs = rawAttrs || '';
+    if (!/\bpreload\s*=/i.test(attrs)) attrs += ' preload="auto"';
+    if (!/\bplaysinline\b/i.test(attrs)) attrs += ' playsinline';
+    if (posterUrl && !/\bposter\s*=/i.test(attrs)) {
+      attrs += ` poster="${posterUrl}"`;
+    }
+    return `<video${attrs}>`;
+  });
+
+  return out;
+};
+
 // Hugo JSON API response types
 interface HugoPost {
   id: number;
@@ -92,7 +133,7 @@ const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
 
   // Rewrite relative URLs in HTML so videos/images/links resolve to
   // swantron.com rather than tronswan.com.
-  const content = rewriteRelativeUrls(hugoPost.content, apiUrl);
+  let content = rewriteRelativeUrls(hugoPost.content, apiUrl);
   const excerpt = rewriteRelativeUrls(hugoPost.excerpt, apiUrl);
 
   // If featuredImage is relative, make it absolute
@@ -104,6 +145,11 @@ const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
   if (!featuredImage) {
     featuredImage = extractImageFromContent(content);
   }
+
+  // Dedupe lead <p><img></p> against featuredImage, and inject poster +
+  // preload + playsinline onto any <video> tags so the player previews the
+  // poster image instead of a black rectangle.
+  content = enhanceMediaInContent(content, featuredImage);
 
   return {
     id: hugoPost.id,
