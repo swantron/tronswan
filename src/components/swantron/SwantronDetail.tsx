@@ -125,7 +125,7 @@ const SwantronDetail: React.FC = () => {
               rel='noopener noreferrer'
               className='swantron-external-button'
             >
-              read original on swantron.com ↗
+              goto swantron.com ↗
             </a>
           </div>
 

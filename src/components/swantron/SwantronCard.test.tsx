@@ -44,7 +44,7 @@ describe('SwantronCard Component', () => {
     expect(screen.getByText('December 25, 2023')).toBeInTheDocument();
     expect(screen.getByText('Technology')).toBeInTheDocument();
     expect(screen.getByText('Life')).toBeInTheDocument();
-    expect(screen.getByText('read on swantron.com ↗')).toBeInTheDocument();
+    expect(screen.getByText('goto swantron.com ↗')).toBeInTheDocument();
   });
 
   test('renders featured image when available', () => {
@@ -97,9 +97,7 @@ describe('SwantronCard Component', () => {
   test('renders external link with correct attributes', () => {
     renderWithRouter(<SwantronCard post={mockPost} />);
 
-    const externalLink = screen
-      .getByText('read on swantron.com ↗')
-      .closest('a');
+    const externalLink = screen.getByText('goto swantron.com ↗').closest('a');
     expect(externalLink).toHaveAttribute('href', 'https://swantron.com/post/1');
     expect(externalLink).toHaveAttribute('target', '_blank');
     expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
@@ -233,9 +231,7 @@ describe('SwantronCard Component', () => {
   test('external link onClick stops propagation', () => {
     renderWithRouter(<SwantronCard post={mockPost} />);
 
-    const externalLink = screen
-      .getByText('read on swantron.com ↗')
-      .closest('a');
+    const externalLink = screen.getByText('goto swantron.com ↗').closest('a');
     expect(externalLink).toBeInTheDocument();
 
     // Simulate the click - React will call the onClick handler
