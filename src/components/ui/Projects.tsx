@@ -17,6 +17,56 @@ interface Project {
   tags: string[];
 }
 
+interface BloggingItem {
+  slug: string;
+  title: string;
+  year: string;
+  description: string;
+  url: string;
+}
+
+const BLOGGING: BloggingItem[] = [
+  {
+    slug: 'secure-base-images',
+    title: 'secure base images for docker',
+    year: '2025',
+    description:
+      'distroless docker base for static go binaries — zero vulns, no shell, non-root.',
+    url: 'https://swantron.com/2025/11/30/secure-base-images/',
+  },
+  {
+    slug: 'self-hosting-bluesky-pds',
+    title: 'self-hosting a bluesky pds',
+    year: '2026',
+    description:
+      'running my own at protocol personal data server — federated, portable.',
+    url: 'https://swantron.com/2026/01/29/self-hosting-bluesky-pds/',
+  },
+  {
+    slug: 'wordpress-to-hugo-migration',
+    title: 'wordpress → hugo migration',
+    year: '2026',
+    description:
+      'fourteen years of posts moved off wordpress onto a hugo static site.',
+    url: 'https://swantron.com/2026/01/18/wordpress-to-hugo-migration/',
+  },
+  {
+    slug: 'aggressive-tv-repair',
+    title: 'aggressive tv repair: baking a motherboard',
+    year: '2018',
+    description: 'an lg tv with a stuck boot sequence got a turn in the oven.',
+    url: 'https://swantron.com/2018/02/20/aggressive-tv-repair-baking-a-motherboard/',
+  },
+  {
+    slug: 'garage-door-hack',
+    title: 'garage door hack: open-er-o-matic 3000',
+    year: '2011',
+    description:
+      'arduino + ping sensor + servo + leds, automating the garage door.',
+    url: 'https://swantron.com/2011/04/13/garage-door-hack/',
+  },
+];
+
 const PROJECTS: Project[] = [
   {
     slug: 'wrenchtron',
@@ -127,6 +177,46 @@ function Projects() {
               </div>
             </Card>
           ))}
+        </div>
+
+        <div className='projects-writing' data-testid='projects-writing'>
+          <h2 className='projects-section-title'>blogging</h2>
+          <p className='projects-writing-sub'>
+            selected posts from swantron.com
+          </p>
+
+          <ul className='projects-writing-list'>
+            {BLOGGING.map(w => (
+              <li key={w.slug} className='projects-writing-item'>
+                <a
+                  href={w.url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='projects-writing-link'
+                  data-testid={`projects-writing-link-${w.slug}`}
+                >
+                  <div className='projects-writing-row'>
+                    <span className='projects-writing-title'>
+                      {w.title} <span className='projects-writing-ext'>↗</span>
+                    </span>
+                    <span className='projects-writing-year'>{w.year}</span>
+                  </div>
+                  <p className='projects-writing-desc'>{w.description}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p className='projects-writing-footer'>
+            <a
+              href='https://swantron.com/hof/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='projects-inline-link'
+            >
+              see the full hall of fame ↗
+            </a>
+          </p>
         </div>
 
         <div className='projects-professional'>
