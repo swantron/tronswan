@@ -23,6 +23,11 @@ export interface Post {
   categories: Category[];
   tags: Tag[];
   link: string;
+  // True when the post body originally opened with the same image we'd render
+  // as the detail-page hero — the inline copy was stripped during content
+  // enhancement, so the detail view should also drop the hero to avoid the
+  // featured image showing up twice.
+  heroIsDuplicate?: boolean;
 }
 
 export interface SwantronServiceResponse {

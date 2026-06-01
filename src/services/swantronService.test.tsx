@@ -168,6 +168,7 @@ describe('swantronService', () => {
         ],
         tags: [{ id: 1, name: 'Tag 2', slug: 'tag-2', link: '/tags/tag-2/' }],
         link: '/index.php/2023/12/26/test-post-2/',
+        heroIsDuplicate: false,
       });
     });
 

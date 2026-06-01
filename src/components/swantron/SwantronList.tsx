@@ -70,7 +70,7 @@ const SwantronList: React.FC = () => {
         <div className='swantron-list-header'>
           <h1 className='page-title'>og blog</h1>
           <p className='swantron-byline'>
-            personal blog — tech, projects, and life{' '}
+            personal blog — tech, projects, and life.{' '}
             <a
               href='https://swantron.com'
               target='_blank'

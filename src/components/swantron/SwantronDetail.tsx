@@ -85,7 +85,7 @@ const SwantronDetail: React.FC = () => {
       />
 
       <article className='swantron-detail' data-testid='swantron-detail'>
-        {post.featuredImage && (
+        {post.featuredImage && !post.heroIsDuplicate && (
           <div className='swantron-detail-image'>
             <img src={post.featuredImage} alt={post.title} loading='lazy' />
           </div>

@@ -42,9 +42,10 @@ const rewriteRelativeUrls = (html: string, apiUrl: string): string => {
 const enhanceMediaInContent = (
   html: string,
   posterUrl: string | null
-): string => {
-  if (!html) return html;
+): { content: string; leadImageStripped: boolean } => {
+  if (!html) return { content: html, leadImageStripped: false };
   let out = html;
+  let leadImageStripped = false;
 
   if (posterUrl) {
     const leadImgRegex = /<p>\s*<img([^>]*)>\s*<\/p>\s*/i;
@@ -53,6 +54,7 @@ const enhanceMediaInContent = (
       const srcMatch = /\ssrc="([^"]+)"/i.exec(match[1]);
       if (srcMatch && srcMatch[1] === posterUrl) {
         out = out.replace(match[0], '');
+        leadImageStripped = true;
       }
     }
   }
@@ -67,7 +69,7 @@ const enhanceMediaInContent = (
     return `<video${attrs}>`;
   });
 
-  return out;
+  return { content: out, leadImageStripped };
 };
 
 // Hugo JSON API response types
@@ -148,8 +150,12 @@ const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
 
   // Dedupe lead <p><img></p> against featuredImage, and inject poster +
   // preload + playsinline onto any <video> tags so the player previews the
-  // poster image instead of a black rectangle.
-  content = enhanceMediaInContent(content, featuredImage);
+  // poster image instead of a black rectangle. We track whether we stripped
+  // a lead image so the detail view can also drop its hero (otherwise the
+  // same image would render as a 300px hero AND immediately again — once via
+  // the body, once via the swantron-detail-image block).
+  const enhanced = enhanceMediaInContent(content, featuredImage);
+  content = enhanced.content;
 
   return {
     id: hugoPost.id,
@@ -161,6 +167,7 @@ const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
     categories: hugoPost.categories || [],
     tags: hugoPost.tags || [],
     link: hugoPost.link,
+    heroIsDuplicate: enhanced.leadImageStripped,
   };
 };
 
