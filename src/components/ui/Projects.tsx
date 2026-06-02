@@ -12,8 +12,9 @@ interface Project {
   slug: string;
   title: string;
   tagline: string;
-  internalPath: string;
+  internalPath?: string;
   externalUrl?: string;
+  blogUrl?: string;
   tags: string[];
 }
 
@@ -26,6 +27,14 @@ interface BloggingItem {
 }
 
 const BLOGGING: BloggingItem[] = [
+  {
+    slug: 'minifier-cli',
+    title: 'minifier-cli: shrink any docker image without touching its dockerfile',
+    year: '2026',
+    description:
+      'born from vuln noise on third-party images we run but don\'t own — traces runtime file access, rebuilds from scratch.',
+    url: 'https://swantron.com/2026/06/01/minifier-cli/',
+  },
   {
     slug: 'secure-base-images',
     title: 'secure base images for docker',
@@ -68,6 +77,15 @@ const BLOGGING: BloggingItem[] = [
 ];
 
 const PROJECTS: Project[] = [
+  {
+    slug: 'minifier-cli',
+    title: 'minifier-cli',
+    tagline:
+      'strips third-party docker images down to only the files they actually use at runtime. 80-90% size reduction, no dockerfile changes required.',
+    externalUrl: 'https://github.com/swantron/minifier-cli',
+    blogUrl: 'https://swantron.com/2026/06/01/minifier-cli/',
+    tags: ['Go', 'Docker', 'DevX', 'Security'],
+  },
   {
     slug: 'wrenchtron',
     title: 'wrenchtron',
@@ -156,14 +174,26 @@ function Projects() {
                   ))}
                 </div>
                 <div className='projects-card-links'>
-                  <Link
-                    to={p.internalPath}
-                    className='projects-card-link primary'
-                    data-testid={`projects-card-link-${p.slug}`}
-                  >
-                    explore →
-                  </Link>
-                  {p.externalUrl && (
+                  {p.internalPath ? (
+                    <Link
+                      to={p.internalPath}
+                      className='projects-card-link primary'
+                      data-testid={`projects-card-link-${p.slug}`}
+                    >
+                      explore →
+                    </Link>
+                  ) : (
+                    <a
+                      href={p.externalUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='projects-card-link primary'
+                      data-testid={`projects-card-link-${p.slug}`}
+                    >
+                      source ↗
+                    </a>
+                  )}
+                  {p.internalPath && p.externalUrl && (
                     <a
                       href={p.externalUrl}
                       target='_blank'
@@ -171,6 +201,16 @@ function Projects() {
                       className='projects-card-link secondary'
                     >
                       live site ↗
+                    </a>
+                  )}
+                  {p.blogUrl && (
+                    <a
+                      href={p.blogUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='projects-card-link secondary'
+                    >
+                      blog post ↗
                     </a>
                   )}
                 </div>
