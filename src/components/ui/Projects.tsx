@@ -36,14 +36,6 @@ const BLOGGING: BloggingItem[] = [
     url: 'https://swantron.com/2026/06/01/minifier-cli/',
   },
   {
-    slug: 'secure-base-images',
-    title: 'secure base images for docker',
-    year: '2025',
-    description:
-      'distroless docker base for static go binaries — zero vulns, no shell, non-root.',
-    url: 'https://swantron.com/2025/11/30/secure-base-images/',
-  },
-  {
     slug: 'self-hosting-bluesky-pds',
     title: 'self-hosting a bluesky pds',
     year: '2026',
@@ -58,6 +50,14 @@ const BLOGGING: BloggingItem[] = [
     description:
       'fourteen years of posts moved off wordpress onto a hugo static site.',
     url: 'https://swantron.com/2026/01/18/wordpress-to-hugo-migration/',
+  },
+  {
+    slug: 'secure-base-images',
+    title: 'secure base images for docker',
+    year: '2025',
+    description:
+      'distroless docker base for static go binaries — zero vulns, no shell, non-root.',
+    url: 'https://swantron.com/2025/11/30/secure-base-images/',
   },
   {
     slug: 'aggressive-tv-repair',
@@ -77,15 +77,6 @@ const BLOGGING: BloggingItem[] = [
 ];
 
 const PROJECTS: Project[] = [
-  {
-    slug: 'minifier-cli',
-    title: 'minifier-cli',
-    tagline:
-      'strips third-party docker images down to only the files they actually use at runtime. 80-90% size reduction, no dockerfile changes required.',
-    externalUrl: 'https://github.com/swantron/minifier-cli',
-    blogUrl: 'https://swantron.com/2026/06/01/minifier-cli/',
-    tags: ['Go', 'Docker', 'DevX', 'Security'],
-  },
   {
     slug: 'wrenchtron',
     title: 'wrenchtron',
@@ -131,10 +122,19 @@ const PROJECTS: Project[] = [
   },
   {
     slug: 'mlb',
-    title: 'mlb',
+    title: 'mlb stats hub',
     tagline: 'live standings and team records pulled from the mlb stats api.',
     internalPath: '/mlb',
     tags: ['React', 'MLB Stats API'],
+  },
+  {
+    slug: 'minifier-cli',
+    title: 'minifier-cli',
+    tagline:
+      'strips third-party docker images down to only the files they actually use at runtime. 80-90% size reduction, no dockerfile changes required.',
+    externalUrl: 'https://github.com/swantron/minifier-cli',
+    blogUrl: 'https://swantron.com/2026/06/01/minifier-cli/',
+    tags: ['Go', 'Docker', 'DevX', 'Security'],
   },
 ];
 
