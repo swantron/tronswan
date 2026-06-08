@@ -118,10 +118,8 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
     });
   };
 
-  const formatSlotTime = (dtTxt: string) => {
-    const [, time] = dtTxt.split(' ');
-    const [hourStr] = time.split(':');
-    const hour = parseInt(hourStr, 10);
+  const formatSlotTime = (dt: number) => {
+    const hour = new Date(dt * 1000).getHours();
     if (hour === 0) return '12 AM';
     if (hour < 12) return `${hour} AM`;
     if (hour === 12) return '12 PM';
@@ -217,7 +215,7 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
               {selectedDay.items.map(slot => (
                 <div key={slot.dt} className='forecast-slot'>
                   <div className='forecast-slot-time'>
-                    {formatSlotTime(slot.dt_txt)}
+                    {formatSlotTime(slot.dt)}
                   </div>
                   <img
                     src={`https://openweathermap.org/img/wn/${slot.weather[0].icon}.png`}
@@ -454,7 +452,8 @@ function Weather() {
   ): DailyForecast[] => {
     const grouped = forecastList.reduce(
       (acc, item) => {
-        const date = item.dt_txt.split(' ')[0]; // YYYY-MM-DD from API (UTC)
+        // Use local date (not UTC from dt_txt) so slots aren't split across day boundaries
+        const date = new Date(item.dt * 1000).toLocaleDateString('en-CA');
         if (!acc[date]) acc[date] = [];
         acc[date].push(item);
         return acc;
@@ -465,7 +464,7 @@ function Weather() {
     return Object.values(grouped)
       .slice(0, 5)
       .map(dayItems => ({
-        date: dayItems[0].dt_txt.split(' ')[0],
+        date: new Date(dayItems[0].dt * 1000).toLocaleDateString('en-CA'),
         high: Math.max(...dayItems.map(item => item.main.temp)),
         low: Math.min(...dayItems.map(item => item.main.temp)),
         description: dayItems[0].weather[0].description,
