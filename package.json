@@ -7,6 +7,7 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
+    "@swantron/otel-bootstrap": "^0.1.0",
     "express": "^5.2.1",
     "react": "19.2.6",
     "react-dom": "19.2.6",
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "start": "node server.js",
+    "start": "node --import @swantron/otel-bootstrap/register server.js",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",

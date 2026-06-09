@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
+import { syntheticMarkerMiddleware } from '@swantron/otel-bootstrap';
 
 // Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,10 @@ const logger = {
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// Stamp synthetic run ids from watchtron probes onto the active server span so
+// the control plane can confirm probe traffic reached this instrumented origin.
+app.use(syntheticMarkerMiddleware());
 
 // Security middleware
 app.use((req, res, next) => {
