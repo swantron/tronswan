@@ -121,3 +121,15 @@ jobs:
         run: |
           echo 'Running full Playwright test suite against deployed site...'
           yarn test:e2e
+
+  # Post-deploy gate: drive synthetic traffic at the live URL and fail if the
+  # white-box telemetry didn't land in the watchtron control plane (proves the
+  # deploy is actually serving instrumented traffic end-to-end).
+  watchtron-verify:
+    needs: deploy-and-validate
+    uses: swantron/watchtron/.github/workflows/verify.yml@main
+    with:
+      service: tronswan
+    secrets:
+      otlp_endpoint: ${{ secrets.WATCHTRON_OTLP_ENDPOINT }}
+      token: ${{ secrets.WATCHTRON_TOKEN }}

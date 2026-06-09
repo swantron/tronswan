@@ -1,0 +1,63 @@
+name: Sync watchtron env (DigitalOcean)
+
+# Codifies the tronswan runtime instrumentation env vars that used to be set by
+# hand in the DigitalOcean console. Fetches the app's current spec, upserts only
+# the WATCHTRON_* vars onto the service component (leaving everything else
+# untouched), and applies it. Manual trigger because updating the spec rolls a
+# new deployment — run it once to adopt, then again only when these change.
+
+on:
+  workflow_dispatch:
+
+env:
+  DO_APP_ID: 0513ce4c-b074-4139-bb38-a1c6a5bc97a6
+  WATCHTRON_SERVICE_NAME: tronswan-web
+
+jobs:
+  sync-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upsert WATCHTRON_* env vars on the DO app spec
+        env:
+          DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          OTLP_ENDPOINT: ${{ secrets.WATCHTRON_OTLP_ENDPOINT }}
+          WATCHTRON_TOKEN: ${{ secrets.WATCHTRON_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${OTLP_ENDPOINT:-}" ] || [ -z "${WATCHTRON_TOKEN:-}" ]; then
+            echo "::error::WATCHTRON_OTLP_ENDPOINT and WATCHTRON_TOKEN must be set as repo secrets."
+            exit 1
+          fi
+
+          api="https://api.digitalocean.com/v2/apps/${DO_APP_ID}"
+          auth="Authorization: Bearer ${DO_TOKEN}"
+
+          echo "Fetching current app spec..."
+          curl -fsS -H "$auth" "$api" | jq '.app.spec' > spec.json
+
+          echo "Upserting WATCHTRON_* onto the service component..."
+          jq \
+            --arg ep "$OTLP_ENDPOINT" \
+            --arg tok "$WATCHTRON_TOKEN" \
+            --arg name "$WATCHTRON_SERVICE_NAME" \
+            '
+            if (.services // [] | length) == 0
+            then error("app spec has no service component")
+            else . end
+            | .services[0].envs = (
+                ((.services[0].envs // []) | map(select(.key | startswith("WATCHTRON_") | not)))
+                + [
+                    {key:"WATCHTRON_OTLP_ENDPOINT", value:$ep,  scope:"RUN_TIME", type:"GENERAL"},
+                    {key:"WATCHTRON_TOKEN",         value:$tok, scope:"RUN_TIME", type:"SECRET"},
+                    {key:"WATCHTRON_SERVICE_NAME",  value:$name, scope:"RUN_TIME", type:"GENERAL"}
+                  ]
+              )
+            ' spec.json > new_spec.json
+
+          jq -n --slurpfile s new_spec.json '{spec: $s[0]}' > payload.json
+
+          echo "Applying updated spec (triggers a redeploy)..."
+          curl -fsS -X PUT -H "$auth" -H "Content-Type: application/json" \
+            -d @payload.json "$api" | jq -r '.app.updated_at // "updated"'
+          echo "Done."
