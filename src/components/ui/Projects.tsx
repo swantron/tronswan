@@ -15,6 +15,7 @@ interface Project {
   internalPath?: string;
   externalUrl?: string;
   blogUrl?: string;
+  liveUrl?: string;
   tags: string[];
 }
 
@@ -136,6 +137,23 @@ const PROJECTS: Project[] = [
     blogUrl: 'https://swantron.com/2026/06/01/minifier-cli/',
     tags: ['Go', 'Docker', 'DevX', 'Security'],
   },
+  {
+    slug: 'watchtron',
+    title: 'watchtron',
+    tagline:
+      'fleet observability paved road. every deploy drives synthetic opentelemetry traffic at the live service and fails unless the new build proves it is serving real requests end-to-end — trace correlation, version assertion, latency regression detection. pairs with uptime-monitor to power the /status page.',
+    externalUrl: 'https://github.com/swantron/watchtron',
+    liveUrl: 'https://watch.swantron.com',
+    tags: ['OpenTelemetry', 'Node', 'Terraform', 'GCP', 'CI/CD'],
+  },
+  {
+    slug: 'uptime-monitor',
+    title: 'uptime-monitor',
+    tagline:
+      'continuous heartbeat for the fleet. a 5-minute github actions cron pings every service and tracks uptime % and incidents over time in a public gist — deliberately tiny, one file, zero infrastructure.',
+    externalUrl: 'https://github.com/swantron/uptime-monitor',
+    tags: ['Node', 'GitHub Actions', 'Monitoring'],
+  },
 ];
 
 function Projects() {
@@ -211,6 +229,16 @@ function Projects() {
                       className='projects-card-link secondary'
                     >
                       blog post ↗
+                    </a>
+                  )}
+                  {p.liveUrl && (
+                    <a
+                      href={p.liveUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='projects-card-link secondary'
+                    >
+                      live dashboard ↗
                     </a>
                   )}
                 </div>

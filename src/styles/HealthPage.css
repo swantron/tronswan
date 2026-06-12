@@ -5,6 +5,30 @@
   color: var(--primary-text, #ffffff);
 }
 
+.health-intro {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 70ch;
+  margin: 0.25rem 0 1.5rem;
+}
+
+.health-intro-link {
+  color: var(--accent-color, #10b981);
+  text-decoration: none;
+}
+
+.health-intro-link:hover {
+  text-decoration: underline;
+}
+
+.health-section-note {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
 .health-content {
   max-width: var(--max-width);
   margin: 0 auto;

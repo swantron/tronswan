@@ -209,6 +209,31 @@ function HealthPage() {
           service health & status
         </h1>
 
+        <p className='health-intro' data-testid='health-intro'>
+          how this is gathered: four independent sources. your browser pings each
+          site live for response time; continuous uptime and incidents come from{' '}
+          <a
+            href='https://github.com/swantron/uptime-monitor'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='health-intro-link'
+          >
+            uptime-monitor
+          </a>{' '}
+          (a 5-minute cron writing to a public gist); per-deploy verification —
+          proof the new build is actually serving traffic end-to-end — comes from{' '}
+          <a
+            href='https://github.com/swantron/watchtron'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='health-intro-link'
+          >
+            watchtron
+          </a>
+          ; and the deployments / infrastructure tabs read the github actions and
+          digitalocean apis.
+        </p>
+
         {/* Overall Status Summary */}
         {(() => {
           const overallStatus = getOverallStatus();
@@ -357,6 +382,12 @@ function HealthPage() {
         <div className='tab-content'>
           {activeTab === 'services' && (
             <div className='health-section'>
+              <p className='health-section-note'>
+                each service shows a live response time (measured from your
+                browser now), continuous uptime from uptime-monitor&apos;s
+                5-minute checks, and the last verified deploy from watchtron (✓ =
+                the new build was proven serving end-to-end).
+              </p>
               <ServiceHealth
                 ref={serviceHealthRef}
                 services={healthData.services}
