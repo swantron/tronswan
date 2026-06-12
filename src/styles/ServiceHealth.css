@@ -260,6 +260,18 @@
   color: #f56565;
 }
 
+.deploy {
+  font-family: var(--font-mono);
+}
+
+.deploy-verified {
+  color: #48bb78;
+}
+
+.deploy-failed {
+  color: #f56565;
+}
+
 .service-summary {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(16, 185, 129, 0.3);

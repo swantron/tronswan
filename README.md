@@ -19,7 +19,7 @@ building / deploying / learning
 - 🌡️ **Weathertron** — Real-time weather and 5-day forecast. Autocomplete city search, °F/°C/K toggle
 - 📄 **Resume** — Content dynamically loaded from Google Docs API ([setup guide](docs/GOOGLE_DOCS_SETUP.md))
 - 🎬 **Shorts** — Gallery of video shorts with modal player
-- 📊 **Status** — Service health dashboard with live API checks, GitHub Actions deployment status, and DigitalOcean monitoring ([guide](docs/HEALTH_PAGE_README.md))
+- 📊 **Status** — Blended fleet health at `/status`: live API checks + continuous uptime/incidents from [uptime-monitor](https://github.com/swantron/uptime-monitor) (the heartbeat) overlaid with verified-deploy provenance from [watchtron](https://github.com/swantron/watchtron) (the deploy gate), plus GitHub Actions + DigitalOcean monitoring ([guide](docs/HEALTH_PAGE_README.md))
 - 🏠 **Home** — Hub page; clicking the logo navigates to a random video short
 
 ## Tech Stack

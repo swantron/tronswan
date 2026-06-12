@@ -11,6 +11,10 @@ import {
   fetchUptimeData,
   getServiceUptime,
 } from '../../services/uptimeApiService';
+import {
+  fetchWatchtronStatus,
+  getDeployForUrl,
+} from '../../services/watchtronApiService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import '../../styles/ServiceHealth.css';
@@ -41,7 +45,23 @@ interface ServiceInfo {
   lastChecked: Date;
   responseTime?: number;
   uptime?: number;
+  // Deploy provenance from watchtron (the deploy-verification side of the blend).
+  deploy?: {
+    pass: boolean;
+    version: string | null;
+    at: string;
+    endToEnd: boolean | null;
+    whiteBox: boolean;
+  };
 }
+
+const relativeTime = (iso: string): string => {
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return `${Math.floor(s)}s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
+};
 
 const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
   ({ services }, ref) => {
@@ -351,15 +371,30 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
         'MLB Stats API': 'mlbApi',
       };
 
-      // Fetch uptime data from Gist and merge with browser health checks
+      // Fetch uptime data (Gist) + watchtron deploy verdicts, and merge both
+      // onto the browser health checks. watchtron is best-effort: if it's
+      // unreachable the page still shows uptime, just without deploy provenance.
       const uptimeData = await fetchUptimeData();
+      const watchtronData = await fetchWatchtronStatus();
       const servicesWithUptime = updatedServices.map(service => {
         const key = nameToKey[service.name];
         const uptime =
           key && uptimeData ? getServiceUptime(uptimeData, key) : undefined;
+        const wt = getDeployForUrl(watchtronData, service.url);
+        const lv = wt?.lastVerdict;
+        const deploy = lv
+          ? {
+              pass: lv.pass,
+              version: lv.servedVersion ?? null,
+              at: lv.at,
+              endToEnd: lv.endToEnd ?? null,
+              whiteBox: !!lv.whiteBox,
+            }
+          : undefined;
         return {
           ...service,
           uptime,
+          deploy,
         };
       });
 
@@ -530,6 +565,24 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
                           className={`metric-value uptime ${service.uptime >= 99.9 ? 'uptime-excellent' : service.uptime >= 95 ? 'uptime-good' : 'uptime-poor'}`}
                         >
                           {service.uptime.toFixed(2)}%
+                        </span>
+                      </div>
+                    )}
+
+                    {service.deploy && (
+                      <div className='metric metric-highlight'>
+                        <span className='metric-label'>Last Deploy:</span>
+                        <span
+                          className={`metric-value deploy ${service.deploy.pass ? 'deploy-verified' : 'deploy-failed'}`}
+                        >
+                          {service.deploy.pass ? 'verified ✓' : 'failed ✗'}
+                          {service.deploy.whiteBox && service.deploy.endToEnd
+                            ? ' · e2e'
+                            : ''}
+                          {service.deploy.version
+                            ? ` · ${service.deploy.version.slice(0, 7)}`
+                            : ''}
+                          {` · ${relativeTime(service.deploy.at)}`}
                         </span>
                       </div>
                     )}

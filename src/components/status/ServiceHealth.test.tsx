@@ -3,6 +3,10 @@ import React from 'react';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
 import '@testing-library/jest-dom';
+import {
+  fetchWatchtronStatus,
+  getDeployForUrl,
+} from '../../services/watchtronApiService';
 import ServiceHealth from './ServiceHealth';
 
 // Mock runtime config
@@ -25,6 +29,12 @@ vi.mock('../../utils/runtimeConfig', () => ({
 vi.mock('../../services/uptimeApiService', () => ({
   fetchUptimeData: vi.fn().mockResolvedValue(null),
   getServiceUptime: vi.fn().mockReturnValue(undefined),
+}));
+
+// Mock watchtronApiService so deploy provenance doesn't interfere with fetch mocks
+vi.mock('../../services/watchtronApiService', () => ({
+  fetchWatchtronStatus: vi.fn().mockResolvedValue(null),
+  getDeployForUrl: vi.fn().mockReturnValue(undefined),
 }));
 
 // Mock fetch globally
@@ -50,6 +60,8 @@ describe('ServiceHealth Component', () => {
       status: 200,
       json: async () => ({}),
     });
+    (fetchWatchtronStatus as any).mockResolvedValue(null);
+    (getDeployForUrl as any).mockReturnValue(undefined);
   });
 
   test('renders all service names', () => {
@@ -340,6 +352,46 @@ describe('ServiceHealth Component', () => {
     const calls = (global.fetch as any).mock.calls;
     const mlbCall = calls.find((call: any) => call[0]?.includes('mlb.com'));
     expect(mlbCall).toBeDefined();
+  });
+
+  test('overlays watchtron deploy provenance when available', async () => {
+    const ref = React.createRef<any>();
+
+    (fetchWatchtronStatus as any).mockResolvedValue({ services: [] });
+    (getDeployForUrl as any).mockImplementation((_status: any, url: string) =>
+      url === 'https://chomptron.com'
+        ? {
+            name: 'chomptron',
+            url,
+            lastVerdict: {
+              pass: true,
+              whiteBox: true,
+              endToEnd: true,
+              servedVersion: 'abc1234ff',
+              versionMatch: true,
+              p95LatencyMs: 117,
+              at: new Date().toISOString(),
+            },
+          }
+        : undefined
+    );
+    (global.fetch as any).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+    });
+
+    render(<ServiceHealth services={defaultServices} ref={ref} />);
+
+    await act(async () => {
+      if (ref.current) {
+        await ref.current.checkAllServices();
+      }
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/verified ✓.*abc1234/)).toBeInTheDocument();
+    });
   });
 
   test('displays last checked time', () => {
