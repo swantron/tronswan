@@ -9,11 +9,11 @@
   "dependencies": {
     "@swantron/otel-bootstrap": "^0.1.0",
     "express": "^5.2.1",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-helmet-async": "^3.0.0",
-    "react-router-dom": "7.15.1",
-    "web-vitals": "5.2.0"
+    "react-router-dom": "7.18.0",
+    "web-vitals": "5.3.0"
   },
   "scripts": {
     "dev": "vite",
@@ -51,28 +51,28 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@playwright/test": "1.60.0",
+    "@playwright/test": "1.61.1",
     "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "16.3.2",
-    "@types/node": "25.9.1",
-    "@types/react": "19.2.15",
+    "@types/node": "26.0.0",
+    "@types/react": "19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "8.59.4",
-    "@typescript-eslint/parser": "8.59.4",
+    "@typescript-eslint/eslint-plugin": "8.62.0",
+    "@typescript-eslint/parser": "8.62.0",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/coverage-v8": "4.1.7",
-    "@vitest/ui": "4.1.7",
+    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/ui": "4.1.9",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "5.5.5",
+    "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "29.1.1",
-    "prettier": "3.8.3",
+    "prettier": "3.8.4",
     "typescript": "^6.0.3",
-    "vite": "8.0.13",
-    "vitest": "4.1.7"
+    "vite": "8.1.0",
+    "vitest": "4.1.9"
   }
 }
