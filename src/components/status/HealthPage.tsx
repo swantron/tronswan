@@ -210,8 +210,9 @@ function HealthPage() {
         </h1>
 
         <p className='health-intro' data-testid='health-intro'>
-          how this is gathered: four independent sources. your browser pings each
-          site live for response time; continuous uptime and incidents come from{' '}
+          how this is gathered: four independent sources. your browser pings
+          each site live for response time; continuous uptime and incidents come
+          from{' '}
           <a
             href='https://github.com/swantron/uptime-monitor'
             target='_blank'
@@ -221,7 +222,8 @@ function HealthPage() {
             uptime-monitor
           </a>{' '}
           (a 5-minute cron writing to a public gist); per-deploy verification —
-          proof the new build is actually serving traffic end-to-end — comes from{' '}
+          proof the new build is actually serving traffic end-to-end — comes
+          from{' '}
           <a
             href='https://github.com/swantron/watchtron'
             target='_blank'
@@ -230,8 +232,8 @@ function HealthPage() {
           >
             watchtron
           </a>
-          ; and the deployments / infrastructure tabs read the github actions and
-          digitalocean apis.
+          ; and the deployments / infrastructure tabs read the github actions
+          and digitalocean apis.
         </p>
 
         {/* Overall Status Summary */}
@@ -385,8 +387,8 @@ function HealthPage() {
               <p className='health-section-note'>
                 each service shows a live response time (measured from your
                 browser now), continuous uptime from uptime-monitor&apos;s
-                5-minute checks, and the last verified deploy from watchtron (✓ =
-                the new build was proven serving end-to-end).
+                5-minute checks, and the last verified deploy from watchtron (✓
+                = the new build was proven serving end-to-end).
               </p>
               <ServiceHealth
                 ref={serviceHealthRef}
