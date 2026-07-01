@@ -3,7 +3,10 @@ import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
+// eslint-plugin-import-x: maintained fork of eslint-plugin-import that supports
+// ESLint 10 (the original 2.x crashes on import/order — removed getTokenOrCommentAfter).
+// Registered under the `import` plugin key so all `import/*` rule names stay unchanged.
+import importPlugin from 'eslint-plugin-import-x';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
@@ -38,6 +41,7 @@ export default [
         crypto: 'readonly',
         btoa: 'readonly',
         TextEncoder: 'readonly',
+        URL: 'readonly',
         URLSearchParams: 'readonly',
         alert: 'readonly',
         // DOM types

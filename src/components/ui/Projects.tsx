@@ -30,10 +30,11 @@ interface BloggingItem {
 const BLOGGING: BloggingItem[] = [
   {
     slug: 'minifier-cli',
-    title: 'minifier-cli: shrink any docker image without touching its dockerfile',
+    title:
+      'minifier-cli: shrink any docker image without touching its dockerfile',
     year: '2026',
     description:
-      'born from vuln noise on third-party images we run but don\'t own — traces runtime file access, rebuilds from scratch.',
+      "born from vuln noise on third-party images we run but don't own — traces runtime file access, rebuilds from scratch.",
     url: 'https://swantron.com/2026/06/01/minifier-cli/',
   },
   {
