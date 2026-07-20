@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,44 +7,48 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import Music from './components/music/Music';
-import HealthPage from './components/status/HealthPage';
-import SwantronDetail from './components/swantron/SwantronDetail';
-import SwantronList from './components/swantron/SwantronList';
-import Chomptron from './components/ui/Chomptron';
 import ErrorBoundary from './components/ui/ErrorBoundary';
-import FizzBuzz from './components/ui/FizzBuzz';
 import Footer from './components/ui/Footer';
-import Hello from './components/ui/Hello';
-import MLB from './components/ui/MLB';
 import PageTransition from './components/ui/PageTransition';
-import Projects from './components/ui/Projects';
-import Resume from './components/ui/Resume';
 import SEO from './components/ui/SEO';
-import StudyGuide from './components/ui/StudyGuide';
-import Weather from './components/ui/Weather';
-import Wrenchtron from './components/ui/Wrenchtron';
-import Baseball2 from './components/video/Baseball2';
-import BuschLeague from './components/video/BuschLeague';
-import Coffee from './components/video/Coffee';
-import DealWithFont from './components/video/DealWithFont';
-import DealWithIt from './components/video/DealWithIt';
-import DealWithWord from './components/video/DealWithWord';
-import Dynomite from './components/video/Dynomite';
-import GangamStyle from './components/video/GangamStyle';
-import Hacking from './components/video/Hacking';
-import JobWellDone from './components/video/JobWellDone';
-import KingKong from './components/video/KingKong';
-import Mishap from './components/video/Mishap';
-import Peloton from './components/video/Peloton';
-import Seeya from './components/video/Seeya';
-import Shorts from './components/video/Shorts';
-import ThumbsUp from './components/video/ThumbsUp';
-import Working from './components/video/Working';
-import Wrigley from './components/video/Wrigley';
-import logo from './robotard-removebg-preview.png';
 import { logger } from './utils/logger';
 import './App.css';
+
+const logo = '/robotard-removebg-preview.webp';
+
+const Music = lazy(() => import('./components/music/Music'));
+const HealthPage = lazy(() => import('./components/status/HealthPage'));
+const SwantronDetail = lazy(
+  () => import('./components/swantron/SwantronDetail')
+);
+const SwantronList = lazy(() => import('./components/swantron/SwantronList'));
+const Chomptron = lazy(() => import('./components/ui/Chomptron'));
+const FizzBuzz = lazy(() => import('./components/ui/FizzBuzz'));
+const Hello = lazy(() => import('./components/ui/Hello'));
+const MLB = lazy(() => import('./components/ui/MLB'));
+const Projects = lazy(() => import('./components/ui/Projects'));
+const Resume = lazy(() => import('./components/ui/Resume'));
+const StudyGuide = lazy(() => import('./components/ui/StudyGuide'));
+const Weather = lazy(() => import('./components/ui/Weather'));
+const Wrenchtron = lazy(() => import('./components/ui/Wrenchtron'));
+const Baseball2 = lazy(() => import('./components/video/Baseball2'));
+const BuschLeague = lazy(() => import('./components/video/BuschLeague'));
+const Coffee = lazy(() => import('./components/video/Coffee'));
+const DealWithFont = lazy(() => import('./components/video/DealWithFont'));
+const DealWithIt = lazy(() => import('./components/video/DealWithIt'));
+const DealWithWord = lazy(() => import('./components/video/DealWithWord'));
+const Dynomite = lazy(() => import('./components/video/Dynomite'));
+const GangamStyle = lazy(() => import('./components/video/GangamStyle'));
+const Hacking = lazy(() => import('./components/video/Hacking'));
+const JobWellDone = lazy(() => import('./components/video/JobWellDone'));
+const KingKong = lazy(() => import('./components/video/KingKong'));
+const Mishap = lazy(() => import('./components/video/Mishap'));
+const Peloton = lazy(() => import('./components/video/Peloton'));
+const Seeya = lazy(() => import('./components/video/Seeya'));
+const Shorts = lazy(() => import('./components/video/Shorts'));
+const ThumbsUp = lazy(() => import('./components/video/ThumbsUp'));
+const Working = lazy(() => import('./components/video/Working'));
+const Wrigley = lazy(() => import('./components/video/Wrigley'));
 
 function Home() {
   React.useEffect(() => {
@@ -254,49 +258,51 @@ function App() {
 
             <ErrorBoundary>
               <PageTransition>
-                <Routes>
-                  <Route
-                    path='/'
-                    element={
-                      <>
-                        <SEO />
-                        <Home />
-                      </>
-                    }
-                  />
-                  <Route path='/projects' element={<Projects />} />
-                  <Route path='/chomptron' element={<Chomptron />} />
-                  <Route path='/wrenchtron' element={<Wrenchtron />} />
-                  <Route path='/swantron' element={<SwantronList />} />
-                  <Route path='/swantron/:id' element={<SwantronDetail />} />
-                  <Route path='/weathertron' element={<Weather />} />
-                  <Route path='/hacking' element={<Hacking />} />
-                  <Route path='/gangamstyle' element={<GangamStyle />} />
-                  <Route path='/dealwithit' element={<DealWithIt />} />
-                  <Route path='/dealwithfont' element={<DealWithFont />} />
-                  <Route path='/dealwithword' element={<DealWithWord />} />
-                  <Route path='/wrigley' element={<Wrigley />} />
-                  <Route path='/baseball2' element={<Baseball2 />} />
-                  <Route path='/kingkong' element={<KingKong />} />
-                  <Route path='/buschleague' element={<BuschLeague />} />
-                  <Route path='/thumbsup' element={<ThumbsUp />} />
-                  <Route path='/jobwelldone' element={<JobWellDone />} />
-                  <Route path='/coffee' element={<Coffee />} />
-                  <Route path='/mishap' element={<Mishap />} />
-                  <Route path='/peloton' element={<Peloton />} />
-                  <Route path='/seeya' element={<Seeya />} />
-                  <Route path='/dynomite' element={<Dynomite />} />
-                  <Route path='/working' element={<Working />} />
-                  <Route path='/shorts' element={<Shorts />} />
-                  <Route path='/music' element={<Music />} />
-                  <Route path='/music/callback' element={<Music />} />
-                  <Route path='/mlb' element={<MLB />} />
-                  <Route path='/trontronbuzztron' element={<FizzBuzz />} />
-                  <Route path='/hello' element={<Hello />} />
-                  <Route path='/resume' element={<Resume />} />
-                  <Route path='/study-guide' element={<StudyGuide />} />
-                  <Route path='/status' element={<HealthPage />} />
-                </Routes>
+                <Suspense fallback={null}>
+                  <Routes>
+                    <Route
+                      path='/'
+                      element={
+                        <>
+                          <SEO />
+                          <Home />
+                        </>
+                      }
+                    />
+                    <Route path='/projects' element={<Projects />} />
+                    <Route path='/chomptron' element={<Chomptron />} />
+                    <Route path='/wrenchtron' element={<Wrenchtron />} />
+                    <Route path='/swantron' element={<SwantronList />} />
+                    <Route path='/swantron/:id' element={<SwantronDetail />} />
+                    <Route path='/weathertron' element={<Weather />} />
+                    <Route path='/hacking' element={<Hacking />} />
+                    <Route path='/gangamstyle' element={<GangamStyle />} />
+                    <Route path='/dealwithit' element={<DealWithIt />} />
+                    <Route path='/dealwithfont' element={<DealWithFont />} />
+                    <Route path='/dealwithword' element={<DealWithWord />} />
+                    <Route path='/wrigley' element={<Wrigley />} />
+                    <Route path='/baseball2' element={<Baseball2 />} />
+                    <Route path='/kingkong' element={<KingKong />} />
+                    <Route path='/buschleague' element={<BuschLeague />} />
+                    <Route path='/thumbsup' element={<ThumbsUp />} />
+                    <Route path='/jobwelldone' element={<JobWellDone />} />
+                    <Route path='/coffee' element={<Coffee />} />
+                    <Route path='/mishap' element={<Mishap />} />
+                    <Route path='/peloton' element={<Peloton />} />
+                    <Route path='/seeya' element={<Seeya />} />
+                    <Route path='/dynomite' element={<Dynomite />} />
+                    <Route path='/working' element={<Working />} />
+                    <Route path='/shorts' element={<Shorts />} />
+                    <Route path='/music' element={<Music />} />
+                    <Route path='/music/callback' element={<Music />} />
+                    <Route path='/mlb' element={<MLB />} />
+                    <Route path='/trontronbuzztron' element={<FizzBuzz />} />
+                    <Route path='/hello' element={<Hello />} />
+                    <Route path='/resume' element={<Resume />} />
+                    <Route path='/study-guide' element={<StudyGuide />} />
+                    <Route path='/status' element={<HealthPage />} />
+                  </Routes>
+                </Suspense>
               </PageTransition>
             </ErrorBoundary>
           </div>

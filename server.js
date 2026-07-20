@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
@@ -23,6 +24,8 @@ const logger = {
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+app.use(compression());
 
 // Stamp synthetic run ids from watchtron probes onto the active server span so
 // the control plane can confirm probe traffic reached this instrumented origin.
@@ -105,8 +108,20 @@ if (!existsSync(buildDir)) {
   process.exit(1);
 }
 
-// Serve static files
-app.use(express.static(buildDir));
+// Serve static files. Files under /assets/ are content-hashed by Vite, so
+// they can be cached forever; everything else (index.html, manifest, etc.)
+// must revalidate so clients always pick up the latest asset hashes.
+app.use(
+  express.static(buildDir, {
+    setHeaders: (res, filePath) => {
+      if (filePath.startsWith(path.join(buildDir, 'assets') + path.sep)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    },
+  })
+);
 
 // Handle client-side routing (SPA) - catch all non-API routes
 app.get(/^(?!\/api).*$/, (req, res) => {
