@@ -89,6 +89,14 @@ const PROJECTS: Project[] = [
     tags: ['Next.js', 'Firebase', 'PWA', 'TypeScript'],
   },
   {
+    slug: 'curbspec',
+    title: 'curbspec',
+    tagline:
+      'paste a vin, a listing, or what you know — get one compiled sheet on a used vehicle: due spend, known issues, and campaigns. reviewed calendars for a growing list of families, live ai research for everything else. ads-free, $12.99, no account.',
+    externalUrl: 'https://curbspec.com',
+    tags: ['Next.js', 'Gemini API', 'Postgres', 'Stripe', 'TypeScript'],
+  },
+  {
     slug: 'chomptron',
     title: 'chomptron',
     tagline:
@@ -168,8 +176,8 @@ function Projects() {
     <div className='projects-page'>
       <SEO
         title='Projects | Tron Swan'
-        description='Personal projects by Joseph Swanson — Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
-        keywords='Joseph Swanson, projects, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
+        description='Personal projects by Joseph Swanson — Curbspec, Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
+        keywords='Joseph Swanson, projects, curbspec, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
         url='/projects'
       />
 
