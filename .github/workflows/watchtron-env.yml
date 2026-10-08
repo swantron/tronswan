@@ -19,14 +19,17 @@ jobs:
     steps:
       - name: Upsert WATCHTRON_* env vars on the DO app spec
         env:
-          DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          # Separate from DIGITALOCEAN_ACCESS_TOKEN (read-only, used on every
+          # push): this one needs app:update, so it only exists for this
+          # manual workflow. Create it when needed; delete it after.
+          DO_TOKEN: ${{ secrets.DIGITALOCEAN_APP_WRITE_TOKEN }}
           OTLP_ENDPOINT: ${{ secrets.WATCHTRON_OTLP_ENDPOINT }}
           WATCHTRON_TOKEN: ${{ secrets.WATCHTRON_TOKEN }}
         run: |
           set -euo pipefail
 
-          if [ -z "${OTLP_ENDPOINT:-}" ] || [ -z "${WATCHTRON_TOKEN:-}" ]; then
-            echo "::error::WATCHTRON_OTLP_ENDPOINT and WATCHTRON_TOKEN must be set as repo secrets."
+          if [ -z "${DO_TOKEN:-}" ] || [ -z "${OTLP_ENDPOINT:-}" ] || [ -z "${WATCHTRON_TOKEN:-}" ]; then
+            echo "::error::DIGITALOCEAN_APP_WRITE_TOKEN, WATCHTRON_OTLP_ENDPOINT and WATCHTRON_TOKEN must be set as repo secrets."
             exit 1
           fi
 
