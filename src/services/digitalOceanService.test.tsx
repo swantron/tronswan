@@ -2,14 +2,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
-// Mock runtimeConfig before importing
-vi.mock('../utils/runtimeConfig', () => ({
-  runtimeConfig: {
-    get: vi.fn(() => 'test-token'),
-    getWithDefault: vi.fn(() => 'test-app-id'),
-  },
-}));
-
 // Mock logger before importing
 vi.mock('../utils/logger', () => ({
   logger: {
@@ -46,14 +38,11 @@ describe('DigitalOceanService', () => {
       const result = await digitalOceanService.getApp();
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://api.digitalocean.com/v2/apps/test-app-id',
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            Authorization: 'Bearer test-token',
-            'Content-Type': 'application/json',
-          }),
-        })
+        '/api/digitalocean/app',
+        expect.any(Object)
       );
+      const [, init] = vi.mocked(fetch).mock.calls[0];
+      expect(JSON.stringify(init)).not.toMatch(/authorization/i);
       expect(result).toEqual(mockApp);
     });
 
@@ -66,8 +55,7 @@ describe('DigitalOceanService', () => {
       expect(logger.apiError).toHaveBeenCalledWith(
         'DigitalOcean',
         'getApp',
-        expect.any(Error),
-        { appId: 'test-app-id' }
+        expect.any(Error)
       );
     });
   });
@@ -153,7 +141,7 @@ describe('DigitalOceanService', () => {
       const result = await digitalOceanService.getDroplets();
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://api.digitalocean.com/v2/droplets',
+        '/api/digitalocean/droplets',
         expect.any(Object)
       );
       expect(result).toEqual(mockDroplets.droplets);
@@ -168,203 +156,6 @@ describe('DigitalOceanService', () => {
       expect(logger.apiError).toHaveBeenCalledWith(
         'DigitalOcean',
         'getDroplets',
-        expect.any(Error)
-      );
-    });
-  });
-
-  describe('getLoadBalancers', () => {
-    it('should fetch load balancers successfully', async () => {
-      const mockLoadBalancers = {
-        load_balancers: [
-          {
-            id: 'lb-1',
-            name: 'test-lb',
-            ip: '192.168.1.100',
-            algorithm: 'round_robin',
-            status: 'active' as const,
-            created_at: '2023-01-01T00:00:00Z',
-            forwarding_rules: [
-              {
-                entry_protocol: 'http',
-                entry_port: 80,
-                target_protocol: 'http',
-                target_port: 80,
-              },
-            ],
-            health_check: {
-              protocol: 'http',
-              port: 80,
-              path: '/api/health',
-              check_interval_seconds: 10,
-              response_timeout_seconds: 5,
-              healthy_threshold: 3,
-              unhealthy_threshold: 3,
-            },
-            sticky_sessions: {
-              type: 'none',
-            },
-            region: {
-              name: 'New York 1',
-              slug: 'nyc1',
-            },
-            droplet_ids: [1, 2],
-            redirect_http_to_https: false,
-            enable_proxy_protocol: false,
-            enable_backend_keepalive: false,
-            disable_lets_encrypt_dns_records: false,
-            allow_ssl_backend: false,
-            enable_lets_encrypt: false,
-          },
-        ],
-      };
-
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockLoadBalancers),
-      } as any);
-
-      const result = await digitalOceanService.getLoadBalancers();
-
-      expect(fetch).toHaveBeenCalledWith(
-        'https://api.digitalocean.com/v2/load_balancers',
-        expect.any(Object)
-      );
-      expect(result).toEqual(mockLoadBalancers.load_balancers);
-    });
-
-    it('should handle errors when fetching load balancers', async () => {
-      vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
-
-      await expect(digitalOceanService.getLoadBalancers()).rejects.toThrow(
-        'API error'
-      );
-      expect(logger.apiError).toHaveBeenCalledWith(
-        'DigitalOcean',
-        'getLoadBalancers',
-        expect.any(Error)
-      );
-    });
-  });
-
-  describe('getDatabases', () => {
-    it('should fetch databases successfully', async () => {
-      const mockDatabases = {
-        databases: [
-          {
-            id: 'db-1',
-            name: 'test-db',
-            engine: 'postgres',
-            version: '13',
-            status: 'online' as const,
-            created_at: '2023-01-01T00:00:00Z',
-            size: 'db-s-1vcpu-1gb',
-            num_nodes: 1,
-            region: 'nyc1',
-            tags: ['production'],
-            db_names: ['app_db'],
-            users: [
-              {
-                name: 'app_user',
-                role: 'readwrite',
-                password: 'secret',
-              },
-            ],
-            connection: {
-              uri: 'postgresql://user:pass@host:5432/db',
-              database: 'app_db',
-              host: 'db.example.com',
-              port: 5432,
-              user: 'app_user',
-              password: 'secret',
-              ssl: true,
-            },
-            private_connection: {
-              uri: 'postgresql://user:pass@private-host:5432/db',
-              database: 'app_db',
-              host: 'private-db.example.com',
-              port: 5432,
-              user: 'app_user',
-              password: 'secret',
-              ssl: true,
-            },
-            maintenance_window: {
-              day: 'sunday',
-              hour: '02:00',
-              pending: false,
-              description: ['Database maintenance'],
-            },
-            backup_restore: {
-              database_name: 'app_db',
-              backup_created_at: '2023-01-01T00:00:00Z',
-            },
-          },
-        ],
-      };
-
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDatabases),
-      } as any);
-
-      const result = await digitalOceanService.getDatabases();
-
-      expect(fetch).toHaveBeenCalledWith(
-        'https://api.digitalocean.com/v2/databases',
-        expect.any(Object)
-      );
-      expect(result).toEqual(mockDatabases.databases);
-    });
-
-    it('should handle errors when fetching databases', async () => {
-      vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
-
-      await expect(digitalOceanService.getDatabases()).rejects.toThrow(
-        'API error'
-      );
-      expect(logger.apiError).toHaveBeenCalledWith(
-        'DigitalOcean',
-        'getDatabases',
-        expect.any(Error)
-      );
-    });
-  });
-
-  describe('getAccount', () => {
-    it('should fetch account info successfully', async () => {
-      const mockAccount = {
-        account: {
-          droplet_limit: 10,
-          floating_ip_limit: 5,
-          volume_limit: 20,
-          load_balancer_limit: 3,
-          database_limit: 2,
-        },
-      };
-
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockAccount),
-      } as any);
-
-      const result = await digitalOceanService.getAccount();
-
-      expect(fetch).toHaveBeenCalledWith(
-        'https://api.digitalocean.com/v2/account',
-        expect.any(Object)
-      );
-      expect(result).toEqual(mockAccount);
-    });
-
-    it('should handle errors when fetching account info', async () => {
-      vi.mocked(fetch).mockRejectedValueOnce(new Error('API error'));
-
-      await expect(digitalOceanService.getAccount()).rejects.toThrow(
-        'API error'
-      );
-      expect(logger.apiError).toHaveBeenCalledWith(
-        'DigitalOcean',
-        'getAccount',
         expect.any(Error)
       );
     });

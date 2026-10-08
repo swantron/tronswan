@@ -1,5 +1,4 @@
 import { logger } from '../utils/logger';
-import { runtimeConfig } from '../utils/runtimeConfig';
 
 export interface DigitalOceanApp {
   id: string;
@@ -193,18 +192,9 @@ export interface DigitalOceanDatabase {
 }
 
 class DigitalOceanService {
-  private baseUrl: string;
-  private token: string;
-  private appId: string;
-
-  constructor() {
-    this.baseUrl = 'https://api.digitalocean.com/v2';
-    this.token = runtimeConfig.get('VITE_DIGITALOCEAN_TOKEN');
-    this.appId = runtimeConfig.getWithDefault(
-      'VITE_DIGITALOCEAN_APP_ID',
-      '0513ce4c-b074-4139-bb38-a1c6a5bc97a6'
-    );
-  }
+  // Requests go through tronswan's own server (server.js), which holds the
+  // DigitalOcean token. Never put a token in client code: it ships in the bundle.
+  private baseUrl = '/api/digitalocean';
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
@@ -219,10 +209,7 @@ class DigitalOceanService {
       'digitalocean-api-call',
       async () => {
         return await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-          },
+          headers: { Accept: 'application/json' },
         });
       },
       { endpoint }
@@ -253,12 +240,11 @@ class DigitalOceanService {
 
   async getApp(): Promise<{ app: DigitalOceanApp }> {
     logger.info('Fetching DigitalOcean app data', {
-      appId: this.appId,
       timestamp: new Date().toISOString(),
     });
 
     try {
-      const result = (await this.makeRequest(`/apps/${this.appId}`)) as {
+      const result = (await this.makeRequest('/app')) as {
         app: DigitalOceanApp;
       };
 
@@ -275,8 +261,7 @@ class DigitalOceanService {
       logger.apiError(
         'DigitalOcean',
         'getApp',
-        error instanceof Error ? error : new Error('Unknown error'),
-        { appId: this.appId }
+        error instanceof Error ? error : new Error('Unknown error')
       );
       throw error;
     }
@@ -288,7 +273,6 @@ class DigitalOceanService {
     });
 
     try {
-      // Get all droplets in the account
       const response = await this.makeRequest<{
         droplets: DigitalOceanDroplet[];
       }>('/droplets');
@@ -309,67 +293,6 @@ class DigitalOceanService {
       logger.apiError(
         'DigitalOcean',
         'getDroplets',
-        error instanceof Error ? error : new Error('Unknown error')
-      );
-      throw error;
-    }
-  }
-
-  async getLoadBalancers(): Promise<DigitalOceanLoadBalancer[]> {
-    try {
-      const response = await this.makeRequest<{
-        load_balancers: DigitalOceanLoadBalancer[];
-      }>('/load_balancers');
-      return response.load_balancers;
-    } catch (error) {
-      logger.apiError(
-        'DigitalOcean',
-        'getLoadBalancers',
-        error instanceof Error ? error : new Error('Unknown error')
-      );
-      throw error;
-    }
-  }
-
-  async getDatabases(): Promise<DigitalOceanDatabase[]> {
-    try {
-      const response = await this.makeRequest<{
-        databases: DigitalOceanDatabase[];
-      }>('/databases');
-      return response.databases;
-    } catch (error) {
-      logger.apiError(
-        'DigitalOcean',
-        'getDatabases',
-        error instanceof Error ? error : new Error('Unknown error')
-      );
-      throw error;
-    }
-  }
-
-  async getAccount(): Promise<{
-    account: {
-      droplet_limit: number;
-      floating_ip_limit: number;
-      volume_limit: number;
-      load_balancer_limit: number;
-      database_limit: number;
-    };
-  }> {
-    try {
-      return await this.makeRequest<{
-        account: {
-          droplet_limit: number;
-          floating_ip_limit: number;
-          volume_limit: number;
-          load_balancer_limit: number;
-          database_limit: number;
-        };
-      }>('/account');
-    } catch (error) {
-      logger.apiError(
-        'DigitalOcean',
-        'getAccount',
         error instanceof Error ? error : new Error('Unknown error')
       );
       throw error;

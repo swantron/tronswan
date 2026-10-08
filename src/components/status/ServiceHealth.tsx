@@ -144,40 +144,12 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       try {
         const startTime = Date.now();
 
-        // Special handling for Spotify API - get access token first
+        // Spotify API - checked by tronswan's server, which holds the client
+        // secret (it must never be shipped to the browser)
         if (service.name === 'Spotify API') {
           try {
-            // Get access token using client credentials flow
-            const clientId = runtimeConfig.get('VITE_SPOTIFY_CLIENT_ID');
-            const clientSecret = runtimeConfig.get(
-              'VITE_SPOTIFY_CLIENT_SECRET'
-            );
-
-            const tokenResponse = await fetch(
-              'https://accounts.spotify.com/api/token',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                  Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-                },
-                body: 'grant_type=client_credentials',
-              }
-            );
-
-            if (!tokenResponse.ok) {
-              throw new Error(`Token request failed: ${tokenResponse.status}`);
-            }
-
-            const tokenData = await tokenResponse.json();
-            const accessToken = tokenData.access_token;
-
-            // Now test the actual API endpoint with the token
-            const apiResponse = await fetch(service.url, {
+            const apiResponse = await fetch('/api/health/spotify', {
               method: 'GET',
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
               cache: 'no-cache',
             });
 
