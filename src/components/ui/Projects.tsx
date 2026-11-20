@@ -29,6 +29,14 @@ interface BloggingItem {
 
 const BLOGGING: BloggingItem[] = [
   {
+    slug: 'drivetron',
+    title: 'drivetron: a driving log the whole family shares',
+    year: '2026',
+    description:
+      'fifty supervised hours, three phones, and a paper log in the glovebox. then every other state.',
+    url: 'https://swantron.com/2026/11/19/drivetron/',
+  },
+  {
     slug: 'minifier-cli',
     title:
       'minifier-cli: shrink any docker image without touching its dockerfile',
@@ -87,6 +95,15 @@ const PROJECTS: Project[] = [
     internalPath: '/wrenchtron',
     externalUrl: 'https://wrenchtron.com',
     tags: ['Next.js', 'Firebase', 'PWA', 'TypeScript'],
+  },
+  {
+    slug: 'drivetron',
+    title: 'drivetron',
+    tagline:
+      'supervised driving log for teens and the parents signing off on them. one log on every phone in the family, night minutes split from sunset and sunrise where you drove, and a printout ready for the parent to sign. rules for all 50 states and d.c., each checked against official sources. free to start, $9.99 once per teen.',
+    externalUrl: 'https://drivetron.app',
+    blogUrl: 'https://swantron.com/2026/11/19/drivetron/',
+    tags: ['Next.js', 'Firebase', 'PWA', 'Stripe', 'TypeScript'],
   },
   {
     slug: 'curbspec',
@@ -176,8 +193,8 @@ function Projects() {
     <div className='projects-page'>
       <SEO
         title='Projects | Tron Swan'
-        description='Personal projects by Joseph Swanson — Curbspec, Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
-        keywords='Joseph Swanson, projects, curbspec, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
+        description='Personal projects by Joseph Swanson — Drivetron, Curbspec, Wrenchtron, Chomptron, Weathertron, Music, MLB. Built with React, Next.js, Firebase, and friends.'
+        keywords='Joseph Swanson, projects, drivetron, curbspec, wrenchtron, chomptron, weathertron, React, Next.js, portfolio'
         url='/projects'
       />
 
@@ -217,7 +234,9 @@ function Projects() {
                       className='projects-card-link primary'
                       data-testid={`projects-card-link-${p.slug}`}
                     >
-                      source ↗
+                      {p.externalUrl?.includes('github.com')
+                        ? 'source ↗'
+                        : 'live site ↗'}
                     </a>
                   )}
                   {p.internalPath && p.externalUrl && (
