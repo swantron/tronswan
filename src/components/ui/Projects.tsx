@@ -33,7 +33,7 @@ const BLOGGING: BloggingItem[] = [
     title: 'drivetron: a driving log the whole family shares',
     year: '2026',
     description:
-      'fifty supervised hours, three phones, and a paper log in the glovebox. then every other state.',
+      'emma has her permit and 50 hours to log. the sheet of paper was never going to work in our house.',
     url: 'https://swantron.com/2026/11/19/drivetron/',
   },
   {
