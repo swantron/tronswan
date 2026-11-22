@@ -15,6 +15,21 @@ function Footer() {
         <span className='footer-copy'>© {year} swantron</span>
         <div className='footer-links'>
           <Link
+            to='/shorts'
+            className={`footer-link ${location.pathname === '/shorts' || location.pathname.startsWith('/video/') ? 'active' : ''}`}
+            aria-current={
+              location.pathname === '/shorts' ? 'page' : undefined
+            }
+            onClick={() =>
+              logger.info('Footer clicked - Shorts', {
+                target: '/shorts',
+                timestamp: new Date().toISOString(),
+              })
+            }
+          >
+            shorts
+          </Link>
+          <Link
             to='/status'
             className={`footer-link ${location.pathname === '/status' ? 'active' : ''}`}
             aria-current={location.pathname === '/status' ? 'page' : undefined}

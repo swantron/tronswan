@@ -77,8 +77,9 @@ const Wrenchtron: React.FC = () => {
                 size='lg'
                 className='demo-button'
                 data-testid='demo-button'
+                aria-label='Try the demo on wrenchtron.com, opens in a new tab'
               >
-                try demo →
+                try demo ↗
               </Button>
               <a
                 href='https://wrenchtron.com'

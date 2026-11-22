@@ -49,7 +49,8 @@
 
 @media (max-width: 600px) {
   .footer-inner {
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
 }

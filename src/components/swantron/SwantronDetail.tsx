@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { useDateFormatter } from '../../hooks/useDateFormatter';
 import { swantronService } from '../../services/swantronService';
@@ -85,6 +85,9 @@ const SwantronDetail: React.FC = () => {
       />
 
       <article className='swantron-detail' data-testid='swantron-detail'>
+        <Link to='/swantron' className='swantron-back'>
+          ← all posts
+        </Link>
         {post.featuredImage && !post.heroIsDuplicate && (
           <div className='swantron-detail-image'>
             <img src={post.featuredImage} alt={post.title} loading='lazy' />
@@ -124,6 +127,7 @@ const SwantronDetail: React.FC = () => {
               target='_blank'
               rel='noopener noreferrer'
               className='swantron-external-button'
+              aria-label={`Read ${post.title} on swantron.com`}
             >
               goto swantron.com ↗
             </a>

@@ -45,12 +45,14 @@ body {
 /* Navigation styles - Glassmorphism Dock */
 .main-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-8);
   padding: var(--space-2);
+  max-width: calc(100% - 2rem);
+  overflow-x: auto;
 
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
@@ -60,7 +62,7 @@ body {
   border-radius: 100px;
   /* Pill shape */
 
-  max-width: fit-content;
+  width: fit-content;
   margin-left: auto;
   margin-right: auto;
   position: sticky;
@@ -74,6 +76,7 @@ body {
   text-decoration: none;
   padding: var(--space-2) var(--space-4);
   border-radius: 99px;
+  white-space: nowrap;
   transition: all var(--transition-fast);
   font-size: 0.95rem;
   font-weight: 500;
@@ -118,7 +121,34 @@ body {
 .home-cta-row {
   margin-top: var(--space-8);
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.logo-hint {
+  display: block;
+  margin: var(--space-2) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.home-secondary-link {
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-secondary-link:hover {
+  color: var(--text-primary);
+}
+
+.route-fallback {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--space-8);
 }
 
 /* Logo styles */
@@ -243,9 +273,8 @@ body {
     border-radius: var(--radius-lg);
     gap: 4px;
     padding: var(--space-2);
-    width: 95%;
-    bottom: 20px;
-    /* Move to bottom for mobile? Optional */
+    width: auto;
+    max-width: calc(100% - 1.5rem);
   }
 
   .nav-link {

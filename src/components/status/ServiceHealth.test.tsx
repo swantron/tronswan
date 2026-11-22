@@ -86,7 +86,7 @@ describe('ServiceHealth Component', () => {
     expect(
       screen.getByText(/AI recipe react app using Gemini \/ GCP/)
     ).toBeInTheDocument();
-    expect(screen.getByText(/og wp blog on Siteground/)).toBeInTheDocument();
+    expect(screen.getByText(/personal blog, hugo/)).toBeInTheDocument();
     expect(screen.getByText(/Bluesky PDS on DO/)).toBeInTheDocument();
     expect(screen.getByText(/baseball integration/)).toBeInTheDocument();
     expect(screen.getByText(/spotify integration/)).toBeInTheDocument();

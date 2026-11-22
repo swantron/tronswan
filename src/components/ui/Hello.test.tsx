@@ -1,9 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { vi, expect, describe, test } from 'vitest';
 
 import '@testing-library/jest-dom';
 import Hello from './Hello';
+
+function renderHello() {
+  return render(
+    <MemoryRouter>
+      <Hello />
+    </MemoryRouter>
+  );
+}
 
 // Mock the SEO component to prevent react-helmet-async errors
 vi.mock('./SEO', () => ({
@@ -14,18 +23,18 @@ vi.mock('./SEO', () => ({
 
 describe('Hello Component', () => {
   test('renders page title', () => {
-    render(<Hello />);
+    renderHello();
     expect(screen.getByTestId('hello-title')).toBeInTheDocument();
     expect(screen.getByTestId('hello-title')).toHaveTextContent('hello');
   });
 
   test('renders subtitle', () => {
-    render(<Hello />);
+    renderHello();
     expect(screen.getByText('joseph swanson')).toBeInTheDocument();
   });
 
   test('renders description section', () => {
-    render(<Hello />);
+    renderHello();
     expect(
       screen.getByText('staff software engineer @ demandbase')
     ).toBeInTheDocument();
@@ -36,7 +45,7 @@ describe('Hello Component', () => {
   });
 
   test('renders LinkedIn link', () => {
-    render(<Hello />);
+    renderHello();
     const linkedinLink = screen.getByText(/^linkedin/);
     expect(linkedinLink).toBeInTheDocument();
     expect(linkedinLink.closest('a')).toHaveAttribute(
@@ -55,7 +64,7 @@ describe('Hello Component', () => {
   });
 
   test('renders resume link', () => {
-    render(<Hello />);
+    renderHello();
     const resumeLink = screen.getByText('resume');
     expect(resumeLink).toBeInTheDocument();
     expect(resumeLink.closest('a')).toHaveAttribute('href', '/resume');
@@ -63,14 +72,14 @@ describe('Hello Component', () => {
   });
 
   test('renders building/deploying/learning text with correct class', () => {
-    render(<Hello />);
+    renderHello();
     const buildingText = screen.getByText('building / deploying / learning');
     expect(buildingText).toBeInTheDocument();
     expect(buildingText).toHaveClass('building-learning-text');
   });
 
   test('all links have proper accessibility attributes', () => {
-    render(<Hello />);
+    renderHello();
 
     const allLinks = screen.getAllByRole('link');
     expect(allLinks).toHaveLength(4);
@@ -93,7 +102,7 @@ describe('Hello Component', () => {
   });
 
   test('links have correct CSS classes', () => {
-    render(<Hello />);
+    renderHello();
 
     const linkedinLink = screen.getByText(/^linkedin/).closest('a');
     const githubLink = screen.getByText(/^github/).closest('a');
@@ -105,7 +114,7 @@ describe('Hello Component', () => {
   });
 
   test('component structure is correct', () => {
-    render(<Hello />);
+    renderHello();
 
     // Check main container
     expect(document.querySelector('.hello-page')).toBeInTheDocument();
@@ -124,7 +133,7 @@ describe('Hello Component', () => {
   });
 
   test('link text is present', () => {
-    render(<Hello />);
+    renderHello();
 
     // Check for text
     expect(screen.getByText(/bozeman, montana/)).toBeInTheDocument();

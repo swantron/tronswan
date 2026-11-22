@@ -83,7 +83,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'swan tron dot com',
         url: 'https://swantron.com',
-        description: 'og wp blog on Siteground',
+        description: 'personal blog, hugo',
         status: services.swantron,
         lastChecked: new Date(),
       },

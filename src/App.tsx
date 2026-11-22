@@ -153,6 +153,7 @@ function Home() {
           loading='eager'
         />
       </a>
+      <p className='logo-hint'>click for a random short</p>
 
       <div className='home-cta-row'>
         <Link
@@ -161,6 +162,9 @@ function Home() {
           data-testid='projects-link'
         >
           projects →
+        </Link>
+        <Link to='/shorts' className='home-secondary-link'>
+          shorts
         </Link>
       </div>
     </div>
@@ -240,6 +244,31 @@ function Navigation() {
   );
 }
 
+function NotFound() {
+  return (
+    <div className='home-container'>
+      <SEO
+        title='Page not found | Tron Swan'
+        description='That page is not on tronswan.com.'
+        url='/404'
+      />
+      <h1 className='page-title'>page not found</h1>
+      <p className='App-tagline'>that address is not on this site.</p>
+      <Link to='/' className='projects-cta'>
+        home →
+      </Link>
+    </div>
+  );
+}
+
+function RouteFallback() {
+  return (
+    <p className='route-fallback' role='status'>
+      loading
+    </p>
+  );
+}
+
 function App() {
   React.useEffect(() => {
     logger.info('App initialized', {
@@ -258,7 +287,7 @@ function App() {
 
             <ErrorBoundary>
               <PageTransition>
-                <Suspense fallback={null}>
+                <Suspense fallback={<RouteFallback />}>
                   <Routes>
                     <Route
                       path='/'
@@ -301,6 +330,7 @@ function App() {
                     <Route path='/resume' element={<Resume />} />
                     <Route path='/study-guide' element={<StudyGuide />} />
                     <Route path='/status' element={<HealthPage />} />
+                    <Route path='*' element={<NotFound />} />
                   </Routes>
                 </Suspense>
               </PageTransition>

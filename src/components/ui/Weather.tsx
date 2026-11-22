@@ -189,10 +189,12 @@ function ForecastDisplay({ forecast, temperatureUnit }: ForecastDisplayProps) {
               </div>
               <div className='forecast-temps'>
                 <span className='forecast-high'>
+                  <span className='forecast-temp-label'>high</span>
                   {Math.round(convertTempForDisplay(day.high))}
                   {getTemperatureUnit()}
                 </span>
                 <span className='forecast-low'>
+                  <span className='forecast-temp-label'>low</span>
                   {Math.round(convertTempForDisplay(day.low))}
                   {getTemperatureUnit()}
                 </span>
@@ -960,7 +962,8 @@ function Weather() {
                     // Delay hiding suggestions to allow click events
                     setTimeout(() => setShowSuggestions(false), 200);
                   }}
-                  placeholder='City, "City, State", or Zip Code (e.g., Bozeman, "Bozeman, MT", 59715)'
+                  placeholder='City or zip'
+                  aria-label='City, city and state, or zip code'
                   className='city-input'
                   data-testid='city-input'
                   disabled={loading}

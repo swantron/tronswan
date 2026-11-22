@@ -150,15 +150,19 @@
 /* Controls */
 .view-mode-toggle {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
   gap: var(--space-2);
-  /* Allow horizontal scroll on small screens before wrapping gets excessive */
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  max-width: 100%;
   padding-bottom: 2px; /* prevent clipping of box-shadow on active buttons */
   margin-bottom: var(--space-6);
+}
+
+.view-mode-toggle .btn {
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .league-filter {
@@ -181,7 +185,7 @@
 /* Standings View */
 .divisions-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
   gap: var(--space-6);
 }
 
@@ -189,6 +193,8 @@
   /* Base card styles */
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .division-title {
@@ -202,18 +208,24 @@
 
 .standings-table-container {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
 .standings-table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .standings-table th,
 .standings-table td {
-  padding: var(--space-2) var(--space-1);
+  padding: var(--space-2) 0.45rem;
   text-align: center;
+  white-space: nowrap;
 }
 
 .standings-table th {
@@ -241,6 +253,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  white-space: nowrap;
 }
 
 .clinch-indicator {

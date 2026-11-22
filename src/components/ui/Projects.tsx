@@ -124,12 +124,12 @@ const PROJECTS: Project[] = [
   },
   {
     slug: 'swantron',
-    title: 'og blog',
+    title: 'blog',
     tagline:
-      'wordpress blog reader fetching posts from swantron.com — tech, projects, and life.',
+      'posts from swantron.com — tech, projects, and life.',
     internalPath: '/swantron',
     externalUrl: 'https://swantron.com',
-    tags: ['React', 'WordPress REST'],
+    tags: ['React', 'Hugo'],
   },
   {
     slug: 'weathertron',

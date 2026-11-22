@@ -988,7 +988,24 @@ function MLB() {
         )}
 
         <h1 className='page-title mlb-title' data-testid='mlb-title'>
-          mlb standings
+          {
+            {
+              standings: 'mlb standings',
+              teamStats: 'mlb team stats',
+              playoff: 'mlb playoff race',
+              rankings: 'mlb rankings',
+              scoreboard: 'mlb scoreboard',
+              splits: 'mlb split heatmap',
+              leaders: 'mlb leaders',
+              playerStats: 'mlb player stats',
+              transactions: 'mlb roster moves',
+              powerRankings: 'mlb power rankings',
+              trends: 'mlb team trends',
+              boxscore: 'mlb boxscore',
+              arsenal: 'mlb pitch arsenal',
+              recaps: 'mlb game recaps',
+            }[viewMode]
+          }
         </h1>
 
         {/* View Mode Toggle */}

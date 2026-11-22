@@ -628,7 +628,7 @@ const Music: React.FC = () => {
           <Button
             className='spotify-login-btn'
             onClick={handleLogin}
-            aria-label='Login with Spotify'
+            aria-label='Connect with Spotify'
             size='lg'
           >
             <span className='spotify-icon' />

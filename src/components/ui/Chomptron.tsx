@@ -130,8 +130,9 @@ const Chomptron: React.FC = () => {
                   className='widget-button'
                   disabled={!ingredients.trim()}
                   data-testid='generate-button'
+                  aria-label='Open chomptron.com with these ingredients'
                 >
-                  generate recipe ✨
+                  generate ↗
                 </Button>
               </div>
               <p className='widget-hint'>

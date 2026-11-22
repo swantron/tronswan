@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Card } from '../common/Card';
 
@@ -49,18 +50,18 @@ function Hello() {
               github ↗
             </a>
 
-            <a className='hello-link' href='/resume' aria-label='Resume'>
+            <Link className='hello-link' to='/resume' aria-label='Resume'>
               resume
-            </a>
+            </Link>
 
             <a
               className='hello-link'
               href='https://swantron.com'
               target='_blank'
               rel='noopener noreferrer'
-              aria-label="Joseph's blog"
+              aria-label='swantron.com, the original blog'
             >
-              blog ↗
+              swantron.com ↗
             </a>
           </div>
         </Card>
