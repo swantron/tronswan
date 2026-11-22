@@ -450,6 +450,49 @@ describe('swantronService', () => {
       ]);
     });
 
+    test('loads the post body from its path when the list has no HTML', async () => {
+      const list = {
+        posts: [
+          {
+            id: 1,
+            slug: 'drivetron',
+            title: 'Drivetron',
+            excerpt: 'A paper log was not going to work.',
+            date: '2026-11-19T00:00:00Z',
+            permalink: 'https://swantron.com/2026/11/19/drivetron/',
+            link: 'https://swantron.com/2026/11/19/drivetron/',
+            path: '/2026/11/19/drivetron/',
+            featuredImage: null,
+            categories: [],
+            tags: [],
+          },
+        ],
+        total: 1,
+      };
+      const detail = {
+        ...list.posts[0],
+        content: '<p>Full body</p>',
+      };
+
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(list),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(detail),
+        });
+
+      const result = await swantronService.getPostById(1);
+
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
+        'https://swantron.com/2026/11/19/drivetron/index.json'
+      );
+      expect(result.content).toBe('<p>Full body</p>');
+    });
+
     test('should handle post not found', async () => {
       const mockResponse = {
         ok: true,
@@ -560,6 +603,71 @@ describe('swantronService', () => {
         'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(1); // Only "Search Result" matches "search"
+      expect(result.posts[0].title).toBe('Search Result');
+    });
+
+    test('searches the plain-text index when the list has no HTML', async () => {
+      const list = {
+        posts: [
+          {
+            id: 1,
+            slug: 'search-result',
+            title: 'Search Result',
+            excerpt: 'Search excerpt',
+            date: '2023-12-25T10:00:00Z',
+            permalink: 'https://swantron.com/2023/12/25/search-result/',
+            link: 'https://swantron.com/2023/12/25/search-result/',
+            path: '/2023/12/25/search-result/',
+            featuredImage: null,
+            categories: [],
+            tags: [],
+          },
+          {
+            id: 2,
+            slug: 'other',
+            title: 'Other',
+            excerpt: 'Something else',
+            date: '2023-12-24T10:00:00Z',
+            permalink: 'https://swantron.com/2023/12/24/other/',
+            link: 'https://swantron.com/2023/12/24/other/',
+            path: '/2023/12/24/other/',
+            featuredImage: null,
+            categories: [],
+            tags: [],
+          },
+        ],
+        total: 2,
+      };
+      const searchIndex = [
+        {
+          title: 'Search Result',
+          content: 'plain text with the word query inside',
+          permalink: 'https://swantron.com/2023/12/25/search-result/',
+        },
+        {
+          title: 'Other',
+          content: 'no match here',
+          permalink: 'https://swantron.com/2023/12/24/other/',
+        },
+      ];
+
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(list),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(searchIndex),
+        });
+
+      const result = await swantronService.searchPosts('query');
+
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
+        'https://swantron.com/search/index.json'
+      );
+      expect(result.posts).toHaveLength(1);
       expect(result.posts[0].title).toBe('Search Result');
     });
 

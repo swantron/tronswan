@@ -78,10 +78,11 @@ interface HugoPost {
   slug: string;
   title: string;
   excerpt: string;
-  content: string;
+  content?: string;
   date: string;
   permalink: string;
   link: string;
+  path?: string;
   featuredImage: string | null;
   categories: Array<{ id: number; name: string; slug: string; link: string }>;
   tags: Array<{ id: number; name: string; slug: string; link: string }>;
@@ -129,13 +130,50 @@ const fetchAllPosts = async (): Promise<HugoPost[]> => {
   return data.posts;
 };
 
+interface SearchIndexEntry {
+  title: string;
+  content: string;
+  permalink: string;
+}
+
+const normalizePermalink = (value: string): string => {
+  try {
+    const url = value.startsWith('http')
+      ? new URL(value)
+      : new URL(value, 'https://swantron.com');
+    return url.pathname.replace(/\/$/, '');
+  } catch {
+    return value.replace(/\/$/, '');
+  }
+};
+
+const fetchSearchIndex = async (): Promise<SearchIndexEntry[]> => {
+  const apiUrl = getSwantronApiUrl();
+  const response = await fetch(`${apiUrl}/search/index.json`);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  const data: SearchIndexEntry[] = await response.json();
+  return Array.isArray(data) ? data : [];
+};
+
+const fetchPostDetail = async (path: string): Promise<HugoPost> => {
+  const apiUrl = getSwantronApiUrl().replace(/\/$/, '');
+  const relative = path.startsWith('/') ? path : `/${path}`;
+  const response = await fetch(`${apiUrl}${relative}index.json`);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  return response.json();
+};
+
 // Helper to convert Hugo post to Post format
 const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
   const apiUrl = getSwantronApiUrl();
 
   // Rewrite relative URLs in HTML so videos/images/links resolve to
   // swantron.com rather than tronswan.com.
-  let content = rewriteRelativeUrls(hugoPost.content, apiUrl);
+  let content = rewriteRelativeUrls(hugoPost.content || '', apiUrl);
   const excerpt = rewriteRelativeUrls(hugoPost.excerpt, apiUrl);
 
   // If featuredImage is relative, make it absolute
@@ -217,7 +255,16 @@ export const swantronService: SwantronService = {
         throw new Error(`Post with id ${id} not found`);
       }
 
-      return convertHugoPostToPost(hugoPost);
+      if (typeof hugoPost.content === 'string') {
+        return convertHugoPostToPost(hugoPost);
+      }
+
+      if (!hugoPost.path) {
+        throw new Error(`Post with id ${id} has no path`);
+      }
+
+      const detail = await fetchPostDetail(hugoPost.path);
+      return convertHugoPostToPost({ ...hugoPost, ...detail, id: hugoPost.id });
     } catch (error) {
       logger.apiError(
         'Swantron',
@@ -236,14 +283,38 @@ export const swantronService: SwantronService = {
     try {
       const allPosts = await fetchAllPosts();
       const queryLower = query.toLowerCase();
+      const listHasBody = allPosts.some(
+        post => typeof post.content === 'string' && post.content.length > 0
+      );
 
-      // Filter posts by search query (title, excerpt, content)
-      const filteredPosts = allPosts.filter(post => {
-        const titleMatch = post.title.toLowerCase().includes(queryLower);
-        const excerptMatch = post.excerpt.toLowerCase().includes(queryLower);
-        const contentMatch = post.content.toLowerCase().includes(queryLower);
-        return titleMatch || excerptMatch || contentMatch;
-      });
+      let filteredPosts: HugoPost[];
+      if (listHasBody) {
+        filteredPosts = allPosts.filter(post => {
+          const titleMatch = post.title.toLowerCase().includes(queryLower);
+          const excerptMatch = post.excerpt.toLowerCase().includes(queryLower);
+          const contentMatch = (post.content || '')
+            .toLowerCase()
+            .includes(queryLower);
+          return titleMatch || excerptMatch || contentMatch;
+        });
+      } else {
+        const index = await fetchSearchIndex();
+        const hits = new Set(
+          index
+            .filter(item => {
+              const title = (item.title || '').toLowerCase();
+              const body = (item.content || '').toLowerCase();
+              return title.includes(queryLower) || body.includes(queryLower);
+            })
+            .map(item => normalizePermalink(item.permalink))
+        );
+        filteredPosts = allPosts.filter(
+          post =>
+            hits.has(normalizePermalink(post.permalink)) ||
+            post.title.toLowerCase().includes(queryLower) ||
+            post.excerpt.toLowerCase().includes(queryLower)
+        );
+      }
 
       // Sort by date (newest first)
       const sortedPosts = [...filteredPosts].sort((a, b) => {
