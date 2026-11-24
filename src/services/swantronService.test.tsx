@@ -146,7 +146,7 @@ describe('swantronService', () => {
         'https://swantron.com/api/posts/index.json'
       );
       expect(result.posts).toHaveLength(3); // We only have 3 posts total
-      expect(result.totalPages).toBe(1); // Math.ceil(3 / 10) = 1
+      expect(result.totalPages).toBe(1); // Math.ceil(3 / 12) = 1
       // Posts should be sorted by date (newest first)
       expect(result.posts[0].id).toBe(2); // Newest
       expect(result.posts[1].id).toBe(1);

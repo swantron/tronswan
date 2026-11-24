@@ -212,7 +212,7 @@ const convertHugoPostToPost = (hugoPost: HugoPost): Post => {
 export const swantronService: SwantronService = {
   async getPosts(
     page: number = 1,
-    perPage: number = 10
+    perPage: number = 12
   ): Promise<SwantronServiceResponse> {
     try {
       const allPosts = await fetchAllPosts();
@@ -278,7 +278,7 @@ export const swantronService: SwantronService = {
   async searchPosts(
     query: string,
     page: number = 1,
-    perPage: number = 10
+    perPage: number = 12
   ): Promise<SwantronServiceResponse> {
     try {
       const allPosts = await fetchAllPosts();
