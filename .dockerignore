@@ -34,7 +34,7 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Environment files (handled by DO App Platform)
+# Environment files (runtime config comes from Cloud Run and Secret Manager)
 .env
 .env.local
 .env.development.local
@@ -44,3 +44,17 @@ Thumbs.db
 # Git
 .git
 .gitignore
+
+# Not needed in the image
+Dockerfile
+firebase.json
+.firebaserc
+.buildkite/
+tests/
+docs/
+playwright.config.ts
+test-results/
+node_modules/
+digitalocean_token
+github_token
+lint_output.txt

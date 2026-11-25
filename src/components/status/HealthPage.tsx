@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import digitalOceanService from '../../services/digitalOceanService';
 import { logger } from '../../utils/logger';
 import { runtimeConfig } from '../../utils/runtimeConfig';
 import SEO from '../ui/SEO';
 
-import DigitalOceanStatus from './DigitalOceanStatus';
 import GitHubStatus, { type GitHubData } from './GitHubStatus';
 import IncidentHistory from './IncidentHistory';
 import ServiceHealth, { ServiceHealthRef } from './ServiceHealth';
@@ -14,14 +12,6 @@ import '../../styles/HealthPage.css';
 
 interface HealthData {
   github: GitHubData;
-  digitalocean: {
-    app: unknown;
-    droplets: unknown[];
-    loadBalancers: unknown[];
-    databases: unknown[];
-    loading: boolean;
-    error: string | null;
-  };
   services: {
     tronswan: 'healthy' | 'degraded' | 'down';
     chomptron: 'healthy' | 'degraded' | 'down';
@@ -44,14 +34,6 @@ function HealthPage() {
       loading: true,
       error: null,
     },
-    digitalocean: {
-      app: null,
-      droplets: [],
-      loadBalancers: [],
-      databases: [],
-      loading: true,
-      error: null,
-    },
     services: {
       tronswan: 'healthy',
       chomptron: 'healthy',
@@ -66,9 +48,9 @@ function HealthPage() {
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [activeTab, setActiveTab] = useState<
-    'services' | 'deployments' | 'infrastructure'
-  >('services');
+  const [activeTab, setActiveTab] = useState<'services' | 'deployments'>(
+    'services'
+  );
   const [countdown, setCountdown] = useState(30);
   const serviceHealthRef = useRef<ServiceHealthRef>(null);
 
@@ -110,13 +92,6 @@ function HealthPage() {
     return { failedDeployments };
   };
 
-  // Count infrastructure issues
-  const getInfrastructureStatus = () => {
-    return {
-      hasError: !!healthData.digitalocean.error,
-    };
-  };
-
   useEffect(() => {
     // Skip data fetching in test environment
     if (typeof window === 'undefined' || process.env.NODE_ENV === 'test') {
@@ -129,50 +104,6 @@ function HealthPage() {
     };
 
     initializeConfig();
-
-    // Fetch DigitalOcean data
-    const fetchDigitalOceanData = async () => {
-      try {
-        setHealthData(prev => ({
-          ...prev,
-          digitalocean: { ...prev.digitalocean, loading: true, error: null },
-        }));
-
-        const [app, droplets] = await Promise.all([
-          digitalOceanService.getApp(),
-          digitalOceanService.getDroplets(),
-        ]);
-
-        logger.info('HealthPage loaded DigitalOcean data', { app, droplets });
-
-        setHealthData(prev => ({
-          ...prev,
-          digitalocean: {
-            app: app.app, // Extract the nested app object
-            droplets,
-            loadBalancers: [],
-            databases: [],
-            loading: false,
-            error: null,
-          },
-        }));
-      } catch (error) {
-        logger.error('Error fetching DigitalOcean data', { error });
-        setHealthData(prev => ({
-          ...prev,
-          digitalocean: {
-            ...prev.digitalocean,
-            loading: false,
-            error:
-              error instanceof Error
-                ? error.message
-                : 'Failed to fetch DigitalOcean data',
-          },
-        }));
-      }
-    };
-
-    fetchDigitalOceanData();
 
     // Auto-refresh interval with countdown
     const interval = setInterval(() => {
@@ -199,8 +130,8 @@ function HealthPage() {
     <div className='health-page'>
       <SEO
         title='Service Health & Deployment Status - Tron Swan'
-        description='Monitor service health, deployment status, and infrastructure metrics for Tron Swan applications. Real-time status from GitHub Actions and DigitalOcean.'
-        keywords='service health, deployment status, GitHub Actions, DigitalOcean, monitoring, DevOps'
+        description='Monitor service health, deployment status, and infrastructure metrics for Tron Swan applications. Real-time status from GitHub Actions.'
+        keywords='service health, deployment status, GitHub Actions, monitoring, DevOps'
         url='/status'
       />
 
@@ -296,7 +227,6 @@ function HealthPage() {
           {(() => {
             const overallStatus = getOverallStatus();
             const deploymentStatus = getDeploymentStatus();
-            const infraStatus = getInfrastructureStatus();
 
             return (
               <>
@@ -350,26 +280,6 @@ function HealthPage() {
                       <span className='tab-badge badge-success' />
                     )}
                 </button>
-                <button
-                  className={`tab-button ${activeTab === 'infrastructure' ? 'active' : ''}`}
-                  onClick={() => {
-                    logger.info('Health tab changed', {
-                      from: activeTab,
-                      to: 'infrastructure',
-                      timestamp: new Date().toISOString(),
-                    });
-                    setActiveTab('infrastructure');
-                  }}
-                >
-                  Infrastructure
-                  {infraStatus.hasError && (
-                    <span className='tab-badge badge-error'>!</span>
-                  )}
-                  {!healthData.digitalocean.loading &&
-                    !infraStatus.hasError && (
-                      <span className='tab-badge badge-success' />
-                    )}
-                </button>
               </>
             );
           })()}
@@ -398,17 +308,6 @@ function HealthPage() {
                 data={healthData.github}
                 onDataChange={githubData =>
                   setHealthData(prev => ({ ...prev, github: githubData }))
-                }
-              />
-            </div>
-          )}
-
-          {activeTab === 'infrastructure' && (
-            <div className='health-section'>
-              <DigitalOceanStatus
-                data={healthData.digitalocean}
-                onDataChange={doData =>
-                  setHealthData(prev => ({ ...prev, digitalocean: doData }))
                 }
               />
             </div>
