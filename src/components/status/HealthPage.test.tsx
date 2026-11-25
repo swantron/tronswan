@@ -42,16 +42,6 @@ vi.mock('../../services/githubService', () => ({
   },
 }));
 
-vi.mock('../../services/digitalOceanService', () => ({
-  default: {
-    getDroplets: vi.fn().mockResolvedValue([]),
-    getLoadBalancers: vi.fn().mockResolvedValue([]),
-    getDatabases: vi.fn().mockResolvedValue([]),
-    getAccount: vi.fn().mockResolvedValue({ account: {} }),
-    getApp: vi.fn().mockResolvedValue({ app: { id: 'test-app' } }),
-  },
-}));
-
 import { logger } from '../../utils/logger';
 
 import HealthPage from './HealthPage';
@@ -88,7 +78,7 @@ describe('HealthPage', () => {
 
     expect(screen.getByText('Services & APIs')).toBeInTheDocument();
     expect(screen.getByText('Deployments')).toBeInTheDocument();
-    expect(screen.getByText('Infrastructure')).toBeInTheDocument();
+    expect(screen.queryByText('Infrastructure')).not.toBeInTheDocument();
   });
 
   it('switches between tabs', () => {
@@ -96,7 +86,6 @@ describe('HealthPage', () => {
 
     const servicesTab = screen.getByText('Services & APIs');
     const deploymentsTab = screen.getByText('Deployments');
-    const infrastructureTab = screen.getByText('Infrastructure');
 
     // Services tab should be active by default
     expect(servicesTab).toHaveClass('active');
@@ -105,9 +94,9 @@ describe('HealthPage', () => {
     fireEvent.click(deploymentsTab);
     expect(deploymentsTab).toHaveClass('active');
 
-    // Click infrastructure tab
-    fireEvent.click(infrastructureTab);
-    expect(infrastructureTab).toHaveClass('active');
+    // And back
+    fireEvent.click(servicesTab);
+    expect(servicesTab).toHaveClass('active');
   });
 
   it('renders health footer', () => {
@@ -139,35 +128,13 @@ describe('HealthPage', () => {
       timestamp: expect.any(String),
     });
 
-    const infrastructureTab = screen.getByText('Infrastructure');
-    fireEvent.click(infrastructureTab);
-
-    expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
-      from: 'deployments',
-      to: 'infrastructure',
-      timestamp: expect.any(String),
-    });
-
     const servicesTab = screen.getByText('Services & APIs');
     fireEvent.click(servicesTab);
 
     expect(logger.info).toHaveBeenCalledWith('Health tab changed', {
-      from: 'infrastructure',
+      from: 'deployments',
       to: 'services',
       timestamp: expect.any(String),
-    });
-  });
-
-  it('handles DigitalOcean data change callback', async () => {
-    renderWithHelmet(<HealthPage />);
-
-    // Switch to infrastructure tab
-    const infrastructureTab = screen.getByText('Infrastructure');
-    fireEvent.click(infrastructureTab);
-
-    await waitFor(() => {
-      // The DigitalOceanStatus component should be rendered
-      expect(screen.getByText('Infrastructure')).toHaveClass('active');
     });
   });
 });

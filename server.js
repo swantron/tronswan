@@ -95,7 +95,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoints for DigitalOcean and monitoring
+// Health check endpoint for Cloud Run and monitoring
 // Use /api/health to avoid conflict with React Router
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -106,8 +106,6 @@ app.get('/api/health', (req, res) => {
 // route is a fixed, read-only endpoint, and responses are cached briefly so
 // public traffic can't burn through upstream rate limits.
 const GITHUB_OWNER = process.env.GITHUB_OWNER || 'swantron';
-const DIGITALOCEAN_APP_ID =
-  process.env.DIGITALOCEAN_APP_ID || '0513ce4c-b074-4139-bb38-a1c6a5bc97a6';
 const PROXY_CACHE_TTL_MS = 60 * 1000;
 const proxyCache = new Map();
 
@@ -143,19 +141,6 @@ const proxyRoute = (name, token, handler) => async (req, res) => {
     });
     res.status(502).json({ error: `${name} request failed` });
   }
-};
-
-// Remove env var blocks (which can hold secret values) from a DO app spec.
-const stripEnvs = value => {
-  if (Array.isArray(value)) return value.map(stripEnvs);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value)
-        .filter(([key]) => key !== 'envs')
-        .map(([key, v]) => [key, stripEnvs(v)])
-    );
-  }
-  return value;
 };
 
 // GitHub is read unauthenticated: every watched repo is public, so no token is
@@ -211,37 +196,6 @@ app.get(
           githubHeaders
         ),
       GITHUB_CACHE_TTL_MS
-    )
-  )
-);
-
-const digitalOceanHeaders = () => ({
-  Authorization: `Bearer ${process.env.DIGITALOCEAN_TOKEN}`,
-  'Content-Type': 'application/json',
-});
-
-app.get(
-  '/api/digitalocean/app',
-  proxyRoute('DigitalOcean', process.env.DIGITALOCEAN_TOKEN, () =>
-    cachedJson('do:app', async () =>
-      stripEnvs(
-        await upstreamJson(
-          `https://api.digitalocean.com/v2/apps/${DIGITALOCEAN_APP_ID}`,
-          digitalOceanHeaders()
-        )
-      )
-    )
-  )
-);
-
-app.get(
-  '/api/digitalocean/droplets',
-  proxyRoute('DigitalOcean', process.env.DIGITALOCEAN_TOKEN, () =>
-    cachedJson('do:droplets', () =>
-      upstreamJson(
-        'https://api.digitalocean.com/v2/droplets',
-        digitalOceanHeaders()
-      )
     )
   )
 );

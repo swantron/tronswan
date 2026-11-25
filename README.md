@@ -30,8 +30,8 @@ building / deploying / learning
 - **Testing**: Vitest, React Testing Library, Playwright (E2E)
 - **Build Tools**: Vite 7.1, TypeScript 5.9
 - **Server**: Express.js 5.1 for production deployment
-- **Deployment**: DigitalOcean App Platform
-- **APIs**: Hugo JSON API, OpenWeatherMap, GitHub, DigitalOcean, Spotify Web API, MLB Stats, Google Docs
+- **Deployment**: Google Cloud Run behind Firebase Hosting
+- **APIs**: Hugo JSON API, OpenWeatherMap, GitHub, Spotify Web API, MLB Stats, Google Docs
 - **Package Manager**: Yarn
 - **CI/CD**: Buildkite (dynamic pipeline, GCP agents) + GitHub Actions (deploy gating, Playwright E2E)
 
@@ -94,13 +94,13 @@ Push / PR
 | 3 | Build | Config/dependency changes or push to `main` |
 | — | Annotate | Always |
 
-E2E tests run against the live DigitalOcean deployment via GHA — kept out of Buildkite as a security boundary.
+E2E tests run against the live deployment via GHA — kept out of Buildkite as a security boundary.
 
 All steps target `queue: gcp`.
 
 ## Deployment
 
-Deployed to DigitalOcean App Platform via GitHub Actions. The Express server (`server.js`) serves the Vite build with SPA fallback routing. See [CI/CD Setup](docs/CI_SETUP.md) for details.
+Deployed to Google Cloud Run via GitHub Actions, with Firebase Hosting in front for the tronswan.com domain and CDN. The `Dockerfile` builds the Vite site and runs the Express server (`server.js`), which serves it with SPA fallback routing. Deploys are keyless (Workload Identity Federation into a `tronswan-deploy` service account); runtime secrets live in Secret Manager. See [CI/CD Setup](docs/CI_SETUP.md) for details.
 
 ## License
 

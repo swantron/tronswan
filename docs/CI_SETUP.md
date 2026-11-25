@@ -25,7 +25,7 @@ Push / PR to main
         │     ├── yarn test:coverage
         │     └── Upload coverage artifact
         └── deploy-and-validate (main push only, after build-test-coverage)
-              ├── Poll DigitalOcean API until deploy succeeds
+              ├── Build image, deploy Cloud Run + Firebase Hosting
               └── Run Playwright E2E suite against live site
 ```
 
@@ -52,7 +52,7 @@ Coverage is extracted from `coverage/coverage-summary.json` and posted as a Buil
 
 ### Why E2E tests are not here
 
-Playwright tests run against the live DigitalOcean deployment. Buildkite agents don't have production access — that boundary is intentional. E2E ownership lives in GHA's `deploy-and-validate` job.
+Playwright tests run against the live deployment. Buildkite agents don't have production access — that boundary is intentional. E2E ownership lives in GHA's `deploy-and-validate` job.
 
 ### Agent setup
 
@@ -82,14 +82,18 @@ Defined in `.github/workflows/cicd.yml`. Triggers on push and PRs to `main`.
 
 Runs after `build-test-coverage` passes. Only fires on `push` to `main` (not PRs).
 
-1. Polls DigitalOcean App Platform API — up to 30 attempts × 15s (7.5 min max) — until the deploy step status is `SUCCESS`
-2. Runs the full Playwright E2E suite against the live site
+1. Signs in to Google Cloud keylessly (GitHub OIDC → Workload Identity Federation → `tronswan-deploy` service account; only `main` of this repo is accepted)
+2. Builds the Docker image and pushes it to Artifact Registry (`tronswan-repo`, keeps the last 5 images)
+3. Deploys it to Cloud Run (`tronswan`, us-central1, runs as `tronswan-run`) and redeploys Firebase Hosting
+4. Runs the full Playwright E2E suite against the live site
 
-If the DO deployment doesn't complete in time or Playwright tests fail, the job fails and the push is flagged.
+If the deploy fails or Playwright tests fail, the job fails and the push is flagged.
 
-### Required secret
+### Required configuration
 
-- `DIGITALOCEAN_ACCESS_TOKEN` — used to poll the DO API for deployment status
+- Secrets: `VITE_WEATHER_API_KEY`, `VITE_GOOGLE_DOCS_API_KEY` (build-time, public in the bundle anyway)
+- Variable: `VITE_SPOTIFY_CLIENT_ID`
+- Secret Manager (project `tronswan`): `spotify-client-secret`, `watchtron-token`
 
 ---
 

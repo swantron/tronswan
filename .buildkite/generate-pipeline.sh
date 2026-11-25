@@ -22,7 +22,7 @@
 #           that unit tests wouldn't surface.
 #
 # E2E tests are intentionally excluded. Playwright tests in this repo run
-# against the live DigitalOcean deployment and are owned by the GitHub Actions
+# against the live deployment and are owned by the GitHub Actions
 # deploy-and-validate workflow. Running them here would require access to the
 # production environment — a boundary we deliberately keep in GHA.
 #

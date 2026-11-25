@@ -11,7 +11,6 @@ interface RuntimeConfig {
   VITE_WEATHER_UNITS: string;
   VITE_SITE_URL: string;
   VITE_GITHUB_OWNER: string;
-  VITE_DIGITALOCEAN_APP_ID: string;
   VITE_SPOTIFY_CLIENT_ID: string;
   VITE_SPOTIFY_REDIRECT_URI: string;
   VITE_SWANTRON_API_URL: string;
@@ -45,7 +44,6 @@ class RuntimeConfigManager {
       'VITE_WEATHER_UNITS',
       'VITE_SITE_URL',
       'VITE_GITHUB_OWNER',
-      'VITE_DIGITALOCEAN_APP_ID',
       'VITE_SPOTIFY_CLIENT_ID',
       'VITE_SPOTIFY_REDIRECT_URI',
       'VITE_SWANTRON_API_URL',
