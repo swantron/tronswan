@@ -95,7 +95,7 @@ if [ "$SRC_CHANGED" = "true" ] || [ "$CONFIG_CHANGED" = "true" ]; then
     env:
       YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
-      yarn install --frozen-lockfile
+      .buildkite/install-deps.sh
       yarn lint
 
   - label: ":typescript: Type Check"
@@ -105,7 +105,7 @@ if [ "$SRC_CHANGED" = "true" ] || [ "$CONFIG_CHANGED" = "true" ]; then
     env:
       YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
-      yarn install --frozen-lockfile
+      .buildkite/install-deps.sh
       yarn type-check
 STEP
 fi
@@ -129,7 +129,7 @@ if [ "$COMPONENTS_CHANGED" = "true" ] || \
     env:
       YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
-      yarn install --frozen-lockfile
+      .buildkite/install-deps.sh
       yarn test:coverage --testTimeout=30000 --maxWorkers=1
       COVERAGE=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
       buildkite-agent annotate \
@@ -155,7 +155,7 @@ if [ "$CONFIG_CHANGED" = "true" ] || \
     env:
       YARN_CACHE_FOLDER: /var/cache/buildkite-agent/yarn-packages
     command: |
-      yarn install --frozen-lockfile
+      .buildkite/install-deps.sh
       yarn build
     artifact_paths:
       - "build/**/*"
