@@ -17,9 +17,7 @@ function Footer() {
           <Link
             to='/shorts'
             className={`footer-link ${location.pathname === '/shorts' || location.pathname.startsWith('/video/') ? 'active' : ''}`}
-            aria-current={
-              location.pathname === '/shorts' ? 'page' : undefined
-            }
+            aria-current={location.pathname === '/shorts' ? 'page' : undefined}
             onClick={() =>
               logger.info('Footer clicked - Shorts', {
                 target: '/shorts',
