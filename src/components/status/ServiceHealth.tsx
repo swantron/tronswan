@@ -69,7 +69,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'tron swan dot com',
         url: 'https://tronswan.com',
-        description: 'react site / GHA / DO',
+        description: 'react site / Cloud Run + Firebase',
         status: services.tronswan,
         lastChecked: new Date(),
       },
@@ -90,7 +90,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'ATProto PDS',
         url: 'https://jswan.dev/xrpc/_health',
-        description: 'Bluesky PDS on DO',
+        description: 'Bluesky PDS on GCE (free tier)',
         status: services.jswan,
         lastChecked: new Date(),
       },
@@ -104,7 +104,7 @@ const ServiceHealth = forwardRef<ServiceHealthRef, ServiceHealthProps>(
       {
         name: 'wrench tron dot com',
         url: 'https://wrenchtron.com',
-        description: 'auto maintenance tracker / DO',
+        description: 'auto maintenance tracker / Firebase',
         status: services.wrenchtron,
         lastChecked: new Date(),
       },

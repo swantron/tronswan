@@ -82,12 +82,12 @@ describe('ServiceHealth Component', () => {
   test('renders service descriptions', () => {
     render(<ServiceHealth services={defaultServices} />);
 
-    expect(screen.getByText(/react site \/ GHA \/ DO/)).toBeInTheDocument();
+    expect(screen.getByText(/react site \/ Cloud Run/)).toBeInTheDocument();
     expect(
       screen.getByText(/AI recipe react app using Gemini \/ GCP/)
     ).toBeInTheDocument();
     expect(screen.getByText(/personal blog, hugo/)).toBeInTheDocument();
-    expect(screen.getByText(/Bluesky PDS on DO/)).toBeInTheDocument();
+    expect(screen.getByText(/Bluesky PDS on GCE/)).toBeInTheDocument();
     expect(screen.getByText(/baseball integration/)).toBeInTheDocument();
     expect(screen.getByText(/spotify integration/)).toBeInTheDocument();
     expect(screen.getByText(/weather integration/)).toBeInTheDocument();

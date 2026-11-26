@@ -125,8 +125,7 @@ const PROJECTS: Project[] = [
   {
     slug: 'swantron',
     title: 'blog',
-    tagline:
-      'posts from swantron.com — tech, projects, and life.',
+    tagline: 'posts from swantron.com — tech, projects, and life.',
     internalPath: '/swantron',
     externalUrl: 'https://swantron.com',
     tags: ['React', 'Hugo'],
